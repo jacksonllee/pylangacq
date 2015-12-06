@@ -17,7 +17,7 @@ PyLangAcq is currently available through GitHub:
 
     $ git clone https://github.com/pylangacq/pylangacq.git
     $ cd pylangacq
-    $ python3 setup.py install
+    $ python setup.py install
 
 Use
 ---
@@ -33,6 +33,20 @@ The `chat` submodule has a `Reader` class that reads in a `.cha` file. The follo
 ... # can be accessed by various methods:
 ... #     metadata(), participants(), participant_codes(), languages(),
 ... #     date(), age()
+...
+>>> # The metadata @ lines in eve01.cha (excluding Time Duration and Tape Location)
+... # are as follows:
+...
+>>> # @UTF8
+... # @Begin
+... # @Languages:	eng
+... # @Participants:	CHI Eve Target_Child , MOT Sue Mother , COL Colin Investigator , RIC Richard Investigator
+... # @ID:	eng|Brown|CHI|1;6.|female|||Target_Child|||
+... # @ID:	eng|Brown|MOT|||||Mother|||
+... # @ID:	eng|Brown|COL|||||Investigator|||
+... # @ID:	eng|Brown|RIC|||||Investigator|||
+... # @Date:	15-OCT-1962
+... # @End
 ...
 >>> pprint(corpus.metadata())
 {'Date': '17-OCT-1962',

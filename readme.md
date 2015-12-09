@@ -22,7 +22,9 @@ PyLangAcq is currently available through GitHub:
 Use
 ---
 
-The `chat` submodule has a `SingleReader` class that reads in a `.cha` file. The following example assumes that a `.cha` file such as [`eve01.cha`](http://childes.psy.cmu.edu/browser/index.php?url=Eng-NA-MOR/Brown/Eve/eve01.cha) is in the current directory.
+The `chat` submodule has the class `SingleReader` for reading a single `.cha` files as well as the generalized `Reader` for multiple files.
+
+For `SingleReader`, the following example assumes that a `.cha` file such as [`eve01.cha`](http://childes.psy.cmu.edu/browser/index.php?url=Eng-NA-MOR/Brown/Eve/eve01.cha) is in the current directory.
 
 ```python
 >>> from pylangacq.chat import SingleReader

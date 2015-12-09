@@ -1,6 +1,5 @@
 
 class Reader:
-
     def __init__(self, filename):
         self.filename = filename
 
@@ -26,9 +25,9 @@ class Reader:
 
         return iter(lines)
 
-    def metadata(self):
+    def headers(self):
         """
-        :return: a ``dict`` of metadata of the .chat file.
+        :return: a ``dict`` of headers of the .chat file.
         The keys are the label
         heads as str (e.g., 'Begin', 'Participants', 'Date'). The value are
         the respective content for the label head.
@@ -79,9 +78,11 @@ class Reader:
 
                 del speaker_info[2]  # remove code info (3rd in list)
                 speaker_info_heads = ['language', 'corpus', 'age',
-                    'sex', 'group', 'SES', 'role', 'education', 'custom']
+                                      'sex', 'group', 'SES', 'role',
+                                      'education', 'custom']
                 speaker_info_dict = {head: info
-                    for head, info in zip(speaker_info_heads, speaker_info)}
+                                     for head, info in
+                                     zip(speaker_info_heads, speaker_info)}
 
                 outdict['Participants'][code].update(speaker_info_dict)
 
@@ -90,6 +91,13 @@ class Reader:
 
         return outdict
 
+    def metadata(self):
+        """
+        :return: same as ``headers()``
+        :rtype: dict
+        """
+        return self.headers()
+
     def participants(self):
         """
         :return: a dict of participant information based on the @ID lines.
@@ -97,7 +105,7 @@ class Reader:
         :rtype: dict
         """
         try:
-            return self.metadata()['Participants']
+            return self.headers()['Participants']
         except KeyError:
             return dict()
 
@@ -107,17 +115,17 @@ class Reader:
         :rtype: set
         """
         try:
-            return set(self.metadata()['Participants'].keys())
+            return set(self.headers()['Participants'].keys())
         except KeyError:
             return set()
 
     def languages(self):
         """
-        :return: a set of languages based on the @Languages metadata
+        :return: a set of languages based on the @Languages headers
         :rtype: set
         """
         try:
-            languages_line = self.metadata()['Languages']
+            languages_line = self.headers()['Languages']
         except KeyError:
             return set()
 
@@ -137,7 +145,7 @@ class Reader:
         :rtype: tuple, or None
         """
         try:
-            date_str = self.metadata()['Date']
+            date_str = self.headers()['Date']
             day_str, month_str, year_str = date_str.split('-')
             day = int(day_str)
             year = int(year_str)
@@ -174,7 +182,7 @@ class Reader:
         :rtype: tuple, or None
         """
         try:
-            age_str = self.metadata()['Participants'][speaker]['age']
+            age_str = self.headers()['Participants'][speaker]['age']
 
             year, _semicolon, month_day = age_str.partition(';')
             month, _period, day = month_day.partition('.')

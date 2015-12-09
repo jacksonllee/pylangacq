@@ -1,8 +1,9 @@
 Change log
 ==========
 
-- Version 0.3 DATE????
+- Version 0.3 2015-12-09
 
+    * class `Reader` can read multiple `.cha` files. The methods associated with `Reader` are mostly a dict mapping from a absolute-path filename to something. `Reader` depends on the class `SingleReader` for a single `.cha` file.
     * Following the conventional CHILDES and CHAT terminology, the `metadata` method in `Reader` is renamed `headers` (though a "new" `metadata` method is defined and points to `headers` for convenience).
 
 - Version 0.2 2015-12-05

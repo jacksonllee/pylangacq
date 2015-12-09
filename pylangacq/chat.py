@@ -35,6 +35,13 @@ class Reader:
 
         self.filenames = sorted(set(self.filenames))
 
+    def number_of_files(self):
+        """
+        :return: the number of ``.cha`` files
+        :rtype: int
+        """
+        return len(self.filenames)
+
     def cha_lines(self):
         """
         Reads the .cha file and cleans it up by undoing the line continuation
@@ -44,24 +51,8 @@ class Reader:
         a list iterator of all cleaned-up lines in the .cha file
         :rtype: dict(str: iter)
         """
-        filename_to_lines = dict()
-
-        for filename in self.filenames:
-            lines = list()
-
-            for line in open(filename, 'rU'):
-                line = line.rstrip()  # don't remove leading \t
-
-                if line.startswith('\t'):
-                    previous_line = lines.pop()  # also removes it from "lines"
-                    line = '{} {}'.format(previous_line, line.strip())
-                    # removes leading/trailing characters (e.g. \t) from "line"
-
-                lines.append(line)
-
-            filename_to_lines[filename] = iter(lines)
-
-        return filename_to_lines
+        return {filename: SingleReader(filename).cha_lines()
+                for filename in self.filenames}
 
     def headers(self):
         """
@@ -80,63 +71,8 @@ class Reader:
         age, sex, group, SES, role, education, custom
         :rtype: dict(str: dict)
         """
-        filename_to_headers = dict()
-
-        for filename in self.filenames:
-            lines = self.cha_lines()[filename]
-            headname_to_entry = dict()
-
-            for line in lines:
-
-                if line.startswith('@Begin') or line.startswith('@End'):
-                    continue
-
-                if not line.startswith('@'):
-                    continue
-
-                # find head, e.g., "Languages", "Participants", "ID" etc
-                head, _tab, line = line.partition('\t')
-                line = line.strip()
-                head = head.lstrip('@')  # remove beginning "@"
-                head = head.rstrip(':')  # remove ending ":", if any
-
-                if head == 'Participants':
-                    headname_to_entry['Participants'] = dict()
-
-                    participants = line.split(',')
-
-                    for participant in participants:
-                        participant = participant.strip()
-                        code, _space, speaker_label = participant.partition(' ')
-                        # code = speaker's code, e.g. CHI, MOT
-                        headname_to_entry['Participants'][code] = \
-                            {'speaker_label': speaker_label}
-
-                elif head == 'ID':
-                    speaker_info = line.split('|')[: -1]
-                    # final empty str removed
-
-                    code = speaker_info[2]
-                    # speaker_info contains these in order:
-                    #   language, corpus, code, age, sex, group, SES, role,
-                    #   education, custom
-
-                    del speaker_info[2]  # remove code info (3rd in list)
-                    speaker_info_heads = ['language', 'corpus', 'age',
-                                          'sex', 'group', 'SES', 'role',
-                                          'education', 'custom']
-                    head_to_info = {head: info
-                                    for head, info in
-                                    zip(speaker_info_heads, speaker_info)}
-
-                    headname_to_entry['Participants'][code].update(head_to_info)
-
-                else:
-                    headname_to_entry[head] = line
-
-            filename_to_headers[filename] = headname_to_entry
-
-        return filename_to_headers
+        return {filename: SingleReader(filename).headers()
+                for filename in self.filenames}
 
     def metadata(self):
         """
@@ -152,16 +88,8 @@ class Reader:
         Key = participant code. Value = dict of info for the participant
         :rtype: dict(str: dict)
         """
-        filename_to_participants = dict()
-
-        for filename in self.filenames:
-            try:
-                filename_to_participants[filename] = \
-                    self.headers()[filename]['Participants']
-            except KeyError:
-                filename_to_participants[filename] = dict()
-
-        return filename_to_participants
+        return {filename: SingleReader(filename).participants()
+                for filename in self.filenames}
 
     def participant_codes(self):
         """
@@ -169,16 +97,8 @@ class Reader:
         a set of the speaker codes (e.g., `{'CHI', 'MOT', 'FAT'}`)
         :rtype: dict(str: set)
         """
-        filename_to_participantcodes = dict()
-
-        for filename in self.filenames:
-            try:
-                filename_to_participantcodes[filename] = \
-                    set(self.headers()[filename]['Participants'].keys())
-            except KeyError:
-                filename_to_participantcodes[filename] = set()
-
-        return filename_to_participantcodes
+        return {filename: SingleReader(filename).participant_codes()
+                for filename in self.filenames}
 
     def languages(self):
         """
@@ -186,24 +106,8 @@ class Reader:
         a set of languages based on the @Languages headers
         :rtype: dict(str: set)
         """
-        filename_to_languages = dict()
-
-        for filename in self.filenames:
-            languages_set = set()
-
-            try:
-                languages_line = self.headers()[filename]['Languages']
-            except KeyError:
-                pass
-            else:
-                for language in languages_line.split(','):
-                    language = language.strip()
-                    if language:
-                        languages_set.add(language)
-
-            filename_to_languages[filename] = languages_set
-
-        return filename_to_languages
+        return {filename: SingleReader(filename).languages()
+                for filename in self.filenames}
 
     def date(self):
         """
@@ -215,36 +119,8 @@ class Reader:
         of any errors arise (e.g., there's no date).
         :rtype: dict(str: tuple), where tuple could be None if no date
         """
-        filename_to_date = dict()
-
-        for filename in self.filenames:
-            try:
-                date_str = self.headers()[filename]['Date']
-                day_str, month_str, year_str = date_str.split('-')
-                day = int(day_str)
-                year = int(year_str)
-
-                month_to_int = {
-                    'JAN': 1,
-                    'FEB': 2,
-                    'MAR': 3,
-                    'APR': 4,
-                    'MAY': 5,
-                    'JUN': 6,
-                    'JUL': 7,
-                    'AUG': 8,
-                    'SEP': 9,
-                    'OCT': 10,
-                    'NOV': 11,
-                    'DEC': 12,
-                }
-
-                month = month_to_int[month_str]
-                filename_to_date[filename] = (year, month, day)
-            except (ValueError, KeyError):
-                filename_to_date[filename] = None
-
-        return filename_to_date
+        return {filename: SingleReader(filename).date()
+                for filename in self.filenames}
 
     def age(self, speaker='CHI'):
         """
@@ -257,20 +133,221 @@ class Reader:
         of any errors arise (e.g., there's no age).
         :rtype: tuple, or None
         """
-        filename_to_age = dict()
+        return {filename: SingleReader(filename).age(speaker=speaker)
+                for filename in self.filenames}
 
-        for filename in self.filenames:
-            try:
-                age_ = self.headers()[filename]['Participants'][speaker]['age']
 
-                year, _semicolon, month_day = age_.partition(';')
-                month, _period, day = month_day.partition('.')
+class SingleReader:
+    def __init__(self, filename):
+        """
+        :param filename: absolute-path of a ``.cha`` file
+        :return: ``self.filename`` is str
+        """
+        if type(filename) is not str:
+            raise ValueError('filename must be str')
 
-                year = int(year) if year.isdigit() else 0
-                month = int(month) if month.isdigit() else 0
-                day = int(day) if day.isdigit() else 0
-                filename_to_age[filename] = (year, month, day)
-            except (KeyError, IndexError, ValueError):
-                filename_to_age[filename] = None
+        if os.path.isabs(filename):
+            self.filename = filename
+        else:
+            abs_path = os.path.abspath('.')
+            self.filename = os.path.normpath(os.path.join(abs_path, filename))
 
-        return filename_to_age
+    def cha_lines(self):
+        """
+        Reads the .cha file and cleans it up by undoing the line continuation
+        with the tab character.
+
+        :return: a list iterator of all cleaned-up lines in the .cha file
+        :rtype: iter
+        """
+        lines = list()
+
+        for line in open(self.filename, 'rU'):
+            line = line.rstrip()  # don't remove leading \t
+
+            if line.startswith('\t'):
+                previous_line = lines.pop()  # also removes it from "lines"
+                line = '{} {}'.format(previous_line, line.strip())
+                # removes leading/trailing characters (e.g. \t) from "line"
+
+            lines.append(line)
+
+        return iter(lines)
+
+    def headers(self):
+        """
+        :return: a dict of headers of the .chat file.
+        The keys are the label
+        heads as str (e.g., 'Begin', 'Participants', 'Date'). The value are
+        the respective content for the label head.
+
+        For the head 'Participants', the value is a dict where the keys are the
+        speaker codes (e.g., 'CHI', 'MOT') and the value is a list of
+        information for the respective speaker code. The list of information is
+        in this order:
+
+        speaker label (from the '@Participants' field), language, corpus, code,
+        age, sex, group, SES, role, education, custom
+        :rtype: dict
+        """
+        headname_to_entry = dict()
+
+        for line in self.cha_lines():
+
+            if line.startswith('@Begin') or line.startswith('@End'):
+                continue
+
+            if not line.startswith('@'):
+                continue
+
+            # find head, e.g., "Languages", "Participants", "ID" etc
+            head, _tab, line = line.partition('\t')
+            line = line.strip()
+            head = head.lstrip('@')  # remove beginning "@"
+            head = head.rstrip(':')  # remove ending ":", if any
+
+            if head == 'Participants':
+                headname_to_entry['Participants'] = dict()
+
+                participants = line.split(',')
+
+                for participant in participants:
+                    participant = participant.strip()
+                    code, _space, speaker_label = participant.partition(' ')
+                    # code = speaker's code, e.g. CHI, MOT
+                    headname_to_entry['Participants'][code] = \
+                        {'speaker_label': speaker_label}
+
+            elif head == 'ID':
+                speaker_info = line.split('|')[: -1]
+                # final empty str removed
+
+                code = speaker_info[2]
+                # speaker_info contains these in order:
+                #   language, corpus, code, age, sex, group, SES, role,
+                #   education, custom
+
+                del speaker_info[2]  # remove code info (3rd in list)
+                speaker_info_heads = ['language', 'corpus', 'age',
+                                      'sex', 'group', 'SES', 'role',
+                                      'education', 'custom']
+                head_to_info = {head: info
+                                for head, info in
+                                zip(speaker_info_heads, speaker_info)}
+
+                headname_to_entry['Participants'][code].update(head_to_info)
+
+            else:
+                headname_to_entry[head] = line
+
+        return headname_to_entry
+
+    def metadata(self):
+        """
+        :return: same as ``headers()``
+        :rtype: dict
+        """
+        return self.headers()
+
+    def participants(self):
+        """
+        :return: a dict of participant information based on the @ID lines.
+        Key = participant code. Value = dict of info for the participant
+        :rtype: dict
+        """
+        try:
+            return self.headers()['Participants']
+        except KeyError:
+            return dict()
+
+    def participant_codes(self):
+        """
+        :return: a dict where key is filename and value is
+        a set of the speaker codes (e.g., `{'CHI', 'MOT', 'FAT'}`)
+        :rtype: dict(str: set)
+        """
+        try:
+            return set(self.headers()['Participants'].keys())
+        except KeyError:
+            return set()
+
+    def languages(self):
+        """
+        :return: a dict where key is filename and value is
+        a set of languages based on the @Languages headers
+        :rtype: dict(str: set)
+        """
+        languages_set = set()
+
+        try:
+            languages_line = self.headers()['Languages']
+        except KeyError:
+            pass
+        else:
+            for language in languages_line.split(','):
+                language = language.strip()
+                if language:
+                    languages_set.add(language)
+
+        return languages_set
+
+    def date(self):
+        """
+        Returns the date of recording.
+
+        :return: a dict where key is filename and value is
+        a 3-tuple of (*year*, *month*, *day*),
+        where *year*, *month*, *day* are all ``int``. Returns ``None`` instead
+        of any errors arise (e.g., there's no date).
+        :rtype: dict(str: tuple), where tuple could be None if no date
+        """
+        try:
+            date_str = self.headers()['Date']
+            day_str, month_str, year_str = date_str.split('-')
+            day = int(day_str)
+            year = int(year_str)
+
+            month_to_int = {
+                'JAN': 1,
+                'FEB': 2,
+                'MAR': 3,
+                'APR': 4,
+                'MAY': 5,
+                'JUN': 6,
+                'JUL': 7,
+                'AUG': 8,
+                'SEP': 9,
+                'OCT': 10,
+                'NOV': 11,
+                'DEC': 12,
+            }
+
+            month = month_to_int[month_str]
+            return year, month, day
+        except (ValueError, KeyError):
+            return None
+
+    def age(self, speaker='CHI'):
+        """
+        Returns the age of a particular speaker.
+
+        :param speaker: an optional argument to specify which speaker,
+        default = ``'CHI'``
+        :return: a 3-tuple of (*year*, *month*, *day*),
+        where *year*, *month*, *day* are all ``int``. Returns ``None`` instead
+        of any errors arise (e.g., there's no age).
+        :rtype: tuple, or None
+        """
+        try:
+            age_ = self.headers()['Participants'][speaker]['age']
+
+            year, _semicolon, month_day = age_.partition(';')
+            month, _period, day = month_day.partition('.')
+
+            year = int(year) if year.isdigit() else 0
+            month = int(month) if month.isdigit() else 0
+            day = int(day) if day.isdigit() else 0
+            return year, month, day
+        except (KeyError, IndexError, ValueError):
+            return None
+

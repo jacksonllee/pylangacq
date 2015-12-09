@@ -22,12 +22,12 @@ PyLangAcq is currently available through GitHub:
 Use
 ---
 
-The `chat` submodule has a `Reader` class that reads in a `.cha` file. The following example assumes that a `.cha` file such as [`eve01.cha`](http://childes.psy.cmu.edu/browser/index.php?url=Eng-NA-MOR/Brown/Eve/eve01.cha) is in the current directory.
+The `chat` submodule has a `SingleReader` class that reads in a `.cha` file. The following example assumes that a `.cha` file such as [`eve01.cha`](http://childes.psy.cmu.edu/browser/index.php?url=Eng-NA-MOR/Brown/Eve/eve01.cha) is in the current directory.
 
 ```python
->>> from pylangacq.chat import Reader
+>>> from pylangacq.chat import SingleReader
 >>> from pprint import pprint
->>> corpus = Reader('eve01.cha')
+>>> corpus = SingleReader('eve01.cha')
 >>>
 >>> # The metadata from the @ lines of eve01.cha
 ... # can be accessed by various methods:
@@ -152,6 +152,44 @@ The `chat` submodule has a `Reader` class that reads in a `.cha` file. The follo
 >>> corpus.age(speaker='MOT')
 (0, 0, 0)  # participants other than CHI often don't have the age info
 ```
+
+
+A separate class `Reader` is available for reading multiple `.cha` files. `Reader` shares the same method names as `SingleReader`. Because `Reader` is the generalized reader for multiple input files built on top of `SingleReader`, the `Reader` methods have a more elaborate data structure, mostly returning a dict mapping a absolute-path filename to whatever the method is for with respect to the file concerned. Example (assuming the `.cha` files for Eve from CHILDES Brown are in the current directory):
+
+```python
+>>> import os
+>>> from pylangacq.chat import Reader
+>>> eve_corpus = Reader('eve*.cha')  # allows filename pattern matching with *
+>>> eve_corpus.number_of_files()
+20  # there are 20 files for Eve, from eve01.cha through eve20.cha
+>>> eve_ages = eve_corpus.age()  # a dict (key: abs-path filename, value: age as a 3-int tuple)
+>>> eve_ages_sorted = sorted([(os.path.basename(fn), age) for fn, age in eve_ages.items()])
+>>> for filename, age in eve_ages_sorted:
+...     print(filename, age)
+...
+eve01.cha (1, 6, 0)
+eve02.cha (1, 6, 0)
+eve03.cha (1, 7, 0)
+eve04.cha (1, 7, 0)
+eve05.cha (1, 8, 0)
+eve06.cha (1, 9, 0)
+eve07.cha (1, 9, 0)
+eve08.cha (1, 9, 0)
+eve09.cha (1, 10, 0)
+eve10.cha (1, 10, 0)
+eve11.cha (1, 11, 0)
+eve12.cha (1, 11, 0)
+eve13.cha (2, 0, 0)
+eve14.cha (2, 0, 0)
+eve15.cha (2, 1, 0)
+eve16.cha (2, 1, 0)
+eve17.cha (2, 2, 0)
+eve18.cha (2, 2, 0)
+eve19.cha (2, 3, 0)
+eve20.cha (2, 3, 0)
+```
+
+
 
 Many, many more functionalities are coming.
 

@@ -5,13 +5,23 @@ import fnmatch
 class Reader:
     def __init__(self, *filenames):
         """
-        :param filenames: a string that matches exactly a .cha file like
+        :param filenames: one or more filenames.
+
+        A filename may match exactly a .cha file like
         ``eve01.cha`` or matches multiple files by glob patterns, e.g.,
         ``eve*.cha`` can match ``eve01.cha``, ``eve02.cha``, etc.
         Apart from ``*`` for any number (including zero) of characters,
         ``?`` is another commonly used wildcard and matches one character.
 
-        :return: ``self.filenames`` is a list of matched absolute-path filenames
+        The ``Reader`` class is set to find *unique* absolute-path filenames.
+        This means that a call such as ``Reader('eve*.cha', '*01.cha')``
+        (for all Eve files and all "01" files together) might seem to have
+        overlapping or duplicate results (like ``eve01.cha`` which satisfies
+        both ``eve*.cha`` and ``*01.cha``), but ``Reader`` filters away the
+        duplicates.
+
+        :return: ``self.filenames`` is a sorted list of matched absolute-path
+        filenames.
         """
         for filename in filenames:
             if type(filename) is not str:
@@ -37,14 +47,14 @@ class Reader:
 
     def number_of_files(self):
         """
-        :return: the number of ``.cha`` files
+        :return: the number of files
         :rtype: int
         """
         return len(self.filenames)
 
     def cha_lines(self):
         """
-        Reads the .cha file and cleans it up by undoing the line continuation
+        Reads the files and cleans them up by undoing the line continuation
         with the tab character.
 
         :return: a dict where key is filename and value is
@@ -57,18 +67,7 @@ class Reader:
     def headers(self):
         """
         :return: a dict where key is filename and value is
-        a dict of headers of the .chat file.
-        The keys are the label
-        heads as str (e.g., 'Begin', 'Participants', 'Date'). The value are
-        the respective content for the label head.
-
-        For the head 'Participants', the value is a dict where the keys are the
-        speaker codes (e.g., 'CHI', 'MOT') and the value is a list of
-        information for the respective speaker code. The list of information is
-        in this order:
-
-        speaker label (from the '@Participants' field), language, corpus, code,
-        age, sex, group, SES, role, education, custom
+        the headers (as a dict) of the CHAT file.
         :rtype: dict(str: dict)
         """
         return {filename: SingleReader(filename).headers()
@@ -84,8 +83,7 @@ class Reader:
     def participants(self):
         """
         :return: a dict where key is filename and value is
-        a dict of participant information based on the @ID lines.
-        Key = participant code. Value = dict of info for the participant
+        participant information (as a dict) based on the @ID lines.
         :rtype: dict(str: dict)
         """
         return {filename: SingleReader(filename).participants()
@@ -128,7 +126,8 @@ class Reader:
 
         :param speaker: an optional argument to specify which speaker,
         default = ``'CHI'``
-        :return: a 3-tuple of (*year*, *month*, *day*),
+        :return: a dict where key is filename and value is
+        a 3-tuple of (*year*, *month*, *day*),
         where *year*, *month*, *day* are all ``int``. Returns ``None`` instead
         of any errors arise (e.g., there's no age).
         :rtype: tuple, or None
@@ -177,11 +176,11 @@ class SingleReader:
     def headers(self):
         """
         :return: a dict of headers of the .chat file.
-        The keys are the label
-        heads as str (e.g., 'Begin', 'Participants', 'Date'). The value are
-        the respective content for the label head.
+        The keys are the header names
+        as str (e.g., 'Begin', 'Participants', 'Date'). The header entry is
+        the content for the respective header name.
 
-        For the head 'Participants', the value is a dict where the keys are the
+        For the head 'Participants', the entry is a dict where the keys are the
         speaker codes (e.g., 'CHI', 'MOT') and the value is a list of
         information for the respective speaker code. The list of information is
         in this order:
@@ -264,7 +263,7 @@ class SingleReader:
         """
         :return: a dict where key is filename and value is
         a set of the speaker codes (e.g., `{'CHI', 'MOT', 'FAT'}`)
-        :rtype: dict(str: set)
+        :rtype: set
         """
         try:
             return set(self.headers()['Participants'].keys())
@@ -273,9 +272,8 @@ class SingleReader:
 
     def languages(self):
         """
-        :return: a dict where key is filename and value is
-        a set of languages based on the @Languages headers
-        :rtype: dict(str: set)
+        :return: a set of languages based on the @Languages headers
+        :rtype: set
         """
         languages_set = set()
 
@@ -295,11 +293,10 @@ class SingleReader:
         """
         Returns the date of recording.
 
-        :return: a dict where key is filename and value is
-        a 3-tuple of (*year*, *month*, *day*),
+        :return: a 3-tuple of (*year*, *month*, *day*),
         where *year*, *month*, *day* are all ``int``. Returns ``None`` instead
         of any errors arise (e.g., there's no date).
-        :rtype: dict(str: tuple), where tuple could be None if no date
+        :rtype: tuple, or None if no date
         """
         try:
             date_str = self.headers()['Date']

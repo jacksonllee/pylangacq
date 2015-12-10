@@ -1,5 +1,3 @@
-#!usr/bin/env python3
-
 from setuptools import (setup, find_packages)
 
 setup(name="pylangacq",
@@ -10,7 +8,7 @@ setup(name="pylangacq",
 PyLangAcq: Language Acquisition Research in Python
 """,
 
-    url="",
+    url="https://github.com/pylangacq/pylangacq",
     author="Jackson Lee",
     author_email="jsllee.phon@gmail.com",
     license="Apache License, Version 2.0",

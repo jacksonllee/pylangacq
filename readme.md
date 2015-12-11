@@ -22,7 +22,10 @@ PyLangAcq is currently available through GitHub:
 Use
 ---
 
-The `chat` submodule has the class `SingleReader` for reading a single `.cha` files as well as the generalized `Reader` for multiple files.
+The `chat` submodule has two classes for reading `.cha` files:
+
+- `SingleReader` for reading a single `.cha` file
+- `Reader` for multiple `.cha` files
 
 For `SingleReader`, the following example assumes that a `.cha` file such as [`eve01.cha`](http://childes.psy.cmu.edu/browser/index.php?url=Eng-NA-MOR/Brown/Eve/eve01.cha) is in the current directory.
 
@@ -31,12 +34,12 @@ For `SingleReader`, the following example assumes that a `.cha` file such as [`e
 >>> from pprint import pprint
 >>> corpus = SingleReader('eve01.cha')
 >>>
->>> # The metadata from the @ lines of eve01.cha
+>>> # The metadata from the headers @ lines of eve01.cha
 ... # can be accessed by various methods:
-... #     metadata(), participants(), participant_codes(), languages(),
+... #     headers(), participants(), participant_codes(), languages(),
 ... #     date(), age()
 ...
->>> # The metadata @ lines in eve01.cha (excluding Time Duration and Tape Location)
+>>> # The headers in eve01.cha (excluding Time Duration and Tape Location)
 ... # are as follows:
 ...
 >>> # @UTF8
@@ -50,7 +53,7 @@ For `SingleReader`, the following example assumes that a `.cha` file such as [`e
 ... # @Date:	15-OCT-1962
 ... # @End
 ...
->>> pprint(corpus.metadata())
+>>> pprint(corpus.headers())
 {'Date': '17-OCT-1962',
  'Languages': 'eng',
  'Participants': {'CHI': {'SES': '',
@@ -156,7 +159,7 @@ For `SingleReader`, the following example assumes that a `.cha` file such as [`e
 ```
 
 
-A separate class `Reader` is available for reading multiple `.cha` files. `Reader` shares the same method names as `SingleReader`. Because `Reader` is the generalized reader for multiple input files built on top of `SingleReader`, the `Reader` methods have a more elaborate data structure, mostly returning a dict mapping a absolute-path filename to whatever the method is for with respect to the file concerned. Example (assuming the `.cha` files for Eve from CHILDES Brown are in the current directory):
+The class `Reader` is available for reading multiple `.cha` files. `Reader` shares the same method names as `SingleReader`. Because `Reader` is the generalized reader for multiple input files built on top of `SingleReader`, the `Reader` methods have a more elaborate data structure, mostly returning a dict mapping a absolute-path filename to whatever the method is for with respect to the file concerned. Example (assuming the `.cha` files for Eve from CHILDES Brown are in the current directory):
 
 ```python
 >>> import os
@@ -200,6 +203,12 @@ Changlog
 --------
 
 See [changlog](ChangeLog.md)
+
+
+License
+-------
+
+See [license](LICENSE.txt)
 
 
 Author

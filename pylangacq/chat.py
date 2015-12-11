@@ -181,13 +181,13 @@ class SingleReader:
         the content for the respective header name.
 
         For the head 'Participants', the entry is a dict where the keys are the
-        speaker codes (e.g., 'CHI', 'MOT') and the value is a list of
-        information for the respective speaker code. The list of information is
-        in this order:
+        speaker codes (e.g., 'CHI', 'MOT') and the value is a dict of
+        information for the respective speaker code. The keys of the
+        information are as follows
 
-        speaker label (from the '@Participants' field), language, corpus, code,
+        speaker_label (from the '@Participants' field), language, corpus, code,
         age, sex, group, SES, role, education, custom
-        :rtype: dict
+        :rtype: dict(str: dict)
         """
         headname_to_entry = dict()
 
@@ -295,7 +295,7 @@ class SingleReader:
 
         :return: a 3-tuple of (*year*, *month*, *day*),
         where *year*, *month*, *day* are all ``int``. Returns ``None`` instead
-        of any errors arise (e.g., there's no date).
+        if any errors arise (e.g., there's no date).
         :rtype: tuple, or None if no date
         """
         try:

@@ -1,9 +1,17 @@
 import os
 import fnmatch
 
+# Tiers (apart from the transcription lines with *) that are of interest
+# (each must be str, beginning with '%' followed by three lowercase letters)
+TIERS = {'%mor', '%gra'}
+
 
 class Reader:
-    def __init__(self, *filenames):
+    """
+    ``Reader`` is a class for reading multiple CHAT files. It is built on the
+    ``SingleReader`` class.
+    """
+    def __init__(self, *filenames, tiers=TIERS):
         """
         :param filenames: one or more filenames.
 
@@ -23,6 +31,8 @@ class Reader:
         :return: ``self.filenames`` is a sorted list of matched absolute-path
         filenames.
         """
+        self.tiers = tiers
+
         for filename in filenames:
             if type(filename) is not str:
                 raise ValueError('{} is not str'.format(repr(filename)))
@@ -61,7 +71,16 @@ class Reader:
         a list iterator of all cleaned-up lines in the .cha file
         :rtype: dict(str: iter)
         """
-        return {filename: SingleReader(filename).cha_lines()
+        return {filename: SingleReader(filename, self.tiers).cha_lines()
+                for filename in self.filenames}
+
+    def tier_sniffer(self):
+        """
+        :return: a dict where key is filename and value is
+        the information (as a dict(str: bool)) for whether a particular tier
+        type (e.g., `%mor`) exists
+        """
+        return {filename: SingleReader(filename, self.tiers).tier_sniffer()
                 for filename in self.filenames}
 
     def headers(self):
@@ -70,7 +89,7 @@ class Reader:
         the headers (as a dict) of the CHAT file.
         :rtype: dict(str: dict)
         """
-        return {filename: SingleReader(filename).headers()
+        return {filename: SingleReader(filename, self.tiers).headers()
                 for filename in self.filenames}
 
     def metadata(self):
@@ -86,7 +105,7 @@ class Reader:
         participant information (as a dict) based on the @ID lines.
         :rtype: dict(str: dict)
         """
-        return {filename: SingleReader(filename).participants()
+        return {filename: SingleReader(filename, self.tiers).participants()
                 for filename in self.filenames}
 
     def participant_codes(self):
@@ -95,7 +114,7 @@ class Reader:
         a set of the speaker codes (e.g., `{'CHI', 'MOT', 'FAT'}`)
         :rtype: dict(str: set)
         """
-        return {filename: SingleReader(filename).participant_codes()
+        return {filename: SingleReader(filename, self.tiers).participant_codes()
                 for filename in self.filenames}
 
     def languages(self):
@@ -104,7 +123,7 @@ class Reader:
         a set of languages based on the @Languages headers
         :rtype: dict(str: set)
         """
-        return {filename: SingleReader(filename).languages()
+        return {filename: SingleReader(filename, self.tiers).languages()
                 for filename in self.filenames}
 
     def date(self):
@@ -117,7 +136,7 @@ class Reader:
         of any errors arise (e.g., there's no date).
         :rtype: dict(str: tuple), where tuple could be None if no date
         """
-        return {filename: SingleReader(filename).date()
+        return {filename: SingleReader(filename, self.tiers).date()
                 for filename in self.filenames}
 
     def age(self, speaker='CHI'):
@@ -132,16 +151,21 @@ class Reader:
         of any errors arise (e.g., there's no age).
         :rtype: tuple, or None
         """
-        return {filename: SingleReader(filename).age(speaker=speaker)
-                for filename in self.filenames}
+        return {filename: SingleReader(filename, self.tiers).age(
+            speaker=speaker) for filename in self.filenames}
 
 
 class SingleReader:
-    def __init__(self, filename):
+    """
+    ``SingleReader`` is a class for reading a single CHAT file.
+    """
+    def __init__(self, filename, tiers=TIERS):
         """
         :param filename: absolute-path of a ``.cha`` file
         :return: ``self.filename`` is str
         """
+        self.tiers = tiers
+
         if type(filename) is not str:
             raise ValueError('filename must be str')
 
@@ -159,6 +183,11 @@ class SingleReader:
         :return: a list iterator of all cleaned-up lines in the .cha file
         :rtype: iter
         """
+        # In principle, either iterator or generator can serve our purposes
+        # well. An iterator but not generator is chosen to be the returned
+        # object, because we need access to the previous line just read in the
+        # previous iteration in the for loop (in case when the present line
+        # starts with a tab character).
         lines = list()
 
         for line in open(self.filename, 'rU'):
@@ -172,6 +201,37 @@ class SingleReader:
             lines.append(line)
 
         return iter(lines)
+
+    def _find_one_tier(self, lines, tier):
+        """
+        :param lines: an iterator of the CHAT file lines
+        :param tier: tier name as str (e.g., `%mor`)
+        :return: ``True`` or ``False``, for whether the tier exists in lines
+        """
+        present = False
+        for line in lines:
+            if line.startswith(tier):
+                present = True
+                break
+        return present
+
+    def tier_sniffer(self):
+        """
+        checks if the CHAT file contains the following tiers:
+
+        - %mor
+        - %gra
+
+        :return: a dict where key is tier name (e.g., '%mor') and
+        value is `True` or `False`
+        :rtype: dict(str: bool)
+        """
+        sniffer_results = dict()
+
+        for tier in self.tiers:
+            sniffer_results[tier] = self._find_one_tier(self.cha_lines(), tier)
+
+        return sniffer_results
 
     def headers(self):
         """
@@ -347,4 +407,3 @@ class SingleReader:
             return year, month, day
         except (KeyError, IndexError, ValueError):
             return None
-

@@ -210,13 +210,13 @@ Many, many more functionalities are coming.
 Changlog
 --------
 
-See [changlog](ChangeLog.md)
+See [changlog](changelog.md)
 
 
 License
 -------
 
-See [license](LICENSE.txt)
+See [license](license.txt)
 
 
 Author

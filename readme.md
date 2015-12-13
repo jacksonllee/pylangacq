@@ -4,7 +4,7 @@ PyLangAcq: Language acquisition research in Python
 What is this
 ------------
 
-PyLangAcq is a Python library for the computational modeling of language acquisition. The library is under active development. The current version is 0.3.
+PyLangAcq is a Python library for the computational modeling of language acquisition. The library is under active development. The current version is 0.4.
 
 Currently, the focus is to develop capabilities to interface with `.cha` transcription files in the CHAT format, widely used by the [CHILDES](http://childes.psy.cmu.edu/) database.
 
@@ -53,6 +53,9 @@ For `SingleReader`, the following example assumes that a `.cha` file such as [`e
 ... # @Date:	15-OCT-1962
 ... # @End
 ...
+>>> corpus.number_of_utterances()
+1588  # number of transcription lines starting with '*', for *CHI, *MOT, etc.
+>>>
 >>> pprint(corpus.headers())
 {'Date': '17-OCT-1962',
  'Languages': 'eng',
@@ -165,8 +168,13 @@ The class `Reader` is available for reading multiple `.cha` files. `Reader` shar
 >>> import os
 >>> from pylangacq.chat import Reader
 >>> eve_corpus = Reader('eve*.cha')  # allows filename pattern matching with *
+>>>
 >>> eve_corpus.number_of_files()
 20  # there are 20 files for Eve, from eve01.cha through eve20.cha
+>>>
+>>> eve_corpus.number_of_utterances()
+26921  # total number of utterances for the Eve portion in Brown
+>>>
 >>> eve_ages = eve_corpus.age()  # a dict (key: abs-path filename, value: age as a 3-int tuple)
 >>> eve_ages_sorted = sorted([(os.path.basename(fn), age) for fn, age in eve_ages.items()])
 >>> for filename, age in eve_ages_sorted:

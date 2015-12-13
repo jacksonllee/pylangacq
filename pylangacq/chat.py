@@ -55,26 +55,21 @@ class Reader:
                                                  filename))
 
         self.filenames = sorted(set(self.filenames))
-        self.number_of_files = len(self.filenames)
 
-        # The following variables are the basis for many derived methods
-        # (e.g., age, languages, participant_codes).
-        # We try not to declare any more variables here (?)
-        # Variables here should be comparable (= with the same names) as those
-        # in the SingleReader class.
+    def number_of_files(self):
+        """
+        :return: the number of CHAT files
+        :rtype: int
+        """
+        return len(self.filenames)
 
-        self.headers = self._headers()
-        self.tier_sniffer = self._tier_sniffer()
-        self.index_to_tiers = self._index_to_tiers()
-        self.number_of_utterances = self._number_of_utterances()
-
-    def _number_of_utterances(self):
+    def number_of_utterances(self):
         """
         :return: the total number of utterances across all CHAT files
         :rtype: int
         """
         return sum([SingleReader(filename,
-                                 self.tier_markers).number_of_utterances
+                                 self.tier_markers).number_of_utterances()
                     for filename in self.filenames])
 
     def cha_lines(self):
@@ -89,32 +84,33 @@ class Reader:
         return {filename: SingleReader(filename, self.tier_markers).cha_lines()
                 for filename in self.filenames}
 
-    def _tier_sniffer(self):
+    def tier_sniffer(self):
         """
         :return: a dict where key is filename and value is
         the information (as a dict(str: bool)) for whether a particular tier
         type (e.g., `%mor`) exists
         """
-        return {filename: SingleReader(filename, self.tier_markers).tier_sniffer
+        return {filename: SingleReader(filename,
+                                       self.tier_markers).tier_sniffer()
                 for filename in self.filenames}
 
-    def _headers(self):
+    def headers(self):
         """
         :return: a dict where key is filename and value is
         the headers (as a dict) of the CHAT file.
         :rtype: dict(str: dict)
         """
-        return {filename: SingleReader(filename, self.tier_markers).headers
+        return {filename: SingleReader(filename, self.tier_markers).headers()
                 for filename in self.filenames}
 
-    def _index_to_tiers(self):
+    def index_to_tiers(self):
         """
         :return: a dict where key is filename and value is
         the index_to_tiers dict of the CHAT file.
         :rtype: dict(str: dict)
         """
         return {filename: SingleReader(filename,
-                                       self.tier_markers).index_to_tiers
+                                       self.tier_markers).index_to_tiers()
                 for filename in self.filenames}
 
     def participants(self):
@@ -198,16 +194,12 @@ class SingleReader:
         if not os.path.isfile(self.filename):
             raise FileNotFoundError(self.filename)
 
-        # The following variables are the basis for many derived methods
-        # (e.g., age, languages, participant_codes).
-        # We *try* to declare as few variables here as possible (?)
-        # Variables here should be comparable (= with the same names) as those
-        # in the Reader class.
-
-        self.tier_sniffer = self._tier_sniffer()
-        self.headers = self._headers()
-        self.index_to_tiers = self._index_to_tiers()
-        self.number_of_utterances = len(self.index_to_tiers)
+    def number_of_utterances(self):
+        """
+        :return: the number of utterances (lines starting with '*')
+        :rtype: int
+        """
+        return len(self.index_to_tiers())
 
     def cha_lines(self):
         """
@@ -252,7 +244,7 @@ class SingleReader:
                 break
         return present
 
-    def _tier_sniffer(self):
+    def tier_sniffer(self):
         """
         checks if the CHAT file contains the following tiers:
 
@@ -270,7 +262,7 @@ class SingleReader:
 
         return sniffer_results
 
-    def _index_to_tiers(self):
+    def index_to_tiers(self):
         """
         Extracts in the CHAT file the utterances and tiers of interest.
         Each utterance is assigned an integer index (starting from 0).
@@ -308,7 +300,7 @@ class SingleReader:
 
         return result
 
-    def _headers(self):
+    def headers(self):
         """
         :return: a dict of headers of the .chat file.
         The keys are the header names
@@ -383,7 +375,7 @@ class SingleReader:
         :rtype: dict
         """
         try:
-            return self.headers['Participants']
+            return self.headers()['Participants']
         except KeyError:
             return dict()
 
@@ -394,7 +386,7 @@ class SingleReader:
         :rtype: set
         """
         try:
-            return set(self.headers['Participants'].keys())
+            return set(self.headers()['Participants'].keys())
         except KeyError:
             return set()
 
@@ -406,7 +398,7 @@ class SingleReader:
         languages_set = set()
 
         try:
-            languages_line = self.headers['Languages']
+            languages_line = self.headers()['Languages']
         except KeyError:
             pass
         else:
@@ -427,7 +419,7 @@ class SingleReader:
         :rtype: tuple, or None if no date
         """
         try:
-            date_str = self.headers['Date']
+            date_str = self.headers()['Date']
             day_str, month_str, year_str = date_str.split('-')
             day = int(day_str)
             year = int(year_str)
@@ -464,7 +456,7 @@ class SingleReader:
         :rtype: tuple, or None
         """
         try:
-            age_ = self.headers['Participants'][speaker]['age']
+            age_ = self.headers()['Participants'][speaker]['age']
 
             year, _semicolon, month_day = age_.partition(';')
             month, _period, day = month_day.partition('.')

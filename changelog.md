@@ -1,6 +1,12 @@
 Change log
 ==========
 
+- Version 0.4 2015-12-13
+
+    * New `number_of_utterances` method for both `Reader` and `SingleReader`
+    * To avoid confusion, `metadata` method is removed
+    * Extraction of utterances and tiers with dict `index_to_tiers`
+
 - Version 0.3 2015-12-09
 
     * class `Reader` can read multiple `.cha` files. The methods associated with `Reader` are mostly a dict mapping from a absolute-path filename to something. `Reader` depends on the class `SingleReader` for a single `.cha` file.

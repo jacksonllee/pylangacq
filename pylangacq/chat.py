@@ -1,9 +1,10 @@
 import os
 import fnmatch
 
-# Tiers (apart from the transcription lines with *) that are of interest
-# (each must be str, beginning with '%' followed by three lowercase letters)
-TIERS = {'%mor', '%gra'}
+from pylangacq.util import startswithoneof
+
+# Tiers (excluding the utterances beginning with '*') that are of interest
+TIER_MARKERS = {'%mor', '%gra'}
 
 
 class Reader:
@@ -11,7 +12,7 @@ class Reader:
     ``Reader`` is a class for reading multiple CHAT files. It is built on the
     ``SingleReader`` class.
     """
-    def __init__(self, *filenames, tiers=TIERS):
+    def __init__(self, *filenames, tiers=TIER_MARKERS):
         """
         :param filenames: one or more filenames.
 
@@ -31,7 +32,7 @@ class Reader:
         :return: ``self.filenames`` is a sorted list of matched absolute-path
         filenames.
         """
-        self.tiers = tiers
+        self.tier_markers = tiers
 
         for filename in filenames:
             if type(filename) is not str:
@@ -39,7 +40,7 @@ class Reader:
             if os.path.isabs(filename):
                 raise ValueError('filename should not be an absolute path')
 
-        abs_path = os.path.abspath('.')
+        abs_path = os.getcwd()
 
         # create filenames_current_dir to store all abs-path filenames
         #  in the current directory
@@ -54,13 +55,27 @@ class Reader:
                                                  filename))
 
         self.filenames = sorted(set(self.filenames))
+        self.number_of_files = len(self.filenames)
 
-    def number_of_files(self):
+        # The following variables are the basis for many derived methods
+        # (e.g., age, languages, participant_codes).
+        # We try not to declare any more variables here (?)
+        # Variables here should be comparable (= with the same names) as those
+        # in the SingleReader class.
+
+        self.headers = self._headers()
+        self.tier_sniffer = self._tier_sniffer()
+        self.index_to_tiers = self._index_to_tiers()
+        self.number_of_utterances = self._number_of_utterances()
+
+    def _number_of_utterances(self):
         """
-        :return: the number of files
+        :return: the total number of utterances across all CHAT files
         :rtype: int
         """
-        return len(self.filenames)
+        return sum([SingleReader(filename,
+                                 self.tier_markers).number_of_utterances
+                    for filename in self.filenames])
 
     def cha_lines(self):
         """
@@ -71,33 +86,36 @@ class Reader:
         a list iterator of all cleaned-up lines in the .cha file
         :rtype: dict(str: iter)
         """
-        return {filename: SingleReader(filename, self.tiers).cha_lines()
+        return {filename: SingleReader(filename, self.tier_markers).cha_lines()
                 for filename in self.filenames}
 
-    def tier_sniffer(self):
+    def _tier_sniffer(self):
         """
         :return: a dict where key is filename and value is
         the information (as a dict(str: bool)) for whether a particular tier
         type (e.g., `%mor`) exists
         """
-        return {filename: SingleReader(filename, self.tiers).tier_sniffer()
+        return {filename: SingleReader(filename, self.tier_markers).tier_sniffer
                 for filename in self.filenames}
 
-    def headers(self):
+    def _headers(self):
         """
         :return: a dict where key is filename and value is
         the headers (as a dict) of the CHAT file.
         :rtype: dict(str: dict)
         """
-        return {filename: SingleReader(filename, self.tiers).headers()
+        return {filename: SingleReader(filename, self.tier_markers).headers
                 for filename in self.filenames}
 
-    def metadata(self):
+    def _index_to_tiers(self):
         """
-        :return: same as ``headers()``
+        :return: a dict where key is filename and value is
+        the index_to_tiers dict of the CHAT file.
         :rtype: dict(str: dict)
         """
-        return self.headers()
+        return {filename: SingleReader(filename,
+                                       self.tier_markers).index_to_tiers
+                for filename in self.filenames}
 
     def participants(self):
         """
@@ -105,7 +123,8 @@ class Reader:
         participant information (as a dict) based on the @ID lines.
         :rtype: dict(str: dict)
         """
-        return {filename: SingleReader(filename, self.tiers).participants()
+        return {filename: SingleReader(filename,
+                                       self.tier_markers).participants()
                 for filename in self.filenames}
 
     def participant_codes(self):
@@ -114,7 +133,8 @@ class Reader:
         a set of the speaker codes (e.g., `{'CHI', 'MOT', 'FAT'}`)
         :rtype: dict(str: set)
         """
-        return {filename: SingleReader(filename, self.tiers).participant_codes()
+        return {filename: SingleReader(filename,
+                                       self.tier_markers).participant_codes()
                 for filename in self.filenames}
 
     def languages(self):
@@ -123,7 +143,7 @@ class Reader:
         a set of languages based on the @Languages headers
         :rtype: dict(str: set)
         """
-        return {filename: SingleReader(filename, self.tiers).languages()
+        return {filename: SingleReader(filename, self.tier_markers).languages()
                 for filename in self.filenames}
 
     def date(self):
@@ -136,7 +156,7 @@ class Reader:
         of any errors arise (e.g., there's no date).
         :rtype: dict(str: tuple), where tuple could be None if no date
         """
-        return {filename: SingleReader(filename, self.tiers).date()
+        return {filename: SingleReader(filename, self.tier_markers).date()
                 for filename in self.filenames}
 
     def age(self, speaker='CHI'):
@@ -151,7 +171,7 @@ class Reader:
         of any errors arise (e.g., there's no age).
         :rtype: tuple, or None
         """
-        return {filename: SingleReader(filename, self.tiers).age(
+        return {filename: SingleReader(filename, self.tier_markers).age(
             speaker=speaker) for filename in self.filenames}
 
 
@@ -159,12 +179,12 @@ class SingleReader:
     """
     ``SingleReader`` is a class for reading a single CHAT file.
     """
-    def __init__(self, filename, tiers=TIERS):
+    def __init__(self, filename, tiers=TIER_MARKERS):
         """
         :param filename: absolute-path of a ``.cha`` file
         :return: ``self.filename`` is str
         """
-        self.tiers = tiers
+        self.tier_markers = tiers
 
         if type(filename) is not str:
             raise ValueError('filename must be str')
@@ -172,8 +192,22 @@ class SingleReader:
         if os.path.isabs(filename):
             self.filename = filename
         else:
-            abs_path = os.path.abspath('.')
+            abs_path = os.getcwd()
             self.filename = os.path.normpath(os.path.join(abs_path, filename))
+
+        if not os.path.isfile(self.filename):
+            raise FileNotFoundError(self.filename)
+
+        # The following variables are the basis for many derived methods
+        # (e.g., age, languages, participant_codes).
+        # We *try* to declare as few variables here as possible (?)
+        # Variables here should be comparable (= with the same names) as those
+        # in the Reader class.
+
+        self.tier_sniffer = self._tier_sniffer()
+        self.headers = self._headers()
+        self.index_to_tiers = self._index_to_tiers()
+        self.number_of_utterances = len(self.index_to_tiers)
 
     def cha_lines(self):
         """
@@ -191,6 +225,9 @@ class SingleReader:
         lines = list()
 
         for line in open(self.filename, 'rU'):
+            if not line:
+                continue
+
             line = line.rstrip()  # don't remove leading \t
 
             if line.startswith('\t'):
@@ -202,7 +239,7 @@ class SingleReader:
 
         return iter(lines)
 
-    def _find_one_tier(self, lines, tier):
+    def find_one_tier(self, lines, tier):
         """
         :param lines: an iterator of the CHAT file lines
         :param tier: tier name as str (e.g., `%mor`)
@@ -215,7 +252,7 @@ class SingleReader:
                 break
         return present
 
-    def tier_sniffer(self):
+    def _tier_sniffer(self):
         """
         checks if the CHAT file contains the following tiers:
 
@@ -228,12 +265,50 @@ class SingleReader:
         """
         sniffer_results = dict()
 
-        for tier in self.tiers:
-            sniffer_results[tier] = self._find_one_tier(self.cha_lines(), tier)
+        for tier in self.tier_markers:
+            sniffer_results[tier] = self.find_one_tier(self.cha_lines(), tier)
 
         return sniffer_results
 
-    def headers(self):
+    def _index_to_tiers(self):
+        """
+        Extracts in the CHAT file the utterances and tiers of interest.
+        Each utterance is assigned an integer index (starting from 0).
+
+        :return: a dict where key is utterance index and value is
+        a dict, where key is tier marker and value is the list of items.
+        Two key-value pairs in the output dict may look like this:
+
+         1537: {'%gra': ['1|2|MOD', '2|0|INCROOT', '3|2|PUNCT'],
+                '%mor': ['n|tapioca', 'n|finger', '.'],
+                '*': ['tapioca', 'finger', '.', '[+', 'IMIT]']},
+         1538: {'%gra': ['1|0|INCROOT', '2|1|PUNCT'],
+                '%mor': ['n|cracker', '.'],
+                '*': ['cracker', '.']}
+
+        :rtype: dict(int: dict(str: list))
+        """
+        result = dict()
+        index_ = -1  # utterance index (1st utterance is index 0)
+        utterance = None
+
+        for line in self.cha_lines():
+            if line.startswith('@'):
+                continue
+
+            tier_marker = startswithoneof(line, self.tier_markers)
+            # tier_marker is '%mor', '%gra', or None
+
+            if line.startswith('*'):
+                index_ += 1
+                utterance = line.split()[1:]
+                result[index_] = {'*': utterance}
+            elif utterance and tier_marker:
+                result[index_][tier_marker] = line.split()[1:]
+
+        return result
+
+    def _headers(self):
         """
         :return: a dict of headers of the .chat file.
         The keys are the header names
@@ -301,13 +376,6 @@ class SingleReader:
 
         return headname_to_entry
 
-    def metadata(self):
-        """
-        :return: same as ``headers()``
-        :rtype: dict
-        """
-        return self.headers()
-
     def participants(self):
         """
         :return: a dict of participant information based on the @ID lines.
@@ -315,7 +383,7 @@ class SingleReader:
         :rtype: dict
         """
         try:
-            return self.headers()['Participants']
+            return self.headers['Participants']
         except KeyError:
             return dict()
 
@@ -326,7 +394,7 @@ class SingleReader:
         :rtype: set
         """
         try:
-            return set(self.headers()['Participants'].keys())
+            return set(self.headers['Participants'].keys())
         except KeyError:
             return set()
 
@@ -338,7 +406,7 @@ class SingleReader:
         languages_set = set()
 
         try:
-            languages_line = self.headers()['Languages']
+            languages_line = self.headers['Languages']
         except KeyError:
             pass
         else:
@@ -359,7 +427,7 @@ class SingleReader:
         :rtype: tuple, or None if no date
         """
         try:
-            date_str = self.headers()['Date']
+            date_str = self.headers['Date']
             day_str, month_str, year_str = date_str.split('-')
             day = int(day_str)
             year = int(year_str)
@@ -396,7 +464,7 @@ class SingleReader:
         :rtype: tuple, or None
         """
         try:
-            age_ = self.headers()['Participants'][speaker]['age']
+            age_ = self.headers['Participants'][speaker]['age']
 
             year, _semicolon, month_day = age_.partition(';')
             month, _period, day = month_day.partition('.')

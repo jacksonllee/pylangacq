@@ -271,14 +271,14 @@ class SingleReader:
         a dict, where key is tier marker and value is the list of items.
         Two key-value pairs in the output dict may look like this:
 
-         1537: {'%gra': ['1|2|MOD', '2|0|INCROOT', '3|2|PUNCT'],
-                '%mor': ['n|tapioca', 'n|finger', '.'],
-                '*': ['tapioca', 'finger', '.', '[+', 'IMIT]']},
-         1538: {'%gra': ['1|0|INCROOT', '2|1|PUNCT'],
-                '%mor': ['n|cracker', '.'],
-                '*': ['cracker', '.']}
+         1537: {'%gra': '1|2|MOD 2|0|INCROOT 3|2|PUNCT',
+                '%mor': 'n|tapioca n|finger .',
+                '*': 'tapioca finger . [+ IMIT]'},
+         1538: {'%gra': '1|0|INCROOT 2|1|PUNCT',
+                '%mor': 'n|cracker .',
+                '*': 'cracker .'}
 
-        :rtype: dict(int: dict(str: list))
+        :rtype: dict(int: dict(str: str))
         """
         result = dict()
         index_ = -1  # utterance index (1st utterance is index 0)
@@ -288,15 +288,17 @@ class SingleReader:
             if line.startswith('@'):
                 continue
 
+            line_split = line.split()
             tier_marker = startswithoneof(line, self.tier_markers)
             # tier_marker is '%mor', '%gra', or None
 
             if line.startswith('*'):
                 index_ += 1
-                utterance = line.split()[1:]
-                result[index_] = {'*': utterance}
+                speaker_code = line_split[0].lstrip('*').rstrip(':')
+                utterance_list = line_split[1:]
+                result[index_] = {speaker_code: ' '.join(utterance_list)}
             elif utterance and tier_marker:
-                result[index_][tier_marker] = line.split()[1:]
+                result[index_][tier_marker] = ' '.join(line_split[1:])
 
         return result
 

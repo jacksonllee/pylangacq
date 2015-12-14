@@ -296,7 +296,8 @@ class SingleReader:
                 index_ += 1
                 speaker_code = line_split[0].lstrip('*').rstrip(':')
                 utterance_list = line_split[1:]
-                result[index_] = {speaker_code: ' '.join(utterance_list)}
+                utterance = ' '.join(utterance_list)
+                result[index_] = {speaker_code: utterance}
             elif utterance and tier_marker:
                 result[index_][tier_marker] = ' '.join(line_split[1:])
 

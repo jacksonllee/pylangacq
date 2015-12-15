@@ -1,7 +1,7 @@
 import os
 import fnmatch
 
-from pylangacq.util import startswithoneof
+from pylangacq.util import *
 
 # Tiers (excluding the utterances beginning with '*') that are of interest
 TIER_MARKERS = {'%mor', '%gra'}
@@ -470,3 +470,75 @@ class SingleReader:
             return year, month, day
         except (KeyError, IndexError, ValueError):
             return None
+
+    def _clean_utterance(self, utterance):
+        """
+        Filters away unwanted material like corpus and conversation
+        analysis-typed annotation in the input utterance.
+        Returns a list of words by splitting
+        the utterance. Each word (including end-of-utterance punctuation) is
+        aligned with the corresponding item on the %mor tier.
+
+        :param utterance: utterance as str
+        :return: utterance as a list of words without annotations
+        :rtype: list
+        """
+        # Step 1:
+        # If utterance has something like  "<aa bb cc> [x 5]" (repeated 5 times)
+        # or "<aa bb cc> [?]" (uncertain transcription) and other similar cases
+        # like overlapping, we need to keep "aa bb cc" as
+        # actual transcription. Solution: Discard only the angle brackets.
+
+        all_left_angle_bracket_indices = find_indices(utterance, '<')
+        repeat_indices = find_indices(utterance, '> \[x')  # substring is '> [x'
+        uncertain_indices = find_indices(utterance, '> \[\?')  # all regex here
+        left_overlap_indices = find_indices(utterance, '> \[<')
+        right_overlap_indices = find_indices(utterance, '> \[>')
+
+        escape_left_angle_bracket_indices = list()
+        check_indices = repeat_indices + uncertain_indices + \
+            left_overlap_indices + right_overlap_indices
+
+        for index_ in check_indices:
+            for i in range(index_, -1, -1):
+                if i in all_left_angle_bracket_indices:
+                    escape_left_angle_bracket_indices.append(i)
+                    break
+
+        utterance_ = ''
+        utterance = replace_all(utterance, {('> [x', '  [x'), ('> [?', '  [?'),
+                                            ('> [>', '  [>'), ('> [<', '  [<')})
+        for i, char in enumerate(utterance):
+            if i not in escape_left_angle_bracket_indices:
+                utterance_ += char
+
+        # Step 2:
+        # Remove things in a scope (by angle or square brackets). Examples:
+        # from  'xx < aa bb > yy'  or  'xx [ aa bb ] yy'
+        # to 'xx  yy' (2 spaces in the middle)
+
+        utterance_ = re.sub('<[^<]+?>', '', utterance_)
+        utterance_ = re.sub('\[[^/][^\[]+?\]', '', utterance_)
+
+        # Step 3:
+        # We need to escape the one item immediately preceding [/] or [//].
+        # Solution: Replace ' [/' by '[/'.
+
+        utterance_ = utterance_.replace(' [/', '[/')
+
+        # Step 4:
+        # Among the "words" in utterance_.split(), discard the unwanted ones.
+
+        escape_words = {'(.)', '(..)', '(...)', 'xxx', '[/]', '[//]'}
+        escape_prefixes = {'[', '<', '&'}
+        escape_suffixes = {']', '>'}
+
+        output_utterance = list()
+
+        for word in utterance_.split():
+            if (word not in escape_words) and \
+                    (not startswithoneof(word, escape_prefixes)) and \
+                    (not endswithoneof(word, escape_suffixes)):
+                output_utterance.append(word)
+
+        return output_utterance

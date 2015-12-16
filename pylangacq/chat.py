@@ -126,7 +126,7 @@ class Reader:
     def participant_codes(self):
         """
         :return: a dict where key is filename and value is
-        a set of the speaker codes (e.g., `{'CHI', 'MOT', 'FAT'}`)
+        a set of the participant codes (e.g., `{'CHI', 'MOT', 'FAT'}`)
         :rtype: dict(str: set)
         """
         return {filename: SingleReader(filename,
@@ -155,11 +155,11 @@ class Reader:
         return {filename: SingleReader(filename, self.tier_markers).date()
                 for filename in self.filenames}
 
-    def age(self, speaker='CHI'):
+    def age(self, participant='CHI'):
         """
-        Returns the age of a particular speaker.
+        Returns the age of a particular participant.
 
-        :param speaker: an optional argument to specify which speaker,
+        :param participant: an optional argument to specify which participant,
         default = ``'CHI'``
         :return: a dict where key is filename and value is
         a 3-tuple of (*year*, *month*, *day*),
@@ -168,7 +168,7 @@ class Reader:
         :rtype: tuple, or None
         """
         return {filename: SingleReader(filename, self.tier_markers).age(
-            speaker=speaker) for filename in self.filenames}
+            participant=participant) for filename in self.filenames}
 
 
 class SingleReader:
@@ -294,10 +294,10 @@ class SingleReader:
 
             if line.startswith('*'):
                 index_ += 1
-                speaker_code = line_split[0].lstrip('*').rstrip(':')
+                participant_code = line_split[0].lstrip('*').rstrip(':')
                 utterance_list = line_split[1:]
                 utterance = ' '.join(utterance_list)
-                result[index_] = {speaker_code: utterance}
+                result[index_] = {participant_code: utterance}
             elif utterance and tier_marker:
                 result[index_][tier_marker] = ' '.join(line_split[1:])
 
@@ -311,12 +311,12 @@ class SingleReader:
         the content for the respective header name.
 
         For the head 'Participants', the entry is a dict where the keys are the
-        speaker codes (e.g., 'CHI', 'MOT') and the value is a dict of
-        information for the respective speaker code. The keys of the
+        participant codes (e.g., 'CHI', 'MOT') and the value is a dict of
+        information for the respective participant code. The keys of the
         information are as follows
 
-        speaker_label (from the '@Participants' field), language, corpus, code,
-        age, sex, group, SES, role, education, custom
+        participant_label (from the '@Participants' field), language, corpus,
+        code, age, sex, group, SES, role, education, custom
         :rtype: dict(str: dict)
         """
         headname_to_entry = dict()
@@ -342,27 +342,27 @@ class SingleReader:
 
                 for participant in participants:
                     participant = participant.strip()
-                    code, _space, speaker_label = participant.partition(' ')
-                    # code = speaker's code, e.g. CHI, MOT
+                    code, _space, participant_label = participant.partition(' ')
+                    # code = participant code, e.g. CHI, MOT
                     headname_to_entry['Participants'][code] = \
-                        {'speaker_label': speaker_label}
+                        {'participant_label': participant_label}
 
             elif head == 'ID':
-                speaker_info = line.split('|')[: -1]
+                participant_info = line.split('|')[: -1]
                 # final empty str removed
 
-                code = speaker_info[2]
-                # speaker_info contains these in order:
+                code = participant_info[2]
+                # participant_info contains these in order:
                 #   language, corpus, code, age, sex, group, SES, role,
                 #   education, custom
 
-                del speaker_info[2]  # remove code info (3rd in list)
-                speaker_info_heads = ['language', 'corpus', 'age',
-                                      'sex', 'group', 'SES', 'role',
-                                      'education', 'custom']
+                del participant_info[2]  # remove code info (3rd in list)
+                participant_info_heads = ['language', 'corpus', 'age', 'sex',
+                                          'group', 'SES', 'role',
+                                          'education', 'custom']
                 head_to_info = {head: info
                                 for head, info in
-                                zip(speaker_info_heads, speaker_info)}
+                                zip(participant_info_heads, participant_info)}
 
                 headname_to_entry['Participants'][code].update(head_to_info)
 
@@ -385,7 +385,7 @@ class SingleReader:
     def participant_codes(self):
         """
         :return: a dict where key is filename and value is
-        a set of the speaker codes (e.g., `{'CHI', 'MOT', 'FAT'}`)
+        a set of the participant codes (e.g., `{'CHI', 'MOT', 'FAT'}`)
         :rtype: set
         """
         try:
@@ -447,11 +447,11 @@ class SingleReader:
         except (ValueError, KeyError):
             return None
 
-    def age(self, speaker='CHI'):
+    def age(self, participant='CHI'):
         """
-        Returns the age of a particular speaker.
+        Returns the age of a particular participant.
 
-        :param speaker: an optional argument to specify which speaker,
+        :param participant: an optional argument to specify which participant,
         default = ``'CHI'``
         :return: a 3-tuple of (*year*, *month*, *day*),
         where *year*, *month*, *day* are all ``int``. Returns ``None`` instead
@@ -459,7 +459,7 @@ class SingleReader:
         :rtype: tuple, or None
         """
         try:
-            age_ = self.headers()['Participants'][speaker]['age']
+            age_ = self.headers()['Participants'][participant]['age']
 
             year, _semicolon, month_day = age_.partition(';')
             month, _period, day = month_day.partition('.')

@@ -194,12 +194,15 @@ class SingleReader:
         if not os.path.isfile(self.filename):
             raise FileNotFoundError(self.filename)
 
+        self.headers = self._headers()
+        self.index_to_tiers = self._index_to_tiers()
+
     def number_of_utterances(self):
         """
         :return: the number of utterances (lines starting with '*')
         :rtype: int
         """
-        return len(self.index_to_tiers())
+        return len(self.index_to_tiers)
 
     def cha_lines(self):
         """
@@ -262,7 +265,7 @@ class SingleReader:
 
         return sniffer_results
 
-    def index_to_tiers(self):
+    def _index_to_tiers(self):
         """
         Extracts in the CHAT file the utterances and tiers of interest.
         Each utterance is assigned an integer index (starting from 0).
@@ -303,7 +306,7 @@ class SingleReader:
 
         return result
 
-    def headers(self):
+    def _headers(self):
         """
         :return: a dict of headers of the .chat file.
         The keys are the header names
@@ -378,7 +381,7 @@ class SingleReader:
         :rtype: dict
         """
         try:
-            return self.headers()['Participants']
+            return self.headers['Participants']
         except KeyError:
             return dict()
 
@@ -389,7 +392,7 @@ class SingleReader:
         :rtype: set
         """
         try:
-            return set(self.headers()['Participants'].keys())
+            return set(self.headers['Participants'].keys())
         except KeyError:
             return set()
 
@@ -401,7 +404,7 @@ class SingleReader:
         languages_set = set()
 
         try:
-            languages_line = self.headers()['Languages']
+            languages_line = self.headers['Languages']
         except KeyError:
             pass
         else:
@@ -422,7 +425,7 @@ class SingleReader:
         :rtype: tuple, or None if no date
         """
         try:
-            date_str = self.headers()['Date']
+            date_str = self.headers['Date']
             day_str, month_str, year_str = date_str.split('-')
             day = int(day_str)
             year = int(year_str)
@@ -459,7 +462,7 @@ class SingleReader:
         :rtype: tuple, or None
         """
         try:
-            age_ = self.headers()['Participants'][participant]['age']
+            age_ = self.headers['Participants'][participant]['age']
 
             year, _semicolon, month_day = age_.partition(';')
             month, _period, day = month_day.partition('.')
@@ -495,9 +498,8 @@ class SingleReader:
             raise TypeError('participant data type is invalid: {}'.format(
                 repr(participant)))
 
-        index_to_tiers = self.index_to_tiers()
         for i in range(self.number_of_utterances()):
-            tiermarker_to_line = index_to_tiers[i]
+            tiermarker_to_line = self.index_to_tiers[i]
             for tier_marker in tiermarker_to_line.keys():
                 if tier_marker in participants:
                     line = tiermarker_to_line[tier_marker]

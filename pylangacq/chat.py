@@ -471,17 +471,50 @@ class SingleReader:
         except (KeyError, IndexError, ValueError):
             return None
 
+    def participant_to_utterance(self, participant='**ALL**', clean=True):
+        """
+        Extracts participant-utterance pairs in order of how they appear in
+        the transcript.
+
+        :param participant:  which participant(s) are of interest, default to
+        ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+        target child, for example. For multiple participants, this parameter
+        accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+        :param clean: whether to filter away the CHAT annotations in the
+        utterance. Default to ``True``.
+        :return: an iterator of the (participant, utterance) tuples
+        :rtype: iter
+        """
+        if participant == '**ALL**':
+            participants = self.participant_codes()
+        elif type(participant) is str:
+            participants = {participant}
+        elif hasattr(participant, '__iter__'):
+            participants = set(participant)
+        else:
+            raise TypeError('participant data type is invalid: {}'.format(
+                repr(participant)))
+
+        index_to_tiers = self.index_to_tiers()
+        for i in range(self.number_of_utterances()):
+            tiermarker_to_line = index_to_tiers[i]
+            for tier_marker in tiermarker_to_line.keys():
+                if tier_marker in participants:
+                    line = tiermarker_to_line[tier_marker]
+                    if clean:
+                        yield tier_marker, self._clean_utterance(line)
+                    else:
+                        yield tier_marker, line
+                    break
+
     def _clean_utterance(self, utterance):
         """
-        Filters away unwanted material like corpus and conversation
+        Filters away unwanted CHAT-format material like corpus and conversation
         analysis-typed annotation in the input utterance.
-        Returns a list of words by splitting
-        the utterance. Each word (including end-of-utterance punctuation) is
-        aligned with the corresponding item on the %mor tier.
 
         :param utterance: utterance as str
-        :return: utterance as a list of words without annotations
-        :rtype: list
+        :return: utterance without CHAT annotations
+        :rtype: str
         """
         # Step 1:
         # If utterance has something like  "<aa bb cc> [x 5]" (repeated 5 times)
@@ -533,12 +566,12 @@ class SingleReader:
         escape_prefixes = {'[', '<', '&'}
         escape_suffixes = {']', '>'}
 
-        output_utterance = list()
+        output_utterance_list = list()
 
         for word in utterance_.split():
             if (word not in escape_words) and \
                     (not startswithoneof(word, escape_prefixes)) and \
                     (not endswithoneof(word, escape_suffixes)):
-                output_utterance.append(word)
+                output_utterance_list.append(word)
 
-        return output_utterance
+        return ' '.join(output_utterance_list)

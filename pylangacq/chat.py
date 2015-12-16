@@ -471,7 +471,7 @@ class SingleReader:
         except (KeyError, IndexError, ValueError):
             return None
 
-    def participant_to_utterance(self, participant='**ALL**', clean=True):
+    def utterances(self, participant='**ALL**', clean=True):
         """
         Extracts participant-utterance pairs in order of how they appear in
         the transcript.

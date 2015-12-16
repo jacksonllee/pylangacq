@@ -100,7 +100,7 @@ class Reader:
         the headers (as a dict) of the CHAT file.
         :rtype: dict(str: dict)
         """
-        return {filename: SingleReader(filename, self.tier_markers).headers()
+        return {filename: SingleReader(filename, self.tier_markers).headers
                 for filename in self.filenames}
 
     def index_to_tiers(self):
@@ -110,7 +110,7 @@ class Reader:
         :rtype: dict(str: dict)
         """
         return {filename: SingleReader(filename,
-                                       self.tier_markers).index_to_tiers()
+                                       self.tier_markers).index_to_tiers
                 for filename in self.filenames}
 
     def participants(self):
@@ -165,10 +165,29 @@ class Reader:
         a 3-tuple of (*year*, *month*, *day*),
         where *year*, *month*, *day* are all ``int``. Returns ``None`` instead
         of any errors arise (e.g., there's no age).
-        :rtype: tuple, or None
+        :rtype: dict(str: tuple or None)
         """
         return {filename: SingleReader(filename, self.tier_markers).age(
             participant=participant) for filename in self.filenames}
+
+    def utterances(self, participant='**ALL**', clean=True):
+        """
+        Extracts participant-utterance pairs in order of how they appear in
+        the transcript.
+
+        :param participant:  which participant(s) are of interest, default to
+        ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+        target child, for example. For multiple participants, this parameter
+        accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+        :param clean: whether to filter away the CHAT annotations in the
+        utterance. Default to ``True``.
+        :return: a dict of filenames to iterators of the
+        (participant, utterance) tuples
+        :rtype: dict(str: iter)
+        """
+        return {filename: SingleReader(filename, self.tier_markers).utterances(
+            participant=participant, clean=clean)
+                for filename in self.filenames}
 
 
 class SingleReader:

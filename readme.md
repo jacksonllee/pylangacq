@@ -4,7 +4,7 @@ PyLangAcq: Language acquisition research in Python
 What is this
 ------------
 
-PyLangAcq is a Python library for the computational modeling of language acquisition. The library is under active development. The current version is 0.4.
+PyLangAcq is a Python library for the computational modeling of language acquisition. The library is under active development. The current version is 0.5.
 
 Currently, the focus is to develop capabilities to interface with `.cha` transcription files in the CHAT format, widely used by the [CHILDES](http://childes.psy.cmu.edu/) database.
 
@@ -56,7 +56,7 @@ For `SingleReader`, the following example assumes that a `.cha` file such as [`e
 >>> corpus.number_of_utterances()
 1588  # number of transcription lines starting with '*', for *CHI, *MOT, etc.
 >>>
->>> pprint(corpus.headers())
+>>> pprint(corpus.headers)
 {'Date': '17-OCT-1962',
  'Languages': 'eng',
  'Participants': {'CHI': {'SES': '',
@@ -68,7 +68,7 @@ For `SingleReader`, the following example assumes that a `.cha` file such as [`e
                           'language': 'eng',
                           'role': 'Target_Child',
                           'sex': 'female',
-                          'speaker_label': 'Eve Target_Child'},
+                          'participant_label': 'Eve Target_Child'},
                   'COL': {'SES': '',
                           'age': '',
                           'corpus': 'Brown',
@@ -78,7 +78,7 @@ For `SingleReader`, the following example assumes that a `.cha` file such as [`e
                           'language': 'eng',
                           'role': 'Investigator',
                           'sex': '',
-                          'speaker_label': 'Colin Investigator'},
+                          'participant_label': 'Colin Investigator'},
                   'MOT': {'SES': '',
                           'age': '',
                           'corpus': 'Brown',
@@ -88,7 +88,7 @@ For `SingleReader`, the following example assumes that a `.cha` file such as [`e
                           'language': 'eng',
                           'role': 'Mother',
                           'sex': '',
-                          'speaker_label': 'Sue Mother'},
+                          'participant_label': 'Sue Mother'},
                   'RIC': {'SES': '',
                           'age': '',
                           'corpus': 'Brown',
@@ -98,7 +98,7 @@ For `SingleReader`, the following example assumes that a `.cha` file such as [`e
                           'language': 'eng',
                           'role': 'Investigator',
                           'sex': '',
-                          'speaker_label': 'Richard Investigator'}},
+                          'participant_label': 'Richard Investigator'}},
  'Tape Location': '850',
  'Time Duration': '11:30-12:00',
  'UTF8': ''}
@@ -113,7 +113,7 @@ For `SingleReader`, the following example assumes that a `.cha` file such as [`e
          'language': 'eng',
          'role': 'Target_Child',
          'sex': 'female',
-         'speaker_label': 'Eve Target_Child'},
+         'participant_label': 'Eve Target_Child'},
  'COL': {'SES': '',
          'age': '',
          'corpus': 'Brown',
@@ -123,7 +123,7 @@ For `SingleReader`, the following example assumes that a `.cha` file such as [`e
          'language': 'eng',
          'role': 'Investigator',
          'sex': '',
-         'speaker_label': 'Colin Investigator'},
+         'participant_label': 'Colin Investigator'},
  'MOT': {'SES': '',
          'age': '',
          'corpus': 'Brown',
@@ -133,7 +133,7 @@ For `SingleReader`, the following example assumes that a `.cha` file such as [`e
          'language': 'eng',
          'role': 'Mother',
          'sex': '',
-         'speaker_label': 'Sue Mother'},
+         'participant_label': 'Sue Mother'},
  'RIC': {'SES': '',
          'age': '',
          'corpus': 'Brown',
@@ -143,7 +143,7 @@ For `SingleReader`, the following example assumes that a `.cha` file such as [`e
          'language': 'eng',
          'role': 'Investigator',
          'sex': '',
-         'speaker_label': 'Richard Investigator'}}
+         'participant_label': 'Richard Investigator'}}
 >>>
 >>> corpus.participant_codes()
 {'CHI', 'RIC', 'COL', 'MOT'}
@@ -157,8 +157,45 @@ For `SingleReader`, the following example assumes that a `.cha` file such as [`e
 >>> corpus.age()
 (1, 6, 0)  # a 3-tuple of int for 1 year and 6 months old; default is for CHI
 >>>
->>> corpus.age(speaker='MOT')
+>>> corpus.age(participant='MOT')
 (0, 0, 0)  # participants other than CHI often don't have the age info
+>>>
+>>> # Extract the first 10 utterances, with CHAT annotations removed (clean=True, the default)
+...
+>>>
+>>> for i, (participant, utterance) in enumerate(corpus.utterances(clean=True)):
+...     if i >= 10:
+...         break
+...     print('{}: {}'.format(participant, utterance))
+...
+CHI: more cookie .
+MOT: you 0v more cookies ?
+MOT: how_about another graham+cracker ?
+MOT: would that do just as_well ?
+MOT: here .
+MOT: here you go .
+CHI: more cookie .
+MOT: you have another cookie right on the table .
+CHI: more juice ?
+MOT: more juice ?
+>>>
+>>> # Extract the first 10 utterances by the target child
+...
+>>> for i, (participant, utterance) in enumerate(corpus.utterances(participant='CHI', clean=True)):
+...     if i >= 10:
+...         break
+...     print('{}: {}'.format(participant, utterance))
+...
+CHI: more cookie .
+CHI: more cookie .
+CHI: more juice ?
+CHI: Fraser .
+CHI: Fraser .
+CHI: Fraser .
+CHI: Fraser .
+CHI: yeah .
+CHI: (th)at ?
+CHI: a fly .
 ```
 
 

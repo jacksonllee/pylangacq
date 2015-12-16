@@ -1,6 +1,12 @@
 Change log
 ==========
 
+- Version 0.5 2015-12-16
+
+    * New `utterances` method for extracting utterance from transcripts
+    * `_clean_utterance` method developed for filtering CHAT annotations away in utterances
+    * Standardizing terminology: use "participant(s)" consistently instead of "speaker(s)"
+
 - Version 0.4 2015-12-13
 
     * New `number_of_utterances` method for both `Reader` and `SingleReader`

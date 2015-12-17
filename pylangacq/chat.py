@@ -74,18 +74,6 @@ class Reader:
                                  self.tier_markers).number_of_utterances()
                     for filename in self.filenames])
 
-    def cha_lines(self):
-        """
-        Reads the files and cleans them up by undoing the line continuation
-        with the tab character.
-
-        :return: a dict where key is filename and value is
-        a list iterator of all cleaned-up lines in the .cha file
-        :rtype: dict(str: iter)
-        """
-        return {filename: SingleReader(filename, self.tier_markers).cha_lines()
-                for filename in self.filenames}
-
     def tier_sniffer(self):
         """
         :return: a dict where key is filename and value is
@@ -230,30 +218,26 @@ class SingleReader:
         Reads the .cha file and cleans it up by undoing the line continuation
         with the tab character.
 
-        :return: a list iterator of all cleaned-up lines in the .cha file
-        :rtype: iter
+        :return: a generator of all cleaned-up lines in the .cha file
+        :rtype: generator
         """
-        # In principle, either iterator or generator can serve our purposes
-        # well. An iterator but not generator is chosen to be the returned
-        # object, because we need access to the previous line just read in the
-        # previous iteration in the for loop (in case when the present line
-        # starts with a tab character).
-        lines = list()
+        previous_line = ''
 
         for line in open(self.filename, 'rU'):
-            if not line:
+            current_line = line.rstrip()  # don't remove leading \t
+
+            if not current_line:
                 continue
 
-            line = line.rstrip()  # don't remove leading \t
-
-            if line.startswith('\t'):
-                previous_line = lines.pop()  # also removes it from "lines"
-                line = '{} {}'.format(previous_line, line.strip())
-                # removes leading/trailing characters (e.g. \t) from "line"
-
-            lines.append(line)
-
-        return iter(lines)
+            if previous_line and current_line.startswith('\t'):
+                previous_line = '{} {}'.format(previous_line,
+                                               current_line.strip())  # strip \t
+            elif previous_line:
+                yield previous_line
+                previous_line = current_line
+            else:  # when it's the very first line
+                previous_line = current_line
+        yield previous_line  # don't forget the very last line!
 
     def find_one_tier(self, lines, tier):
         """

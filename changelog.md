@@ -1,6 +1,12 @@
 Change log
 ==========
 
+Current version: 0.5
+
+- Version 0.6 in progress
+
+    * `cha_lines` optimized
+
 - Version 0.5 2015-12-16
 
     * New `utterances` method for extracting utterances from transcripts

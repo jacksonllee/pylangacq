@@ -6,6 +6,8 @@ from pylangacq.util import *
 # Tiers (excluding the utterances beginning with '*') that are of interest
 TIER_MARKERS = {'%mor', '%gra'}
 
+ALL_PARTICIPANTS = '**ALL**'
+
 
 class Reader:
     """
@@ -170,7 +172,7 @@ class Reader:
         return {filename: SingleReader(filename, self.tier_markers).age(
             participant=participant) for filename in self.filenames}
 
-    def utterances(self, participant='**ALL**', clean=True):
+    def utterances(self, participant=ALL_PARTICIPANTS, clean=True):
         """
         Extracts participant-utterance pairs in order of how they appear in
         the transcript.
@@ -352,7 +354,7 @@ class SingleReader:
                 continue
 
             # find head, e.g., "Languages", "Participants", "ID" etc
-            head, _tab, line = line.partition('\t')
+            head, _, line = line.partition('\t')
             line = line.strip()
             head = head.lstrip('@')  # remove beginning "@"
             head = head.rstrip(':')  # remove ending ":", if any
@@ -364,7 +366,7 @@ class SingleReader:
 
                 for participant in participants:
                     participant = participant.strip()
-                    code, _space, participant_label = participant.partition(' ')
+                    code, _, participant_label = participant.partition(' ')
                     # code = participant code, e.g. CHI, MOT
                     headname_to_entry['Participants'][code] = \
                         {'participant_label': participant_label}
@@ -483,8 +485,8 @@ class SingleReader:
         try:
             age_ = self.headers['Participants'][participant]['age']
 
-            year, _semicolon, month_day = age_.partition(';')
-            month, _period, day = month_day.partition('.')
+            year, _, month_day = age_.partition(';')
+            month, _, day = month_day.partition('.')
 
             year = int(year) if year.isdigit() else 0
             month = int(month) if month.isdigit() else 0
@@ -493,7 +495,7 @@ class SingleReader:
         except (KeyError, IndexError, ValueError):
             return None
 
-    def utterances(self, participant='**ALL**', clean=True):
+    def utterances(self, participant=ALL_PARTICIPANTS, clean=True):
         """
         Extracts participant-utterance pairs in order of how they appear in
         the transcript.
@@ -507,15 +509,7 @@ class SingleReader:
         :return: an iterator of the (participant, utterance) tuples
         :rtype: iter
         """
-        if participant == '**ALL**':
-            participants = self.participant_codes()
-        elif type(participant) is str:
-            participants = {participant}
-        elif hasattr(participant, '__iter__'):
-            participants = set(participant)
-        else:
-            raise TypeError('participant data type is invalid: {}'.format(
-                repr(participant)))
+        participants = self._determine_participants(participant)
 
         for i in range(self.number_of_utterances()):
             tiermarker_to_line = self.index_to_tiers[i]
@@ -596,3 +590,24 @@ class SingleReader:
                 output_utterance_list.append(word)
 
         return ' '.join(output_utterance_list)
+
+    def _determine_participants(self, participant):
+        """
+        Determines the target participants.
+
+        :param participant: str for one participant,
+        or a sequence of participants
+        :return: a set of participants
+        :rtype: set
+        """
+        if participant == ALL_PARTICIPANTS:
+            participants = self.participant_codes()
+        elif type(participant) is str:
+            participants = {participant}
+        elif hasattr(participant, '__iter__'):
+            participants = set(participant)
+        else:
+            raise TypeError('participant data type is invalid: {}'.format(
+                repr(participant)))
+        return participants
+

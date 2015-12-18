@@ -1,5 +1,6 @@
 import os
 import fnmatch
+from pprint import pformat
 
 from pylangacq.util import *
 
@@ -281,10 +282,10 @@ class SingleReader:
 
          1537: {'%gra': '1|2|MOD 2|0|INCROOT 3|2|PUNCT',
                 '%mor': 'n|tapioca n|finger .',
-                '*': 'tapioca finger . [+ IMIT]'},
+                'CHI': 'tapioca finger . [+ IMIT]'},
          1538: {'%gra': '1|0|INCROOT 2|1|PUNCT',
                 '%mor': 'n|cracker .',
-                '*': 'cracker .'}
+                'MOT': 'cracker .'}
 
         :rtype: dict(int: dict(str: str))
         """
@@ -595,3 +596,211 @@ class SingleReader:
                 repr(participant)))
         return participants
 
+    def _get_participant_code(self, tiermarker_to_line):
+        """
+        Gets the participant code from a tier set of utterance plus other %xxx
+        tiers.
+
+        :param tiermarker_to_line: a dict representing an utterance with its
+         associated tiers, where key is a tier marker (e.g.,
+        '%mor', '%gra', or a participant code)
+        :return: a participant code
+        :rtype: str, or None if no participant code is found
+        """
+        for tier_marker in tiermarker_to_line.keys():
+            if not tier_marker.startswith('%'):
+                return tier_marker
+        return None
+
+    def words(self, participant=ALL_PARTICIPANTS):
+        """
+        Extracts words.
+
+        :param participant: Specify participant as a str (e.g., 'CHI') or
+        participants as a sequence of str.
+        :return: generator of words
+        """
+        return self._get_words(participant=participant,
+                               tagged=False, sents=False)
+
+    def tagged_words(self, participant=ALL_PARTICIPANTS):
+        """
+        Extracts tagged words.
+
+        :param participant: Specify participant as a str (e.g., 'CHI') or
+        participants as a sequence of str.
+        :return: generator of tagged words
+        """
+        return self._get_words(participant=participant,
+                               tagged=True, sents=False)
+
+    def sents(self, participant=ALL_PARTICIPANTS):
+        """
+        Extracts sents (using NLTK terminology;
+        = words subgrouped into utterances).
+
+        :param participant: Specify participant as a str (e.g., 'CHI') or
+        participants as a sequence of str.
+        :return: generator of sents.
+        """
+        return self._get_words(participant=participant,
+                               tagged=False, sents=True)
+
+    def tagged_sents(self, participant=ALL_PARTICIPANTS):
+        """
+        Extracts tagged sents (using NLTK terminology;
+        = tagged words subgrouped into utterances).
+
+        :param participant: Specify participant as a str (e.g., 'CHI') or
+        participants as a sequence of str.
+        :return: generator of tagged sents.
+        """
+        return self._get_words(participant=participant,
+                               tagged=True, sents=True)
+
+    def _get_words(self, participant=ALL_PARTICIPANTS, tagged=True, sents=True):
+        """
+        Extracts words (defined below) for the specified participant(s).
+
+        The representation of "word" depends on whether ``tagged`` is True, and
+        is based to some extent on the NLTK conventions.
+
+        :param participant:  which participant(s) are of interest, default to
+        ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+        target child, for example. For multiple participants, this parameter
+        accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+
+        :param tagged:
+
+        If ``tagged`` is True, a word is a 4-tuple of (word, PoS, mor, gra).
+
+        - word is str
+        - PoS is part-of-speech tag as str, forced to be in uppercase following
+            NLTK
+        - mor is morphological information as str
+        - gra is grammatical relation, as a 3-tuple of
+            (self-position, head-position, relation), data type (int, int, str).
+
+        An example word with this representation is:
+        ('thought', 'V', 'think&PAST', (3, 0, 'ROOT'))
+        where in the original data, "thought" is the transcription,
+        %mor has "v|think&PAST", and %gra is "3|0|ROOT"
+
+        This word representation is an extension of NLTK, where a tagged word is
+        typically a 2-tuple of (word, PoS).
+
+        If ``tagged`` is False, a word is simply the word (str) from the
+        transcription.
+
+        :param sents: If ``sents`` (using NLTK terminology) is True,
+        words from the same utterance (= "sentence") are grouped
+        together into a list which is in turn yielded. Otherwise, individual
+        words are directly yielded without utterance structure.
+
+        :return: a generator of either sents of words, or just words
+        """
+        participants = self._determine_participants(participant)
+
+        for i in range(self.number_of_utterances()):
+            tiermarker_to_line = self.index_to_tiers[i]
+            participant_code = self._get_participant_code(tiermarker_to_line)
+
+            if participant_code not in participants:
+                continue
+
+            # get the plain words from utterance tier
+            utterance = self._clean_utterance(
+                tiermarker_to_line[participant_code])
+            words = utterance.split()
+
+            # %mor tier
+            clitic_indices = list()  # indices at the word items
+            clitic_count = 0
+
+            mor_items = list()
+            if '%mor' in tiermarker_to_line:
+                mor_split = tiermarker_to_line['%mor'].split()
+
+                for j, item in enumerate(mor_split):
+                    tilde_count = item.count('~')
+
+                    if tilde_count:
+                        item_split = item.split('~')
+
+                        for k in range(tilde_count):
+                            clitic_indices.append(clitic_count + j + k + 1)
+                            clitic_count += 1
+
+                            mor_items.append(item_split[k])
+
+                        mor_items.append(item_split[-1])
+                    else:
+                        mor_items.append(item)
+
+            if mor_items and \
+                    ((len(words) + clitic_count) != len(mor_items)):
+                raise ValueError(
+                    'cannot align the utterance and %mor tiers:\n{}'.format(
+                        pformat(tiermarker_to_line)))
+
+            # %gra tier
+            gra_items = list()
+            if '%gra' in tiermarker_to_line:
+                for item in tiermarker_to_line['%gra'].split():
+                    # an item is a string like '1|2|SUBJ'
+
+                    item_list = list()
+                    for element in item.split('|'):
+                        try:
+                            converted_element = int(element)
+                        except ValueError:
+                            converted_element = element
+
+                        item_list.append(converted_element)
+
+                    gra_items.append(tuple(item_list))
+
+            if mor_items and gra_items and \
+                    (len(mor_items) != len(gra_items)):
+                raise ValueError(
+                    'cannot align the %mor and %gra tiers:\n{}'.format(
+                        pformat(tiermarker_to_line)))
+
+            # utterance tier
+            if mor_items and clitic_count:
+                word_iterator = iter(words)
+                utterance_items = ['' for x in range(len(mor_items))]
+
+                for j in range(len(mor_items)):
+                    if j in clitic_indices:
+                        utterance_items[j] = 'CLITIC'
+                    else:
+                        utterance_items[j] = next(word_iterator)
+            else:
+                utterance_items = words
+
+            # determine what to yield (and how) to create the generator
+            if not mor_items:
+                mor_items = ['' for x in range(len(utterance_items))]
+            if not gra_items:
+                gra_items = ['' for x in range(len(utterance_items))]
+
+            if sents:
+                sent = list()
+
+            for word, mor, gra in zip(utterance_items, mor_items, gra_items):
+                pos, _, mor = mor.partition('|')
+
+                if tagged:
+                    output_word = (word, pos.upper(), mor, gra)
+                    # pos in uppercase follows NLTK convention
+                else:
+                    output_word = word
+
+                if sents:
+                    sent.append(output_word)
+                else:
+                    yield output_word
+
+            if sents:
+                yield sent

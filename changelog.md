@@ -6,6 +6,7 @@ Current version: 0.5
 - Version 0.6 in progress
 
     * `cha_lines` optimized
+    * Methods added: `tagged_words`, `words`, `tagged_sents`, `sents`
 
 - Version 0.5 2015-12-16
 

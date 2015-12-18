@@ -35,29 +35,25 @@ class Reader:
         :return: ``self.filenames`` is a sorted list of matched absolute-path
         filenames.
         """
-        self.tier_markers = tiers
-
+        filenames_set = set()
         for filename in filenames:
             if type(filename) is not str:
                 raise ValueError('{} is not str'.format(repr(filename)))
-            if os.path.isabs(filename):
-                raise ValueError('filename should not be an absolute path')
 
-        abs_path = os.getcwd()
+            abs_fullpath = os.path.abspath(filename)
+            abs_dir = os.path.dirname(abs_fullpath)
 
-        # create filenames_current_dir to store all abs-path filenames
-        #  in the current directory
-        filenames_current_dir = [os.path.join(abs_path, fn)
-                                 for fn in next(os.walk(abs_path))[2]]
+            if not os.path.isdir(abs_dir):
+                raise ValueError('dir does not exist: {}'.format(abs_dir))
 
-        self.filenames = list()
+            candidate_filenames = [os.path.join(abs_dir, fn)
+                                   for fn in next(os.walk(abs_dir))[2]]
 
-        for filename in filenames:
-            filename = os.path.normpath(os.path.join(abs_path, filename))
-            self.filenames.extend(fnmatch.filter(filenames_current_dir,
-                                                 filename))
+            filenames_set.update(fnmatch.filter(candidate_filenames,
+                                                abs_fullpath))
 
-        self.filenames = sorted(set(self.filenames))
+        self.filenames = sorted(filenames_set)
+        self.tier_markers = tiers
 
     def number_of_files(self):
         """

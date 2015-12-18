@@ -7,6 +7,8 @@ Current version: 0.5
 
     * `cha_lines` optimized
     * Methods added: `tagged_words`, `words`, `tagged_sents`, `sents`
+    * Tier detection revamped. `tier_sniffer` method removed, with `self.tier_markers` in `SingleClass` now being a set of %-tier markers.
+    * Static methods in classes pulled out
 
 - Version 0.5 2015-12-16
 

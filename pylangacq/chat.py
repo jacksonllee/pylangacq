@@ -4,9 +4,6 @@ from pprint import pformat
 
 from pylangacq.util import *
 
-# Tiers (excluding the utterances beginning with '*') that are of interest
-TIER_MARKERS = {'%mor', '%gra'}
-
 ALL_PARTICIPANTS = '**ALL**'
 
 
@@ -15,7 +12,7 @@ class Reader:
     ``Reader`` is a class for reading multiple CHAT files. It is built on the
     ``SingleReader`` class.
     """
-    def __init__(self, *filenames, tiers=TIER_MARKERS):
+    def __init__(self, *filenames):
         """
         :param filenames: one or more filenames.
 
@@ -53,7 +50,6 @@ class Reader:
                                                 abs_fullpath))
 
         self.filenames = sorted(filenames_set)
-        self.tier_markers = tiers
 
     def number_of_files(self):
         """
@@ -67,19 +63,8 @@ class Reader:
         :return: the total number of utterances across all CHAT files
         :rtype: int
         """
-        return sum([SingleReader(filename,
-                                 self.tier_markers).number_of_utterances()
+        return sum([SingleReader(filename).number_of_utterances()
                     for filename in self.filenames])
-
-    def tier_sniffer(self):
-        """
-        :return: a dict where key is filename and value is
-        the information (as a dict(str: bool)) for whether a particular tier
-        type (e.g., `%mor`) exists
-        """
-        return {filename: SingleReader(filename,
-                                       self.tier_markers).tier_sniffer()
-                for filename in self.filenames}
 
     def headers(self):
         """
@@ -87,7 +72,7 @@ class Reader:
         the headers (as a dict) of the CHAT file.
         :rtype: dict(str: dict)
         """
-        return {filename: SingleReader(filename, self.tier_markers).headers
+        return {filename: SingleReader(filename).headers
                 for filename in self.filenames}
 
     def index_to_tiers(self):
@@ -96,8 +81,7 @@ class Reader:
         the index_to_tiers dict of the CHAT file.
         :rtype: dict(str: dict)
         """
-        return {filename: SingleReader(filename,
-                                       self.tier_markers).index_to_tiers
+        return {filename: SingleReader(filename).index_to_tiers
                 for filename in self.filenames}
 
     def participants(self):
@@ -106,8 +90,7 @@ class Reader:
         participant information (as a dict) based on the @ID lines.
         :rtype: dict(str: dict)
         """
-        return {filename: SingleReader(filename,
-                                       self.tier_markers).participants()
+        return {filename: SingleReader(filename).participants()
                 for filename in self.filenames}
 
     def participant_codes(self):
@@ -116,8 +99,7 @@ class Reader:
         a set of the participant codes (e.g., `{'CHI', 'MOT', 'FAT'}`)
         :rtype: dict(str: set)
         """
-        return {filename: SingleReader(filename,
-                                       self.tier_markers).participant_codes()
+        return {filename: SingleReader(filename).participant_codes()
                 for filename in self.filenames}
 
     def languages(self):
@@ -126,7 +108,7 @@ class Reader:
         a set of languages based on the @Languages headers
         :rtype: dict(str: set)
         """
-        return {filename: SingleReader(filename, self.tier_markers).languages()
+        return {filename: SingleReader(filename).languages()
                 for filename in self.filenames}
 
     def date(self):
@@ -139,7 +121,7 @@ class Reader:
         of any errors arise (e.g., there's no date).
         :rtype: dict(str: tuple), where tuple could be None if no date
         """
-        return {filename: SingleReader(filename, self.tier_markers).date()
+        return {filename: SingleReader(filename).date()
                 for filename in self.filenames}
 
     def age(self, participant='CHI'):
@@ -154,7 +136,7 @@ class Reader:
         of any errors arise (e.g., there's no age).
         :rtype: dict(str: tuple or None)
         """
-        return {filename: SingleReader(filename, self.tier_markers).age(
+        return {filename: SingleReader(filename).age(
             participant=participant) for filename in self.filenames}
 
     def utterances(self, participant=ALL_PARTICIPANTS, clean=True):
@@ -172,7 +154,7 @@ class Reader:
         (participant, utterance) tuples
         :rtype: dict(str: iter)
         """
-        return {filename: SingleReader(filename, self.tier_markers).utterances(
+        return {filename: SingleReader(filename).utterances(
             participant=participant, clean=clean)
                 for filename in self.filenames}
 
@@ -181,27 +163,22 @@ class SingleReader:
     """
     ``SingleReader`` is a class for reading a single CHAT file.
     """
-    def __init__(self, filename, tiers=TIER_MARKERS):
+    def __init__(self, filename):
         """
         :param filename: absolute-path of a ``.cha`` file
         :return: ``self.filename`` is str
         """
-        self.tier_markers = tiers
-
         if type(filename) is not str:
             raise ValueError('filename must be str')
 
-        if os.path.isabs(filename):
-            self.filename = filename
-        else:
-            abs_path = os.getcwd()
-            self.filename = os.path.normpath(os.path.join(abs_path, filename))
+        self.filename = os.path.abspath(filename)
 
         if not os.path.isfile(self.filename):
             raise FileNotFoundError(self.filename)
 
         self.headers = self._headers()
         self.index_to_tiers = self._index_to_tiers()
+        self.tier_markers = self._tier_markers()
 
     def number_of_utterances(self):
         """
@@ -236,36 +213,19 @@ class SingleReader:
                 previous_line = current_line
         yield previous_line  # don't forget the very last line!
 
-    def find_one_tier(self, lines, tier):
+    def _tier_markers(self):
         """
-        :param lines: an iterator of the CHAT file lines
-        :param tier: tier name as str (e.g., `%mor`)
-        :return: ``True`` or ``False``, for whether the tier exists in lines
+        Return the set of %-beginning tier markers used in the CHAT file.
+
+        :return:
+        :rtype: set
         """
-        present = False
-        for line in lines:
-            if line.startswith(tier):
-                present = True
-                break
-        return present
-
-    def tier_sniffer(self):
-        """
-        checks if the CHAT file contains the following tiers:
-
-        - %mor
-        - %gra
-
-        :return: a dict where key is tier name (e.g., '%mor') and
-        value is `True` or `False`
-        :rtype: dict(str: bool)
-        """
-        sniffer_results = dict()
-
-        for tier in self.tier_markers:
-            sniffer_results[tier] = self.find_one_tier(self.cha_lines(), tier)
-
-        return sniffer_results
+        result = set()
+        for tiermarkers_to_tiers in self.index_to_tiers.values():
+            for tier_marker in tiermarkers_to_tiers.keys():
+                if tier_marker.startswith('%'):
+                    result.add(tier_marker)
+        return result
 
     def _index_to_tiers(self):
         """
@@ -294,16 +254,14 @@ class SingleReader:
                 continue
 
             line_split = line.split()
-            tier_marker = startswithoneof(line, self.tier_markers)
-            # tier_marker is '%mor', '%gra', or None
 
             if line.startswith('*'):
                 index_ += 1
                 participant_code = line_split[0].lstrip('*').rstrip(':')
-                utterance_list = line_split[1:]
-                utterance = ' '.join(utterance_list)
+                utterance = ' '.join(line_split[1:])
                 result[index_] = {participant_code: utterance}
-            elif utterance and tier_marker:
+            elif utterance and line.startswith('%'):
+                tier_marker = line_split[0].rstrip(':')
                 result[index_][tier_marker] = ' '.join(line_split[1:])
 
         return result
@@ -494,83 +452,15 @@ class SingleReader:
 
         for i in range(self.number_of_utterances()):
             tiermarker_to_line = self.index_to_tiers[i]
+
             for tier_marker in tiermarker_to_line.keys():
                 if tier_marker in participants:
                     line = tiermarker_to_line[tier_marker]
                     if clean:
-                        yield tier_marker, self._clean_utterance(line)
+                        yield tier_marker, clean_utterance(line)
                     else:
                         yield tier_marker, line
                     break
-
-    def _clean_utterance(self, utterance):
-        """
-        Filters away unwanted CHAT-format material like corpus and conversation
-        analysis-typed annotation in the input utterance.
-
-        :param utterance: utterance as str
-        :return: utterance without CHAT annotations
-        :rtype: str
-        """
-        # Step 1:
-        # If utterance has something like  "<aa bb cc> [x 5]" (repeated 5 times)
-        # or "<aa bb cc> [?]" (uncertain transcription) and other similar cases
-        # like overlapping, we need to keep "aa bb cc" as
-        # actual transcription. Solution: Discard only the angle brackets.
-
-        all_left_angle_bracket_indices = find_indices(utterance, '<')
-        repeat_indices = find_indices(utterance, '> \[x')  # substring is '> [x'
-        uncertain_indices = find_indices(utterance, '> \[\?')  # all regex here
-        left_overlap_indices = find_indices(utterance, '> \[<')
-        right_overlap_indices = find_indices(utterance, '> \[>')
-
-        escape_left_angle_bracket_indices = list()
-        check_indices = repeat_indices + uncertain_indices + \
-            left_overlap_indices + right_overlap_indices
-
-        for index_ in check_indices:
-            for i in range(index_, -1, -1):
-                if i in all_left_angle_bracket_indices:
-                    escape_left_angle_bracket_indices.append(i)
-                    break
-
-        utterance_ = ''
-        utterance = replace_all(utterance, {('> [x', '  [x'), ('> [?', '  [?'),
-                                            ('> [>', '  [>'), ('> [<', '  [<')})
-        for i, char in enumerate(utterance):
-            if i not in escape_left_angle_bracket_indices:
-                utterance_ += char
-
-        # Step 2:
-        # Remove things in a scope (by angle or square brackets). Examples:
-        # from  'xx < aa bb > yy'  or  'xx [ aa bb ] yy'
-        # to 'xx  yy' (2 spaces in the middle)
-
-        utterance_ = re.sub('<[^<]+?>', '', utterance_)
-        utterance_ = re.sub('\[[^/][^\[]+?\]', '', utterance_)
-
-        # Step 3:
-        # We need to escape the one item immediately preceding [/] or [//].
-        # Solution: Replace ' [/' by '[/'.
-
-        utterance_ = utterance_.replace(' [/', '[/')
-
-        # Step 4:
-        # Among the "words" in utterance_.split(), discard the unwanted ones.
-
-        escape_words = {'(.)', '(..)', '(...)', 'xxx', '[/]', '[//]'}
-        escape_prefixes = {'[', '<', '&'}
-        escape_suffixes = {']', '>'}
-
-        output_utterance_list = list()
-
-        for word in utterance_.split():
-            if (word not in escape_words) and \
-                    (not startswithoneof(word, escape_prefixes)) and \
-                    (not endswithoneof(word, escape_suffixes)):
-                output_utterance_list.append(word)
-
-        return ' '.join(output_utterance_list)
 
     def _determine_participants(self, participant):
         """
@@ -591,22 +481,6 @@ class SingleReader:
             raise TypeError('participant data type is invalid: {}'.format(
                 repr(participant)))
         return participants
-
-    def _get_participant_code(self, tiermarker_to_line):
-        """
-        Gets the participant code from a tier set of utterance plus other %xxx
-        tiers.
-
-        :param tiermarker_to_line: a dict representing an utterance with its
-         associated tiers, where key is a tier marker (e.g.,
-        '%mor', '%gra', or a participant code)
-        :return: a participant code
-        :rtype: str, or None if no participant code is found
-        """
-        for tier_marker in tiermarker_to_line.keys():
-            if not tier_marker.startswith('%'):
-                return tier_marker
-        return None
 
     def words(self, participant=ALL_PARTICIPANTS):
         """
@@ -699,14 +573,13 @@ class SingleReader:
 
         for i in range(self.number_of_utterances()):
             tiermarker_to_line = self.index_to_tiers[i]
-            participant_code = self._get_participant_code(tiermarker_to_line)
+            participant_code = get_participant_code(tiermarker_to_line.keys())
 
             if participant_code not in participants:
                 continue
 
             # get the plain words from utterance tier
-            utterance = self._clean_utterance(
-                tiermarker_to_line[participant_code])
+            utterance = clean_utterance(tiermarker_to_line[participant_code])
             words = utterance.split()
 
             # %mor tier
@@ -765,7 +638,7 @@ class SingleReader:
             # utterance tier
             if mor_items and clitic_count:
                 word_iterator = iter(words)
-                utterance_items = ['' for x in range(len(mor_items))]
+                utterance_items = [''] * len(mor_items)
 
                 for j in range(len(mor_items)):
                     if j in clitic_indices:
@@ -777,9 +650,9 @@ class SingleReader:
 
             # determine what to yield (and how) to create the generator
             if not mor_items:
-                mor_items = ['' for x in range(len(utterance_items))]
+                mor_items = [''] * len(utterance_items)
             if not gra_items:
-                gra_items = ['' for x in range(len(utterance_items))]
+                gra_items = [''] * len(utterance_items)
 
             if sents:
                 sent = list()
@@ -800,3 +673,88 @@ class SingleReader:
 
             if sents:
                 yield sent
+
+
+def clean_utterance(utterance):
+    """
+    Filters away unwanted CHAT-format material like corpus and conversation
+    analysis-typed annotation in the input utterance.
+
+    :param utterance: utterance as str
+    :return: utterance without CHAT annotations
+    :rtype: str
+    """
+    # Step 1:
+    # If utterance has something like  "<aa bb cc> [x 5]" (repeated 5 times)
+    # or "<aa bb cc> [?]" (uncertain transcription) and other similar cases
+    # like overlapping, we need to keep "aa bb cc" as
+    # actual transcription. Solution: Discard only the angle brackets.
+
+    all_left_angle_bracket_indices = find_indices(utterance, '<')
+    repeat_indices = find_indices(utterance, '> \[x')  # substring is '> [x'
+    uncertain_indices = find_indices(utterance, '> \[\?')  # all regex here
+    left_overlap_indices = find_indices(utterance, '> \[<')
+    right_overlap_indices = find_indices(utterance, '> \[>')
+
+    escape_left_angle_bracket_indices = list()
+    check_indices = repeat_indices + uncertain_indices + \
+        left_overlap_indices + right_overlap_indices
+
+    for index_ in check_indices:
+        for i in range(index_, -1, -1):
+            if i in all_left_angle_bracket_indices:
+                escape_left_angle_bracket_indices.append(i)
+                break
+
+    utterance_ = ''
+    utterance = replace_all(utterance, {('> [x', '  [x'), ('> [?', '  [?'),
+                                        ('> [>', '  [>'), ('> [<', '  [<')})
+    for i, char in enumerate(utterance):
+        if i not in escape_left_angle_bracket_indices:
+            utterance_ += char
+
+    # Step 2:
+    # Remove things in a scope (by angle or square brackets). Examples:
+    # from  'xx < aa bb > yy'  or  'xx [ aa bb ] yy'
+    # to 'xx  yy' (2 spaces in the middle)
+
+    utterance_ = re.sub('<[^<]+?>', '', utterance_)
+    utterance_ = re.sub('\[[^/][^\[]+?\]', '', utterance_)
+
+    # Step 3:
+    # We need to escape the one item immediately preceding [/] or [//].
+    # Solution: Replace ' [/' by '[/'.
+
+    utterance_ = utterance_.replace(' [/', '[/')
+
+    # Step 4:
+    # Among the "words" in utterance_.split(), discard the unwanted ones.
+
+    escape_words = {'(.)', '(..)', '(...)', 'xxx', '[/]', '[//]'}
+    escape_prefixes = {'[', '<', '&'}
+    escape_suffixes = {']', '>'}
+
+    output_utterance_list = list()
+
+    for word in utterance_.split():
+        if (word not in escape_words) and \
+                (not startswithoneof(word, escape_prefixes)) and \
+                (not endswithoneof(word, escape_suffixes)):
+            output_utterance_list.append(word)
+
+    return ' '.join(output_utterance_list)
+
+
+def get_participant_code(tier_marker_seq):
+    """
+    Return the participant code from a tier marker set.
+
+    :param tier_marker_seq: a sequence of tier markers like '%mor', '%gra', and
+    a participant code
+    :return: a participant code, e.g., 'CHI' from ``{'CHI', '%mor', '%gra'}``
+    :rtype: str, or None if no participant code is found
+    """
+    for tier_marker in tier_marker_seq:
+        if not tier_marker.startswith('%'):
+            return tier_marker
+    return None

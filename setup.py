@@ -17,7 +17,7 @@ PyLangAcq: Language Acquisition Research in Python
                 'NLP', 'linguistics', 'corpora', 'speech',
                 'language', 'CHILDES', 'CHAT', 'transcription',
                 'acquisition', 'development', 'learning'],
-    # install_requires=["nltk"],
+    install_requires=['networkx'],
 
     zip_safe=False,
 

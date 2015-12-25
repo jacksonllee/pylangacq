@@ -175,12 +175,19 @@ class SingleReader:
         self.index_to_tiers = self._index_to_tiers()
         self.tier_markers = self._tier_markers()
 
-    def number_of_utterances(self):
+    def __len__(self):
         """
         :return: The number of utterances (lines starting with '*')
         :rtype: int
         """
         return len(self.index_to_tiers)
+
+    def number_of_utterances(self):
+        """
+        :return: The number of utterances (lines starting with '*')
+        :rtype: int
+        """
+        return self.__len__()
 
     def cha_lines(self):
         """

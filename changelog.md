@@ -9,6 +9,7 @@ Current version: 0.5
     * Methods added: `tagged_words`, `words`, `tagged_sents`, `sents`
     * Tier detection revamped. `tier_sniffer` method removed, with `self.tier_markers` in `SingleClass` now being a set of %-tier markers.
     * Static methods in classes pulled out
+    * `len()` added
 
 - Version 0.5 2015-12-16
 

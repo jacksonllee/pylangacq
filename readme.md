@@ -244,6 +244,12 @@ eve20.cha (2, 3, 0)
 Many, many more functionalities are coming.
 
 
+Syntax highlighting for CHAT transcripts
+----------------------------------------
+
+See the directory [`chat-syntax-highlighting`](chat-syntax-highlighting).
+
+
 Changlog
 --------
 

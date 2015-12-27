@@ -641,7 +641,7 @@ class SingleReader:
 
                 for j in range(len(mor_items)):
                     if j in clitic_indices:
-                        utterance_items[j] = 'CLITIC'
+                        utterance_items[j] = CLITIC
                     else:
                         utterance_items[j] = next(word_iterator)
             else:
@@ -662,6 +662,9 @@ class SingleReader:
                 if tagged:
                     output_word = (word, pos.upper(), mor, gra)
                     # pos in uppercase follows NLTK convention
+                elif word == CLITIC:
+                    # if tagged is False and word is the clitic
+                    continue
                 else:
                     output_word = word
 

@@ -1,7 +1,7 @@
 from setuptools import (setup, find_packages)
 
 setup(name="pylangacq",
-    version="0.5",
+    version="0.6",
     description="PyLangAcq",
 
     long_description="""

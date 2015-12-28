@@ -1,17 +1,19 @@
 Change log
 ==========
 
-Current version: 0.5
+Current version: 0.6
 
-- Version 0.6 in progress
+- Version 0.7 in progress
+
+- Version 0.6 2015-12-27
 
     * `cha_lines` optimized
     * Methods added: `tagged_words`, `words`, `tagged_sents`, `sents`
     * Tier detection revamped. `tier_sniffer` method removed, with `self.tier_markers` in `SingleReader` now being a set of %-tier markers.
-    * Static methods in classes pulled out
     * `len()` for `SingleReader` added
-    * Submodule `grammar` added, with class `DependencyGraph` being set up
     * `word_frequency()` for `SingleReader` added
+    * Submodule `grammar` added, with class `DependencyGraph` being set up
+    * Static methods in classes pulled out
 
 - Version 0.5 2015-12-16
 

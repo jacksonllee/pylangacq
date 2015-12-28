@@ -1,6 +1,7 @@
 import os
 import fnmatch
 from pprint import pformat
+from collections import Counter
 
 from pylangacq.util import *
 
@@ -447,6 +448,7 @@ class SingleReader:
 
         :rtype: iter
         """
+        # TODO: collapses like [x 4] not yet handled
         participants = self._determine_participants(participant)
 
         for i in range(self.number_of_utterances()):
@@ -568,6 +570,7 @@ class SingleReader:
 
         :return: A generator of either sents of words, or just words
         """
+        # TODO: collapses like [x 4] not yet handled
         participants = self._determine_participants(participant)
 
         for i in range(self.number_of_utterances()):
@@ -675,6 +678,23 @@ class SingleReader:
 
             if sents:
                 yield sent
+
+    def word_frequency(self, participant=ALL_PARTICIPANTS, keep_case=True):
+        """
+        :return: a Counter dict of word-frequency pairs
+        :rtype: Counter
+        """
+        # TODO: collapses like [x 4] not yet handled
+        output = Counter()
+
+        if keep_case:
+            for word in self.words(participant=participant):
+                output[word] += 1
+        else:
+            for word in self.words(participant=participant):
+                output[word.lower()] += 1
+
+        return output
 
 
 def clean_utterance(utterance):

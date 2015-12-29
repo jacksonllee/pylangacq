@@ -19,7 +19,7 @@ PyLangAcq is currently available through GitHub:
     $ cd pylangacq
     $ python setup.py -U install
 
-The command `python` is meant to be generic for whichever Python interpreter of your choice is. The development of PyLangAcq is mainly under Python 3, though in principle everything should work just fine in Python 2.
+The command `python` is meant to be generic for whichever Python interpreter of your choice is. PyLangAcq is compatible with both Python 2 and 3.
 
 Use
 ---

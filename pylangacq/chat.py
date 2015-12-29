@@ -560,8 +560,12 @@ class SingleReader:
         This word representation is an extension of NLTK, where a tagged word is
         typically a 2-tuple of (word, PoS).
 
+        If PoS, mor, gra correspond to a "word" that is a clitic (due to the
+        tilde in the original CHAT data), then word is 'CLITIC'.
+
         If ``tagged`` is False, a word is simply the word (str) from the
-        transcription.
+        transcription. If the word is 'CLITIC", it is not included in the
+        returned generator.
 
         :param sents: If ``sents`` (using NLTK terminology) is True,
         words from the same utterance (= "sentence") are grouped

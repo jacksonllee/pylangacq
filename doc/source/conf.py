@@ -34,6 +34,7 @@ import pylangacq
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.doctest',
+    'sphinx.ext.viewcode',
     'alabaster',
 ]
 

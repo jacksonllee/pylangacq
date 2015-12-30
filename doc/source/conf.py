@@ -35,6 +35,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.doctest',
     'sphinx.ext.viewcode',
+    'sphinx.ext.autosummary',
     'alabaster',
 ]
 

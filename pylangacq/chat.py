@@ -128,11 +128,13 @@ class Reader:
         """
         :param participant: The participant being specified,
         default to ``'CHI'``
+
         :return: A dict where key is filename and value is
         a 3-tuple of (*year*, *month*, *day*),
         where *year*, *month*, *day* are all ``int``.
         The value is ``None`` instead if any errors arise
         (e.g., there's no age).
+
         :rtype: dict(str: tuple), where tuple could be None if no age
         """
         return {filename: SingleReader(filename).age(

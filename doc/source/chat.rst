@@ -12,7 +12,5 @@ The ``chat`` module defines classes for reading and parsing CHAT transcripts.
 
 
 .. automodule:: pylangacq.chat
-   :exclude-members: clean_utterance
    :members:
-   :private-members:
 

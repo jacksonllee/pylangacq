@@ -73,7 +73,7 @@ class Reader:
         the headers (as a dict) of the CHAT file.
         :rtype: dict(str: dict)
         """
-        return {filename: SingleReader(filename).headers
+        return {filename: SingleReader(filename).headers()
                 for filename in self.filenames}
 
     def index_to_tiers(self):
@@ -82,7 +82,7 @@ class Reader:
         the index_to_tiers dict of the CHAT file.
         :rtype: dict(str: dict)
         """
-        return {filename: SingleReader(filename).index_to_tiers
+        return {filename: SingleReader(filename).index_to_tiers()
                 for filename in self.filenames}
 
     def participants(self):
@@ -159,12 +159,11 @@ class Reader:
 
 class SingleReader:
     """
-    ``SingleReader`` is a class for reading a single CHAT file.
+    A class for reading a single CHAT file with the absolute path *filename*.
     """
     def __init__(self, filename):
         """
         :param filename: The absolute path of the CHAT file
-        :return: ``self.filename`` is str
         """
         if type(filename) is not str:
             raise ValueError('filename must be str')
@@ -174,30 +173,36 @@ class SingleReader:
         if not os.path.isfile(self.filename):
             raise FileNotFoundError(self.filename)
 
-        self.headers = self._headers()
-        self.index_to_tiers = self._index_to_tiers()
+        self._headers = self._get_headers()
+        self._index_to_tiers = self._get_index_to_tiers()
         self.tier_markers = self._tier_markers()
 
     def __len__(self):
         """
+        Return the number of utterances.
+
         :return: The number of utterances (lines starting with '*')
+
         :rtype: int
         """
-        return len(self.index_to_tiers)
+        return len(self._index_to_tiers)
 
     def number_of_utterances(self):
         """
+        Return the number of utterances.
+
         :return: The number of utterances (lines starting with '*')
+
         :rtype: int
         """
         return self.__len__()
 
     def cha_lines(self):
         """
-        Read the CHAT file and clean it up by undoing the line continuation
-        with the tab character.
+        Read the CHAT file and undo the line continuations by tab.
 
         :return: A generator of all cleaned-up lines in the CHAT file
+
         :rtype: generator
         """
         previous_line = ''
@@ -220,24 +225,27 @@ class SingleReader:
 
     def _tier_markers(self):
         """
+        Determine what the %-tiers are.
+
         :return: The set of %-beginning tier markers used in the CHAT file
+
         :rtype: set
         """
         result = set()
-        for tiermarkers_to_tiers in self.index_to_tiers.values():
+        for tiermarkers_to_tiers in self._index_to_tiers.values():
             for tier_marker in tiermarkers_to_tiers.keys():
                 if tier_marker.startswith('%'):
                     result.add(tier_marker)
         return result
 
-    def _index_to_tiers(self):
+    def index_to_tiers(self):
         """
-        Extract in the CHAT file the utterances and tiers of interest.
-        Each utterance is assigned an integer index (starting from 0).
+        Extract and organize the utterances and the corresponding tiers.
 
-        :return: A dict where key is utterance index and value is
-        a dict, where key is tier marker and value is the line as str.
-        Two key-value pairs in the output dict may look like this:
+        :return: A dict where key is utterance index (starting from 0)
+        and value is a dict,
+        where key is tier marker and value is the line as str. For example,
+        two key-value pairs in the output dict may look like this::
 
          1537: {'%gra': '1|2|MOD 2|0|INCROOT 3|2|PUNCT',
                 '%mor': 'n|tapioca n|finger .',
@@ -248,6 +256,9 @@ class SingleReader:
 
         :rtype: dict(int: dict(str: str))
         """
+        return self._index_to_tiers
+
+    def _get_index_to_tiers(self):
         result = dict()
         index_ = -1  # utterance index (1st utterance is index 0)
         utterance = None
@@ -269,9 +280,12 @@ class SingleReader:
 
         return result
 
-    def _headers(self):
+    def headers(self):
         """
+        Return the headers as a dict.
+
         :return: A dict of headers of the CHAT file.
+
         The keys are the header names
         as str (e.g., 'Begin', 'Participants', 'Date'). The header entry is
         the content for the respective header name.
@@ -279,12 +293,25 @@ class SingleReader:
         For the head 'Participants', the entry is a dict where the keys are the
         participant codes (e.g., 'CHI', 'MOT') and the value is a dict of
         information for the respective participant code. The keys of the
-        information are as follows
+        information are as follows:
 
-        participant_label (from the '@Participants' field), language, corpus,
-        code, age, sex, group, SES, role, education, custom
+        * participant_label
+        * language
+        * corpus
+        * code
+        * age
+        * sex
+        * group
+        * SES
+        * role
+        * education
+        * custom
+
         :rtype: dict(str: dict)
         """
+        return self._headers
+
+    def _get_headers(self):
         headname_to_entry = dict()
 
         for line in self.cha_lines():
@@ -339,36 +366,86 @@ class SingleReader:
 
     def participants(self):
         """
-        :return: A dict of participant information based on the @ID lines, where
-        the key is the participant code, and the value is a dict of info
-        for the participant.
+        Return the participant information as a dict.
+
+        :return: A dict of participant information based on the @ID lines,
+        where the key is the participant code, and the value is a dict of info
+        for the participant. Example::
+
+            {'CHI': {'SES': '',
+                     'age': '1;6.',
+                     'corpus': 'Brown',
+                     'custom': '',
+                     'education': '',
+                     'group': '',
+                     'language': 'eng',
+                     'participant_label': 'Eve Target_Child',
+                     'role': 'Target_Child',
+                     'sex': 'female'},
+             'COL': {'SES': '',
+                     'age': '',
+                     'corpus': 'Brown',
+                     'custom': '',
+                     'education': '',
+                     'group': '',
+                     'language': 'eng',
+                     'participant_label': 'Colin Investigator',
+                     'role': 'Investigator',
+                     'sex': ''},
+             'MOT': {'SES': '',
+                     'age': '',
+                     'corpus': 'Brown',
+                     'custom': '',
+                     'education': '',
+                     'group': '',
+                     'language': 'eng',
+                     'participant_label': 'Sue Mother',
+                     'role': 'Mother',
+                     'sex': ''},
+             'RIC': {'SES': '',
+                     'age': '',
+                     'corpus': 'Brown',
+                     'custom': '',
+                     'education': '',
+                     'group': '',
+                     'language': 'eng',
+                     'participant_label': 'Richard Investigator',
+                     'role': 'Investigator',
+                     'sex': ''}}
+
         :rtype: dict
         """
         try:
-            return self.headers['Participants']
+            return self._headers['Participants']
         except KeyError:
             return dict()
 
     def participant_codes(self):
         """
+        Return the participant codes as a set.
+
         :return: A dict where key is filename and value is
         a set of the participant codes (e.g., `{'CHI', 'MOT', 'FAT'}`)
+
         :rtype: set
         """
         try:
-            return set(self.headers['Participants'].keys())
+            return set(self._headers['Participants'].keys())
         except KeyError:
             return set()
 
     def languages(self):
         """
+        Return as a set the languages of the CHAT transcript.
+
         :return: The set of languages based on the @Languages headers
+
         :rtype: set
         """
         languages_set = set()
 
         try:
-            languages_line = self.headers['Languages']
+            languages_line = self._headers['Languages']
         except KeyError:
             pass
         else:
@@ -381,13 +458,16 @@ class SingleReader:
 
     def date(self):
         """
+        Return the date of recording as a tuple.
+
         :return: The date of recording as a 3-tuple of (*year*, *month*, *day*),
         where *year*, *month*, *day* are all ``int``. If any errors arise
         (e.g., there's no date), ``None`` is returned.
+
         :rtype: tuple, or None if no valid date
         """
         try:
-            date_str = self.headers['Date']
+            date_str = self._headers['Date']
             day_str, month_str, year_str = date_str.split('-')
             day = int(day_str)
             year = int(year_str)
@@ -414,16 +494,18 @@ class SingleReader:
 
     def age(self, participant='CHI'):
         """
-        Returns the age of a particular participant.
+        Return the age of *participant* as a tuple.
 
         :param participant: The participant specified, default to ``'CHI'``
+
         :return: The age as a 3-tuple of (*year*, *month*, *day*),
         where *year*, *month*, *day* are all ``int``. If any errors arise
         (e.g., there's no age), ``None`` is returned.
+
         :rtype: tuple, or None
         """
         try:
-            age_ = self.headers['Participants'][participant]['age']
+            age_ = self._headers['Participants'][participant]['age']
 
             year, _, month_day = age_.partition(';')
             month, _, day = month_day.partition('.')
@@ -437,24 +519,27 @@ class SingleReader:
 
     def utterances(self, participant=ALL_PARTICIPANTS, clean=True):
         """
+        Return the utterances by *participant*
+        as (*participant*, *utterance*) pairs.
+
         :param participant: Participant(s) of interest, default to
         ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
         target child, for example. For multiple participants, this parameter
         accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
 
         :param clean: Whether to filter away the CHAT annotations in the
-        utterance. Default to ``True``.
+        utterance; default to ``True``.
 
-        :return: An iterator of the (participant, utterance) tuples
+        :return: A generator of the (participant, utterance) tuples
         in the order of how the utterances appear in the transcript.
 
-        :rtype: iter
+        :rtype: generator
         """
         # TODO: collapses like [x 4] not yet handled
         participants = self._determine_participants(participant)
 
         for i in range(self.number_of_utterances()):
-            tiermarker_to_line = self.index_to_tiers[i]
+            tiermarker_to_line = self._index_to_tiers[i]
 
             for tier_marker in tiermarker_to_line.keys():
                 if tier_marker in participants:
@@ -471,7 +556,9 @@ class SingleReader:
 
         :param participant: Participant as str,
         or a sequence of participants
+
         :return: a set of participants of interest
+
         :rtype: set
         """
         if participant == ALL_PARTICIPANTS:
@@ -487,10 +574,11 @@ class SingleReader:
 
     def words(self, participant=ALL_PARTICIPANTS):
         """
-        Extract words from the CHAT transcript.
+        Extract words by *participant* from the CHAT transcript.
 
         :param participant: Participant(s) of interest, as a str (e.g., 'CHI')
         for one participant or as a sequence of str for multiple ones.
+
         :return: generator of words
         """
         return self._get_words(participant=participant,
@@ -498,10 +586,11 @@ class SingleReader:
 
     def tagged_words(self, participant=ALL_PARTICIPANTS):
         """
-        Extract tagged words from the CHAT transcript.
+        Extract tagged words by *participant* from the CHAT transcript.
 
         :param participant: Participant(s) of interest, as a str (e.g., 'CHI')
         for one participant or as a sequence of str for multiple ones.
+
         :return: generator of tagged words
         """
         return self._get_words(participant=participant,
@@ -509,11 +598,13 @@ class SingleReader:
 
     def sents(self, participant=ALL_PARTICIPANTS):
         """
-        Extract sents (using NLTK terminology;
-        = utterances as lists of words) from the CHAT transcript.
+        Extract utterances by *participant* from the CHAT transcript.
+
+        utterances = sents in NLTK terminology
 
         :param participant: Participant(s) of interest, as a str (e.g., 'CHI')
         for one participant or as a sequence of str for multiple ones.
+
         :return: generator of sents.
         """
         return self._get_words(participant=participant,
@@ -521,11 +612,13 @@ class SingleReader:
 
     def tagged_sents(self, participant=ALL_PARTICIPANTS):
         """
-        Extract tagged sents (using NLTK terminology;
-        = utterances as lists of words) from the CHAT transcript.
+        Extract tagged utterances by *participant* from the CHAT transcript.
+
+        utterances = sents in NLTK terminology
 
         :param participant: Participant(s) of interest, as a str (e.g., 'CHI')
         for one participant or as a sequence of str for multiple ones.
+
         :return: generator of tagged sents.
         """
         return self._get_words(participant=participant,
@@ -533,7 +626,7 @@ class SingleReader:
 
     def _get_words(self, participant=ALL_PARTICIPANTS, tagged=True, sents=True):
         """
-        Extract words (defined below) for the specified participant(s).
+        Extract words for the specified participant(s).
 
         The representation of "word" depends on whether ``tagged`` is True, and
         is based to some extent on the NLTK conventions.
@@ -545,17 +638,21 @@ class SingleReader:
 
         :param tagged:
 
-        If ``tagged`` is True, a word is a 4-tuple of (word, PoS, mor, gra).
+        If ``tagged`` is True, a word is a 4-tuple of
+        (*word*, *PoS*, *mor*, *gra*), where:
 
-        - word is str
-        - PoS is part-of-speech tag as str, forced to be in uppercase following
-            NLTK
-        - mor is morphological information as str
-        - gra is grammatical relation, as a 3-tuple of
-            (self-position, head-position, relation), data type (int, int, str).
+        * *word* is str
+        * *PoS* is part-of-speech tag as str,
+          forced to be in uppercase following NLTK
+        * *mor* is morphological information as str
+        * *gra* is grammatical relation, as a 3-tuple of
+          (*self-position*, *head-position*, *relation*),
+          with the data type (int, int, str).
 
-        An example word with this representation is:
+        An example word with this representation::
+
         ('thought', 'V', 'think&PAST', (3, 0, 'ROOT'))
+
         where in the original data, "thought" is the transcription,
         %mor has "v|think&PAST", and %gra is "3|0|ROOT"
 
@@ -565,7 +662,7 @@ class SingleReader:
         If PoS, mor, gra correspond to a "word" that is a clitic (due to the
         tilde in the original CHAT data), then word is 'CLITIC'.
 
-        If ``tagged`` is False, a word is simply the word (str) from the
+        If ``tagged`` is False, a word is simply the word (as a str) from the
         transcription. If the word is 'CLITIC", it is not included in the
         returned generator.
 
@@ -580,7 +677,7 @@ class SingleReader:
         participants = self._determine_participants(participant)
 
         for i in range(self.number_of_utterances()):
-            tiermarker_to_line = self.index_to_tiers[i]
+            tiermarker_to_line = self._index_to_tiers[i]
             participant_code = get_participant_code(tiermarker_to_line.keys())
 
             if participant_code not in participants:
@@ -687,7 +784,15 @@ class SingleReader:
 
     def word_frequency(self, participant=ALL_PARTICIPANTS, keep_case=True):
         """
+        Return word frequency information for the specified *participant*.
+
+        :param keep_case: If *keep_case* is True (the default), case
+        distinctions are kept and word tokens like "the" and "The" are treated
+        as distinct types. If *keep_case* is False, all case distinctions are
+        collapsed, with all word tokens forced to be in lowercase.
+
         :return: a Counter dict of word-frequency pairs
+
         :rtype: Counter
         """
         # TODO: collapses like [x 4] not yet handled
@@ -705,11 +810,12 @@ class SingleReader:
 
 def clean_utterance(utterance):
     """
-    Filter away unwanted CHAT-format material like corpus and conversation
-    analysis-typed annotation in the input utterance.
+    Filter away the CHAT-style annotations in *utterance*.
 
-    :param utterance: Utterance as str
-    :return: Utterance without CHAT annotations
+    :param utterance: The utterance as a str
+
+    :return: The utterance without CHAT annotations
+
     :rtype: str
     """
     # Step 1:
@@ -777,9 +883,11 @@ def get_participant_code(tier_marker_seq):
     """
     Return the participant code from a tier marker set.
 
-    :param tier_marker_seq: A sequence of tier markers like '%mor', '%gra', and
-    a participant code
-    :return: A participant code, e.g., 'CHI' from ``{'CHI', '%mor', '%gra'}``
+    :param tier_marker_seq: A sequence of tier markers like
+    ``{'CHI', '%mor', '%gra'}``
+
+    :return: A participant code, e.g., ``'CHI'``
+
     :rtype: str, or None if no participant code is found
     """
     for tier_marker in tier_marker_seq:

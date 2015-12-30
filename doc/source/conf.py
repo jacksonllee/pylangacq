@@ -54,10 +54,11 @@ master_doc = 'index'
 # General information about the project.
 project = 'PyLangAcq'
 author = 'Jackson L. Lee'
+html_author_link = '<a href="http://jacksonllee.com/">{}</a>'.format(author)
 today_ = date.today()
-copyright = '2015-{}, {}. Doc last updated on {}'.format(
+copyright = '2015-{}, {} | Documentation last updated on {}'.format(
     today_.strftime('%Y'),
-    author,
+    html_author_link,
     today_.strftime('%B %d, %Y')
 )
 
@@ -144,6 +145,8 @@ html_theme_options = {
     'github_button': False,  # default is True
     'github_banner': False,  # default is False
     'show_related': False,  # default is False
+    'page_width': '1200px',  # default is '940px'
+    'sidebar_width': '200px',  # default is '220px'
 }
 # For what these HTML theme options mean and many other options I haven't used,
 # see <https://pypi.python.org/pypi/alabaster>.

@@ -1,7 +1,7 @@
 .. _dev:
 
-Development and changelog
-=========================
+Development
+===========
 
 The current focus is to develop capabilities to interact with CHAT transcripts.
 

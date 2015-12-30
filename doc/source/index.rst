@@ -12,7 +12,7 @@ Features:
 
 * Comprehensive capabilities of handling CHAT transcripts
   as used in CHILDES
-* Standard analytic tools such MLU and IPSyn readily available
+* Standard analytic tools such as MLU and IPSyn readily available
 * Benefits from Python: fast coding, numerous libraries for computational
   modeling and machine learning
 * Powerful extensions for research with conversational data in general

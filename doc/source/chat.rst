@@ -1,6 +1,6 @@
 .. _chat:
 
-``chat`` --- reading and parsing CHAT transcripts
+``chat`` --- Reading and parsing CHAT transcripts
 =================================================
 
 .. automodule:: pylangacq.chat

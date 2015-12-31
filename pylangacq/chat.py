@@ -313,10 +313,10 @@ class SingleReader:
         if type(filename) is not str:
             raise ValueError('filename must be str')
 
-        self.filename = os.path.abspath(filename)
+        self._filename = os.path.abspath(filename)
 
-        if not os.path.isfile(self.filename):
-            raise FileNotFoundError(self.filename)
+        if not os.path.isfile(self._filename):
+            raise FileNotFoundError(self._filename)
 
         self._headers = self._get_headers()
         self._index_to_tiers = self._get_index_to_tiers()
@@ -342,6 +342,16 @@ class SingleReader:
         """
         return self.__len__()
 
+    def filename(self):
+        """
+        Return the filename.
+
+        :return: The filename.
+
+        :rtype: str
+        """
+        return self._filename
+
     def cha_lines(self):
         """
         Read the CHAT file and undo the line continuations by tab.
@@ -352,7 +362,7 @@ class SingleReader:
         """
         previous_line = ''
 
-        for line in open(self.filename, 'rU'):
+        for line in open(self._filename, 'rU'):
             current_line = line.rstrip()  # don't remove leading \t
 
             if not current_line:

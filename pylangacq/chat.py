@@ -10,8 +10,7 @@ ALL_PARTICIPANTS = '**ALL**'
 
 class Reader:
     """
-    ``Reader`` is a class for reading multiple CHAT files. It is built on the
-    ``SingleReader`` class.
+    A class for reading multiple CHAT files.
     """
     def __init__(self, *filenames):
         """
@@ -29,9 +28,6 @@ class Reader:
         overlapping or duplicate results (like ``eve01.cha`` which satisfies
         both ``eve*.cha`` and ``*01.cha``), but ``Reader`` filters away the
         duplicates.
-
-        :return: ``self.filenames`` is a sorted list of matched absolute-path
-        filenames.
         """
         filenames_set = set()
         for filename in filenames:
@@ -50,84 +46,139 @@ class Reader:
             filenames_set.update(fnmatch.filter(candidate_filenames,
                                                 abs_fullpath))
 
-        self.filenames = sorted(filenames_set)
+        self._filenames = filenames_set
+
+    def __len__(self):
+        """
+        Return the number of files.
+
+        :return: The number of files
+
+        :rtype: int
+        """
+        return len(self._filenames)
+
+    def filenames(self):
+        """
+        Return the set of absolute-path filenames.
+
+        :return: The set of absolute-path filenames.
+        """
+        return self._filenames
 
     def number_of_files(self):
         """
-        :return: The number of CHAT files
+        Return the number of files.
+
+        :return: The number of files
+
         :rtype: int
         """
-        return len(self.filenames)
+        return self.__len__()
 
     def number_of_utterances(self):
         """
+        Return a dict mapping a filename to the file's number of utterances.
+
+        :return: A dict where key is filename and value is
+        the file's number of utterances
+
+        :rtype: dict(str: int)
+        """
+        return {filename: SingleReader(filename).number_of_utterances()
+                for filename in self._filenames}
+
+    def total_number_of_utterances(self):
+        """
+        Return the total number of utterances.
+
         :return: The total number of utterances across all CHAT files
+
         :rtype: int
         """
         return sum([SingleReader(filename).number_of_utterances()
-                    for filename in self.filenames])
+                    for filename in self._filenames])
 
     def headers(self):
         """
+        Return a dict mapping a filename to the headers.
+
         :return: A dict where key is filename and value is
         the headers (as a dict) of the CHAT file.
+
         :rtype: dict(str: dict)
         """
         return {filename: SingleReader(filename).headers()
-                for filename in self.filenames}
+                for filename in self._filenames}
 
     def index_to_tiers(self):
         """
+        Return a dict mapping a filename to the file's index_to_tiers dict.
+
         :return: A dict where key is filename and value is
         the index_to_tiers dict of the CHAT file.
+
         :rtype: dict(str: dict)
         """
         return {filename: SingleReader(filename).index_to_tiers()
-                for filename in self.filenames}
+                for filename in self._filenames}
 
     def participants(self):
         """
+        Return a dict mapping a filename to the file's participant info dict.
+
         :return: A dict where key is filename and value is
-        participant information (as a dict) based on the @ID lines.
+        participant information as a dict.
+
         :rtype: dict(str: dict)
         """
         return {filename: SingleReader(filename).participants()
-                for filename in self.filenames}
+                for filename in self._filenames}
 
     def participant_codes(self):
         """
+        Return a dict mapping a filename to the file's set of participant codes.
+
         :return: A dict where key is filename and value is
         a set of the participant codes (e.g., ``{'CHI', 'MOT', 'FAT'}``)
+
         :rtype: dict(str: set)
         """
         return {filename: SingleReader(filename).participant_codes()
-                for filename in self.filenames}
+                for filename in self._filenames}
 
     def languages(self):
         """
+        Return a dict mapping a filename to the set of languages used.
+
         :return: A dict where key is filename and value is
         a set of languages based on the @Languages headers
+
         :rtype: dict(str: set)
         """
         return {filename: SingleReader(filename).languages()
-                for filename in self.filenames}
+                for filename in self._filenames}
 
     def date(self):
         """
+        Return a dict mapping a filename to the date.
+
         :return: A dict where key is filename and value is
         a 3-tuple of (*year*, *month*, *day*),
         where *year*, *month*, *day* are all ``int``.
         The value is ``None`` instead if any errors arise
         (e.g., there's no date).
+
         :rtype: dict(str: tuple), where tuple could be None if no date
         """
         return {filename: SingleReader(filename).date()
-                for filename in self.filenames}
+                for filename in self._filenames}
 
     def age(self, participant='CHI'):
         """
-        :param participant: The participant being specified,
-        default to ``'CHI'``
+        Return a dict mapping a filename to the age of the *participant*.
+
+        :param participant: The specified participant, default to ``'CHI'``
 
         :return: A dict where key is filename and value is
         a 3-tuple of (*year*, *month*, *day*),
@@ -138,28 +189,122 @@ class Reader:
         :rtype: dict(str: tuple), where tuple could be None if no age
         """
         return {filename: SingleReader(filename).age(
-            participant=participant) for filename in self.filenames}
+            participant=participant) for filename in self._filenames}
 
     def utterances(self, participant=ALL_PARTICIPANTS, clean=True):
         """
+        Return a dict mapping a filename to the file's
+        (*participant*, *utterance*) pairs.
+
         :param participant:  The participant(s) being specified, default to
         ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
         target child, for example. For multiple participants, this parameter
         accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+
         :param clean: Whether to filter away the CHAT annotations in the
         utterance, default to ``True``.
+
         :return: A dict where key is filename and value is
-        an iterator of the (participant, utterance) tuples
+        an iterator of the (*participant*, *utterance*) tuples
+
         :rtype: dict(str: iter)
         """
         return {filename: SingleReader(filename).utterances(
             participant=participant, clean=clean)
-                for filename in self.filenames}
+                for filename in self._filenames}
+
+    def word_frequency(self, participant='CHI', keep_case=True):
+        """
+        Return a dict mapping a filename to the file's word frequency dict
+        for the specified *participant*.
+
+        :param participant: The specified participant, default to ``'CHI'``
+
+        :return: A dict where key is filename and value is
+        a Counter dict of word-frequency pairs.
+
+        :rtype: dict(str: Counter)
+        """
+        return {filename: SingleReader(filename).word_frequency(
+            participant=participant, keep_case=keep_case)
+                for filename in self._filenames}
+
+    def words(self, participant=ALL_PARTICIPANTS):
+        """
+        Return a dict mapping a filename to the file's generator of words
+        for the specified *participant*.
+
+        :param participant:  The participant(s) being specified, default to
+        ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+        target child, for example. For multiple participants, this parameter
+        accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+
+        :return: A dict where key is filename and value is
+        a generator of words
+
+        :rtype: dict(str: generator)
+        """
+        return {filename: SingleReader(filename).words(
+            participant=participant) for filename in self._filenames}
+
+    def tagged_words(self, participant=ALL_PARTICIPANTS):
+        """
+        Return a dict mapping a filename to the file's generator of tagged words
+        for the specified *participant*.
+
+        :param participant:  The participant(s) being specified, default to
+        ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+        target child, for example. For multiple participants, this parameter
+        accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+
+        :return: A dict where key is filename and value is
+        a generator of tagged words
+
+        :rtype: dict(str: generator)
+        """
+        return {filename: SingleReader(filename).tagged_words(
+            participant=participant) for filename in self._filenames}
+
+    def sents(self, participant=ALL_PARTICIPANTS):
+        """
+        Return a dict mapping a filename to the file's generator of sents
+        for the specified *participant*
+
+        :param participant:  The participant(s) being specified, default to
+        ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+        target child, for example. For multiple participants, this parameter
+        accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+
+        :return: A dict where key is filename and value is
+        a generator of sents
+
+        :rtype: dict(str: generator)
+        """
+        return {filename: SingleReader(filename).sents(
+            participant=participant) for filename in self._filenames}
+
+    def tagged_sents(self, participant=ALL_PARTICIPANTS):
+        """
+        Return a dict mapping a filename to the file's generator of tagged sents
+        for the specified *participant*
+
+        :param participant:  The participant(s) being specified, default to
+        ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+        target child, for example. For multiple participants, this parameter
+        accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+
+        :return: A dict where key is filename and value is
+        a generator of tagged sents
+
+        :rtype: dict(str: generator)
+        """
+        return {filename: SingleReader(filename).tagged_sents(
+            participant=participant) for filename in self._filenames}
 
 
 class SingleReader:
     """
-    A class for reading a single CHAT file with the absolute path *filename*.
+    A class for reading a single CHAT file.
     """
     def __init__(self, filename):
         """
@@ -574,7 +719,7 @@ class SingleReader:
 
     def words(self, participant=ALL_PARTICIPANTS):
         """
-        Extract words by *participant* from the CHAT transcript.
+        Return a generator of words by *participant*.
 
         :param participant: Participant(s) of interest, as a str (e.g., 'CHI')
         for one participant or as a sequence of str for multiple ones.
@@ -586,7 +731,7 @@ class SingleReader:
 
     def tagged_words(self, participant=ALL_PARTICIPANTS):
         """
-        Extract tagged words by *participant* from the CHAT transcript.
+        Return a generator of  tagged words by *participant*.
 
         :param participant: Participant(s) of interest, as a str (e.g., 'CHI')
         for one participant or as a sequence of str for multiple ones.
@@ -598,9 +743,9 @@ class SingleReader:
 
     def sents(self, participant=ALL_PARTICIPANTS):
         """
-        Extract utterances by *participant* from the CHAT transcript.
+        Return a generator of sents by *participant*.
 
-        utterances = sents in NLTK terminology
+        (utterances = sents in NLTK terminology)
 
         :param participant: Participant(s) of interest, as a str (e.g., 'CHI')
         for one participant or as a sequence of str for multiple ones.
@@ -612,9 +757,9 @@ class SingleReader:
 
     def tagged_sents(self, participant=ALL_PARTICIPANTS):
         """
-        Extract tagged utterances by *participant* from the CHAT transcript.
+        Return a generator of tagged sents by *participant*.
 
-        utterances = sents in NLTK terminology
+        (utterances = sents in NLTK terminology)
 
         :param participant: Participant(s) of interest, as a str (e.g., 'CHI')
         for one participant or as a sequence of str for multiple ones.

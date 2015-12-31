@@ -8,7 +8,10 @@ PyLangAcq: Language Acquisition Research in Python
 
 PyLangAcq is a Python library primarily for language acquisition research.
 
-Features:
+PyLangAcq is under active development. The current version is |version|.
+
+Features
+--------
 
 * Comprehensive capabilities of handling CHAT transcripts
   as used in CHILDES
@@ -17,13 +20,32 @@ Features:
   modeling and machine learning
 * Powerful extensions for research with conversational data in general
 
-PyLangAcq is under active development. The current version is |version|.
+Getting started
+---------------
+
+:ref:`download`: Get PyLangAcq!
+
+:ref:`tutorial`: Quick examples and pointers
+
+:ref:`reference`: Full library and code details
+
+All pages of this library documentation can be reached via the menu on the left.
+
+
 
 .. toctree::
    :maxdepth: 2
+   :hidden:
 
    download
    tutorial
    data
    reference
    dev
+
+How to cite
+-----------
+
+PyLangAcq is maintained by `Jackson L. Lee <http://jacksonllee.com/>`_.
+
+A paper is being prepared.

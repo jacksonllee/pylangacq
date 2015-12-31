@@ -3,7 +3,8 @@
 ``util`` --- General functions and constants
 ============================================
 
-Work in progress
+The ``util`` module defines general functions and constants used throughout
+the library.
 
 .. automodule:: pylangacq.util
    :members:

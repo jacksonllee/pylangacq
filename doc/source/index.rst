@@ -39,7 +39,8 @@ All pages of this library documentation can be reached via the menu on the left.
 
    download
    tutorial
-   data
+   read
+   metadata
    reference
    dev
 

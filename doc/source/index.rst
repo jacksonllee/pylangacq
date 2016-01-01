@@ -41,6 +41,7 @@ All pages of this library documentation can be reached via the menu on the left.
    tutorial
    read
    metadata
+   transcriptions
    reference
    dev
 

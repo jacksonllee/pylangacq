@@ -50,8 +50,8 @@ In this example, ``*`` matches all files (= the 20 CHAT files) for Eve::
 
 More on :ref:`read`.
 
-Accessing metadata
-------------------
+Metadata
+--------
 
 CHAT transcripts store metadata as headers with lines beginning with
 ``@``. For instance, we can retrieve the age information of the target child
@@ -86,6 +86,12 @@ file's age information (as a 3-tuple, e.g., ``(1, 6, 0)`` for 1 year and
 
 More on :ref:`metadata`.
 
+Transcriptions and annotations
+------------------------------
+
+
+
+More on :ref:`transcriptions`.
 
 Questions? Issues?
 ------------------

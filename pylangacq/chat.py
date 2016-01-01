@@ -2,6 +2,7 @@ import os
 import fnmatch
 from pprint import pformat
 from collections import Counter
+from itertools import chain
 
 from pylangacq.util import *
 
@@ -300,6 +301,62 @@ class Reader:
         """
         return {filename: SingleReader(filename).tagged_sents(
             participant=participant) for filename in self._filenames}
+
+    def all_words(self, participant=ALL_PARTICIPANTS):
+        """
+        Return a generator of words for *participant* in all files.
+
+        :param participant:  The participant(s) being specified, default to
+        ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+        target child, for example. For multiple participants, this parameter
+        accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+
+        :return: a generator of words (as an itertools chain)
+        """
+        return chain(SingleReader(filename).words(participant=participant)
+                     for filename in sorted(self._filenames))
+
+    def all_tagged_words(self, participant=ALL_PARTICIPANTS):
+        """
+        Return a generator of tagged words for *participant* in all files.
+
+        :param participant:  The participant(s) being specified, default to
+        ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+        target child, for example. For multiple participants, this parameter
+        accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+
+        :return: a generator of tagged words (as an itertools chain)
+        """
+        return chain(SingleReader(filename).tagged_words(
+            participant=participant) for filename in sorted(self._filenames))
+
+    def all_sents(self, participant=ALL_PARTICIPANTS):
+        """
+        Return a generator of sents for *participant* in all files.
+
+        :param participant:  The participant(s) being specified, default to
+        ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+        target child, for example. For multiple participants, this parameter
+        accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+
+        :return: a generator of sents (as an itertools chain)
+        """
+        return chain(SingleReader(filename).sents(participant=participant)
+                     for filename in sorted(self._filenames))
+
+    def all_tagged_sents(self, participant=ALL_PARTICIPANTS):
+        """
+        Return a generator of tagged sents for *participant* in all files.
+
+        :param participant:  The participant(s) being specified, default to
+        ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+        target child, for example. For multiple participants, this parameter
+        accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+
+        :return: a generator of tagged sents (as an itertools chain)
+        """
+        return chain(SingleReader(filename).tagged_sents(
+            participant=participant) for filename in sorted(self._filenames))
 
 
 class SingleReader:

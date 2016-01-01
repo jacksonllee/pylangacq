@@ -48,6 +48,10 @@ Methods specific to the ``Reader`` class:
 
 .. autosummary::
 
+   all_sents
+   all_tagged_sents
+   all_tagged_words
+   all_words
    filenames
    number_of_files
    total_number_of_utterances

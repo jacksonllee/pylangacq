@@ -15,19 +15,19 @@ class Reader:
     def __init__(self, *filenames):
         """
         :param filenames: One or more filenames. A filename may match exactly
-        a CHAT file like ``eve01.cha`` or matches multiple files
-        by glob patterns, e.g.,
-        ``eve*.cha`` can match ``eve01.cha``, ``eve02.cha``, etc.
-        Apart from ``*`` for any number (including zero) of characters,
-        ``?`` is another commonly used wildcard and matches one character.
-        A filename can be either an absolute or relative path.
+            a CHAT file like ``eve01.cha`` or matches multiple files
+            by glob patterns, e.g.,
+            ``eve*.cha`` can match ``eve01.cha``, ``eve02.cha``, etc.
+            Apart from ``*`` for any number (including zero) of characters,
+            ``?`` is another commonly used wildcard and matches one character.
+            A filename can be either an absolute or relative path.
 
         The ``Reader`` class is set to find *unique* absolute-path filenames.
-        This means that a call such as ``Reader('eve*.cha', '*01.cha')``
-        (for all Eve files and all "01" files together) might seem to have
-        overlapping or duplicate results (like ``eve01.cha`` which satisfies
-        both ``eve*.cha`` and ``*01.cha``), but ``Reader`` filters away the
-        duplicates.
+            This means that a call such as ``Reader('eve*.cha', '*01.cha')``
+            (for all Eve files and all "01" files together) might seem to have
+            overlapping or duplicate results (like ``eve01.cha`` which satisfies
+            both ``eve*.cha`` and ``*01.cha``), but ``Reader`` filters away the
+            duplicates.
         """
         filenames_set = set()
         for filename in filenames:
@@ -81,7 +81,7 @@ class Reader:
         Return a dict mapping a filename to the file's number of utterances.
 
         :return: A dict where key is filename and value is
-        the file's number of utterances
+            the file's number of utterances
 
         :rtype: dict(str: int)
         """
@@ -104,7 +104,7 @@ class Reader:
         Return a dict mapping a filename to the headers.
 
         :return: A dict where key is filename and value is
-        the headers (as a dict) of the CHAT file.
+            the headers (as a dict) of the CHAT file.
 
         :rtype: dict(str: dict)
         """
@@ -116,7 +116,7 @@ class Reader:
         Return a dict mapping a filename to the file's index_to_tiers dict.
 
         :return: A dict where key is filename and value is
-        the index_to_tiers dict of the CHAT file.
+            the index_to_tiers dict of the CHAT file.
 
         :rtype: dict(str: dict)
         """
@@ -128,7 +128,7 @@ class Reader:
         Return a dict mapping a filename to the file's participant info dict.
 
         :return: A dict where key is filename and value is
-        participant information as a dict.
+            participant information as a dict.
 
         :rtype: dict(str: dict)
         """
@@ -140,7 +140,7 @@ class Reader:
         Return a dict mapping a filename to the file's set of participant codes.
 
         :return: A dict where key is filename and value is
-        a set of the participant codes (e.g., ``{'CHI', 'MOT', 'FAT'}``)
+            a set of the participant codes (e.g., ``{'CHI', 'MOT', 'FAT'}``)
 
         :rtype: dict(str: set)
         """
@@ -152,7 +152,7 @@ class Reader:
         Return a dict mapping a filename to the set of languages used.
 
         :return: A dict where key is filename and value is
-        a set of languages based on the @Languages headers
+            a set of languages based on the @Languages headers
 
         :rtype: dict(str: set)
         """
@@ -164,10 +164,10 @@ class Reader:
         Return a dict mapping a filename to the date.
 
         :return: A dict where key is filename and value is
-        a 3-tuple of (*year*, *month*, *day*),
-        where *year*, *month*, *day* are all ``int``.
-        The value is ``None`` instead if any errors arise
-        (e.g., there's no date).
+            a 3-tuple of (*year*, *month*, *day*),
+            where *year*, *month*, *day* are all ``int``.
+            The value is ``None`` instead if any errors arise
+            (e.g., there's no date).
 
         :rtype: dict(str: tuple), where tuple could be None if no date
         """
@@ -181,10 +181,10 @@ class Reader:
         :param participant: The specified participant, default to ``'CHI'``
 
         :return: A dict where key is filename and value is
-        a 3-tuple of (*year*, *month*, *day*),
-        where *year*, *month*, *day* are all ``int``.
-        The value is ``None`` instead if any errors arise
-        (e.g., there's no age).
+            a 3-tuple of (*year*, *month*, *day*),
+            where *year*, *month*, *day* are all ``int``.
+            The value is ``None`` instead if any errors arise
+            (e.g., there's no age).
 
         :rtype: dict(str: tuple), where tuple could be None if no age
         """
@@ -194,18 +194,18 @@ class Reader:
     def utterances(self, participant=ALL_PARTICIPANTS, clean=True):
         """
         Return a dict mapping a filename to the file's
-        (*participant*, *utterance*) pairs.
+            (*participant*, *utterance*) pairs.
 
         :param participant:  The participant(s) being specified, default to
-        ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-        target child, for example. For multiple participants, this parameter
-        accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+            target child, for example. For multiple participants, this parameter
+            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
 
         :param clean: Whether to filter away the CHAT annotations in the
-        utterance, default to ``True``.
+            utterance, default to ``True``.
 
         :return: A dict where key is filename and value is
-        an iterator of the (*participant*, *utterance*) tuples
+            an iterator of the (*participant*, *utterance*) tuples
 
         :rtype: dict(str: iter)
         """
@@ -216,12 +216,12 @@ class Reader:
     def word_frequency(self, participant='CHI', keep_case=True):
         """
         Return a dict mapping a filename to the file's word frequency dict
-        for the specified *participant*.
+            for the specified *participant*.
 
         :param participant: The specified participant, default to ``'CHI'``
 
         :return: A dict where key is filename and value is
-        a Counter dict of word-frequency pairs.
+            a Counter dict of word-frequency pairs.
 
         :rtype: dict(str: Counter)
         """
@@ -232,15 +232,15 @@ class Reader:
     def words(self, participant=ALL_PARTICIPANTS):
         """
         Return a dict mapping a filename to the file's generator of words
-        for the specified *participant*.
+            for the specified *participant*.
 
         :param participant:  The participant(s) being specified, default to
-        ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-        target child, for example. For multiple participants, this parameter
-        accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+            target child, for example. For multiple participants, this parameter
+            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
 
         :return: A dict where key is filename and value is
-        a generator of words
+            a generator of words
 
         :rtype: dict(str: generator)
         """
@@ -250,15 +250,15 @@ class Reader:
     def tagged_words(self, participant=ALL_PARTICIPANTS):
         """
         Return a dict mapping a filename to the file's generator of tagged words
-        for the specified *participant*.
+            for the specified *participant*.
 
         :param participant:  The participant(s) being specified, default to
-        ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-        target child, for example. For multiple participants, this parameter
-        accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+            target child, for example. For multiple participants, this parameter
+            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
 
         :return: A dict where key is filename and value is
-        a generator of tagged words
+            a generator of tagged words
 
         :rtype: dict(str: generator)
         """
@@ -268,15 +268,15 @@ class Reader:
     def sents(self, participant=ALL_PARTICIPANTS):
         """
         Return a dict mapping a filename to the file's generator of sents
-        for the specified *participant*
+            for the specified *participant*
 
         :param participant:  The participant(s) being specified, default to
-        ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-        target child, for example. For multiple participants, this parameter
-        accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+            target child, for example. For multiple participants, this parameter
+            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
 
         :return: A dict where key is filename and value is
-        a generator of sents
+            a generator of sents
 
         :rtype: dict(str: generator)
         """
@@ -286,15 +286,15 @@ class Reader:
     def tagged_sents(self, participant=ALL_PARTICIPANTS):
         """
         Return a dict mapping a filename to the file's generator of tagged sents
-        for the specified *participant*
+            for the specified *participant*
 
         :param participant:  The participant(s) being specified, default to
-        ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-        target child, for example. For multiple participants, this parameter
-        accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+            target child, for example. For multiple participants, this parameter
+            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
 
         :return: A dict where key is filename and value is
-        a generator of tagged sents
+            a generator of tagged sents
 
         :rtype: dict(str: generator)
         """
@@ -306,9 +306,9 @@ class Reader:
         Return a generator of words for *participant* in all files.
 
         :param participant:  The participant(s) being specified, default to
-        ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-        target child, for example. For multiple participants, this parameter
-        accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+            target child, for example. For multiple participants, this parameter
+            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
 
         :return: a generator of words
         """
@@ -320,9 +320,9 @@ class Reader:
         Return a generator of tagged words for *participant* in all files.
 
         :param participant:  The participant(s) being specified, default to
-        ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-        target child, for example. For multiple participants, this parameter
-        accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+            target child, for example. For multiple participants, this parameter
+            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
 
         :return: a generator of tagged words
         """
@@ -334,9 +334,9 @@ class Reader:
         Return a generator of sents for *participant* in all files.
 
         :param participant:  The participant(s) being specified, default to
-        ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-        target child, for example. For multiple participants, this parameter
-        accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+            target child, for example. For multiple participants, this parameter
+            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
 
         :return: a generator of sents
         """
@@ -348,9 +348,9 @@ class Reader:
         Return a generator of tagged sents for *participant* in all files.
 
         :param participant:  The participant(s) being specified, default to
-        ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-        target child, for example. For multiple participants, this parameter
-        accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+            target child, for example. For multiple participants, this parameter
+            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
 
         :return: a generator of tagged sents
         """
@@ -454,16 +454,16 @@ class SingleReader:
         Extract and organize the utterances and the corresponding tiers.
 
         :return: A dict where key is utterance index (starting from 0)
-        and value is a dict,
-        where key is tier marker and value is the line as str. For example,
-        two key-value pairs in the output dict may look like this::
+            and value is a dict,
+            where key is tier marker and value is the line as str. For example,
+            two key-value pairs in the output dict may look like this::
 
-         1537: {'%gra': '1|2|MOD 2|0|INCROOT 3|2|PUNCT',
-                '%mor': 'n|tapioca n|finger .',
-                'CHI': 'tapioca finger . [+ IMIT]'},
-         1538: {'%gra': '1|0|INCROOT 2|1|PUNCT',
-                '%mor': 'n|cracker .',
-                'MOT': 'cracker .'}
+                 1537: {'%gra': '1|2|MOD 2|0|INCROOT 3|2|PUNCT',
+                        '%mor': 'n|tapioca n|finger .',
+                        'CHI': 'tapioca finger . [+ IMIT]'},
+                 1538: {'%gra': '1|0|INCROOT 2|1|PUNCT',
+                        '%mor': 'n|cracker .',
+                        'MOT': 'cracker .'}
 
         :rtype: dict(int: dict(str: str))
         """
@@ -498,25 +498,25 @@ class SingleReader:
         :return: A dict of headers of the CHAT file.
 
         The keys are the header names
-        as str (e.g., 'Begin', 'Participants', 'Date'). The header entry is
-        the content for the respective header name.
+            as str (e.g., 'Begin', 'Participants', 'Date'). The header entry is
+            the content for the respective header name.
 
         For the head 'Participants', the entry is a dict where the keys are the
-        participant codes (e.g., 'CHI', 'MOT') and the value is a dict of
-        information for the respective participant code. The keys of the
-        information are as follows:
+            participant codes (e.g., 'CHI', 'MOT') and the value is a dict of
+            information for the respective participant code. The keys of the
+            information are as follows:
 
-        * participant_label
-        * language
-        * corpus
-        * code
-        * age
-        * sex
-        * group
-        * SES
-        * role
-        * education
-        * custom
+                * participant_label
+                * language
+                * corpus
+                * code
+                * age
+                * sex
+                * group
+                * SES
+                * role
+                * education
+                * custom
 
         :rtype: dict(str: dict)
         """
@@ -580,49 +580,49 @@ class SingleReader:
         Return the participant information as a dict.
 
         :return: A dict of participant information based on the @ID lines,
-        where the key is the participant code, and the value is a dict of info
-        for the participant. Example::
+            where the key is the participant code, and the value is a dict of
+            info for the participant. Example::
 
-            {'CHI': {'SES': '',
-                     'age': '1;6.',
-                     'corpus': 'Brown',
-                     'custom': '',
-                     'education': '',
-                     'group': '',
-                     'language': 'eng',
-                     'participant_label': 'Eve Target_Child',
-                     'role': 'Target_Child',
-                     'sex': 'female'},
-             'COL': {'SES': '',
-                     'age': '',
-                     'corpus': 'Brown',
-                     'custom': '',
-                     'education': '',
-                     'group': '',
-                     'language': 'eng',
-                     'participant_label': 'Colin Investigator',
-                     'role': 'Investigator',
-                     'sex': ''},
-             'MOT': {'SES': '',
-                     'age': '',
-                     'corpus': 'Brown',
-                     'custom': '',
-                     'education': '',
-                     'group': '',
-                     'language': 'eng',
-                     'participant_label': 'Sue Mother',
-                     'role': 'Mother',
-                     'sex': ''},
-             'RIC': {'SES': '',
-                     'age': '',
-                     'corpus': 'Brown',
-                     'custom': '',
-                     'education': '',
-                     'group': '',
-                     'language': 'eng',
-                     'participant_label': 'Richard Investigator',
-                     'role': 'Investigator',
-                     'sex': ''}}
+                {'CHI': {'SES': '',
+                         'age': '1;6.',
+                         'corpus': 'Brown',
+                         'custom': '',
+                         'education': '',
+                         'group': '',
+                         'language': 'eng',
+                         'participant_label': 'Eve Target_Child',
+                         'role': 'Target_Child',
+                         'sex': 'female'},
+                 'COL': {'SES': '',
+                         'age': '',
+                         'corpus': 'Brown',
+                         'custom': '',
+                         'education': '',
+                         'group': '',
+                         'language': 'eng',
+                         'participant_label': 'Colin Investigator',
+                         'role': 'Investigator',
+                         'sex': ''},
+                 'MOT': {'SES': '',
+                         'age': '',
+                         'corpus': 'Brown',
+                         'custom': '',
+                         'education': '',
+                         'group': '',
+                         'language': 'eng',
+                         'participant_label': 'Sue Mother',
+                         'role': 'Mother',
+                         'sex': ''},
+                 'RIC': {'SES': '',
+                         'age': '',
+                         'corpus': 'Brown',
+                         'custom': '',
+                         'education': '',
+                         'group': '',
+                         'language': 'eng',
+                         'participant_label': 'Richard Investigator',
+                         'role': 'Investigator',
+                         'sex': ''}}
 
         :rtype: dict
         """
@@ -636,7 +636,7 @@ class SingleReader:
         Return the participant codes as a set.
 
         :return: A dict where key is filename and value is
-        a set of the participant codes (e.g., `{'CHI', 'MOT', 'FAT'}`)
+            a set of the participant codes (e.g., `{'CHI', 'MOT', 'FAT'}`)
 
         :rtype: set
         """
@@ -672,8 +672,8 @@ class SingleReader:
         Return the date of recording as a tuple.
 
         :return: The date of recording as a 3-tuple of (*year*, *month*, *day*),
-        where *year*, *month*, *day* are all ``int``. If any errors arise
-        (e.g., there's no date), ``None`` is returned.
+            where *year*, *month*, *day* are all ``int``. If any errors arise
+            (e.g., there's no date), ``None`` is returned.
 
         :rtype: tuple, or None if no valid date
         """
@@ -710,8 +710,8 @@ class SingleReader:
         :param participant: The participant specified, default to ``'CHI'``
 
         :return: The age as a 3-tuple of (*year*, *month*, *day*),
-        where *year*, *month*, *day* are all ``int``. If any errors arise
-        (e.g., there's no age), ``None`` is returned.
+            where *year*, *month*, *day* are all ``int``. If any errors arise
+            (e.g., there's no age), ``None`` is returned.
 
         :rtype: tuple, or None
         """
@@ -731,18 +731,18 @@ class SingleReader:
     def utterances(self, participant=ALL_PARTICIPANTS, clean=True):
         """
         Return the utterances by *participant*
-        as (*participant*, *utterance*) pairs.
+            as (*participant*, *utterance*) pairs.
 
         :param participant: Participant(s) of interest, default to
-        ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-        target child, for example. For multiple participants, this parameter
-        accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+            target child, for example. For multiple participants, this parameter
+            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
 
         :param clean: Whether to filter away the CHAT annotations in the
-        utterance; default to ``True``.
+            utterance; default to ``True``.
 
         :return: A generator of the (participant, utterance) tuples
-        in the order of how the utterances appear in the transcript.
+            in the order of how the utterances appear in the transcript.
 
         :rtype: generator
         """
@@ -766,7 +766,7 @@ class SingleReader:
         Determine the target participants.
 
         :param participant: Participant as str,
-        or a sequence of participants
+            or a sequence of participants
 
         :return: a set of participants of interest
 
@@ -788,7 +788,7 @@ class SingleReader:
         Return a generator of words by *participant*.
 
         :param participant: Participant(s) of interest, as a str (e.g., 'CHI')
-        for one participant or as a sequence of str for multiple ones.
+            for one participant or as a sequence of str for multiple ones.
 
         :return: generator of words
         """
@@ -800,7 +800,7 @@ class SingleReader:
         Return a generator of  tagged words by *participant*.
 
         :param participant: Participant(s) of interest, as a str (e.g., 'CHI')
-        for one participant or as a sequence of str for multiple ones.
+            for one participant or as a sequence of str for multiple ones.
 
         :return: generator of tagged words
         """
@@ -814,7 +814,7 @@ class SingleReader:
         (utterances = sents in NLTK terminology)
 
         :param participant: Participant(s) of interest, as a str (e.g., 'CHI')
-        for one participant or as a sequence of str for multiple ones.
+            for one participant or as a sequence of str for multiple ones.
 
         :return: generator of sents.
         """
@@ -828,7 +828,7 @@ class SingleReader:
         (utterances = sents in NLTK terminology)
 
         :param participant: Participant(s) of interest, as a str (e.g., 'CHI')
-        for one participant or as a sequence of str for multiple ones.
+            for one participant or as a sequence of str for multiple ones.
 
         :return: generator of tagged sents.
         """
@@ -840,47 +840,47 @@ class SingleReader:
         Extract words for the specified participant(s).
 
         The representation of "word" depends on whether ``tagged`` is True, and
-        is based to some extent on the NLTK conventions.
+            is based to some extent on the NLTK conventions.
 
         :param participant:  Participant(s) of interest, default to
-        ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-        target child, for example. For multiple participants, this parameter
-        accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+            target child, for example. For multiple participants, this parameter
+            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
 
         :param tagged:
 
         If ``tagged`` is True, a word is a 4-tuple of
-        (*word*, *PoS*, *mor*, *gra*), where:
+            (*word*, *PoS*, *mor*, *gra*), where:
 
-        * *word* is str
-        * *PoS* is part-of-speech tag as str,
-          forced to be in uppercase following NLTK
-        * *mor* is morphological information as str
-        * *gra* is grammatical relation, as a 3-tuple of
-          (*self-position*, *head-position*, *relation*),
-          with the data type (int, int, str).
+            * *word* is str
+            * *PoS* is part-of-speech tag as str,
+              forced to be in uppercase following NLTK
+            * *mor* is morphological information as str
+            * *gra* is grammatical relation, as a 3-tuple of
+              (*self-position*, *head-position*, *relation*),
+              with the data type (int, int, str).
 
         An example word with this representation::
 
         ('thought', 'V', 'think&PAST', (3, 0, 'ROOT'))
 
-        where in the original data, "thought" is the transcription,
-        %mor has "v|think&PAST", and %gra is "3|0|ROOT"
+            where in the original data, "thought" is the transcription,
+            %mor has "v|think&PAST", and %gra is "3|0|ROOT"
 
         This word representation is an extension of NLTK, where a tagged word is
-        typically a 2-tuple of (word, PoS).
+            typically a 2-tuple of (word, PoS).
 
         If PoS, mor, gra correspond to a "word" that is a clitic (due to the
-        tilde in the original CHAT data), then word is 'CLITIC'.
+            tilde in the original CHAT data), then word is 'CLITIC'.
 
         If ``tagged`` is False, a word is simply the word (as a str) from the
-        transcription. If the word is 'CLITIC", it is not included in the
-        returned generator.
+            transcription. If the word is 'CLITIC", it is not included in the
+            returned generator.
 
         :param sents: If ``sents`` (using NLTK terminology) is True,
-        words from the same utterance (= "sentence") are grouped
-        together into a list which is in turn yielded. Otherwise, individual
-        words are directly yielded without utterance structure.
+            words from the same utterance (= "sentence") are grouped
+            together into a list which is in turn yielded. Otherwise, individual
+            words are directly yielded without utterance structure.
 
         :return: A generator of either sents of words, or just words
         """
@@ -998,9 +998,9 @@ class SingleReader:
         Return word frequency information for the specified *participant*.
 
         :param keep_case: If *keep_case* is True (the default), case
-        distinctions are kept and word tokens like "the" and "The" are treated
-        as distinct types. If *keep_case* is False, all case distinctions are
-        collapsed, with all word tokens forced to be in lowercase.
+            distinctions are kept and word tokens like "the" and "The" are treated
+            as distinct types. If *keep_case* is False, all case distinctions are
+            collapsed, with all word tokens forced to be in lowercase.
 
         :return: a Counter dict of word-frequency pairs
 
@@ -1169,7 +1169,7 @@ def get_participant_code(tier_marker_seq):
     Return the participant code from a tier marker set.
 
     :param tier_marker_seq: A sequence of tier markers like
-    ``{'CHI', '%mor', '%gra'}``
+        ``{'CHI', '%mor', '%gra'}``
 
     :return: A participant code, e.g., ``'CHI'``
 

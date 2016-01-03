@@ -8,7 +8,7 @@ CLITIC = 'CLITIC'
 def startswithoneof(inputstr, seq):
     """
     Check if *inputstr* starts with one of the items in seq. If it does, return
-    the item that it starts with. If it doe not, return ``None``.
+        the item that it starts with. If it doe not, return ``None``.
 
     :param inputstr: input string
 
@@ -29,7 +29,7 @@ def startswithoneof(inputstr, seq):
 def endswithoneof(inputstr, seq):
     """
     Check if *inputstr* ends with one of the items in seq. If it does, return
-    the item that it ends with. If it doe not, return ``None``.
+        the item that it ends with. If it doe not, return ``None``.
 
     :param inputstr: input string
 
@@ -65,7 +65,7 @@ def find_indices(longstr, substring):
 def replace_all(inputstr, replacee_replacer_pairs):
     """
     Replace in *inputstr* all replacers by the corresponding replacees in
-    *replacee_replacer_pairs*.
+        *replacee_replacer_pairs*.
 
     :param inputstr: input string
 
@@ -81,7 +81,7 @@ def replace_all(inputstr, replacee_replacer_pairs):
 def remove_extra_spaces(inputstr):
     """
     Remove extra spaces in *inputstr* so that there are only single
-    (but not double, triple etc) spaces.
+        (but not double, triple etc) spaces.
 
     :param inputstr: input string
 

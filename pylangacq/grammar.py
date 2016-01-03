@@ -4,13 +4,14 @@ import networkx as nx
 class DependencyGraph(nx.DiGraph):
     """
     DependencyGraph is a class based on the networkx directed graph for
-    modeling dependency graphs in dependency grammar.
+        modeling dependency graphs in dependency grammar.
     """
     def __init__(self, data, form='CHAT'):
         """
         Initialize dependency graph.
 
         :param data: input data
+
         :param form: format of the input data
         """
         super(DependencyGraph, self).__init__()
@@ -24,7 +25,6 @@ class DependencyGraph(nx.DiGraph):
     def _create_graph_from_chat(self):
         """
         Create dependency graph based on the input data.
-
         """
         for word, pos, mor, gra in self.data:
             node1, node2, relation = gra  # e.g., (1, 3, 'LINK')
@@ -57,6 +57,7 @@ class DependencyGraph(nx.DiGraph):
         \end{dependency}
 
         :return: The LaTeX tikz-dependency code for drawing the graph
+
         :rtype: str
         """
         return  # work in progress
@@ -79,6 +80,7 @@ class DependencyGraph(nx.DiGraph):
         . . 3 PUNCT
 
         :return: The CoNLL format of the dependency graph
+
         :rtype: str
         """
         return  # work in progress

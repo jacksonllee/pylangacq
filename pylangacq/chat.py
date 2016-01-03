@@ -2,7 +2,6 @@ import os
 import fnmatch
 from pprint import pformat
 from collections import Counter
-from itertools import chain
 
 from pylangacq.util import *
 
@@ -311,10 +310,10 @@ class Reader:
         target child, for example. For multiple participants, this parameter
         accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
 
-        :return: a generator of words (as an itertools chain)
+        :return: a generator of words
         """
-        return chain(*(SingleReader(filename).words(participant=participant)
-                       for filename in sorted(self._filenames)))
+        return GeneratorViewer(*(SingleReader(filename).words(
+            participant=participant) for filename in sorted(self._filenames)))
 
     def all_tagged_words(self, participant=ALL_PARTICIPANTS):
         """
@@ -325,9 +324,9 @@ class Reader:
         target child, for example. For multiple participants, this parameter
         accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
 
-        :return: a generator of tagged words (as an itertools chain)
+        :return: a generator of tagged words
         """
-        return chain(*(SingleReader(filename).tagged_words(
+        return GeneratorViewer(*(SingleReader(filename).tagged_words(
             participant=participant) for filename in sorted(self._filenames)))
 
     def all_sents(self, participant=ALL_PARTICIPANTS):
@@ -339,10 +338,10 @@ class Reader:
         target child, for example. For multiple participants, this parameter
         accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
 
-        :return: a generator of sents (as an itertools chain)
+        :return: a generator of sents
         """
-        return chain(*(SingleReader(filename).sents(participant=participant)
-                       for filename in sorted(self._filenames)))
+        return GeneratorViewer(*(SingleReader(filename).sents(
+            participant=participant) for filename in sorted(self._filenames)))
 
     def all_tagged_sents(self, participant=ALL_PARTICIPANTS):
         """
@@ -353,9 +352,9 @@ class Reader:
         target child, for example. For multiple participants, this parameter
         accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
 
-        :return: a generator of tagged sents (as an itertools chain)
+        :return: a generator of tagged sents
         """
-        return chain(*(SingleReader(filename).tagged_sents(
+        return GeneratorViewer(*(SingleReader(filename).tagged_sents(
             participant=participant) for filename in sorted(self._filenames)))
 
 
@@ -793,8 +792,8 @@ class SingleReader:
 
         :return: generator of words
         """
-        return self._get_words(participant=participant,
-                               tagged=False, sents=False)
+        return GeneratorViewer(self._get_words(participant=participant,
+                                               tagged=False, sents=False))
 
     def tagged_words(self, participant=ALL_PARTICIPANTS):
         """
@@ -805,8 +804,8 @@ class SingleReader:
 
         :return: generator of tagged words
         """
-        return self._get_words(participant=participant,
-                               tagged=True, sents=False)
+        return GeneratorViewer(self._get_words(participant=participant,
+                                               tagged=True, sents=False))
 
     def sents(self, participant=ALL_PARTICIPANTS):
         """
@@ -819,8 +818,8 @@ class SingleReader:
 
         :return: generator of sents.
         """
-        return self._get_words(participant=participant,
-                               tagged=False, sents=True)
+        return GeneratorViewer(self._get_words(participant=participant,
+                                               tagged=False, sents=True))
 
     def tagged_sents(self, participant=ALL_PARTICIPANTS):
         """
@@ -833,8 +832,8 @@ class SingleReader:
 
         :return: generator of tagged sents.
         """
-        return self._get_words(participant=participant,
-                               tagged=True, sents=True)
+        return GeneratorViewer(self._get_words(participant=participant,
+                                               tagged=True, sents=True))
 
     def _get_words(self, participant=ALL_PARTICIPANTS, tagged=True, sents=True):
         """
@@ -1155,9 +1154,9 @@ def clean_utterance(utterance):
             # word ends with ]
             word = word[: -1]
 
-        if startswithoneof(word, keep_prefixes) or \
-                ((word not in escape_words) and \
-                (not startswithoneof(word, escape_prefixes))):
+        if ((word not in escape_words) and
+                (not startswithoneof(word, escape_prefixes))) or \
+                startswithoneof(word, keep_prefixes):
             new_words.append(word)
 
     # print('step 5:', remove_extra_spaces(' '.join(new_words)))

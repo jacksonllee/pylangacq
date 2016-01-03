@@ -313,8 +313,8 @@ class Reader:
 
         :return: a generator of words (as an itertools chain)
         """
-        return chain(SingleReader(filename).words(participant=participant)
-                     for filename in sorted(self._filenames))
+        return chain(*(SingleReader(filename).words(participant=participant)
+                       for filename in sorted(self._filenames)))
 
     def all_tagged_words(self, participant=ALL_PARTICIPANTS):
         """
@@ -327,8 +327,8 @@ class Reader:
 
         :return: a generator of tagged words (as an itertools chain)
         """
-        return chain(SingleReader(filename).tagged_words(
-            participant=participant) for filename in sorted(self._filenames))
+        return chain(*(SingleReader(filename).tagged_words(
+            participant=participant) for filename in sorted(self._filenames)))
 
     def all_sents(self, participant=ALL_PARTICIPANTS):
         """
@@ -341,8 +341,8 @@ class Reader:
 
         :return: a generator of sents (as an itertools chain)
         """
-        return chain(SingleReader(filename).sents(participant=participant)
-                     for filename in sorted(self._filenames))
+        return chain(*(SingleReader(filename).sents(participant=participant)
+                       for filename in sorted(self._filenames)))
 
     def all_tagged_sents(self, participant=ALL_PARTICIPANTS):
         """
@@ -355,8 +355,8 @@ class Reader:
 
         :return: a generator of tagged sents (as an itertools chain)
         """
-        return chain(SingleReader(filename).tagged_sents(
-            participant=participant) for filename in sorted(self._filenames))
+        return chain(*(SingleReader(filename).tagged_sents(
+            participant=participant) for filename in sorted(self._filenames)))
 
 
 class SingleReader:
@@ -1030,65 +1030,139 @@ def clean_utterance(utterance):
 
     :rtype: str
     """
-    # Step 1:
-    # If utterance has something like  "<aa bb cc> [x 5]" (repeated 5 times)
-    # or "<aa bb cc> [?]" (uncertain transcription) and other similar cases
-    # like overlapping, we need to keep "aa bb cc" as
-    # actual transcription. Solution: Discard only the angle brackets.
+    # Function tested with the Brown portion (Adam, Eve, and Sarah) of CHILDES
 
-    all_left_angle_bracket_indices = find_indices(utterance, '<')
-    repeat_indices = find_indices(utterance, '> \[x')  # substring is '> [x'
-    uncertain_indices = find_indices(utterance, '> \[\?')  # all regex here
-    left_overlap_indices = find_indices(utterance, '> \[<')
-    right_overlap_indices = find_indices(utterance, '> \[>')
+    # *** At the end of each step, apply remove_extra_spaces(). ***
 
-    escape_left_angle_bracket_indices = list()
-    check_indices = repeat_indices + uncertain_indices + \
-        left_overlap_indices + right_overlap_indices
+    # Step 1: Remove unwanted scope elements (only the very certain cases), e.g.
+    # [= whatever] for explanations
+    # [x how_many_times] for collapses
+    # [+ whatever] for actions etc
+    # [* whatever] for error coding
+    # [=? whatever] for uncertain transcriptions
+    # [=! whatever] for actions etc
+    # [% whatever] for random noises?
+    # [?] for best guess
 
-    for index_ in check_indices:
-        for i in range(index_, -1, -1):
-            if i in all_left_angle_bracket_indices:
-                escape_left_angle_bracket_indices.append(i)
+    utterance = re.sub('\[= [^\[]+?\]', '', utterance)
+    utterance = re.sub('\[x \d+?\]', '', utterance)
+    utterance = re.sub('\[\+ [^\[]+?\]', '', utterance)
+    utterance = re.sub('\[\* [^\[]+?\]', '', utterance)
+    utterance = re.sub('\[=\? [^\[]+?\]', '', utterance)
+    utterance = re.sub('\[=! [^\[]+?\]', '', utterance)
+    utterance = re.sub('\[% [^\[]+?\]', '', utterance)
+    utterance = utterance.replace('[?]', '')
+    utterance = remove_extra_spaces(utterance)
+    print('step 1:', utterance)
+
+    # Step 2: Pad elements with spaces to avoid human transcription errors etc
+    # If utterance has these delimiters: [ ]
+    # then pad them with extra spaces to avoid errors in transcriptions
+    # like "movement[?]" (--> "movement [?]")
+    #
+    # If utterance has:
+    #     “ (beginning quote)
+    #     ” (ending quote)
+    #     , (comma)
+    #     ? (question mark)
+    #     . (period)
+    # then pad them with extra spaces.
+
+    utterance = utterance.replace('[', ' [')
+    utterance = utterance.replace(']', '] ')
+    utterance = utterance.replace('“', ' “ ')
+    utterance = utterance.replace('”', ' ” ')
+    utterance = re.sub('[^\+],', ' , ', utterance)
+    utterance = re.sub('[^\[]\?', ' ? ', utterance)
+    # utterance = re.sub('[^\(\[\.\+]\.', ' . ', utterance)
+    utterance = remove_extra_spaces(utterance)
+    print('step 2:', utterance)
+
+    # Step 3: Handle 'xx [zz]' or '<xx yy> [zz]'
+    #
+    # Three cases:
+    # 1) Keep 'xx' and discard 'zz'. Examples:
+    #        [x how_many_times]
+    #        [?] for uncertain transcriptions
+    #        [<] and [>] for overlapping
+    #
+    # 2) Discard 'xx' and keep 'zz'. Examples:
+    #        [:: something] or [: something] for errors
+    #
+    # 3) Discard 'xx' (no 'zz'). Examples:
+    #        [/] and [//] for repetitions
+
+    discard_signal_indices = set()
+    discard_signal_indices.update(find_indices(utterance, '\[:'),
+                                  find_indices(utterance, '\[/'))  # use regex
+
+    discard_end_indices = [i-2 for i in sorted(discard_signal_indices)]
+    discard_start_indices = list()
+    for end_index in discard_end_indices:
+        if utterance[end_index] == '>':
+            for i in range(end_index, -1, -1):
+                if utterance[i] == '<' and utterance[i + 1] != ']':
+                    discard_start_indices.append(i)
+                    break
+        else:
+            for i in range(end_index, -1, -1):
+                if i == 0:
+                    discard_start_indices.append(0)
+                    break
+                elif utterance[i] == ' ':
+                    discard_start_indices.append(i + 1)
+                    break
+
+    new_utterance = ''
+    for i in range(len(utterance)):
+        ignore_this_character = False
+        for start_i, end_i in zip(discard_start_indices, discard_end_indices):
+            if (i >= start_i) and (i <= end_i):
+                ignore_this_character = True
                 break
+        if not ignore_this_character:
+            new_utterance += utterance[i]
 
-    utterance_ = ''
-    utterance = replace_all(utterance, {('> [x', '  [x'), ('> [?', '  [?'),
-                                        ('> [>', '  [>'), ('> [<', '  [<')})
-    for i, char in enumerate(utterance):
-        if i not in escape_left_angle_bracket_indices:
-            utterance_ += char
+    utterance = remove_extra_spaces(new_utterance)
+    print('step 3:', utterance)
 
-    # Step 2:
-    # Remove things in a scope (by angle or square brackets). Examples:
-    # from  'xx < aa bb > yy'  or  'xx [ aa bb ] yy'
-    # to 'xx  yy' (2 spaces in the middle)
+    # Step 4: Remove unwanted elements (only the very certain cases).
 
-    utterance_ = re.sub('<[^<]+?>', '', utterance_)
-    utterance_ = re.sub('\[[^/][^\[]+?\]', '', utterance_)
+    unwanted_elements = {'(.)', '(..)', '(...)',
+                         'xxx', 'www', 'yyy',
+                         # '+"', '+.',
+                         }
+    for unwanted_element in unwanted_elements:
+        utterance = utterance.replace(unwanted_element, '')
+    utterance = remove_extra_spaces(utterance)
+    print('step 4:', utterance)
 
-    # Step 3:
-    # We need to escape the one item immediately preceding [/] or [//].
-    # Solution: Replace ' [/' by '[/'.
+    # Step 5: Split utterance by spaces and determine whether to keep items.
 
-    utterance_ = utterance_.replace(' [/', '[/')
+    escape_prefixes = {'[?', '[/', '[<', '[>', '[:', '[!', '[*',
+                       '+"', '+,', '&'}
+    escape_words = {'0'}
+    keep_prefixes = {'+"/', '+,/'}
 
-    # Step 4:
-    # Among the "words" in utterance_.split(), discard the unwanted ones.
+    words = utterance.split()
+    new_words = list()
 
-    escape_words = {'(.)', '(..)', '(...)', 'xxx', '[/]', '[//]'}
-    escape_prefixes = {'[', '<', '&'}
-    escape_suffixes = {']', '>'}
+    for word in words:
+        word = re.sub('\A<', '', word)  # remove beginning <
+        word = re.sub('>\Z', '', word)  # remove final >
 
-    output_utterance_list = list()
+        if bool(re.compile('[^\]]+?\]\Z').match(word)):
+            # word ends with ]
+            word = word[: -1]
 
-    for word in utterance_.split():
-        if (word not in escape_words) and \
-                (not startswithoneof(word, escape_prefixes)) and \
-                (not endswithoneof(word, escape_suffixes)):
-            output_utterance_list.append(word)
+        if startswithoneof(word, keep_prefixes) or \
+                ((word not in escape_words) and \
+                (not startswithoneof(word, escape_prefixes))):
+            new_words.append(word)
 
-    return ' '.join(output_utterance_list)
+    print('step 5:', remove_extra_spaces(' '.join(new_words)))
+
+    return remove_extra_spaces(' '.join(new_words))
 
 
 def get_participant_code(tier_marker_seq):

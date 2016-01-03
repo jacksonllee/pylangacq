@@ -59,3 +59,7 @@ def replace_all(inputstr, replacee_replacer_pairs):
         inputstr = inputstr.replace(replacee, replacer)
     return inputstr
 
+def remove_extra_spaces(inputstr):
+    while '  ' in inputstr:
+        inputstr = inputstr.replace('  ', ' ')
+    return inputstr.strip()

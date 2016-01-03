@@ -1053,7 +1053,7 @@ def clean_utterance(utterance):
     utterance = re.sub('\[% [^\[]+?\]', '', utterance)
     utterance = utterance.replace('[?]', '')
     utterance = remove_extra_spaces(utterance)
-    print('step 1:', utterance)
+    # print('step 1:', utterance)
 
     # Step 2: Pad elements with spaces to avoid human transcription errors etc
     # If utterance has these delimiters: [ ]
@@ -1076,7 +1076,7 @@ def clean_utterance(utterance):
     utterance = re.sub('[^\[]\?', ' ? ', utterance)
     # utterance = re.sub('[^\(\[\.\+]\.', ' . ', utterance)
     utterance = remove_extra_spaces(utterance)
-    print('step 2:', utterance)
+    # print('step 2:', utterance)
 
     # Step 3: Handle 'xx [zz]' or '<xx yy> [zz]'
     #
@@ -1124,7 +1124,7 @@ def clean_utterance(utterance):
             new_utterance += utterance[i]
 
     utterance = remove_extra_spaces(new_utterance)
-    print('step 3:', utterance)
+    # print('step 3:', utterance)
 
     # Step 4: Remove unwanted elements (only the very certain cases).
 
@@ -1135,7 +1135,7 @@ def clean_utterance(utterance):
     for unwanted_element in unwanted_elements:
         utterance = utterance.replace(unwanted_element, '')
     utterance = remove_extra_spaces(utterance)
-    print('step 4:', utterance)
+    # print('step 4:', utterance)
 
     # Step 5: Split utterance by spaces and determine whether to keep items.
 
@@ -1160,7 +1160,7 @@ def clean_utterance(utterance):
                 (not startswithoneof(word, escape_prefixes))):
             new_words.append(word)
 
-    print('step 5:', remove_extra_spaces(' '.join(new_words)))
+    # print('step 5:', remove_extra_spaces(' '.join(new_words)))
 
     return remove_extra_spaces(' '.join(new_words))
 

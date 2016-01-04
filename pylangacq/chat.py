@@ -231,7 +231,7 @@ class Reader:
 
     def words(self, participant=ALL_PARTICIPANTS):
         """
-        Return a dict mapping a filename to the file's generator of words
+        Return a dict mapping a filename to the file's list of words
             for the specified *participant*.
 
         :param participant:  The participant(s) being specified, default to
@@ -240,16 +240,16 @@ class Reader:
             accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
 
         :return: A dict where key is filename and value is
-            a generator of words
+            a list of words
 
-        :rtype: dict(str: generator)
+        :rtype: dict(str: list)
         """
         return {filename: SingleReader(filename).words(
             participant=participant) for filename in self._filenames}
 
     def tagged_words(self, participant=ALL_PARTICIPANTS):
         """
-        Return a dict mapping a filename to the file's generator of tagged words
+        Return a dict mapping a filename to the file's list of tagged words
             for the specified *participant*.
 
         :param participant:  The participant(s) being specified, default to
@@ -258,16 +258,16 @@ class Reader:
             accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
 
         :return: A dict where key is filename and value is
-            a generator of tagged words
+            a list of tagged words
 
-        :rtype: dict(str: generator)
+        :rtype: dict(str: list)
         """
         return {filename: SingleReader(filename).tagged_words(
             participant=participant) for filename in self._filenames}
 
     def sents(self, participant=ALL_PARTICIPANTS):
         """
-        Return a dict mapping a filename to the file's generator of sents
+        Return a dict mapping a filename to the file's list of sents
             for the specified *participant*
 
         :param participant:  The participant(s) being specified, default to
@@ -276,16 +276,16 @@ class Reader:
             accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
 
         :return: A dict where key is filename and value is
-            a generator of sents
+            a list of sents
 
-        :rtype: dict(str: generator)
+        :rtype: dict(str: list)
         """
         return {filename: SingleReader(filename).sents(
             participant=participant) for filename in self._filenames}
 
     def tagged_sents(self, participant=ALL_PARTICIPANTS):
         """
-        Return a dict mapping a filename to the file's generator of tagged sents
+        Return a dict mapping a filename to the file's list of tagged sents
             for the specified *participant*
 
         :param participant:  The participant(s) being specified, default to
@@ -294,67 +294,67 @@ class Reader:
             accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
 
         :return: A dict where key is filename and value is
-            a generator of tagged sents
+            a list of tagged sents
 
-        :rtype: dict(str: generator)
+        :rtype: dict(str: list)
         """
         return {filename: SingleReader(filename).tagged_sents(
             participant=participant) for filename in self._filenames}
 
     def all_words(self, participant=ALL_PARTICIPANTS):
         """
-        Return a generator of words for *participant* in all files.
+        Return a list of words for *participant* in all files.
 
         :param participant:  The participant(s) being specified, default to
             ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
             target child, for example. For multiple participants, this parameter
             accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
 
-        :return: a generator of words
+        :return: a list of words
         """
-        return GeneratorViewer(*(SingleReader(filename).words(
+        return IterableList(*(SingleReader(filename).words(
             participant=participant) for filename in sorted(self._filenames)))
 
     def all_tagged_words(self, participant=ALL_PARTICIPANTS):
         """
-        Return a generator of tagged words for *participant* in all files.
+        Return a list of tagged words for *participant* in all files.
 
         :param participant:  The participant(s) being specified, default to
             ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
             target child, for example. For multiple participants, this parameter
             accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
 
-        :return: a generator of tagged words
+        :return: a list of tagged words
         """
-        return GeneratorViewer(*(SingleReader(filename).tagged_words(
+        return IterableList(*(SingleReader(filename).tagged_words(
             participant=participant) for filename in sorted(self._filenames)))
 
     def all_sents(self, participant=ALL_PARTICIPANTS):
         """
-        Return a generator of sents for *participant* in all files.
+        Return a list of sents for *participant* in all files.
 
         :param participant:  The participant(s) being specified, default to
             ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
             target child, for example. For multiple participants, this parameter
             accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
 
-        :return: a generator of sents
+        :return: a list of sents
         """
-        return GeneratorViewer(*(SingleReader(filename).sents(
+        return IterableList(*(SingleReader(filename).sents(
             participant=participant) for filename in sorted(self._filenames)))
 
     def all_tagged_sents(self, participant=ALL_PARTICIPANTS):
         """
-        Return a generator of tagged sents for *participant* in all files.
+        Return a list of tagged sents for *participant* in all files.
 
         :param participant:  The participant(s) being specified, default to
             ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
             target child, for example. For multiple participants, this parameter
             accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
 
-        :return: a generator of tagged sents
+        :return: a list of tagged sents
         """
-        return GeneratorViewer(*(SingleReader(filename).tagged_sents(
+        return IterableList(*(SingleReader(filename).tagged_sents(
             participant=participant) for filename in sorted(self._filenames)))
 
 
@@ -741,12 +741,13 @@ class SingleReader:
         :param clean: Whether to filter away the CHAT annotations in the
             utterance; default to ``True``.
 
-        :return: A generator of the (participant, utterance) tuples
+        :return: A list of the (participant, utterance) tuples
             in the order of how the utterances appear in the transcript.
 
-        :rtype: generator
+        :rtype: list
         """
         # TODO: collapses like [x 4] not yet handled
+        output = list()
         participants = self._determine_participants(participant)
 
         for i in range(self.number_of_utterances()):
@@ -756,10 +757,11 @@ class SingleReader:
                 if tier_marker in participants:
                     line = tiermarker_to_line[tier_marker]
                     if clean:
-                        yield tier_marker, clean_utterance(line)
+                        output.append((tier_marker, clean_utterance(line)))
                     else:
-                        yield tier_marker, line
+                        output.append((tier_marker, line))
                     break
+        return output
 
     def _determine_participants(self, participant):
         """
@@ -785,54 +787,54 @@ class SingleReader:
 
     def words(self, participant=ALL_PARTICIPANTS):
         """
-        Return a generator of words by *participant*.
+        Return a list of words by *participant*.
 
         :param participant: Participant(s) of interest, as a str (e.g., 'CHI')
             for one participant or as a sequence of str for multiple ones.
 
-        :return: generator of words
+        :return: list of words
         """
-        return GeneratorViewer(self._get_words(participant=participant,
+        return IterableList(self._get_words(participant=participant,
                                                tagged=False, sents=False))
 
     def tagged_words(self, participant=ALL_PARTICIPANTS):
         """
-        Return a generator of  tagged words by *participant*.
+        Return a list of  tagged words by *participant*.
 
         :param participant: Participant(s) of interest, as a str (e.g., 'CHI')
             for one participant or as a sequence of str for multiple ones.
 
-        :return: generator of tagged words
+        :return: list of tagged words
         """
-        return GeneratorViewer(self._get_words(participant=participant,
+        return IterableList(self._get_words(participant=participant,
                                                tagged=True, sents=False))
 
     def sents(self, participant=ALL_PARTICIPANTS):
         """
-        Return a generator of sents by *participant*.
+        Return a list of sents by *participant*.
 
         (utterances = sents in NLTK terminology)
 
         :param participant: Participant(s) of interest, as a str (e.g., 'CHI')
             for one participant or as a sequence of str for multiple ones.
 
-        :return: generator of sents.
+        :return: list of sents.
         """
-        return GeneratorViewer(self._get_words(participant=participant,
+        return IterableList(self._get_words(participant=participant,
                                                tagged=False, sents=True))
 
     def tagged_sents(self, participant=ALL_PARTICIPANTS):
         """
-        Return a generator of tagged sents by *participant*.
+        Return a list of tagged sents by *participant*.
 
         (utterances = sents in NLTK terminology)
 
         :param participant: Participant(s) of interest, as a str (e.g., 'CHI')
             for one participant or as a sequence of str for multiple ones.
 
-        :return: generator of tagged sents.
+        :return: list of tagged sents.
         """
-        return GeneratorViewer(self._get_words(participant=participant,
+        return IterableList(self._get_words(participant=participant,
                                                tagged=True, sents=True))
 
     def _get_words(self, participant=ALL_PARTICIPANTS, tagged=True, sents=True):

@@ -92,13 +92,15 @@ def remove_extra_spaces(inputstr):
     return inputstr.strip()
 
 
-class GeneratorViewer(chain):
+class IterableList(list):
     """
-    A generator class with methods for collections such as len().
+    A class like ``list`` that can be initialized with iterables.
     """
-    def __init__(self, *iterable):
-        super(GeneratorViewer, self).__init__()
-        self.from_iterable(iterable)
+    def __init__(self, *iterables):
+        self.input_iterables = iterables
+        self.from_iterables()
 
-    def __len__(self):
-        return sum(1 for _ in self)
+    def from_iterables(self):
+        for it in self.input_iterables:
+            for element in it:
+                self.append(element)

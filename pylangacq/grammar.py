@@ -16,6 +16,7 @@ class DependencyGraph(nx.DiGraph):
         """
         super(DependencyGraph, self).__init__()
         self.data = data
+        self._faulty = False
 
         if form == 'CHAT':
             self._create_graph_from_chat()
@@ -27,12 +28,33 @@ class DependencyGraph(nx.DiGraph):
         Create dependency graph based on the input data.
         """
         for word, pos, mor, gra in self.data:
-            node1, node2, relation = gra  # e.g., (1, 3, 'LINK')
+            try:
+                node1, node2, relation = gra  # e.g., (1, 3, 'LINK')
+            except ValueError:
+                node1 = -1
+                node2 = -1
+                relation = '**ERROR**'
+                self._faulty = True
+
             self.add_edge(node1, node2, rel=relation)
             self.node[node1] = {'word': word,
                                 'pos': pos,
                                 'mor': mor,
                                 }
+
+        self.node[0] = {'word': 'ROOT',
+                        'pos': 'ROOT',
+                        'mor': 'ROOT',
+                        }
+
+    def faulty(self):
+        """
+        Return True or False for whether the graph is faulty for dependency
+            information.
+
+        :return: True or False
+        """
+        return self._faulty
 
     def to_tikz(self):
         """

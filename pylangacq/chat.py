@@ -378,6 +378,8 @@ class SingleReader:
         self._index_to_tiers = self._get_index_to_tiers()
         self.tier_markers = self._tier_markers()
 
+        self._part_of_speech_tags = None
+
     def __len__(self):
         """
         Return the number of utterances.
@@ -1019,6 +1021,28 @@ class SingleReader:
                 output[word.lower()] += 1
 
         return output
+
+    def part_of_speech_tags(self, participant=ALL_PARTICIPANTS):
+        """
+        Return the set of part-of-speech tags in the data for *participant*.
+
+        :param participant:  Participant(s) of interest, default to
+            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+            target child, for example. For multiple participants, this parameter
+            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+
+        :return: a set of part-of-speech tags
+
+        :rtype: set
+        """
+        output_set = set()
+        tagged_words = self.tagged_words(participant=participant)
+
+        for tagged_word in tagged_words:
+            pos = tagged_word[1]
+            output_set.add(pos)
+
+        return output_set
 
 
 def clean_utterance(utterance):

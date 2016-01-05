@@ -8,7 +8,7 @@ setup(name="pylangacq",
 PyLangAcq: Language Acquisition Research in Python
 """,
 
-    url="https://github.com/pylangacq/pylangacq",
+    url="http://pylangacq.github.io/",
     author="Jackson Lee",
     author_email="jsllee.phon@gmail.com",
     license="Apache License, Version 2.0",

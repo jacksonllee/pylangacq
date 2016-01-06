@@ -1,9 +1,20 @@
 Change log
 ==========
 
-Current version: 0.6
+Current version: 0.7
 
-- Version 0.7 in progress
+- Version 0.8 in progress
+
+    * word ngrams
+    * MLU
+    * IPSyn
+    * various string output formats for dependency graphs
+
+- Version 0.7 2016-01-06
+
+    * Added `part_of_speech_tags()` in `SingleReader`
+    * Added "all X" methods in `Reader`
+    * Bug fixes: `clean_utterance()`, `DependencyGraph`
 
 - Version 0.6 2015-12-27
 

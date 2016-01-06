@@ -4,7 +4,7 @@ PyLangAcq: Language acquisition research in Python
 What is this
 ------------
 
-PyLangAcq is a Python library for the computational modeling of language acquisition. The library is under active development. The current version is 0.6.
+PyLangAcq is a Python library for the computational modeling of language acquisition. The library is under active development. The current version is 0.7.
 
 Currently, the focus is to develop capabilities to interface with `.cha` transcription files in the CHAT format, widely used by the [CHILDES](http://childes.psy.cmu.edu/) database.
 

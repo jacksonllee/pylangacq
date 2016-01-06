@@ -51,6 +51,8 @@ class Reader:
 
         self._filenames = filenames_set
 
+        self._all_part_of_speech_tags = None
+
     def __len__(self):
         """
         Return the number of files.
@@ -359,6 +361,40 @@ class Reader:
         """
         return IterableList(*(SingleReader(filename).tagged_sents(
             participant=participant) for filename in sorted(self._filenames)))
+
+    def part_of_speech_tags(self, participant=ALL_PARTICIPANTS):
+        """
+        Return a dict mapping a filename to the file's the set of
+            part-of-speech tags in the data for *participant*
+
+        :param participant:  The participant(s) being specified, default to
+            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+            target child, for example. For multiple participants, this parameter
+            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+
+        :return: A dict where key is filename and value is
+            the file's the set of part-of-speech tags
+
+        :rtype: dict(str: set)
+        """
+        return {filename: SingleReader(filename).part_of_speech_tags(
+            participant=participant) for filename in self._filenames}
+
+    def all_part_of_speech_tags(self, participant=ALL_PARTICIPANTS):
+        """
+        Return the set of part-of-speech tags for *participant* in all files.
+
+        :param participant:  The participant(s) being specified, default to
+            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+            target child, for example. For multiple participants, this parameter
+            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+
+        :return: a set of part-of-speech tags
+        """
+        if self._all_part_of_speech_tags is None:
+            self._all_part_of_speech_tags = set().union(*(
+                self.part_of_speech_tags(participant=participant).values()))
+        return self._all_part_of_speech_tags
 
 
 class SingleReader:

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import re
-from itertools import chain
 
 # CLITIC is a str constant to represent what would be a clitic in tagged data.
 CLITIC = 'CLITIC'
@@ -99,6 +98,7 @@ class IterableList(list):
     A class like ``list`` that can be initialized with iterables.
     """
     def __init__(self, *iterables):
+        super(IterableList, self).__init__()
         self.input_iterables = iterables
         self.from_iterables()
 

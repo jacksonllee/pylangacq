@@ -14,6 +14,7 @@ class Reader:
     """
     A class for reading multiple CHAT files.
     """
+
     def __init__(self, *filenames):
         """
         :param filenames: One or more filenames. A filename may match exactly
@@ -364,6 +365,7 @@ class SingleReader:
     """
     A class for reading a single CHAT file.
     """
+
     def __init__(self, filename):
         """
         :param filename: The absolute path of the CHAT file
@@ -799,7 +801,7 @@ class SingleReader:
         :return: list of words
         """
         return IterableList(self._get_words(participant=participant,
-                                               tagged=False, sents=False))
+                                            tagged=False, sents=False))
 
     def tagged_words(self, participant=ALL_PARTICIPANTS):
         """
@@ -811,7 +813,7 @@ class SingleReader:
         :return: list of tagged words
         """
         return IterableList(self._get_words(participant=participant,
-                                               tagged=True, sents=False))
+                                            tagged=True, sents=False))
 
     def sents(self, participant=ALL_PARTICIPANTS):
         """
@@ -825,7 +827,7 @@ class SingleReader:
         :return: list of sents.
         """
         return IterableList(self._get_words(participant=participant,
-                                               tagged=False, sents=True))
+                                            tagged=False, sents=True))
 
     def tagged_sents(self, participant=ALL_PARTICIPANTS):
         """
@@ -839,7 +841,7 @@ class SingleReader:
         :return: list of tagged sents.
         """
         return IterableList(self._get_words(participant=participant,
-                                               tagged=True, sents=True))
+                                            tagged=True, sents=True))
 
     def _get_words(self, participant=ALL_PARTICIPANTS, tagged=True, sents=True):
         """
@@ -1004,9 +1006,10 @@ class SingleReader:
         Return word frequency information for the specified *participant*.
 
         :param keep_case: If *keep_case* is True (the default), case
-            distinctions are kept and word tokens like "the" and "The" are treated
-            as distinct types. If *keep_case* is False, all case distinctions are
-            collapsed, with all word tokens forced to be in lowercase.
+            distinctions are kept and word tokens like "the" and "The" are
+            treated as distinct types. If *keep_case* is False, all case
+            distinctions are collapsed, with all word tokens forced to be in
+            lowercase.
 
         :return: a Counter dict of word-frequency pairs
 
@@ -1123,7 +1126,7 @@ def clean_utterance(utterance):
     discard_signal_indices.update(find_indices(utterance, '\[:'),
                                   find_indices(utterance, '\[/'))  # use regex
 
-    discard_end_indices = [i-2 for i in sorted(discard_signal_indices)]
+    discard_end_indices = [i - 2 for i in sorted(discard_signal_indices)]
     discard_start_indices = list()
     for end_index in discard_end_indices:
         if utterance[end_index] == '>':

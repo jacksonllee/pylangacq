@@ -23,7 +23,7 @@ The command `python` is meant to be generic for whichever Python interpreter of 
 Documentation
 -------------
 
-Please visit [http://pylangacq.github.io/](http://pylangacq.github.io/).
+Please visit [http://pylangacq.github.io/](http://pylangacq.github.io/)
 
 
 

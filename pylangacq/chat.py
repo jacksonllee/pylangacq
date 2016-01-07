@@ -36,27 +36,32 @@ class Reader:
         self._input_filenames = filenames
         self._reset_reader(*self._input_filenames)
 
+    def _get_abs_filenames(self, *filenames):
+        filenames_set = set()
+        for filename in filenames:
+            if type(filename) is not str:
+                raise ValueError('{} is not str'.format(repr(filename)))
+
+            abs_fullpath = os.path.abspath(filename)
+            abs_dir = os.path.dirname(abs_fullpath)
+
+            if not os.path.isdir(abs_dir):
+                raise ValueError('dir does not exist: {}'.format(abs_dir))
+
+            candidate_filenames = [os.path.join(abs_dir, fn)
+                                   for fn in next(os.walk(abs_dir))[2]]
+
+            filenames_set.update(fnmatch.filter(candidate_filenames,
+                                                abs_fullpath))
+        return filenames_set
+
     def _reset_reader(self, *filenames, check=True):
         filenames_set = set()
 
         if not check:
             filenames_set = set(filenames)
         elif filenames:
-            for filename in filenames:
-                if type(filename) is not str:
-                    raise ValueError('{} is not str'.format(repr(filename)))
-
-                abs_fullpath = os.path.abspath(filename)
-                abs_dir = os.path.dirname(abs_fullpath)
-
-                if not os.path.isdir(abs_dir):
-                    raise ValueError('dir does not exist: {}'.format(abs_dir))
-
-                candidate_filenames = [os.path.join(abs_dir, fn)
-                                       for fn in next(os.walk(abs_dir))[2]]
-
-                filenames_set.update(fnmatch.filter(candidate_filenames,
-                                                    abs_fullpath))
+            filenames_set = self._get_abs_filenames(*filenames)
 
         self._filenames = filenames_set
         self._all_part_of_speech_tags = None
@@ -89,17 +94,22 @@ class Reader:
         """
         return self.__len__()
 
-    def number_of_utterances(self):
+    def number_of_utterances(self, participant=ALL_PARTICIPANTS):
         """
         Return a dict mapping a filename to the file's number of utterances.
+
+        :param participant:  The participant(s) being specified, default to
+            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+            target child, for example. For multiple participants, this parameter
+            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
 
         :return: A dict where key is filename and value is
             the file's number of utterances
 
         :rtype: dict(str: int)
         """
-        return {filename: SingleReader(filename).number_of_utterances()
-                for filename in self._filenames}
+        return {filename: SingleReader(filename).number_of_utterances(
+            participant=participant) for filename in self._filenames}
 
     def total_number_of_utterances(self):
         """
@@ -406,8 +416,7 @@ class Reader:
 
     def update(self, reader):
         """
-        Update the current CHAT Reader instance with *reader* for filenames
-            included.
+        Combine the current CHAT Reader instance with *reader*.
         """
         if type(reader) is not type(self):
             raise ValueError('invalid reader')
@@ -415,31 +424,31 @@ class Reader:
         new_filenames = reader.filenames() | self.filenames()
         self._reset_reader(*tuple(new_filenames), check=False)
 
-    def add(self, filename):
+    def add(self, *filenames):
         """
-        Add a CHAT file to the current reader by an absolute-path *filename*.
-
-        Raise ``ValueError`` for invalid *filename*.
+        Add one or multiple CHAT files to the current reader
+            by *filenames*
+            (which may take glob patterns with wildcards ``*`` and ``?``).
         """
-        if not (type(filename) is str and os.path.isabs(filename)):
-            raise ValueError('an absolute-path filename is required')
-
-        new_filenames = self.filenames()
-        new_filenames.add(filename)
+        add_filenames = self._get_abs_filenames(*filenames)
+        new_filenames = self.filenames() | add_filenames
         self._reset_reader(*tuple(new_filenames), check=False)
 
-    def remove(self, filename):
+    def remove(self, *filenames):
         """
-        Remove a CHAT file from the current reader by an absolute-path
-            *filename*.
-
-        Raise ``KeyError`` if *filename* is not found.
+        Remove one or multiple CHAT file from the current reader
+            by *filenames*.
+            (which may take glob patterns with wildcards ``*`` and ``?``).
         """
-        if filename not in self.filenames():
-            raise KeyError('filename not found')
+        remove_filenames = self._get_abs_filenames(*filenames)
+        new_filenames = set(self.filenames())
 
-        new_filenames = self.filenames()
-        new_filenames.remove(filename)
+        for remove_filename in remove_filenames:
+            if remove_filename not in self.filenames():
+                raise KeyError('filename not found')
+            else:
+                new_filenames.remove(remove_filename)
+
         self._reset_reader(*tuple(new_filenames), check=False)
 
 
@@ -477,15 +486,20 @@ class SingleReader:
         """
         return len(self._index_to_tiers)
 
-    def number_of_utterances(self):
+    def number_of_utterances(self, participant=ALL_PARTICIPANTS):
         """
-        Return the number of utterances.
+        Return the number of utterances by *participant*.
+
+        :param participant:  Participant(s) of interest, default to
+            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+            target child, for example. For multiple participants, this parameter
+            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
 
         :return: The number of utterances (lines starting with '*')
 
         :rtype: int
         """
-        return self.__len__()
+        return len(self.utterances(participant=participant))
 
     def filename(self):
         """
@@ -499,7 +513,8 @@ class SingleReader:
 
     def cha_lines(self):
         """
-        Read the CHAT file and undo the line continuations by tab.
+        A generator of lines in the CHAT file,
+            with the tab-character line continuations undone.
 
         :return: A generator of all cleaned-up lines in the CHAT file
 
@@ -508,6 +523,7 @@ class SingleReader:
         previous_line = ''
 
         for line in open(self._filename, 'rU'):
+            previous_line = previous_line.strip()
             current_line = line.rstrip()  # don't remove leading \t
 
             if not current_line:
@@ -540,7 +556,7 @@ class SingleReader:
 
     def index_to_tiers(self):
         """
-        Extract and organize the utterances and the corresponding tiers.
+        Return a dict of utterances and the corresponding tiers.
 
         :return: A dict where key is utterance index (starting from 0)
             and value is a dict,
@@ -736,7 +752,7 @@ class SingleReader:
 
     def languages(self):
         """
-        Return as a set the languages of the CHAT transcript.
+        Return a set the languages of the CHAT transcript.
 
         :return: The set of languages based on the @Languages headers
 
@@ -839,7 +855,7 @@ class SingleReader:
         output = list()
         participants = self._determine_participants(participant)
 
-        for i in range(self.number_of_utterances()):
+        for i in range(len(self)):
             tiermarker_to_line = self._index_to_tiers[i]
 
             for tier_marker in tiermarker_to_line.keys():

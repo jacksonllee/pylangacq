@@ -24,6 +24,7 @@ class Reader:
             Apart from ``*`` for any number (including zero) of characters,
             ``?`` is another commonly used wildcard and matches one character.
             A filename can be either an absolute or relative path.
+            if no *filenames* are provided, an empty Reader instance results.
 
         The ``Reader`` class is set to find *unique* absolute-path filenames.
             This means that a call such as ``Reader('eve*.cha', '*01.cha')``
@@ -32,25 +33,32 @@ class Reader:
             both ``eve*.cha`` and ``*01.cha``), but ``Reader`` filters away the
             duplicates.
         """
+        self._input_filenames = filenames
+        self._reset_reader(*self._input_filenames)
+
+    def _reset_reader(self, *filenames, check=True):
         filenames_set = set()
-        for filename in filenames:
-            if type(filename) is not str:
-                raise ValueError('{} is not str'.format(repr(filename)))
 
-            abs_fullpath = os.path.abspath(filename)
-            abs_dir = os.path.dirname(abs_fullpath)
+        if not check:
+            filenames_set = set(filenames)
+        elif filenames:
+            for filename in filenames:
+                if type(filename) is not str:
+                    raise ValueError('{} is not str'.format(repr(filename)))
 
-            if not os.path.isdir(abs_dir):
-                raise ValueError('dir does not exist: {}'.format(abs_dir))
+                abs_fullpath = os.path.abspath(filename)
+                abs_dir = os.path.dirname(abs_fullpath)
 
-            candidate_filenames = [os.path.join(abs_dir, fn)
-                                   for fn in next(os.walk(abs_dir))[2]]
+                if not os.path.isdir(abs_dir):
+                    raise ValueError('dir does not exist: {}'.format(abs_dir))
 
-            filenames_set.update(fnmatch.filter(candidate_filenames,
-                                                abs_fullpath))
+                candidate_filenames = [os.path.join(abs_dir, fn)
+                                       for fn in next(os.walk(abs_dir))[2]]
+
+                filenames_set.update(fnmatch.filter(candidate_filenames,
+                                                    abs_fullpath))
 
         self._filenames = filenames_set
-
         self._all_part_of_speech_tags = None
 
     def __len__(self):
@@ -395,6 +403,45 @@ class Reader:
             self._all_part_of_speech_tags = set().union(*(
                 self.part_of_speech_tags(participant=participant).values()))
         return self._all_part_of_speech_tags
+
+    def update(self, reader):
+        """
+        Update the current CHAT Reader instance with *reader* for filenames
+            included.
+        """
+        if type(reader) is not type(self):
+            raise ValueError('invalid reader')
+
+        new_filenames = reader.filenames() | self.filenames()
+        self._reset_reader(*tuple(new_filenames), check=False)
+
+    def add(self, filename):
+        """
+        Add a CHAT file to the current reader by an absolute-path *filename*.
+
+        Raise ``ValueError`` for invalid *filename*.
+        """
+        if not (type(filename) is str and os.path.isabs(filename)):
+            raise ValueError('an absolute-path filename is required')
+
+        new_filenames = self.filenames()
+        new_filenames.add(filename)
+        self._reset_reader(*tuple(new_filenames), check=False)
+
+    def remove(self, filename):
+        """
+        Remove a CHAT file from the current reader by an absolute-path
+            *filename*.
+
+        Raise ``KeyError`` if *filename* is not found.
+        """
+        if filename not in self.filenames():
+            raise KeyError('filename not found')
+
+        new_filenames = self.filenames()
+        new_filenames.remove(filename)
+        self._reset_reader(*tuple(new_filenames), check=False)
+
 
 
 class SingleReader:

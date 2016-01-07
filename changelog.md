@@ -5,6 +5,8 @@ Current version: 0.7
 
 - Version 0.8 in progress
 
+    * Added methods for changing filenames in `Reader`:
+      `update()`, `add()`, `remove()`
     * word ngrams
     * MLU
     * IPSyn

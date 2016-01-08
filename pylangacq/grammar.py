@@ -62,36 +62,76 @@ class DependencyGraph(nx.DiGraph):
         """
         Return the dependency graph as LaTeX tikz-dependency code.
 
+        >>> from pylangacq.grammar import (DependencyGraph, chat_graph_data)
         >>> graph = DependencyGraph(chat_graph_data)
-        >>> graph.to_tikz()
+        >>> print(graph.to_tikz())
         \begin{dependency}[theme = simple]
-           \begin{deptext}[column sep=1em]
-              but \& I \& thought \& you \& wanted \& me \& to \& turn \& it \& . \\
-           \end{deptext}
-           \deproot{3}{ROOT}
-           \depedge{1}{3}{LINK}
-           \depedge{2}{3}{SUBJ}
-           \depedge{4}{3}{OBJ}
-           \depedge{5}{3}{JCT}
-           \depedge{6}{5}{POBJ}
-           \depedge{7}{8}{INF}
-           \depedge{8}{3}{XCOMP}
-           \depedge{9}{8}{OBJ}
-           \depedge{10}{3}{PUNCT}
+            \begin{deptext}[column sep=1em]
+                but \& I \& thought \& you \& wanted \& me \& to \& turn \& it \& . \\
+            \end{deptext}
+            \deproot{3}{ROOT}
+            \depedge{1}{3}{LINK}
+            \depedge{2}{3}{SUBJ}
+            \depedge{3}{0}{ROOT}
+            \depedge{4}{3}{OBJ}
+            \depedge{5}{3}{JCT}
+            \depedge{6}{5}{POBJ}
+            \depedge{7}{8}{INF}
+            \depedge{8}{3}{XCOMP}
+            \depedge{9}{8}{OBJ}
+            \depedge{10}{3}{PUNCT}
         \end{dependency}
 
         :return: The LaTeX tikz-dependency code for drawing the graph
 
         :rtype: str
         """
-        return  # work in progress
+        tikz_dep_code = ''
+
+        # get graph info
+        dep_to_head = dict(self.edges())
+        number_of_nodes = self.number_of_nodes()
+
+        # add \begin{deptext}...\end{deptext}
+        words = [self.node[n]['word']
+                 for n in range(1, number_of_nodes)]
+        deptext_template = '    \\begin{{deptext}}[column sep=1em]\n' + \
+                           '        {} \\\\ \n' + \
+                           '    \\end{{deptext}}\n'
+        tikz_dep_code += deptext_template.format(' \\& '.join(words))
+
+        # add the \deproot line
+        dep_shooting_to_root = 0
+        root_rel = ''
+        for dep in range(1, number_of_nodes):
+            head = dep_to_head[dep]
+            if head == 0:
+                dep_shooting_to_root = dep
+                root_rel = self.edge[dep_shooting_to_root][0]['rel']
+                break
+        tikz_dep_code += '    \\deproot{{{}}}{{{}}}\n'.format(
+            dep_shooting_to_root, root_rel)
+
+        # add the \depedge lines
+        for dep in range(1, number_of_nodes):
+            head = dep_to_head[dep]
+            rel = self.edge[dep][head]['rel']
+            tikz_dep_code += '    \\depedge{{{}}}{{{}}}{{{}}}\n'.format(
+                dep, head, rel)
+
+        # return tikz_dep_code
+        # wrapped inside \begin{dependency}...\end{dependency}
+        dependency_template = '\\begin{{dependency}}[theme = simple]\n' + \
+                              '{}\\end{{dependency}}'
+        return dependency_template.format(tikz_dep_code)
 
     def to_conll(self):
         """
         Return the dependency graph in the CoNLL format.
 
+        >>> from pylangacq.grammar import (DependencyGraph, chat_graph_data)
         >>> graph = DependencyGraph(chat_graph_data)
-        >>> graph.to_conll()
+        >>> print(graph.to_conll())
         but CONJ 3 LINK
         I PRO:SUB 3 SUBJ
         thought V 0 ROOT
@@ -107,7 +147,17 @@ class DependencyGraph(nx.DiGraph):
 
         :rtype: str
         """
-        return  # work in progress
+        collector = list()
+        dep_to_head = dict(self.edges())
+
+        for dep in range(1, self.number_of_nodes()):
+            head = dep_to_head[dep]
+            word = self.node[dep]['word']
+            pos = self.node[dep]['pos']
+            rel = self.edge[dep][head]['rel']
+            collector.append('{} {} {} {}'.format(word, pos, head, rel))
+
+        return '\n'.join(collector)
 
 
 chat_graph_data = [('but', 'CONJ', 'but', (1, 3, 'LINK')),

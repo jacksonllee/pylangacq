@@ -172,12 +172,12 @@ class Reader:
 
     def languages(self):
         """
-        Return a dict mapping a filename to the set of languages used.
+        Return a dict mapping a filename to the list of languages used.
 
         :return: A dict where key is filename and value is
-            a set of languages based on the @Languages headers
+            a list of languages based on the @Languages headers
 
-        :rtype: dict(str: set)
+        :rtype: dict(str: list)
         """
         return {filename: SingleReader(filename).languages()
                 for filename in self._filenames}
@@ -655,9 +655,11 @@ class SingleReader:
                 for participant in participants:
                     participant = participant.strip()
                     code, _, participant_label = participant.partition(' ')
+                    participant_name, _, participant_role = \
+                        participant_label.partition(' ')
                     # code = participant code, e.g. CHI, MOT
                     headname_to_entry['Participants'][code] = \
-                        {'participant_label': participant_label}
+                        {'participant_name': participant_name}
 
             elif head == 'ID':
                 participant_info = line.split('|')[: -1]
@@ -670,11 +672,10 @@ class SingleReader:
 
                 del participant_info[2]  # remove code info (3rd in list)
                 participant_info_heads = ['language', 'corpus', 'age', 'sex',
-                                          'group', 'SES', 'role',
+                                          'group', 'SES', 'participant_role',
                                           'education', 'custom']
-                head_to_info = {head: info
-                                for head, info in
-                                zip(participant_info_heads, participant_info)}
+                head_to_info = dict(zip(participant_info_heads,
+                                        participant_info))
 
                 headname_to_entry['Participants'][code].update(head_to_info)
 
@@ -755,13 +756,13 @@ class SingleReader:
 
     def languages(self):
         """
-        Return a set the languages of the CHAT transcript.
+        Return a list the languages of the CHAT transcript.
 
-        :return: The set of languages based on the @Languages headers
+        :return: The list of languages based on the @Languages headers
 
         :rtype: set
         """
-        languages_set = set()
+        languages_list = list()
 
         try:
             languages_line = self._headers['Languages']
@@ -771,9 +772,9 @@ class SingleReader:
             for language in languages_line.split(','):
                 language = language.strip()
                 if language:
-                    languages_set.add(language)
+                    languages_list.append(language)
 
-        return languages_set
+        return languages_list
 
     def date(self):
         """

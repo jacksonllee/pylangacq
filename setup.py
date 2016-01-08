@@ -1,7 +1,13 @@
+import os
 from setuptools import (setup, find_packages)
 
+version_filename = os.path.join(os.path.dirname(__file__),
+                                'pylangacq', 'VERSION')
+with open(version_filename) as f:
+    current_version = f.read().strip()
+
 setup(name="pylangacq",
-    version="0.7",
+    version=current_version,
     description="PyLangAcq",
 
     long_description="""

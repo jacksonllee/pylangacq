@@ -418,17 +418,21 @@ class Reader:
         """
         Combine the current CHAT Reader instance with *reader*.
         """
-        if type(reader) is not type(self):
+        if type(reader) is Reader:
+            add_filenames = reader.filenames()
+        elif type(reader) is SingleReader:
+            add_filenames = set()
+            add_filenames.add(reader.filename())
+        else:
             raise ValueError('invalid reader')
 
-        new_filenames = reader.filenames() | self.filenames()
+        new_filenames = add_filenames | self.filenames()
         self._reset_reader(*tuple(new_filenames), check=False)
 
     def add(self, *filenames):
         """
-        Add one or multiple CHAT files to the current reader
-            by *filenames*
-            (which may take glob patterns with wildcards ``*`` and ``?``).
+        Add one or multiple CHAT files to the current reader by *filenames*.
+            *filenames* may take glob patterns with wildcards ``*`` and ``?``.
         """
         add_filenames = self._get_abs_filenames(*filenames)
         new_filenames = self.filenames() | add_filenames
@@ -436,9 +440,9 @@ class Reader:
 
     def remove(self, *filenames):
         """
-        Remove one or multiple CHAT file from the current reader
-            by *filenames*.
-            (which may take glob patterns with wildcards ``*`` and ``?``).
+        Remove one or multiple CHAT files from the current reader by
+            *filenames*.
+            *filenames* may take glob patterns with wildcards ``*`` and ``?``.
         """
         remove_filenames = self._get_abs_filenames(*filenames)
         new_filenames = set(self.filenames())
@@ -450,7 +454,6 @@ class Reader:
                 new_filenames.remove(remove_filename)
 
         self._reset_reader(*tuple(new_filenames), check=False)
-
 
 
 class SingleReader:

@@ -236,7 +236,7 @@ class Reader:
             participant=participant, clean=clean)
                 for filename in self._filenames}
 
-    def word_frequency(self, participant='CHI', keep_case=True):
+    def word_frequency(self, participant=ALL_PARTICIPANTS, keep_case=True):
         """
         Return a dict mapping a filename to the file's word frequency dict
             for the specified *participant*.
@@ -455,6 +455,30 @@ class Reader:
 
         self._reset_reader(*tuple(new_filenames), check=False)
 
+    def word_ngrams(self, n, participant=ALL_PARTICIPANTS, keep_case=True):
+        """
+        Return a dict mapping a filename to the file's Counter dict of
+            *n*-grams for *participant*. Each ngram is an n-tuple of words.
+
+        :param participant:  The participant(s) being specified, default to
+            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+            target child, for example. For multiple participants, this parameter
+            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+
+        :param keep_case: If *keep_case* is True (the default), case
+            distinctions are kept and word tokens like "the" and "The" are
+            treated as distinct types. If *keep_case* is False, all case
+            distinctions are collapsed, with all word tokens forced to be in
+            lowercase.
+
+        :return: a dict mapping a filename to a Counter dict of
+            ngram-frequency pairs for that file
+
+        :rtype: dict(str: Counter)
+        """
+        return {filename: SingleReader(filename).word_ngrams(n,
+            participant=participant, keep_case=keep_case)
+                for filename in self._filenames}
 
 class SingleReader:
     """
@@ -1152,6 +1176,46 @@ class SingleReader:
 
         return output_set
 
+    def word_ngrams(self, n, participant=ALL_PARTICIPANTS, keep_case=True):
+        """
+        Return a Counter dict of *n*-grams for *participant*. Each ngram is
+            an n-tuple of words.
+
+        :param participant:  The participant(s) being specified, default to
+            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
+            target child, for example. For multiple participants, this parameter
+            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+
+        :param keep_case: If *keep_case* is True (the default), case
+            distinctions are kept and word tokens like "the" and "The" are
+            treated as distinct types. If *keep_case* is False, all case
+            distinctions are collapsed, with all word tokens forced to be in
+            lowercase.
+
+        :return: a Counter dict of ngram-frequency pairs
+
+        :rtype: Counter
+        """
+        # TODO: collapses like [x 4] not yet handled
+        if (type(n) is not int) or (n < 1):
+            raise ValueError('n must be a positive integer: {}'.format(n))
+
+        if n == 1:
+            return self.word_frequency(participant=participant,
+                                       keep_case=keep_case)
+
+        sents = self.sents(participant=participant)
+        output_counter = Counter()
+
+        for sent in sents:
+            if len(sent) < n:
+                continue
+            if not keep_case:
+                sent = [word.lower() for word in sent]
+            ngram_list = zip(*[sent[i:] for i in range(n)])
+            output_counter.update(ngram_list)
+
+        return output_counter
 
 def clean_utterance(utterance):
     """

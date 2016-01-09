@@ -9,6 +9,7 @@ Current version: 0.7
       `update()`, `add()`, `remove()`
     * Add `word_ngrams()`
     * Add language development measures: `MLUm()`, `MLUw()`, `TTR()`, `IPSyn()`
+    * Add `concordances()` for search queries and concordances
     * Allow regular expression matching when specifying participants in all relevant `SingleReader` and `Reader` methods
     * Add output formats for dependency graphs: `to_tikz()` and `to_conll()`
 

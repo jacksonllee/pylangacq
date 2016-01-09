@@ -710,7 +710,7 @@ class SingleReader:
         return self._index_to_tiers
 
     def _get_index_to_tiers(self):
-        result = dict()
+        result_with_collapses = dict()
         index_ = -1  # utterance index (1st utterance is index 0)
         utterance = None
 
@@ -724,12 +724,35 @@ class SingleReader:
                 index_ += 1
                 participant_code = line_split[0].lstrip('*').rstrip(':')
                 utterance = ' '.join(line_split[1:])
-                result[index_] = {participant_code: utterance}
+                result_with_collapses[index_] = {participant_code: utterance}
+
             elif utterance and line.startswith('%'):
                 tier_marker = line_split[0].rstrip(':')
-                result[index_][tier_marker] = ' '.join(line_split[1:])
+                result_with_collapses[index_][tier_marker] = \
+                    ' '.join(line_split[1:])
 
-        return result
+        # handle collapses such as [x 4]
+        result_without_collapses = dict()
+        new_index = -1  # utterance index (1st utterance is index 0)
+        collapse_pattern = re.compile('\[x \d+?\]')  # e.g., "[x <number(s)>]"
+        number_regex = re.compile('\d+')
+
+        for old_index in range(len(result_with_collapses)):
+            tier_dict = result_with_collapses[old_index]
+            participant_code = get_participant_code(tier_dict.keys())
+            utterance = tier_dict[participant_code]
+
+            try:
+                collapse_str = collapse_pattern.search(utterance).group()
+                collapse_number = int(number_regex.findall(collapse_str)[0])
+            except (AttributeError, ValueError):
+                collapse_number = 1
+
+            for i in range(collapse_number):
+                new_index += 1
+                result_without_collapses[new_index] = tier_dict
+
+        return result_without_collapses
 
     def headers(self):
         """
@@ -994,7 +1017,6 @@ class SingleReader:
 
         :rtype: list
         """
-        # TODO: collapses like [x 4] not yet handled
         output = list()
         participants = self._determine_participants(participant)
 
@@ -1189,7 +1211,6 @@ class SingleReader:
 
         :return: A generator of either sents of words, or just words
         """
-        # TODO: collapses like [x 4] not yet handled
         participants = self._determine_participants(participant)
 
         for i in range(self.number_of_utterances()):
@@ -1324,7 +1345,6 @@ class SingleReader:
 
         :rtype: Counter
         """
-        # TODO: collapses like [x 4] not yet handled
         output = Counter()
 
         if keep_case:
@@ -1392,7 +1412,6 @@ class SingleReader:
 
         :rtype: Counter
         """
-        # TODO: collapses like [x 4] not yet handled
         if (type(n) is not int) or (n < 1):
             raise ValueError('n must be a positive integer: {}'.format(n))
 
@@ -1412,6 +1431,7 @@ class SingleReader:
             output_counter.update(ngram_list)
 
         return output_counter
+
 
 def clean_utterance(utterance):
     """

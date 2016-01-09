@@ -2,10 +2,12 @@
 
 import os
 import fnmatch
+import re
 from pprint import pformat
 from collections import Counter
 
 from pylangacq.util import *
+from pylangacq.measures import *
 
 ALL_PARTICIPANTS = '**ALL**'
 
@@ -252,8 +254,8 @@ class Reader:
 
     def word_frequency(self, participant=ALL_PARTICIPANTS, keep_case=True):
         """
-        Return a dict mapping a filename to the file's word frequency dict
-            for the specified *participant*.
+        Return a dict mapping a filename to the file's word frequency Counter
+            dict for the specified *participant*.
 
         :param participant: The participant(s) of interest (default is all
             participants if unspecified). This parameter is flexible.
@@ -580,6 +582,46 @@ class Reader:
         return {filename: SingleReader(filename).word_ngrams(n,
             participant=participant, keep_case=keep_case)
                 for filename in self._filenames}
+
+    def MLU(self, participant='CHI'):
+        """
+        Return a dict mapping a filename to the file's mean length of utterance
+            (MLU) in morphemes for *participant*
+            (default to ``'CHI'``); same as ``MLUm()``.
+
+        :param participant: The participant specified, default to ``'CHI'``
+
+        :rtype: dict(str: float)
+        """
+        return {filename: SingleReader(filename).MLU(
+            participant=participant) for filename in self._filenames}
+
+    def MLUm(self, participant='CHI'):
+        """
+        Return a dict mapping a filename to the file's mean length of utterance
+            (MLU) in morphemes for *participant*
+            (default to ``'CHI'``); same as ``MLU()``.
+
+        :param participant: The participant specified, default to ``'CHI'``
+
+        :rtype: dict(str: float)
+        """
+        return {filename: SingleReader(filename).MLUm(
+            participant=participant) for filename in self._filenames}
+
+    def MLUw(self, participant='CHI'):
+        """
+        Return a dict mapping a filename to the file's mean length of utterance
+            (MLU) in words for *participant*
+            (default to ``'CHI'``).
+
+        :param participant: The participant specified, default to ``'CHI'``
+
+        :rtype: dict(str: float)
+        """
+        return {filename: SingleReader(filename).MLUw(
+            participant=participant) for filename in self._filenames}
+
 
 class SingleReader:
     """
@@ -1321,7 +1363,7 @@ class SingleReader:
 
     def word_frequency(self, participant=ALL_PARTICIPANTS, keep_case=True):
         """
-        Return word frequency information for the specified *participant*.
+        Return the word frequency Counter dict for *participant*.
 
         :param participant: The participant(s) of interest (default is all
             participants if unspecified). This parameter is flexible.
@@ -1431,6 +1473,33 @@ class SingleReader:
             output_counter.update(ngram_list)
 
         return output_counter
+
+    def MLU(self, participant='CHI'):
+        """
+        Return the mean length of utterance (MLU) in morphemes for *participant*
+            (default to ``'CHI'``); same as ``MLUm()``.
+
+        :param participant: The participant specified, default to ``'CHI'``
+        """
+        return get_MLUm(self.index_to_tiers(), participant=participant)
+
+    def MLUm(self, participant='CHI'):
+        """
+        Return the mean length of utterance (MLU) in morphemes for *participant*
+            (default to ``'CHI'``); same as ``MLU()``.
+
+        :param participant: The participant specified, default to ``'CHI'``
+        """
+        return get_MLUm(self.index_to_tiers(), participant=participant)
+
+    def MLUw(self, participant='CHI'):
+        """
+        Return the mean length of utterance (MLU) in words for *participant*
+            (default to ``'CHI'``).
+
+        :param participant: The participant specified, default to ``'CHI'``
+        """
+        return get_MLUw(self.sents(participant=participant))
 
 
 def clean_utterance(utterance):

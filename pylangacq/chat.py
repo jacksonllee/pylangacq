@@ -98,10 +98,17 @@ class Reader:
         """
         Return a dict mapping a filename to the file's number of utterances.
 
-        :param participant:  The participant(s) being specified, default to
-            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-            target child, for example. For multiple participants, this parameter
-            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+        :param participant: The participant(s) of interest (default is all
+            participants if unspecified). This parameter is flexible.
+            Set it to be ``'CHI'`` for the target child only, for example.
+            If multiple participants are desired, this parameter can take
+            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
+            question. Underlyingly, this parameter actually performs
+            regular expression matching
+            (so passing ``'CHI'`` to this parameter is an
+            exact match for the participant code ``'CHI'``, for instance).
+            For child-directed speech (i.e., targeting all participant
+            except ``'CHI'``), use ``^(?!.*CHI).*$``.
 
         :return: A dict where key is filename and value is
             the file's number of utterances
@@ -219,10 +226,17 @@ class Reader:
         Return a dict mapping a filename to the file's
             (*participant*, *utterance*) pairs.
 
-        :param participant:  The participant(s) being specified, default to
-            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-            target child, for example. For multiple participants, this parameter
-            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+        :param participant: The participant(s) of interest (default is all
+            participants if unspecified). This parameter is flexible.
+            Set it to be ``'CHI'`` for the target child only, for example.
+            If multiple participants are desired, this parameter can take
+            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
+            question. Underlyingly, this parameter actually performs
+            regular expression matching
+            (so passing ``'CHI'`` to this parameter is an
+            exact match for the participant code ``'CHI'``, for instance).
+            For child-directed speech (i.e., targeting all participant
+            except ``'CHI'``), use ``^(?!.*CHI).*$``.
 
         :param clean: Whether to filter away the CHAT annotations in the
             utterance, default to ``True``.
@@ -241,7 +255,17 @@ class Reader:
         Return a dict mapping a filename to the file's word frequency dict
             for the specified *participant*.
 
-        :param participant: The specified participant, default to ``'CHI'``
+        :param participant: The participant(s) of interest (default is all
+            participants if unspecified). This parameter is flexible.
+            Set it to be ``'CHI'`` for the target child only, for example.
+            If multiple participants are desired, this parameter can take
+            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
+            question. Underlyingly, this parameter actually performs
+            regular expression matching
+            (so passing ``'CHI'`` to this parameter is an
+            exact match for the participant code ``'CHI'``, for instance).
+            For child-directed speech (i.e., targeting all participant
+            except ``'CHI'``), use ``^(?!.*CHI).*$``.
 
         :return: A dict where key is filename and value is
             a Counter dict of word-frequency pairs.
@@ -257,10 +281,17 @@ class Reader:
         Return a dict mapping a filename to the file's list of words
             for the specified *participant*.
 
-        :param participant:  The participant(s) being specified, default to
-            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-            target child, for example. For multiple participants, this parameter
-            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+        :param participant: The participant(s) of interest (default is all
+            participants if unspecified). This parameter is flexible.
+            Set it to be ``'CHI'`` for the target child only, for example.
+            If multiple participants are desired, this parameter can take
+            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
+            question. Underlyingly, this parameter actually performs
+            regular expression matching
+            (so passing ``'CHI'`` to this parameter is an
+            exact match for the participant code ``'CHI'``, for instance).
+            For child-directed speech (i.e., targeting all participant
+            except ``'CHI'``), use ``^(?!.*CHI).*$``.
 
         :return: A dict where key is filename and value is
             a list of words
@@ -275,10 +306,17 @@ class Reader:
         Return a dict mapping a filename to the file's list of tagged words
             for the specified *participant*.
 
-        :param participant:  The participant(s) being specified, default to
-            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-            target child, for example. For multiple participants, this parameter
-            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+        :param participant: The participant(s) of interest (default is all
+            participants if unspecified). This parameter is flexible.
+            Set it to be ``'CHI'`` for the target child only, for example.
+            If multiple participants are desired, this parameter can take
+            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
+            question. Underlyingly, this parameter actually performs
+            regular expression matching
+            (so passing ``'CHI'`` to this parameter is an
+            exact match for the participant code ``'CHI'``, for instance).
+            For child-directed speech (i.e., targeting all participant
+            except ``'CHI'``), use ``^(?!.*CHI).*$``.
 
         :return: A dict where key is filename and value is
             a list of tagged words
@@ -293,10 +331,17 @@ class Reader:
         Return a dict mapping a filename to the file's list of sents
             for the specified *participant*
 
-        :param participant:  The participant(s) being specified, default to
-            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-            target child, for example. For multiple participants, this parameter
-            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+        :param participant: The participant(s) of interest (default is all
+            participants if unspecified). This parameter is flexible.
+            Set it to be ``'CHI'`` for the target child only, for example.
+            If multiple participants are desired, this parameter can take
+            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
+            question. Underlyingly, this parameter actually performs
+            regular expression matching
+            (so passing ``'CHI'`` to this parameter is an
+            exact match for the participant code ``'CHI'``, for instance).
+            For child-directed speech (i.e., targeting all participant
+            except ``'CHI'``), use ``^(?!.*CHI).*$``.
 
         :return: A dict where key is filename and value is
             a list of sents
@@ -311,10 +356,17 @@ class Reader:
         Return a dict mapping a filename to the file's list of tagged sents
             for the specified *participant*
 
-        :param participant:  The participant(s) being specified, default to
-            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-            target child, for example. For multiple participants, this parameter
-            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+        :param participant: The participant(s) of interest (default is all
+            participants if unspecified). This parameter is flexible.
+            Set it to be ``'CHI'`` for the target child only, for example.
+            If multiple participants are desired, this parameter can take
+            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
+            question. Underlyingly, this parameter actually performs
+            regular expression matching
+            (so passing ``'CHI'`` to this parameter is an
+            exact match for the participant code ``'CHI'``, for instance).
+            For child-directed speech (i.e., targeting all participant
+            except ``'CHI'``), use ``^(?!.*CHI).*$``.
 
         :return: A dict where key is filename and value is
             a list of tagged sents
@@ -328,10 +380,17 @@ class Reader:
         """
         Return a list of words for *participant* in all files.
 
-        :param participant:  The participant(s) being specified, default to
-            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-            target child, for example. For multiple participants, this parameter
-            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+        :param participant: The participant(s) of interest (default is all
+            participants if unspecified). This parameter is flexible.
+            Set it to be ``'CHI'`` for the target child only, for example.
+            If multiple participants are desired, this parameter can take
+            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
+            question. Underlyingly, this parameter actually performs
+            regular expression matching
+            (so passing ``'CHI'`` to this parameter is an
+            exact match for the participant code ``'CHI'``, for instance).
+            For child-directed speech (i.e., targeting all participant
+            except ``'CHI'``), use ``^(?!.*CHI).*$``.
 
         :return: a list of words
         """
@@ -342,10 +401,17 @@ class Reader:
         """
         Return a list of tagged words for *participant* in all files.
 
-        :param participant:  The participant(s) being specified, default to
-            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-            target child, for example. For multiple participants, this parameter
-            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+        :param participant: The participant(s) of interest (default is all
+            participants if unspecified). This parameter is flexible.
+            Set it to be ``'CHI'`` for the target child only, for example.
+            If multiple participants are desired, this parameter can take
+            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
+            question. Underlyingly, this parameter actually performs
+            regular expression matching
+            (so passing ``'CHI'`` to this parameter is an
+            exact match for the participant code ``'CHI'``, for instance).
+            For child-directed speech (i.e., targeting all participant
+            except ``'CHI'``), use ``^(?!.*CHI).*$``.
 
         :return: a list of tagged words
         """
@@ -356,10 +422,17 @@ class Reader:
         """
         Return a list of sents for *participant* in all files.
 
-        :param participant:  The participant(s) being specified, default to
-            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-            target child, for example. For multiple participants, this parameter
-            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+        :param participant: The participant(s) of interest (default is all
+            participants if unspecified). This parameter is flexible.
+            Set it to be ``'CHI'`` for the target child only, for example.
+            If multiple participants are desired, this parameter can take
+            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
+            question. Underlyingly, this parameter actually performs
+            regular expression matching
+            (so passing ``'CHI'`` to this parameter is an
+            exact match for the participant code ``'CHI'``, for instance).
+            For child-directed speech (i.e., targeting all participant
+            except ``'CHI'``), use ``^(?!.*CHI).*$``.
 
         :return: a list of sents
         """
@@ -370,10 +443,17 @@ class Reader:
         """
         Return a list of tagged sents for *participant* in all files.
 
-        :param participant:  The participant(s) being specified, default to
-            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-            target child, for example. For multiple participants, this parameter
-            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+        :param participant: The participant(s) of interest (default is all
+            participants if unspecified). This parameter is flexible.
+            Set it to be ``'CHI'`` for the target child only, for example.
+            If multiple participants are desired, this parameter can take
+            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
+            question. Underlyingly, this parameter actually performs
+            regular expression matching
+            (so passing ``'CHI'`` to this parameter is an
+            exact match for the participant code ``'CHI'``, for instance).
+            For child-directed speech (i.e., targeting all participant
+            except ``'CHI'``), use ``^(?!.*CHI).*$``.
 
         :return: a list of tagged sents
         """
@@ -385,10 +465,17 @@ class Reader:
         Return a dict mapping a filename to the file's the set of
             part-of-speech tags in the data for *participant*
 
-        :param participant:  The participant(s) being specified, default to
-            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-            target child, for example. For multiple participants, this parameter
-            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+        :param participant: The participant(s) of interest (default is all
+            participants if unspecified). This parameter is flexible.
+            Set it to be ``'CHI'`` for the target child only, for example.
+            If multiple participants are desired, this parameter can take
+            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
+            question. Underlyingly, this parameter actually performs
+            regular expression matching
+            (so passing ``'CHI'`` to this parameter is an
+            exact match for the participant code ``'CHI'``, for instance).
+            For child-directed speech (i.e., targeting all participant
+            except ``'CHI'``), use ``^(?!.*CHI).*$``.
 
         :return: A dict where key is filename and value is
             the file's the set of part-of-speech tags
@@ -402,10 +489,17 @@ class Reader:
         """
         Return the set of part-of-speech tags for *participant* in all files.
 
-        :param participant:  The participant(s) being specified, default to
-            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-            target child, for example. For multiple participants, this parameter
-            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+        :param participant: The participant(s) of interest (default is all
+            participants if unspecified). This parameter is flexible.
+            Set it to be ``'CHI'`` for the target child only, for example.
+            If multiple participants are desired, this parameter can take
+            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
+            question. Underlyingly, this parameter actually performs
+            regular expression matching
+            (so passing ``'CHI'`` to this parameter is an
+            exact match for the participant code ``'CHI'``, for instance).
+            For child-directed speech (i.e., targeting all participant
+            except ``'CHI'``), use ``^(?!.*CHI).*$``.
 
         :return: a set of part-of-speech tags
         """
@@ -460,10 +554,17 @@ class Reader:
         Return a dict mapping a filename to the file's Counter dict of
             *n*-grams for *participant*. Each ngram is an n-tuple of words.
 
-        :param participant:  The participant(s) being specified, default to
-            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-            target child, for example. For multiple participants, this parameter
-            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+        :param participant: The participant(s) of interest (default is all
+            participants if unspecified). This parameter is flexible.
+            Set it to be ``'CHI'`` for the target child only, for example.
+            If multiple participants are desired, this parameter can take
+            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
+            question. Underlyingly, this parameter actually performs
+            regular expression matching
+            (so passing ``'CHI'`` to this parameter is an
+            exact match for the participant code ``'CHI'``, for instance).
+            For child-directed speech (i.e., targeting all participant
+            except ``'CHI'``), use ``^(?!.*CHI).*$``.
 
         :param keep_case: If *keep_case* is True (the default), case
             distinctions are kept and word tokens like "the" and "The" are
@@ -517,10 +618,17 @@ class SingleReader:
         """
         Return the number of utterances by *participant*.
 
-        :param participant:  Participant(s) of interest, default to
-            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-            target child, for example. For multiple participants, this parameter
-            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+        :param participant: The participant(s) of interest (default is all
+            participants if unspecified). This parameter is flexible.
+            Set it to be ``'CHI'`` for the target child only, for example.
+            If multiple participants are desired, this parameter can take
+            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
+            question. Underlyingly, this parameter actually performs
+            regular expression matching
+            (so passing ``'CHI'`` to this parameter is an
+            exact match for the participant code ``'CHI'``, for instance).
+            For child-directed speech (i.e., targeting all participant
+            except ``'CHI'``), use ``^(?!.*CHI).*$``.
 
         :return: The number of utterances (lines starting with '*')
 
@@ -866,10 +974,17 @@ class SingleReader:
         Return the utterances by *participant*
             as (*participant*, *utterance*) pairs.
 
-        :param participant: Participant(s) of interest, default to
-            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-            target child, for example. For multiple participants, this parameter
-            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+        :param participant: The participant(s) of interest (default is all
+            participants if unspecified). This parameter is flexible.
+            Set it to be ``'CHI'`` for the target child only, for example.
+            If multiple participants are desired, this parameter can take
+            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
+            question. Underlyingly, this parameter actually performs
+            regular expression matching
+            (so passing ``'CHI'`` to this parameter is an
+            exact match for the participant code ``'CHI'``, for instance).
+            For child-directed speech (i.e., targeting all participant
+            except ``'CHI'``), use ``^(?!.*CHI).*$``.
 
         :param clean: Whether to filter away the CHAT annotations in the
             utterance; default to ``True``.
@@ -907,23 +1022,44 @@ class SingleReader:
 
         :rtype: set
         """
+        all_participant_codes = self.participant_codes()
+
         if participant == ALL_PARTICIPANTS:
-            participants = self.participant_codes()
-        elif type(participant) is str:
-            participants = {participant}
+            return all_participant_codes
+        if type(participant) is str:
+            check_participants = {participant}
         elif hasattr(participant, '__iter__'):
-            participants = set(participant)
+            check_participants = set(participant)
         else:
             raise TypeError('participant data type is invalid: {}'.format(
                 repr(participant)))
-        return participants
+
+        output_participant_set = set()
+
+        for check_participant in check_participants:
+            re_pattern = re.compile(check_participant)
+
+            for participant_code in all_participant_codes:
+                if re_pattern.fullmatch(participant_code):
+                    output_participant_set.add(participant_code)
+
+        return output_participant_set
 
     def words(self, participant=ALL_PARTICIPANTS):
         """
         Return a list of words by *participant*.
 
-        :param participant: Participant(s) of interest, as a str (e.g., 'CHI')
-            for one participant or as a sequence of str for multiple ones.
+        :param participant: The participant(s) of interest (default is all
+            participants if unspecified). This parameter is flexible.
+            Set it to be ``'CHI'`` for the target child only, for example.
+            If multiple participants are desired, this parameter can take
+            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
+            question. Underlyingly, this parameter actually performs
+            regular expression matching
+            (so passing ``'CHI'`` to this parameter is an
+            exact match for the participant code ``'CHI'``, for instance).
+            For child-directed speech (i.e., targeting all participant
+            except ``'CHI'``), use ``^(?!.*CHI).*$``.
 
         :return: list of words
         """
@@ -934,8 +1070,17 @@ class SingleReader:
         """
         Return a list of  tagged words by *participant*.
 
-        :param participant: Participant(s) of interest, as a str (e.g., 'CHI')
-            for one participant or as a sequence of str for multiple ones.
+        :param participant: The participant(s) of interest (default is all
+            participants if unspecified). This parameter is flexible.
+            Set it to be ``'CHI'`` for the target child only, for example.
+            If multiple participants are desired, this parameter can take
+            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
+            question. Underlyingly, this parameter actually performs
+            regular expression matching
+            (so passing ``'CHI'`` to this parameter is an
+            exact match for the participant code ``'CHI'``, for instance).
+            For child-directed speech (i.e., targeting all participant
+            except ``'CHI'``), use ``^(?!.*CHI).*$``.
 
         :return: list of tagged words
         """
@@ -948,8 +1093,17 @@ class SingleReader:
 
         (utterances = sents in NLTK terminology)
 
-        :param participant: Participant(s) of interest, as a str (e.g., 'CHI')
-            for one participant or as a sequence of str for multiple ones.
+        :param participant: The participant(s) of interest (default is all
+            participants if unspecified). This parameter is flexible.
+            Set it to be ``'CHI'`` for the target child only, for example.
+            If multiple participants are desired, this parameter can take
+            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
+            question. Underlyingly, this parameter actually performs
+            regular expression matching
+            (so passing ``'CHI'`` to this parameter is an
+            exact match for the participant code ``'CHI'``, for instance).
+            For child-directed speech (i.e., targeting all participant
+            except ``'CHI'``), use ``^(?!.*CHI).*$``.
 
         :return: list of sents.
         """
@@ -962,8 +1116,17 @@ class SingleReader:
 
         (utterances = sents in NLTK terminology)
 
-        :param participant: Participant(s) of interest, as a str (e.g., 'CHI')
-            for one participant or as a sequence of str for multiple ones.
+        :param participant: The participant(s) of interest (default is all
+            participants if unspecified). This parameter is flexible.
+            Set it to be ``'CHI'`` for the target child only, for example.
+            If multiple participants are desired, this parameter can take
+            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
+            question. Underlyingly, this parameter actually performs
+            regular expression matching
+            (so passing ``'CHI'`` to this parameter is an
+            exact match for the participant code ``'CHI'``, for instance).
+            For child-directed speech (i.e., targeting all participant
+            except ``'CHI'``), use ``^(?!.*CHI).*$``.
 
         :return: list of tagged sents.
         """
@@ -977,10 +1140,17 @@ class SingleReader:
         The representation of "word" depends on whether ``tagged`` is True, and
             is based to some extent on the NLTK conventions.
 
-        :param participant:  Participant(s) of interest, default to
-            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-            target child, for example. For multiple participants, this parameter
-            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+        :param participant: The participant(s) of interest (default is all
+            participants if unspecified). This parameter is flexible.
+            Set it to be ``'CHI'`` for the target child only, for example.
+            If multiple participants are desired, this parameter can take
+            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
+            question. Underlyingly, this parameter actually performs
+            regular expression matching
+            (so passing ``'CHI'`` to this parameter is an
+            exact match for the participant code ``'CHI'``, for instance).
+            For child-directed speech (i.e., targeting all participant
+            except ``'CHI'``), use ``^(?!.*CHI).*$``.
 
         :param tagged:
 
@@ -1132,6 +1302,18 @@ class SingleReader:
         """
         Return word frequency information for the specified *participant*.
 
+        :param participant: The participant(s) of interest (default is all
+            participants if unspecified). This parameter is flexible.
+            Set it to be ``'CHI'`` for the target child only, for example.
+            If multiple participants are desired, this parameter can take
+            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
+            question. Underlyingly, this parameter actually performs
+            regular expression matching
+            (so passing ``'CHI'`` to this parameter is an
+            exact match for the participant code ``'CHI'``, for instance).
+            For child-directed speech (i.e., targeting all participant
+            except ``'CHI'``), use ``^(?!.*CHI).*$``.
+
         :param keep_case: If *keep_case* is True (the default), case
             distinctions are kept and word tokens like "the" and "The" are
             treated as distinct types. If *keep_case* is False, all case
@@ -1158,10 +1340,17 @@ class SingleReader:
         """
         Return the set of part-of-speech tags in the data for *participant*.
 
-        :param participant:  Participant(s) of interest, default to
-            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-            target child, for example. For multiple participants, this parameter
-            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+        :param participant: The participant(s) of interest (default is all
+            participants if unspecified). This parameter is flexible.
+            Set it to be ``'CHI'`` for the target child only, for example.
+            If multiple participants are desired, this parameter can take
+            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
+            question. Underlyingly, this parameter actually performs
+            regular expression matching
+            (so passing ``'CHI'`` to this parameter is an
+            exact match for the participant code ``'CHI'``, for instance).
+            For child-directed speech (i.e., targeting all participant
+            except ``'CHI'``), use ``^(?!.*CHI).*$``.
 
         :return: a set of part-of-speech tags
 
@@ -1181,10 +1370,17 @@ class SingleReader:
         Return a Counter dict of *n*-grams for *participant*. Each ngram is
             an n-tuple of words.
 
-        :param participant:  The participant(s) being specified, default to
-            ``'**ALL**'`` for all participants. Set it to be ``'CHI'`` for the
-            target child, for example. For multiple participants, this parameter
-            accepts a sequence of participants, such as ``{'CHI', 'MOT'}``.
+        :param participant: The participant(s) of interest (default is all
+            participants if unspecified). This parameter is flexible.
+            Set it to be ``'CHI'`` for the target child only, for example.
+            If multiple participants are desired, this parameter can take
+            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
+            question. Underlyingly, this parameter actually performs
+            regular expression matching
+            (so passing ``'CHI'`` to this parameter is an
+            exact match for the participant code ``'CHI'``, for instance).
+            For child-directed speech (i.e., targeting all participant
+            except ``'CHI'``), use ``^(?!.*CHI).*$``.
 
         :param keep_case: If *keep_case* is True (the default), case
             distinctions are kept and word tokens like "the" and "The" are

@@ -8,8 +8,7 @@ Current version: 0.7
     * Add methods for changing filenames in `Reader`:
       `update()`, `add()`, `remove()`
     * Add `word_ngrams()`
-    * MLU
-    * IPSyn
+    * Add language development measures: `MLUm()`, `MLUw()`, `TTR()`, `IPSyn()`
     * Allow regular expression matching when specifying participants in all relevant `SingleReader` and `Reader` methods
     * Add output formats for dependency graphs: `to_tikz()` and `to_conll()`
 

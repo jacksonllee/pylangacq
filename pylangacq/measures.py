@@ -3,6 +3,7 @@
 from __future__ import division
 
 def get_MLUm(index_to_tiers, participant='CHI'):
+    """Mean length of utterance (MLU) in morphemes"""
     total_utterance_count = 0
     total_morpheme_count = 0
 
@@ -23,6 +24,7 @@ def get_MLUm(index_to_tiers, participant='CHI'):
 
 
 def get_MLUw(sents):
+    """Mean length of utterance (MLU) in words"""
     # *sents* are already filtered for the desired participant like 'CHI'
     total_utterance_count = 0
     total_word_count = 0
@@ -37,5 +39,12 @@ def get_MLUw(sents):
         return 0
 
 
+def get_TTR(word_freq_dict):
+    """Type-token ratio (TTR)"""
+    # *word_freq_dict* already filtered for the desired participant like 'CHI'
+    return len(word_freq_dict) / sum(word_freq_dict.values())
+
+
 def get_IPSyn(tagged_sents, participant='CHI'):
+    """Index of Productive Syntax (IPSyn)"""
     return  # TODO: work in progress

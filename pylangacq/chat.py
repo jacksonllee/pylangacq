@@ -622,6 +622,17 @@ class Reader:
         return {filename: SingleReader(filename).MLUw(
             participant=participant) for filename in self._filenames}
 
+    def TTR(self, participant='CHI'):
+        """
+        Return a dict mapping a filename to the file's type-token ratio (TTR)
+            for *participant* (default to ``'CHI'``).
+
+        :param participant: The participant specified, default to ``'CHI'``
+
+        :rtype: dict(str: float)
+        """
+        return {filename: SingleReader(filename).TTR(
+            participant=participant) for filename in self._filenames}
 
 class SingleReader:
     """
@@ -1500,6 +1511,15 @@ class SingleReader:
         :param participant: The participant specified, default to ``'CHI'``
         """
         return get_MLUw(self.sents(participant=participant))
+
+    def TTR(self, participant='CHI'):
+        """
+        Return the type-token ratio (TTR) for *participant*
+            (default to ``'CHI'``).
+
+        :param participant: The participant specified, default to ``'CHI'``
+        """
+        return get_TTR(self.word_frequency(participant=participant))
 
 
 def clean_utterance(utterance):

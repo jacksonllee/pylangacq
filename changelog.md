@@ -5,12 +5,13 @@ Current version: 0.7
 
 - Version 0.8 in progress
 
-    * Added methods for changing filenames in `Reader`:
+    * Add methods for changing filenames in `Reader`:
       `update()`, `add()`, `remove()`
-    * word ngrams
+    * Add `word_ngrams()`
     * MLU
     * IPSyn
-    * various string output formats for dependency graphs
+    * Allow regular expression matching when specifying participants in all relevant `SingleReader` and `Reader` methods
+    * Add output formats for dependency graphs: `to_tikz()` and `to_conll()`
 
 - Version 0.7 2016-01-06
 

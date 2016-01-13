@@ -1,13 +1,19 @@
 import os
+import sys
 from setuptools import (setup, find_packages)
+
+py_version = sys.version_info[:2]
+if py_version < (3, 4):
+    sys.exit('Error:\nPyLangAcq requires Python 3.4 or above.\n'
+             'You are using Python {}.{}.'.format(*py_version))
 
 version_filename = os.path.join(os.path.dirname(__file__),
                                 'pylangacq', 'VERSION')
 with open(version_filename) as f:
-    current_version = f.read().strip()
+    package_version = f.read().strip()
 
 setup(name="pylangacq",
-    version=current_version,
+    version=package_version,
     description="PyLangAcq",
 
     long_description="""
@@ -35,12 +41,9 @@ PyLangAcq: Language Acquisition Research in Python
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.2',
-        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
         'Topic :: Scientific/Engineering',
         'Topic :: Scientific/Engineering :: Artificial Intelligence',
         'Topic :: Scientific/Engineering :: Human Machine Interfaces',

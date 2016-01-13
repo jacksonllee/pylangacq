@@ -1101,6 +1101,7 @@ class SingleReader:
 
         if participant == ALL_PARTICIPANTS:
             return all_participant_codes
+
         if type(participant) is str:
             check_participants = {participant}
         elif hasattr(participant, '__iter__'):
@@ -1112,10 +1113,10 @@ class SingleReader:
         output_participant_set = set()
 
         for check_participant in check_participants:
-            re_pattern = re.compile('\A' + check_participant + '\Z')
+            re_pattern = re.compile(check_participant)
 
             for participant_code in all_participant_codes:
-                if re_pattern.match(participant_code):
+                if re_pattern.fullmatch(participant_code):
                     output_participant_set.add(participant_code)
 
         return output_participant_set

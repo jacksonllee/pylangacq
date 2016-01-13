@@ -419,8 +419,8 @@ class Reader:
             return {filename: SingleReader(filename).part_of_speech_tags(
                 participant=participant) for filename in self._filenames}
         else:
-            return set().union(*(self.part_of_speech_tags(
-                participant=participant).values()))
+            return set().union(*(SingleReader(filename).part_of_speech_tags(
+                participant=participant) for filename in self._filenames))
 
     def update(self, reader):
         """

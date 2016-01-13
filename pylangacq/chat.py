@@ -1106,13 +1106,13 @@ class SingleReader:
         elif hasattr(participant, '__iter__'):
             check_participants = set(participant)
         else:
-            raise TypeError('participant data type is invalid: {}'.format(
-                repr(participant)))
+            raise TypeError('participant data type is invalid: {}'
+                            .format(repr(participant)))
 
         output_participant_set = set()
 
         for check_participant in check_participants:
-            re_pattern = re.compile(check_participant)
+            re_pattern = re.compile('\A' + check_participant + '\Z')
 
             for participant_code in all_participant_codes:
                 if re_pattern.match(participant_code):
@@ -1326,9 +1326,8 @@ class SingleReader:
 
             if mor_items and gra_items and \
                     (len(mor_items) != len(gra_items)):
-                raise ValueError(
-                    'cannot align the %mor and %gra tiers:\n{}'.format(
-                        pformat(tiermarker_to_line)))
+                raise ValueError('cannot align the %mor and %gra tiers:\n{}'
+                                 .format(pformat(tiermarker_to_line)))
 
             # utterance tier
             if mor_items and clitic_count:

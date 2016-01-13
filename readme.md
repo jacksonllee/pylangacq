@@ -18,9 +18,9 @@ PyLangAcq is currently available through GitHub:
 
     $ git clone https://github.com/pylangacq/pylangacq.git
     $ cd pylangacq
-    $ python setup.py install
+    $ python3 setup.py install
 
-The command `python` is meant to be generic for whichever Python interpreter of your choice is. PyLangAcq is compatible with both Python 2 and 3.
+Python 3.4 or above is required. The command `python3` is meant to point to your Python 3 interpreter.
 
 
 Syntax highlighting for CHAT transcripts

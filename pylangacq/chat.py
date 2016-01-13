@@ -1115,7 +1115,7 @@ class SingleReader:
             re_pattern = re.compile(check_participant)
 
             for participant_code in all_participant_codes:
-                if re_pattern.fullmatch(participant_code):
+                if re_pattern.match(participant_code):
                     output_participant_set.add(participant_code)
 
         return output_participant_set
@@ -1301,11 +1301,11 @@ class SingleReader:
                     else:
                         mor_items.append(item)
 
-            if mor_items and \
-                    ((len(words) + clitic_count) != len(mor_items)):
-                raise ValueError(
-                    'cannot align the utterance and %mor tiers:\n{}'.format(
-                        pformat(tiermarker_to_line)))
+            if mor_items and ((len(words) + clitic_count) != len(mor_items)):
+                message = 'cannot align the utterance and %mor tiers:\n' + \
+                          'Tiers --\n{}\nCleaned-up utterance --\n{}'
+                raise ValueError(message.format(
+                    pformat(tiermarker_to_line), utterance))
 
             # %gra tier
             gra_items = list()
@@ -1545,6 +1545,7 @@ def clean_utterance(utterance):
     # [=! whatever] for actions etc
     # [% whatever] for random noises?
     # [?] for best guess
+    # [- language_name] for using a non-dominant language
 
     utterance = re.sub('\[= [^\[]+?\]', '', utterance)
     utterance = re.sub('\[x \d+?\]', '', utterance)
@@ -1553,6 +1554,7 @@ def clean_utterance(utterance):
     utterance = re.sub('\[=\? [^\[]+?\]', '', utterance)
     utterance = re.sub('\[=! [^\[]+?\]', '', utterance)
     utterance = re.sub('\[% [^\[]+?\]', '', utterance)
+    utterance = re.sub('\[- [^\[]+?\]', '', utterance)
     utterance = utterance.replace('[?]', '')
     utterance = remove_extra_spaces(utterance)
     # print('step 1:', utterance)
@@ -1567,7 +1569,7 @@ def clean_utterance(utterance):
     #     ” (ending quote)
     #     , (comma)
     #     ? (question mark)
-    #     . (period)
+    #     . (period) <-- commented out at the moment
     # then pad them with extra spaces.
 
     utterance = utterance.replace('[', ' [')

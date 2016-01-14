@@ -5,6 +5,8 @@ Current version: 0.7
 
 - Version 0.8 in progress
 
+    * Library now compatible only with Python 3.4 or above
+    * Add the `by_files` parameter to many `Reader` methods; remove the "all_" methods
     * Add methods for changing filenames in `Reader`:
       `update()`, `add()`, `remove()`
     * Add `word_ngrams()`
@@ -12,11 +14,15 @@ Current version: 0.7
     * Add `concordances()` for search queries and concordances
     * Allow regular expression matching when specifying participants in all relevant `SingleReader` and `Reader` methods
     * Add output formats for dependency graphs: `to_tikz()` and `to_conll()`
+    * Distinguish `participant_name` and `participant_role` in metadata
+    * The `@Languages` header contents are treated as a list but now a set now for ordering wrt language dominance
+    * "Undo" collapses in transcriptions such as `[x 4]`
+    * Various bug fixes
 
 - Version 0.7 2016-01-06
 
-    * Added `part_of_speech_tags()` in `SingleReader`
-    * Added "all X" methods in `Reader`
+    * Add `part_of_speech_tags()` in `SingleReader`
+    * Add "all X" methods in `Reader`
     * Bug fixes: `clean_utterance()`, `DependencyGraph`
 
 - Version 0.6 2015-12-27

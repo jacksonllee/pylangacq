@@ -279,6 +279,7 @@ class Reader:
             for filename in self._filenames:
                 output_counter.update(SingleReader(filename).word_frequency(
                     participant=participant, keep_case=keep_case))
+            return output_counter
 
     def words(self, participant=ALL_PARTICIPANTS, by_files=False):
         """

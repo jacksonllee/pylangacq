@@ -464,6 +464,12 @@ class Reader:
 
         self._reset_reader(*tuple(new_filenames), check=False)
 
+    def clear(self):
+        """
+        Clear everything and reset as an empty Reader instance.
+        """
+        self._reset_reader()
+
     def word_ngrams(self, n, participant=ALL_PARTICIPANTS, keep_case=True,
                     by_files=False):
         """

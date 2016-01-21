@@ -54,4 +54,6 @@ PyLangAcq: Language Acquisition Research in Python
         'Topic :: Text Processing :: Indexing',
         'Topic :: Text Processing :: Linguistic'
     ],
+
+    package_data = {'pylangacq': ['VERSION']}
 )

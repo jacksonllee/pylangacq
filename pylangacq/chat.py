@@ -195,18 +195,22 @@ class Reader:
         return {filename: SingleReader(filename).date()
                 for filename in self._filenames}
 
-    def age(self, participant='CHI'):
+    def age(self, participant='CHI', month=False):
         """
         Return a dict mapping an absolute-path filename to the *participant*'s
-            age in the form of (*year*, *month*, *day*) (data type:
-            (int, int, int)); the age may be ``None`` if unavailable.
+            age in the form of (year, month, day).
+            The age may be ``None`` if unavailable.
+            If *month* is True (default: False), the age is a float in months.
 
         :param participant: The specified participant; defaults to ``'CHI'``
 
-        :rtype: dict(str: tuple(int, int, int))
+        :param month: If True (default: False), return a float as age in months.
+
+        :rtype: dict(str: tuple(int, int, int)) or dict(str: float)
         """
         return {filename: SingleReader(filename).age(
-            participant=participant) for filename in self._filenames}
+            participant=participant, month=month)
+                for filename in self._filenames}
 
     def utterances(self, participant=ALL_PARTICIPANTS, clean=True,
                    by_files=False):
@@ -947,28 +951,35 @@ class SingleReader:
         except (ValueError, KeyError):
             return None
 
-    def age(self, participant='CHI'):
+    def age(self, participant='CHI', month=False):
         """
-        Return the age of *participant* as a tuple.
+        Return the age of *participant* as a tuple or a float.
 
         :param participant: The participant specified, default to ``'CHI'``
 
-        :return: The age as a 3-tuple of (*year*, *month*, *day*),
-            where *year*, *month*, *day* are all ``int``. If any errors arise
-            (e.g., there's no age), ``None`` is returned.
+        :param month: If True (default: False), return a float as age in months.
 
-        :rtype: tuple, or None
+        :return: The age as a 3-tuple of (year, month, day).
+            If any errors arise (e.g., there's no age), ``None`` is returned.
+            If *month* is True (default: False),
+            return a float as age in months instead.
+
+        :rtype: tuple or float
         """
         try:
             age_ = self._headers['Participants'][participant]['age']
 
-            year, _, month_day = age_.partition(';')
-            month, _, day = month_day.partition('.')
+            year_str, _, month_day = age_.partition(';')
+            month_str, _, day_str = month_day.partition('.')
 
-            year = int(year) if year.isdigit() else 0
-            month = int(month) if month.isdigit() else 0
-            day = int(day) if day.isdigit() else 0
-            return year, month, day
+            year_int = int(year_str) if year_str.isdigit() else 0
+            month_int = int(month_str) if month_str.isdigit() else 0
+            day_int = int(day_str) if day_str.isdigit() else 0
+
+            if month:
+                return year_int*12 + month_int + day_int/30
+            else:
+                return year_int, month_int, day_int
         except (KeyError, IndexError, ValueError):
             return None
 
@@ -1040,10 +1051,8 @@ class SingleReader:
         output_participant_set = set()
 
         for check_participant in check_participants:
-            re_pattern = re.compile(check_participant)
-
             for participant_code in all_participant_codes:
-                if re_pattern.fullmatch(participant_code):
+                if re.fullmatch(check_participant, participant_code):
                     output_participant_set.add(participant_code)
 
         return output_participant_set

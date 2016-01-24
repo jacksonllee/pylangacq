@@ -2,9 +2,6 @@
 
 import re
 
-# CLITIC is a str constant to represent what would be a clitic in tagged data.
-CLITIC = 'CLITIC'
-
 
 def startswithoneof(inputstr, seq):
     """

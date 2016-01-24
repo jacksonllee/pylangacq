@@ -11,6 +11,8 @@ from pylangacq.measures import *
 
 ALL_PARTICIPANTS = '**ALL**'
 
+# CLITIC is a str constant to represent what would be a clitic in tagged data.
+CLITIC = 'CLITIC'
 
 class Reader:
     """
@@ -587,6 +589,11 @@ class SingleReader:
         self.tier_markers = self._tier_markers()
 
         self._part_of_speech_tags = None
+
+        self.words_to_ignore_in_MLUw = {'', '!', '+...', '.', ',', '?', '‡',
+                                        '„', '0', CLITIC}
+
+        self.pos_to_ignore_in_MLUm = {'', '!', '+...', '0', '?', 'BEG'}
 
     def __len__(self):
         """
@@ -1428,7 +1435,8 @@ class SingleReader:
 
         :param participant: The participant specified, default to ``'CHI'``
         """
-        return get_MLUm(self.index_to_tiers(), participant=participant)
+        return get_MLUm(self.tagged_sents(participant=participant),
+                        pos_to_ignore=self.pos_to_ignore_in_MLUm)
 
     def MLUm(self, participant='CHI'):
         """
@@ -1437,7 +1445,8 @@ class SingleReader:
 
         :param participant: The participant specified, default to ``'CHI'``
         """
-        return get_MLUm(self.index_to_tiers(), participant=participant)
+        return get_MLUm(self.tagged_sents(participant=participant),
+                        pos_to_ignore=self.pos_to_ignore_in_MLUm)
 
     def MLUw(self, participant='CHI'):
         """
@@ -1446,7 +1455,8 @@ class SingleReader:
 
         :param participant: The participant specified, default to ``'CHI'``
         """
-        return get_MLUw(self.sents(participant=participant))
+        return get_MLUw(self.sents(participant=participant),
+                        words_to_ignore=self.words_to_ignore_in_MLUw)
 
     def TTR(self, participant='CHI'):
         """

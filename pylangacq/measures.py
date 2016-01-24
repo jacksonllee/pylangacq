@@ -2,20 +2,25 @@
 
 from __future__ import division
 
-def get_MLUm(index_to_tiers, participant='CHI'):
+def get_MLUm(tagged_sents, pos_to_ignore=None):
     """Mean length of utterance (MLU) in morphemes"""
+    # *tagged_sents* are already filtered for the desired participant like 'CHI'
     total_utterance_count = 0
     total_morpheme_count = 0
 
-    for i in range(len(index_to_tiers)):
-        if '%mor' in index_to_tiers[i] and participant in index_to_tiers[i]:
-            total_utterance_count += 1
-            morphs = index_to_tiers[i]['%mor'].split()
-            total_morpheme_count += len(morphs)
+    for tagged_sent in tagged_sents:
+        total_utterance_count += 1
 
-            for morph in morphs:
-                total_morpheme_count += morph.count('-')
-                total_morpheme_count += morph.count('~')
+        for tagged_word in tagged_sent:
+            pos = tagged_word[1]
+            morph = tagged_word[2]
+
+            if pos_to_ignore and pos in pos_to_ignore:
+                continue
+
+            total_morpheme_count += 1
+            total_morpheme_count += morph.count('-')
+            total_morpheme_count += morph.count('~')
 
     if total_utterance_count:
         return total_morpheme_count / total_utterance_count
@@ -23,7 +28,7 @@ def get_MLUm(index_to_tiers, participant='CHI'):
         return 0
 
 
-def get_MLUw(sents):
+def get_MLUw(sents, words_to_ignore=None):
     """Mean length of utterance (MLU) in words"""
     # *sents* are already filtered for the desired participant like 'CHI'
     total_utterance_count = 0
@@ -31,7 +36,11 @@ def get_MLUw(sents):
 
     for sent in sents:
         total_utterance_count += 1
-        total_word_count += len(sent)
+
+        for word in sent:
+            if words_to_ignore and word in words_to_ignore:
+                continue
+            total_word_count += 1
 
     if total_utterance_count:
         return total_word_count / total_utterance_count
@@ -45,6 +54,6 @@ def get_TTR(word_freq_dict):
     return len(word_freq_dict) / sum(word_freq_dict.values())
 
 
-def get_IPSyn(tagged_sents, participant='CHI'):
+def get_IPSyn():
     """Index of Productive Syntax (IPSyn)"""
     return  # TODO: work in progress

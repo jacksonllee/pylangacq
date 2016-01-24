@@ -8,7 +8,7 @@ Current version: 0.7
     * Library now compatible only with Python 3.4 or above
     * Add the `by_files` parameter to many `Reader` methods; remove the "all_" methods
     * Add methods for changing filenames in `Reader`:
-      `update()`, `add()`, `remove()`
+      `update()`, `add()`, `remove()`, `clear()`
     * Add `word_ngrams()`
     * Add language development measures: `MLUm()`, `MLUw()`, `TTR()`, `IPSyn()`
     * Add `concordances()` for search queries and concordances

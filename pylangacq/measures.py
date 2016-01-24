@@ -48,9 +48,12 @@ def get_MLUw(sents, words_to_ignore=None):
         return 0
 
 
-def get_TTR(word_freq_dict):
+def get_TTR(word_freq_dict, words_to_ignore=None):
     """Type-token ratio (TTR)"""
     # *word_freq_dict* already filtered for the desired participant like 'CHI'
+    if words_to_ignore:
+        word_freq_dict = {word: freq for word, freq in word_freq_dict.items()
+                          if word not in words_to_ignore}
     return len(word_freq_dict) / sum(word_freq_dict.values())
 
 

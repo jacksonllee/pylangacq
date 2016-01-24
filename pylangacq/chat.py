@@ -590,10 +590,12 @@ class SingleReader:
 
         self._part_of_speech_tags = None
 
-        self.words_to_ignore_in_MLUw = {'', '!', '+...', '.', ',', '?', '‡',
-                                        '„', '0', CLITIC}
+        # for MLUw() and TTR()
+        self.words_to_ignore = {'', '!', '+...', '.', ',', '?', '‡',
+                                '„', '0', CLITIC}
 
-        self.pos_to_ignore_in_MLUm = {'', '!', '+...', '0', '?', 'BEG'}
+        # for MLUm()
+        self.pos_to_ignore = {'', '!', '+...', '0', '?', 'BEG'}
 
     def __len__(self):
         """
@@ -1436,7 +1438,7 @@ class SingleReader:
         :param participant: The participant specified, default to ``'CHI'``
         """
         return get_MLUm(self.tagged_sents(participant=participant),
-                        pos_to_ignore=self.pos_to_ignore_in_MLUm)
+                        pos_to_ignore=self.pos_to_ignore)
 
     def MLUm(self, participant='CHI'):
         """
@@ -1446,7 +1448,7 @@ class SingleReader:
         :param participant: The participant specified, default to ``'CHI'``
         """
         return get_MLUm(self.tagged_sents(participant=participant),
-                        pos_to_ignore=self.pos_to_ignore_in_MLUm)
+                        pos_to_ignore=self.pos_to_ignore)
 
     def MLUw(self, participant='CHI'):
         """
@@ -1456,7 +1458,7 @@ class SingleReader:
         :param participant: The participant specified, default to ``'CHI'``
         """
         return get_MLUw(self.sents(participant=participant),
-                        words_to_ignore=self.words_to_ignore_in_MLUw)
+                        words_to_ignore=self.words_to_ignore)
 
     def TTR(self, participant='CHI'):
         """
@@ -1465,7 +1467,8 @@ class SingleReader:
 
         :param participant: The participant specified, default to ``'CHI'``
         """
-        return get_TTR(self.word_frequency(participant=participant))
+        return get_TTR(self.word_frequency(participant=participant),
+                       words_to_ignore=self.words_to_ignore)
 
 
 def clean_utterance(utterance):

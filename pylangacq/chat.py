@@ -1481,7 +1481,10 @@ def clean_utterance(utterance):
 
     :rtype: str
     """
-    # Function tested with the Brown portion (Adam, Eve, and Sarah) of CHILDES
+    # Function tested with the following CHILDES datasets:
+    # 1) Brown (Adam, Eve, and Sarah) in Eng-NA-MOR
+    # 2) Valian in Eng-NA-MOR
+    # 3) YipMatthews (Timmy, Sophie, and Alicia) in Biling
 
     # *** At the end of each step, apply remove_extra_spaces(). ***
 
@@ -1493,8 +1496,12 @@ def clean_utterance(utterance):
     # [=? whatever] for uncertain transcriptions
     # [=! whatever] for actions etc
     # [% whatever] for random noises?
+    # [^ whatever] for complex local events
     # [?] for best guess
+    # [<] and [>] for overlapping
+    # [!] for stressing
     # [- language_name] for using a non-dominant language
+    # whatever for audio/video time stamps? the  character is 0x15
 
     utterance = re.sub('\[= [^\[]+?\]', '', utterance)
     utterance = re.sub('\[x \d+?\]', '', utterance)
@@ -1504,7 +1511,12 @@ def clean_utterance(utterance):
     utterance = re.sub('\[=! [^\[]+?\]', '', utterance)
     utterance = re.sub('\[% [^\[]+?\]', '', utterance)
     utterance = re.sub('\[- [^\[]+?\]', '', utterance)
+    utterance = re.sub('\[\^ [^\[]+?\]', '', utterance)
+    utterance = re.sub('[^]+?', '', utterance)
     utterance = utterance.replace('[?]', '')
+    utterance = utterance.replace('[<]', '')
+    utterance = utterance.replace('[>]', '')
+    utterance = utterance.replace('[!]', '')
     utterance = remove_extra_spaces(utterance)
     # print('step 1:', utterance)
 
@@ -1526,94 +1538,106 @@ def clean_utterance(utterance):
     utterance = utterance.replace('“', ' “ ')
     utterance = utterance.replace('”', ' ” ')
     utterance = re.sub('[^\+],', ' , ', utterance)
-    utterance = re.sub('[^\[]\?', ' ? ', utterance)
+    utterance = re.sub('[^\[/]\?', ' ? ', utterance)
     # utterance = re.sub('[^\(\[\.\+]\.', ' . ', utterance)
     utterance = remove_extra_spaces(utterance)
     # print('step 2:', utterance)
 
-    # Step 3: Handle 'xx [zz]' or '<xx yy> [zz]'
+    # Step 3: Handle [/] and [//] for repetitions; [: xx] or [:: xx] for errors
     #
-    # Three cases:
-    # 1) Keep 'xx' and discard 'zz'. Examples:
-    #        [x how_many_times]
-    #        [?] for uncertain transcriptions
-    #        [<] and [>] for overlapping
+    # Discard "xx [/]", "<xx yy> [/]", "xx [//]", "<xx yy> [//]".
+    # For "zz [: xx]" or "<yy zz> [:: xx]", keep "xx" and discard the rest.
     #
-    # 2) Discard 'xx' and keep 'zz'. Examples:
-    #        [:: something] or [: something] for errors
-    #
-    # 3) Discard 'xx' (no 'zz'). Examples:
-    #        [/] and [//] for repetitions
+    # Strategies:
+    # 1. Get all matching index pairs for angle brackets < and >.
+    # 2. Delete the unwanted material inside and including these brackets plus
+    #    their signaling annotations (= "[:", "[::", "[/]", "[//]").
+    # 3. Delete the unwanted words on the left of the signaling annotations.
 
-    discard_signal_indices = set()
-    discard_signal_indices.update(find_indices(utterance, '\[:'),
-                                  find_indices(utterance, '\[/'))  # use regex
+    angle_brackets_L2R_pairs = dict() # left-to-right
+    for index_ in find_indices(utterance, '<'):
+        counter = 1
+        for i in range(index_ + 1, len(utterance)):
+            if utterance[i] == '<':
+                counter += 1
+            elif utterance[i] == '>':
+                counter -= 1
 
-    discard_end_indices = [i - 2 for i in sorted(discard_signal_indices)]
-    discard_start_indices = list()
-    for end_index in discard_end_indices:
-        if utterance[end_index] == '>':
-            for i in range(end_index, -1, -1):
-                if utterance[i] == '<' and utterance[i + 1] != ']':
-                    discard_start_indices.append(i)
-                    break
-        else:
-            for i in range(end_index, -1, -1):
-                if i == 0:
-                    discard_start_indices.append(0)
-                    break
-                elif utterance[i] == ' ':
-                    discard_start_indices.append(i + 1)
-                    break
+            if counter == 0:
+                angle_brackets_L2R_pairs[index_] = i
+                break
+    angle_brackets_R2L_pairs = {v: k
+                                for k, v in angle_brackets_L2R_pairs.items()}
+
+    index_pairs = list()  # characters bounded by index pairs are to be removed
+
+    double_overlap_right_indices = find_indices(utterance, '> \[//\]')
+    index_pairs += [(begin + 1, begin + 5)
+                    for begin in double_overlap_right_indices]  # remove ' [//]'
+
+    single_overlap_right_indices = find_indices(utterance, '> \[/\]')
+    index_pairs += [(begin + 1, begin + 4)
+                    for begin in single_overlap_right_indices]  # remove ' [/]'
+
+    double_error_right_indices = find_indices(utterance, '> \[::')
+    index_pairs += [(begin + 1, begin + 4)
+                    for begin in double_error_right_indices]  # remove ' [::'
+
+    single_error_right_indices = find_indices(utterance, '> \[: ')
+    index_pairs += [(begin + 1, begin + 3)
+                    for begin in single_error_right_indices]  # remove ' [:'
+
+    right_indices = double_overlap_right_indices + \
+                    single_overlap_right_indices + \
+                    double_error_right_indices + \
+                    single_error_right_indices
+    index_pairs = index_pairs + [(angle_brackets_R2L_pairs[right], right)
+                                  for right in sorted(right_indices)]
+    indices_to_ignore = set()
+    for left, right in index_pairs:
+        for i in range(left, right + 1):
+            indices_to_ignore.add(i)
 
     new_utterance = ''
     for i in range(len(utterance)):
-        ignore_this_character = False
-        for start_i, end_i in zip(discard_start_indices, discard_end_indices):
-            if (i >= start_i) and (i <= end_i):
-                ignore_this_character = True
-                break
-        if not ignore_this_character:
+        if i not in indices_to_ignore:
             new_utterance += utterance[i]
+    utterance = new_utterance
 
-    utterance = remove_extra_spaces(new_utterance)
+    utterance = re.sub('\S+? \[/\]', '', utterance)
+    utterance = re.sub('\S+? \[//\]', '', utterance)
+
+    utterance = re.sub('\S+? \[::', '', utterance)
+    utterance = re.sub('\S+? \[:', '', utterance)
+
+    utterance = remove_extra_spaces(utterance)
     # print('step 3:', utterance)
 
-    # Step 4: Remove unwanted elements (only the very certain cases).
-
-    unwanted_elements = {'(.)', '(..)', '(...)',
-                         'xxx', 'www', 'yyy',
-                         # '+"', '+.',
-                         }
-    for unwanted_element in unwanted_elements:
-        utterance = utterance.replace(unwanted_element, '')
-    utterance = remove_extra_spaces(utterance)
-    # print('step 4:', utterance)
-
-    # Step 5: Split utterance by spaces and determine whether to keep items.
+    # Step 4: Split utterance by spaces and determine whether to keep items.
 
     escape_prefixes = {'[?', '[/', '[<', '[>', '[:', '[!', '[*',
-                       '+"', '+,', '&'}
-    escape_words = {'0'}
-    keep_prefixes = {'+"/', '+,/'}
+                       '+"', '+,', '&', '<&'}
+    escape_words = {'0', '++', '+<',
+                    '(.)', '(..)', '(...)',
+                    'xxx', 'www', 'yyy'}
+    keep_prefixes = {'+"/', '+,/', '+".'}
 
     words = utterance.split()
     new_words = list()
 
     for word in words:
-        word = re.sub('\A<', '', word)  # remove beginning <
-        word = re.sub('>\Z', '', word)  # remove final >
+        word = re.sub('\A<', '', word)   # remove beginning <
+        word = re.sub('>\Z', '', word)   # remove final >
+        word = re.sub('\]\Z', '', word)  # remove final ]
 
-        if bool(re.compile('[^\]]+?\]\Z').match(word)):
-            # word ends with ]
-            word = word[: -1]
+        not_an_escape_word = word not in escape_words
+        no_escape_prefix = not startswithoneof(word, escape_prefixes)
+        has_keep_prefix = startswithoneof(word, keep_prefixes)
 
-        if ((word not in escape_words) and
-                (not startswithoneof(word, escape_prefixes))) or \
-                startswithoneof(word, keep_prefixes):
+        if (not_an_escape_word and no_escape_prefix) or has_keep_prefix:
             new_words.append(word)
 
-    # print('step 5:', remove_extra_spaces(' '.join(new_words)))
+    # print('step 4:', remove_extra_spaces(' '.join(new_words)))
 
     return remove_extra_spaces(' '.join(new_words))
 

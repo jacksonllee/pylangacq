@@ -1488,7 +1488,8 @@ def clean_utterance(utterance):
     # Function tested with the following CHILDES datasets:
     # 1) Brown (Adam, Eve, and Sarah) in Eng-NA-MOR
     # 2) Valian in Eng-NA-MOR
-    # 3) YipMatthews (Timmy, Sophie, and Alicia) in Biling
+    # 3) YipMatthews in Biling
+    # 4) LeeWongLeung in EastAsian/Cantonese
 
     # *** At the end of each step, apply remove_extra_spaces(). ***
 
@@ -1500,12 +1501,17 @@ def clean_utterance(utterance):
     # [=? whatever] for uncertain transcriptions
     # [=! whatever] for actions etc
     # [% whatever] for random noises?
-    # [^ whatever] for complex local events
-    # [?] for best guess
-    # [<] and [>] for overlapping
-    # [!] for stressing
     # [- language_name] for using a non-dominant language
+    # [^ whatever] for complex local events
     # whatever for audio/video time stamps? the  character is 0x15
+    # [<] and [>] for overlapping, including [<1], [>2] etc with numbers
+    # (2.), (3.5) etc for pauses
+
+    # [?] for best guess
+    # [!] for stressing
+
+    # "[*] [/" replaced by "[/"
+    # "] [*]" replaced by "]"
 
     utterance = re.sub('\[= [^\[]+?\]', '', utterance)
     utterance = re.sub('\[x \d+?\]', '', utterance)
@@ -1517,10 +1523,16 @@ def clean_utterance(utterance):
     utterance = re.sub('\[- [^\[]+?\]', '', utterance)
     utterance = re.sub('\[\^ [^\[]+?\]', '', utterance)
     utterance = re.sub('[^]+?', '', utterance)
+    utterance = re.sub('\[<\d?\]', '', utterance)
+    utterance = re.sub('\[>\d?\]', '', utterance)
+    utterance = re.sub('\(\d+?\.?\d*?\)', '', utterance)
+
     utterance = utterance.replace('[?]', '')
-    utterance = utterance.replace('[<]', '')
-    utterance = utterance.replace('[>]', '')
     utterance = utterance.replace('[!]', '')
+
+    utterance = utterance.replace('[*] [/', '[/')
+    utterance = utterance.replace('] [*]', ']')
+
     utterance = remove_extra_spaces(utterance)
     # print('step 1:', utterance)
 
@@ -1530,6 +1542,7 @@ def clean_utterance(utterance):
     # like "movement[?]" (--> "movement [?]")
     #
     # If utterance has:
+    #     < > (left and right angle brackets), excluding "+<" (lazy overlap)
     #     “ (beginning quote)
     #     ” (ending quote)
     #     , (comma)
@@ -1537,17 +1550,22 @@ def clean_utterance(utterance):
     #     . (period) <-- commented out at the moment
     # then pad them with extra spaces.
 
+    utterance = utterance.replace('<', ' <')
+    utterance = utterance.replace('+ <', '+<')
+    utterance = utterance.replace('>', '> ')
     utterance = utterance.replace('[', ' [')
     utterance = utterance.replace(']', '] ')
     utterance = utterance.replace('“', ' “ ')
     utterance = utterance.replace('”', ' ” ')
     utterance = re.sub('[^\+],', ' , ', utterance)
-    utterance = re.sub('[^\[/]\?', ' ? ', utterance)
+    utterance = re.sub('[^\[\./]\?', ' ? ', utterance)
     # utterance = re.sub('[^\(\[\.\+]\.', ' . ', utterance)
     utterance = remove_extra_spaces(utterance)
     # print('step 2:', utterance)
 
-    # Step 3: Handle [/] and [//] for repetitions; [: xx] or [:: xx] for errors
+    # Step 3:
+    # Handle [/], [//], [///] for repetitions/reformulation
+    #        [: xx] or [:: xx] for errors
     #
     # Discard "xx [/]", "<xx yy> [/]", "xx [//]", "<xx yy> [//]".
     # For "zz [: xx]" or "<yy zz> [:: xx]", keep "xx" and discard the rest.
@@ -1575,6 +1593,10 @@ def clean_utterance(utterance):
 
     index_pairs = list()  # characters bounded by index pairs are to be removed
 
+    triple_slash_right_indices = find_indices(utterance, '> \[///\]')
+    index_pairs += [(begin + 1, begin + 6)
+                    for begin in triple_slash_right_indices]  # remove ' [///]'
+
     double_overlap_right_indices = find_indices(utterance, '> \[//\]')
     index_pairs += [(begin + 1, begin + 5)
                     for begin in double_overlap_right_indices]  # remove ' [//]'
@@ -1594,7 +1616,8 @@ def clean_utterance(utterance):
     right_indices = double_overlap_right_indices + \
                     single_overlap_right_indices + \
                     double_error_right_indices + \
-                    single_error_right_indices
+                    single_error_right_indices + \
+                    triple_slash_right_indices
     index_pairs = index_pairs + [(angle_brackets_R2L_pairs[right], right)
                                   for right in sorted(right_indices)]
     indices_to_ignore = set()
@@ -1610,6 +1633,7 @@ def clean_utterance(utterance):
 
     utterance = re.sub('\S+? \[/\]', '', utterance)
     utterance = re.sub('\S+? \[//\]', '', utterance)
+    utterance = re.sub('\S+? \[///\]', '', utterance)
 
     utterance = re.sub('\S+? \[::', '', utterance)
     utterance = re.sub('\S+? \[:', '', utterance)

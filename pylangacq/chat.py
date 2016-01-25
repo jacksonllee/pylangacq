@@ -87,13 +87,22 @@ class Reader:
         """
         return len(self._filenames)
 
-    def filenames(self):
+    def filenames(self, sorted_by_age=False):
         """
-        Return the set of absolute-path filenames.
+        Return the set of absolute-path filenames; if ``sorted_by_age`` is True
+        (default: False), return a list instead sorted by the target child's
+        age.
 
-        :rtype: set(str)
+        :param sorted_by_age: if the return object is a list of filenames sorted
+            by the target child's age; defaults to False.
+
+        :rtype: set(str) or list(str)
         """
-        return self._filenames
+        if not sorted_by_age:
+            return self._filenames
+        else:
+            return [fn for fn, _ in sorted(self.age().items(),
+                                           key=lambda x: x[1])]
 
     def number_of_files(self):
         """

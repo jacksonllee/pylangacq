@@ -53,12 +53,16 @@ class Reader:
 
             abs_fullpath = os.path.abspath(filename)
             abs_dir = os.path.dirname(abs_fullpath)
+            glob_match_pattern = re.compile('.*[\*\?\[\]].*')
+            while glob_match_pattern.search(abs_dir):
+                abs_dir = os.path.dirname(abs_dir)
 
             if not os.path.isdir(abs_dir):
-                raise ValueError('dir does not exist: {}'.format(abs_dir))
+                raise ValueError('invalid filename: {}'.format(filename))
 
-            candidate_filenames = [os.path.join(abs_dir, fn)
-                                   for fn in next(os.walk(abs_dir))[2]]
+            candidate_filenames = [os.path.join(dir_, fn)
+                                   for dir_, _, fns in os.walk(abs_dir)
+                                   for fn in fns]
 
             filenames_set.update(fnmatch.filter(candidate_filenames,
                                                 abs_fullpath))

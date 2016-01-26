@@ -1483,6 +1483,75 @@ class SingleReader:
         return get_TTR(self.word_frequency(participant=participant),
                        words_to_ignore=self.words_to_ignore)
 
+    def search(self, search_item, participant=ALL_PARTICIPANTS,
+               match_entire_word=True, lemma=False, concordance=False):
+        return self._search(search_item, participant=participant,
+                            match_entire_word=match_entire_word, lemma=lemma,
+                            concordance=concordance)
+
+    def concordance(self, search_item, participant=ALL_PARTICIPANTS,
+                    match_entire_word=True, lemma=False):
+        return self._search(search_item, participant=participant,
+                            match_entire_word=match_entire_word, lemma=lemma,
+                            concordance=True)
+
+    def _search(self, search_item, participant=ALL_PARTICIPANTS,
+                match_entire_word=True, lemma=False, concordance=False):
+        taggedsent_charnumber_list = list()
+        # = list of (tagged_sent, char_number)
+
+        # set up the match function
+        if match_entire_word or lemma:
+            match_function = lambda search_, test_: search_ == test_
+        else:
+            match_function = lambda search_, test_: search_ in test_
+
+        for tagged_sent in self.tagged_sents(participant=participant):
+            for i, tagged_word in enumerate(tagged_sent):
+                word, pos, mor, rel = tagged_word
+
+                # test_item targets word by default
+                # if the "lemma" parameter is True,
+                # then shift test_item to lemma extract from mor
+                test_item = word
+                if lemma:
+                    # get lemma from mor (remove morphological info by - and &)
+                    test_item = mor
+                    test_item, _, _ = test_item.partition('-')
+                    test_item, _, _ = test_item.partition('&')
+
+                # run the match test
+                # if match, keep the tagged_sent and compute char_number
+                # char_number = the number of characters that would precede the
+                #               target **word** if sent was represented as str
+                #               (as is the case when "concordance" is True)
+                if match_function(search_item, test_item):
+
+                    preceding_words = [tagged_sent[k][0] for k in range(i)]
+                    preceding_words = [w for w in preceding_words
+                                       if w != CLITIC]  # remove CLITIC
+                    char_number = sum([len(w) for w in preceding_words]) + \
+                                  len(preceding_words) - 1  # plus spaces
+                    taggedsent_charnumber_list.append((tagged_sent,
+                                                       char_number))
+
+        if not taggedsent_charnumber_list:  # if empty
+            return taggedsent_charnumber_list
+
+        if not concordance:
+            return [tagged_sent
+                    for tagged_sent, _ in taggedsent_charnumber_list]
+        else:
+            max_char_number = max([n for _, n in taggedsent_charnumber_list])
+            result_list = list()
+
+            for tagged_sent, char_number in taggedsent_charnumber_list:
+                sent = [word for word, _, _, _ in tagged_sent if word != CLITIC]
+                sent_str = ' '*(max_char_number - char_number) + ' '.join(sent)
+                result_list.append(sent_str)
+
+            return result_list
+
 
 def clean_utterance(utterance):
     """

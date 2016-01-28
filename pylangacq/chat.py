@@ -14,6 +14,8 @@ ALL_PARTICIPANTS = '**ALL**'
 # CLITIC is a str constant to represent what would be a clitic in tagged data.
 CLITIC = 'CLITIC'
 
+
+# noinspection PyPep8Naming
 class Reader:
     """
     A class for reading multiple CHAT files.
@@ -31,16 +33,17 @@ class Reader:
             if no *filenames* are provided, an empty Reader instance results.
 
         The ``Reader`` class is set to find *unique* absolute-path filenames.
-            This means that a call such as ``Reader('eve*.cha', '*01.cha')``
-            (for all Eve files and all "01" files together) might seem to have
-            overlapping or duplicate results (like ``eve01.cha`` which satisfies
-            both ``eve*.cha`` and ``*01.cha``), but ``Reader`` filters away the
-            duplicates.
+        This means that a call such as ``Reader('eve*.cha', '*01.cha')``
+        (for all Eve files and all "01" files together) might seem to have
+        overlapping or duplicate results (like ``eve01.cha`` which satisfies
+        both ``eve*.cha`` and ``*01.cha``), but ``Reader`` filters away the
+        duplicates.
         """
         self._input_filenames = filenames
         self._reset_reader(*self._input_filenames)
 
-    def _get_abs_filenames(self, *filenames):
+    @staticmethod
+    def _get_abs_filenames(*filenames):
         """
         Return a set of absolute-path filenames based on *filenames*.
 
@@ -78,23 +81,19 @@ class Reader:
 
         self._filenames = filenames_set
         self._all_part_of_speech_tags = None
+        self._fname_to_tagged_sents = {fn: SingleReader(fn)
+                                              for fn in self._filenames}
 
     def __len__(self):
         """
         Return the number of files.
-
-        :rtype: int
         """
         return len(self._filenames)
 
     def filenames(self, sorted_by_age=False):
         """
-        Return the set of absolute-path filenames; if ``sorted_by_age`` is True
-        (default: False), return a list instead sorted by the target child's
-        age.
-
-        :param sorted_by_age: if the return object is a list of filenames sorted
-            by the target child's age; defaults to False.
+        Return the set of absolute-path filenames, or a list sorted by the
+        target child's age if *sorted_by_age* is True.
 
         :rtype: set(str) or list(str)
         """
@@ -107,17 +106,13 @@ class Reader:
     def number_of_files(self):
         """
         Return the number of files.
-
-        :rtype: int
         """
         return len(self)
 
     def number_of_utterances(self, participant=ALL_PARTICIPANTS,
                              by_files=False):
         """
-        Return the total number of utterances for *participant* in all files.
-            If *by_files* is True (default: False), return a dict mapping an
-            absolute-path filename to the file's number of utterances.
+        Return the number of utterances for *participant* in all files.
 
         :param participant: The participant(s) of interest (default is all
             participants if unspecified). This parameter is flexible.
@@ -131,91 +126,92 @@ class Reader:
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
 
+        :param by_files: If True (default: False), return dict(absolute-path
+            filename: X for that file) instead of X for all files altogether.
+
         :rtype: int, or dict(str: int)
         """
         if by_files:
-            return {filename: SingleReader(filename).number_of_utterances(
-                participant=participant) for filename in self._filenames}
+            return {fn: self._fname_to_tagged_sents[fn].number_of_utterances(
+                participant=participant) for fn in self._filenames}
         else:
-            return sum(SingleReader(filename).number_of_utterances(
-                participant=participant) for filename in self._filenames)
+            return sum(self._fname_to_tagged_sents[fn].number_of_utterances(
+                participant=participant) for fn in self._filenames)
 
     def headers(self):
         """
         Return a dict mapping an absolute-path filename to the headers of
-            that file.
+        that file.
 
         :rtype: dict(str: dict)
         """
-        return {filename: SingleReader(filename).headers()
-                for filename in self._filenames}
+        return {fn: self._fname_to_tagged_sents[fn].headers()
+                for fn in self._filenames}
 
     def index_to_tiers(self):
         """
         Return a dict mapping an absolute-path filename to the file's
-            index_to_tiers dict.
+        index_to_tiers dict.
 
         :rtype: dict(str: dict)
         """
-        return {filename: SingleReader(filename).index_to_tiers()
-                for filename in self._filenames}
+        return {fn: self._fname_to_tagged_sents[fn].index_to_tiers()
+                for fn in self._filenames}
 
     def participants(self):
         """
         Return a dict mapping an absolute-path filename to the file's
-            participant info dict.
+        participant info dict.
 
         :rtype: dict(str: dict)
         """
-        return {filename: SingleReader(filename).participants()
-                for filename in self._filenames}
+        return {fn: self._fname_to_tagged_sents[fn].participants()
+                for fn in self._filenames}
 
     def participant_codes(self, by_files=False):
         """
-        Return the set of participant codes (e.g., ``{'CHI', 'MOT'}``)
-            from all files. If *by_files* is True (default: False),
-            return a dict mapping an absolute-path filename to the file's set
-            of participant codes.
+        Return the participant codes (e.g., ``{'CHI', 'MOT'}``)
+        from all files.
+
+        :param by_files: If True (default: False), return dict(absolute-path
+            filename: X for that file) instead of X for all files altogether.
 
         :rtype: set(str), or dict(str: set(str))
         """
         if by_files:
-            return {filename: SingleReader(filename).participant_codes()
-                    for filename in self._filenames}
+            return {fn: self._fname_to_tagged_sents[fn].participant_codes()
+                    for fn in self._filenames}
         else:
             output_set = set()
-            for filename in self._filenames:
-                for code in SingleReader(filename).participant_codes():
+            for fn in self._filenames:
+                for code in self._fname_to_tagged_sents[fn].participant_codes():
                     output_set.add(code)
             return output_set
 
     def languages(self):
         """
         Return a dict mapping an absolute-path filename to the list of
-            languages used.
+        languages used.
 
         :rtype: dict(str: list(str))
         """
-        return {filename: SingleReader(filename).languages()
-                for filename in self._filenames}
+        return {fn: self._fname_to_tagged_sents[fn].languages()
+                for fn in self._filenames}
 
     def date(self):
         """
         Return a dict mapping an absolute-path filename to the date in the form
-            of a 3-tuple of (*year*, *month*, *day*) (data type:
-            (int, int, int)); the date may be ``None`` if unavailable.
+        of a 3-tuple of (year, month, day).
 
         :rtype: dict(str: tuple(int, int, int))
         """
-        return {filename: SingleReader(filename).date()
-                for filename in self._filenames}
+        return {fn: self._fname_to_tagged_sents[fn].date()
+                for fn in self._filenames}
 
     def age(self, participant='CHI', month=False):
         """
         Return a dict mapping an absolute-path filename to the *participant*'s
-            age in the form of (year, month, day).
-            The age may be ``None`` if unavailable.
-            If *month* is True (default: False), the age is a float in months.
+        age in the form of (years, months, days).
 
         :param participant: The specified participant; defaults to ``'CHI'``
 
@@ -223,17 +219,14 @@ class Reader:
 
         :rtype: dict(str: tuple(int, int, int)) or dict(str: float)
         """
-        return {filename: SingleReader(filename).age(
+        return {fn: self._fname_to_tagged_sents[fn].age(
             participant=participant, month=month)
-                for filename in self._filenames}
+                for fn in self._filenames}
 
     def utterances(self, participant=ALL_PARTICIPANTS, clean=True,
                    by_files=False):
         """
         Return a list of (*participant*, utterance) pairs from all files.
-            If *by_files* is True (default: False), return instead
-            a dict mapping an absolute-path filename to the list of
-            (*participant*, utterance) pairs for that file.
 
         :param participant: The participant(s) of interest (default is all
             participants if unspecified). This parameter is flexible.
@@ -250,24 +243,24 @@ class Reader:
         :param clean: Whether to filter away the CHAT annotations in the
             utterance; defaults to ``True``.
 
+        :param by_files: If True (default: False), return dict(absolute-path
+            filename: X for that file) instead of X for all files altogether.
+
         :rtype: list(str), or dict(str: list(str))
         """
         if by_files:
-            return {filename: SingleReader(filename).utterances(
+            return {fn: self._fname_to_tagged_sents[fn].utterances(
                 participant=participant, clean=clean)
-                for filename in self._filenames}
+                for fn in self._filenames}
         else:
-            return IterableList(*(SingleReader(filename).utterances(
+            return IterableList(*(self._fname_to_tagged_sents[fn].utterances(
                 participant=participant, clean=clean)
-                for filename in sorted(self._filenames)))
+                for fn in sorted(self._filenames)))
 
     def word_frequency(self, participant=ALL_PARTICIPANTS, keep_case=True,
                        by_files=False):
         """
         Return a Counter of word frequency dict for *participant* in all files.
-            If *by_files* is True (default: False), return a dict mapping an
-            absolute-path filename to the file's word frequency Counter
-            dict for *participant*.
 
         :param participant: The participant(s) of interest (default is all
             participants if unspecified). This parameter is flexible.
@@ -287,24 +280,26 @@ class Reader:
             distinctions are collapsed, with all word tokens forced to be in
             lowercase.
 
+        :param by_files: If True (default: False), return dict(absolute-path
+            filename: X for that file) instead of X for all files altogether.
+
         :rtype: Counter, or dict(str: Counter)
         """
         if by_files:
-            return {filename: SingleReader(filename).word_frequency(
+            return {fn: self._fname_to_tagged_sents[fn].word_frequency(
                 participant=participant, keep_case=keep_case)
-                    for filename in self._filenames}
+                    for fn in self._filenames}
         else:
             output_counter = Counter()
-            for filename in self._filenames:
-                output_counter.update(SingleReader(filename).word_frequency(
-                    participant=participant, keep_case=keep_case))
+            for fn in self._filenames:
+                output_counter.update(
+                    self._fname_to_tagged_sents[fn].word_frequency(
+                        participant=participant, keep_case=keep_case))
             return output_counter
 
     def words(self, participant=ALL_PARTICIPANTS, by_files=False):
         """
-        Return a list of words by *participant* in all files. If *by_files* is
-            True (default: False), return a dict mapping an absolute-path
-            filename to the file's list of words by *participant*.
+        Return a list of words by *participant* in all files.
 
         :param participant: The participant(s) of interest (default is all
             participants if unspecified). This parameter is flexible.
@@ -317,22 +312,22 @@ class Reader:
             exact match for the participant code ``'CHI'``, for instance).
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
+
+        :param by_files: If True (default: False), return dict(absolute-path
+            filename: X for that file) instead of X for all files altogether.
 
         :rtype: list(str), or dict(str: list(str))
         """
         if by_files:
-            return {filename: SingleReader(filename).words(
-                participant=participant) for filename in self._filenames}
+            return {fn: self._fname_to_tagged_sents[fn].words(
+                participant=participant) for fn in self._filenames}
         else:
-            return IterableList(*(SingleReader(filename).words(
-                participant=participant) for filename in sorted(self._filenames)))
+            return IterableList(*(self._fname_to_tagged_sents[fn].words(
+                participant=participant) for fn in sorted(self._filenames)))
 
     def tagged_words(self, participant=ALL_PARTICIPANTS, by_files=False):
         """
-        Return a list of tagged words by *participant* in all files. If
-            *by_files* is True (default: False), return a dict mapping an
-            absolute-path filename to the file's list of tagged words by
-            *participant*.
+        Return a list of tagged words by *participant* in all files.
 
         :param participant: The participant(s) of interest (default is all
             participants if unspecified). This parameter is flexible.
@@ -345,22 +340,23 @@ class Reader:
             exact match for the participant code ``'CHI'``, for instance).
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
+
+        :param by_files: If True (default: False), return dict(absolute-path
+            filename: X for that file) instead of X for all files altogether.
 
         :rtype: list(tuple), or dict(str: list(tuple))
         """
         if by_files:
-            return {filename: SingleReader(filename).tagged_words(
-                participant=participant) for filename in self._filenames}
+            return {fn: self._fname_to_tagged_sents[fn].tagged_words(
+                participant=participant) for fn in self._filenames}
         else:
-            return IterableList(*(SingleReader(filename).tagged_words(
+            return IterableList(*(self._fname_to_tagged_sents[fn].tagged_words(
                 participant=participant)
-                for filename in sorted(self._filenames)))
+                for fn in sorted(self._filenames)))
 
     def sents(self, participant=ALL_PARTICIPANTS, by_files=False):
         """
-        Return a list of sents by *participant* in all files. If *by_files* is
-            True (default: False), return a dict mapping an absolute-path
-            filename to the file's list of sents by *participant*
+        Return a list of sents by *participant* in all files.
 
         :param participant: The participant(s) of interest (default is all
             participants if unspecified). This parameter is flexible.
@@ -373,23 +369,23 @@ class Reader:
             exact match for the participant code ``'CHI'``, for instance).
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
+
+        :param by_files: If True (default: False), return dict(absolute-path
+            filename: X for that file) instead of X for all files altogether.
 
         :rtype: list(list(str)), or dict(str: list(list(str)))
         """
         if by_files:
-            return {filename: SingleReader(filename).sents(
-                participant=participant) for filename in self._filenames}
+            return {fn: self._fname_to_tagged_sents[fn].sents(
+                participant=participant) for fn in self._filenames}
         else:
-            return IterableList(*(SingleReader(filename).sents(
+            return IterableList(*(self._fname_to_tagged_sents[fn].sents(
                 participant=participant)
-                for filename in sorted(self._filenames)))
+                for fn in sorted(self._filenames)))
 
     def tagged_sents(self, participant=ALL_PARTICIPANTS, by_files=False):
         """
-        Return a list of tagged sents by *participant* in all files. If
-            *by_files* is True (default: False), return a dict mapping an
-            absolute-path filename to the file's list of tagged sents by
-            *participant*.
+        Return a list of tagged sents by *participant* in all files.
 
         :param participant: The participant(s) of interest (default is all
             participants if unspecified). This parameter is flexible.
@@ -402,21 +398,23 @@ class Reader:
             exact match for the participant code ``'CHI'``, for instance).
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
+
+        :param by_files: If True (default: False), return dict(absolute-path
+            filename: X for that file) instead of X for all files altogether.
 
         :rtype: list(list(tuple)), or dict(str: list(list(tuple)))
         """
         if by_files:
-            return {filename: SingleReader(filename).tagged_sents(
-                participant=participant) for filename in self._filenames}
+            return {fn: self._fname_to_tagged_sents[fn].tagged_sents(
+                participant=participant) for fn in self._filenames}
         else:
-            return IterableList(*(SingleReader(filename).tagged_sents(
+            return IterableList(*(self._fname_to_tagged_sents[fn].tagged_sents(
                 participant=participant)
-                for filename in sorted(self._filenames)))
+                for fn in sorted(self._filenames)))
 
     def part_of_speech_tags(self, participant=ALL_PARTICIPANTS, by_files=False):
         """
-        Return a dict mapping a filename to the file's the set of
-            part-of-speech tags in the data for *participant*
+        Return the part-of-speech tags in the data for *participant*.
 
         :param participant: The participant(s) of interest (default is all
             participants if unspecified). This parameter is flexible.
@@ -430,21 +428,24 @@ class Reader:
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
 
-        :return: A dict where key is filename and value is
-            the file's the set of part-of-speech tags
+        :param by_files: If True (default: False), return dict(absolute-path
+            filename: X for that file) instead of X for all files altogether.
 
-        :rtype: dict(str: set)
+        :rtype: set or dict(str: set)
         """
         if by_files:
-            return {filename: SingleReader(filename).part_of_speech_tags(
-                participant=participant) for filename in self._filenames}
+            return {fn: self._fname_to_tagged_sents[fn].part_of_speech_tags(
+                participant=participant) for fn in self._filenames}
         else:
-            return set().union(*(SingleReader(filename).part_of_speech_tags(
-                participant=participant) for filename in self._filenames))
+            return set().union(*(
+                self._fname_to_tagged_sents[fn].part_of_speech_tags(
+                participant=participant) for fn in self._filenames))
 
     def update(self, reader):
         """
         Combine the current CHAT Reader instance with *reader*.
+
+        :param reader: a ``Reader`` instance
         """
         if type(reader) is Reader:
             add_filenames = reader.filenames()
@@ -469,8 +470,8 @@ class Reader:
     def remove(self, *filenames):
         """
         Remove one or multiple CHAT files from the current reader by
-            *filenames*.
-            *filenames* may take glob patterns with wildcards ``*`` and ``?``.
+        *filenames*.
+        *filenames* may take glob patterns with wildcards ``*`` and ``?``.
         """
         remove_filenames = self._get_abs_filenames(*filenames)
         new_filenames = set(self.filenames())
@@ -493,9 +494,6 @@ class Reader:
                     by_files=False):
         """
         Return a Counter of word *n*-grams by *participant* in all files.
-            If *by_files* is True (default: False), return a dict mapping an
-            absolute-path filename to the file's Counter dict of word
-            *n*-grams for *participant*. Each *n*-gram is an *n*-tuple of words.
 
         :param participant: The participant(s) of interest (default is all
             participants if unspecified). This parameter is flexible.
@@ -515,71 +513,178 @@ class Reader:
             distinctions are collapsed, with all word tokens forced to be in
             lowercase.
 
+        :param by_files: If True (default: False), return dict(absolute-path
+            filename: X for that file) instead of X for all files altogether.
+
         :rtype: Counter, or dict(str: Counter)
         """
         if by_files:
-            return {filename: SingleReader(filename).word_ngrams(n,
+            return {fn: self._fname_to_tagged_sents[fn].word_ngrams(n,
                 participant=participant, keep_case=keep_case)
-                    for filename in self._filenames}
+                    for fn in self._filenames}
         else:
             output_counter = Counter()
-            for filename in self._filenames:
-                output_counter.update(SingleReader(filename).word_ngrams(
-                    n, participant=participant, keep_case=keep_case))
+            for fn in self._filenames:
+                output_counter.update(
+                    self._fname_to_tagged_sents[fn].word_ngrams(
+                        n, participant=participant, keep_case=keep_case))
             return output_counter
 
     def MLU(self, participant='CHI'):
         """
         Return a dict mapping a filename to the file's mean length of utterance
-            (MLU) in morphemes for *participant*
-            (default to ``'CHI'``); same as ``MLUm()``.
+        (MLU) in morphemes for *participant*
+        (default to ``'CHI'``); same as ``MLUm()``.
 
-        :param participant: The participant specified, default to ``'CHI'``
+        :param participant: the participant specified, default to ``'CHI'``
 
         :rtype: dict(str: float)
         """
-        return {filename: SingleReader(filename).MLU(
-            participant=participant) for filename in self._filenames}
+        return {fn: self._fname_to_tagged_sents[fn].MLU(
+            participant=participant) for fn in self._filenames}
 
     def MLUm(self, participant='CHI'):
         """
         Return a dict mapping a filename to the file's mean length of utterance
-            (MLU) in morphemes for *participant*
-            (default to ``'CHI'``); same as ``MLU()``.
+        (MLU) in morphemes for *participant*
+        (default to ``'CHI'``); same as ``MLU()``.
 
-        :param participant: The participant specified, default to ``'CHI'``
+        :param participant: the participant specified, default to ``'CHI'``
 
         :rtype: dict(str: float)
         """
-        return {filename: SingleReader(filename).MLUm(
-            participant=participant) for filename in self._filenames}
+        return {fn: self._fname_to_tagged_sents[fn].MLUm(
+            participant=participant) for fn in self._filenames}
 
     def MLUw(self, participant='CHI'):
         """
         Return a dict mapping a filename to the file's mean length of utterance
-            (MLU) in words for *participant*
-            (default to ``'CHI'``).
+        (MLU) in words for *participant*
+        (default to ``'CHI'``).
 
-        :param participant: The participant specified, default to ``'CHI'``
+        :param participant: the participant specified, default to ``'CHI'``
 
         :rtype: dict(str: float)
         """
-        return {filename: SingleReader(filename).MLUw(
-            participant=participant) for filename in self._filenames}
+        return {fn: self._fname_to_tagged_sents[fn].MLUw(
+            participant=participant) for fn in self._filenames}
 
     def TTR(self, participant='CHI'):
         """
         Return a dict mapping a filename to the file's type-token ratio (TTR)
-            for *participant* (default to ``'CHI'``).
+        for *participant* (default to ``'CHI'``).
 
-        :param participant: The participant specified, default to ``'CHI'``
+        :param participant: the participant specified, default to ``'CHI'``
 
         :rtype: dict(str: float)
         """
-        return {filename: SingleReader(filename).TTR(
-            participant=participant) for filename in self._filenames}
+        return {fn: self._fname_to_tagged_sents[fn].TTR(
+            participant=participant) for fn in self._filenames}
 
+    def search(self, search_item, participant=ALL_PARTICIPANTS,
+               match_entire_word=True, lemma=False,
+               output_tagged=True, output_sents=True,
+               by_files=False):
+        """
+        Return a list of elements containing *search_item* by *participant*
+        in all files. Depending on *output_tagged* and *output_sents*,
+        each element can be either a list of tagged or untagged words, or simply
+        a word string.
 
+        :param search_item: word or lemma to search for.
+
+        :param participant: The participant(s) of interest (default is all
+            participants if unspecified). This parameter is flexible.
+            Set it to be ``'CHI'`` for the target child only, for example.
+            If multiple participants are desired, this parameter can take
+            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
+            question. Underlyingly, this parameter actually performs
+            regular expression matching
+            (so passing ``'CHI'`` to this parameter is an
+            exact match for the participant code ``'CHI'``, for instance).
+            For child-directed speech (i.e., targeting all participant
+            except ``'CHI'``), use ``^(?!.*CHI).*$``.
+
+        :param match_entire_word: If False (default: True), substring
+            matching is performed.
+
+        :param lemma: If True (default: False), *search_item* refers to the
+            lemma (from "mor" in the tagged word) instead.
+
+        :param output_tagged: If True (default), a word in the return object is
+            a tagged word of the (word, pos, mor, rel) tuple; otherwise just
+            a word string.
+
+        :param output_sents: If True (default), each element in the return
+            object is a list for each utterance; otherwise each element is
+            a word (tagged or untagged) without the utterance structure.
+
+        :param by_files: If True (default: False), return dict(absolute-path
+            filename: X for that file) instead of X for all files altogether.
+
+        :rtype: list, or dict(str: list)
+        """
+        if by_files:
+            return {fn: self._fname_to_tagged_sents[fn].search(
+                search_item, participant=participant,
+                match_entire_word=match_entire_word, lemma=lemma,
+                output_tagged=output_tagged, output_sents=output_sents)
+                    for fn in self._filenames}
+        else:
+            output_list = list()
+            for fn in self.filenames(sorted_by_age=True):
+                output_list.extend(self._fname_to_tagged_sents[fn].search(
+                    search_item, participant=participant,
+                    match_entire_word=match_entire_word, lemma=lemma,
+                    output_tagged=output_tagged, output_sents=output_sents))
+            return output_list
+
+    def concordance(self, search_item, participant=ALL_PARTICIPANTS,
+                    match_entire_word=True, lemma=False, by_files=False):
+        """
+        Return a list of utterances (as strings) each containing *search_item*
+        by *participant*. All strings are aligned for *search_item* by space
+        padding to create the word concordance effect.
+
+        :param search_item: word or lemma to search for.
+
+        :param participant: The participant(s) of interest (default is all
+            participants if unspecified). This parameter is flexible.
+            Set it to be ``'CHI'`` for the target child only, for example.
+            If multiple participants are desired, this parameter can take
+            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
+            question. Underlyingly, this parameter actually performs
+            regular expression matching
+            (so passing ``'CHI'`` to this parameter is an
+            exact match for the participant code ``'CHI'``, for instance).
+            For child-directed speech (i.e., targeting all participant
+            except ``'CHI'``), use ``^(?!.*CHI).*$``.
+
+        :param match_entire_word: If False (default: True), substring
+            matching is performed.
+
+        :param lemma: If True (default: False), *search_item* refers to the
+            lemma (from "mor" in the tagged word) instead.
+
+        :param by_files: If True (default: False), return dict(absolute-path
+            filename: X for that file) instead of X for all files altogether.
+
+        :rtype: list, or dict(str: list)
+        """
+        if by_files:
+            return {fn: self._fname_to_tagged_sents[fn].concordance(
+                search_item, participant=participant,
+                match_entire_word=match_entire_word, lemma=lemma)
+                    for fn in self._filenames}
+        else:
+            output_list = list()
+            for fn in self.filenames(sorted_by_age=True):
+                output_list.extend(self._fname_to_tagged_sents[fn].concordance(
+                    search_item, participant=participant,
+                    match_entire_word=match_entire_word, lemma=lemma))
+            return output_list
+
+# noinspection PyPep8Naming
 class SingleReader:
     """
     A class for reading a single CHAT file.
@@ -603,6 +708,9 @@ class SingleReader:
 
         self._part_of_speech_tags = None
 
+        # list of (partcipant, list of tagged sents)
+        self._all_tagged_sents = self._create_all_tagged_sents()
+
         # for MLUw() and TTR()
         self.words_to_ignore = {'', '!', '+...', '.', ',', '?', '‡',
                                 '„', '0', CLITIC}
@@ -613,10 +721,6 @@ class SingleReader:
     def __len__(self):
         """
         Return the number of utterances.
-
-        :return: The number of utterances (lines starting with '*')
-
-        :rtype: int
         """
         return len(self._index_to_tiers)
 
@@ -635,27 +739,19 @@ class SingleReader:
             exact match for the participant code ``'CHI'``, for instance).
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
-
-        :return: The number of utterances (lines starting with '*')
-
-        :rtype: int
         """
         return len(self.utterances(participant=participant))
 
     def filename(self):
         """
-        Return the filename.
-
-        :return: The filename.
-
-        :rtype: str
+        Return the absolute-path filename.
         """
         return self._filename
 
     def cha_lines(self):
         """
         A generator of lines in the CHAT file,
-            with the tab-character line continuations undone.
+        with the tab-character line continuations undone.
 
         :return: A generator of all cleaned-up lines in the CHAT file
 
@@ -685,8 +781,6 @@ class SingleReader:
         Determine what the %-tiers are.
 
         :return: The set of %-beginning tier markers used in the CHAT file
-
-        :rtype: set
         """
         result = set()
         for tiermarkers_to_tiers in self._index_to_tiers.values():
@@ -893,8 +987,6 @@ class SingleReader:
                          'participant_label': 'Richard Investigator',
                          'role': 'Investigator',
                          'sex': ''}}
-
-        :rtype: dict
         """
         try:
             return self._headers['Participants']
@@ -903,12 +995,7 @@ class SingleReader:
 
     def participant_codes(self):
         """
-        Return the participant codes as a set.
-
-        :return: A dict where key is filename and value is
-            a set of the participant codes (e.g., `{'CHI', 'MOT', 'FAT'}`)
-
-        :rtype: set
+        Return the set of participant codes (e.g., `{'CHI', 'MOT', 'FAT'}`).
         """
         try:
             return set(self._headers['Participants'].keys())
@@ -917,11 +1004,8 @@ class SingleReader:
 
     def languages(self):
         """
-        Return a list the languages of the CHAT transcript.
-
-        :return: The list of languages based on the @Languages headers
-
-        :rtype: set
+        Return the list of the languages involved based on the @Languages
+        header.
         """
         languages_list = list()
 
@@ -939,13 +1023,10 @@ class SingleReader:
 
     def date(self):
         """
-        Return the date of recording as a tuple.
+        Return the date of recording as a tuple of (*year*, *month*, *day*).
+        If any errors arise (e.g., there's no date), return ``None``.
 
-        :return: The date of recording as a 3-tuple of (*year*, *month*, *day*),
-            where *year*, *month*, *day* are all ``int``. If any errors arise
-            (e.g., there's no date), ``None`` is returned.
-
-        :rtype: tuple, or None if no valid date
+        :rtype: (int, int, int)
         """
         try:
             date_str = self._headers['Date']
@@ -981,7 +1062,7 @@ class SingleReader:
 
         :param month: If True (default: False), return a float as age in months.
 
-        :return: The age as a 3-tuple of (year, month, day).
+        :return: The age as a 3-tuple of (years, months, days).
             If any errors arise (e.g., there's no age), ``None`` is returned.
             If *month* is True (default: False),
             return a float as age in months instead.
@@ -1008,7 +1089,7 @@ class SingleReader:
     def utterances(self, participant=ALL_PARTICIPANTS, clean=True):
         """
         Return a list of the utterances by *participant*
-            as (*participant*, *utterance*) pairs.
+        as (*participant*, *utterance*) pairs.
 
         :param participant: The participant(s) of interest (default is all
             participants if unspecified). This parameter is flexible.
@@ -1024,11 +1105,6 @@ class SingleReader:
 
         :param clean: Whether to filter away the CHAT annotations in the
             utterance; default to ``True``.
-
-        :return: A list of the (participant, utterance) tuples
-            in the order of how the utterances appear in the transcript.
-
-        :rtype: list
         """
         output = list()
         participants = self._determine_participants(participant)
@@ -1094,15 +1170,13 @@ class SingleReader:
             exact match for the participant code ``'CHI'``, for instance).
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
-
-        :return: list of words
         """
         return IterableList(self._get_words(participant=participant,
                                             tagged=False, sents=False))
 
     def tagged_words(self, participant=ALL_PARTICIPANTS):
         """
-        Return a list of  tagged words by *participant*.
+        Return a list of tagged words by *participant*.
 
         :param participant: The participant(s) of interest (default is all
             participants if unspecified). This parameter is flexible.
@@ -1115,8 +1189,6 @@ class SingleReader:
             exact match for the participant code ``'CHI'``, for instance).
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
-
-        :return: list of tagged words
         """
         return IterableList(self._get_words(participant=participant,
                                             tagged=True, sents=False))
@@ -1138,8 +1210,6 @@ class SingleReader:
             exact match for the participant code ``'CHI'``, for instance).
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
-
-        :return: list of sents.
         """
         return IterableList(self._get_words(participant=participant,
                                             tagged=False, sents=True))
@@ -1161,8 +1231,6 @@ class SingleReader:
             exact match for the participant code ``'CHI'``, for instance).
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
-
-        :return: list of tagged sents.
         """
         return IterableList(self._get_words(participant=participant,
                                             tagged=True, sents=True))
@@ -1172,7 +1240,7 @@ class SingleReader:
         Extract words for the specified participant(s).
 
         The representation of "word" depends on whether ``tagged`` is True, and
-            is based to some extent on the NLTK conventions.
+        is based to some extent on the NLTK conventions.
 
         :param participant: The participant(s) of interest (default is all
             participants if unspecified). This parameter is flexible.
@@ -1220,17 +1288,35 @@ class SingleReader:
             words from the same utterance (= "sentence") are grouped
             together into a list which is in turn yielded. Otherwise, individual
             words are directly yielded without utterance structure.
-
-        :return: A generator of either sents of words, or just words
         """
+        result_list = list()
         participants = self._determine_participants(participant)
+
+        if sents:
+            add_function = lambda result_, sent_: result_.append(sent_)
+        else:
+            add_function = lambda result_, sent_: result_.extend(sent_)
+
+        if tagged:
+            sent_to_add = lambda sent_: sent_
+        else:
+            sent_to_add = lambda sent_: [x[0] for x in sent_]
+
+        # noinspection PyTypeChecker
+        for participant_code, tagged_sent in self._all_tagged_sents:
+            if participant_code not in participants:
+                continue
+
+            add_function(result_list, sent_to_add(tagged_sent))
+
+        return result_list
+
+    def _create_all_tagged_sents(self):
+        result_list = list()
 
         for i in range(self.number_of_utterances()):
             tiermarker_to_line = self._index_to_tiers[i]
             participant_code = get_participant_code(tiermarker_to_line.keys())
-
-            if participant_code not in participants:
-                continue
 
             # get the plain words from utterance tier
             utterance = clean_utterance(tiermarker_to_line[participant_code])
@@ -1307,28 +1393,18 @@ class SingleReader:
             if not gra_items:
                 gra_items = [''] * len(utterance_items)
 
-            if sents:
-                sent = list()
+            sent = list()
 
             for word, mor, gra in zip(utterance_items, mor_items, gra_items):
                 pos, _, mor = mor.partition('|')
 
-                if tagged:
-                    output_word = (word, pos.upper(), mor, gra)
-                    # pos in uppercase follows NLTK convention
-                elif word == CLITIC:
-                    # if tagged is False and word is the clitic
-                    continue
-                else:
-                    output_word = word
+                output_word = (word, pos.upper(), mor, gra)
+                # pos in uppercase follows NLTK convention
+                sent.append(output_word)
 
-                if sents:
-                    sent.append(output_word)
-                else:
-                    yield output_word
+            result_list.append((participant_code, sent))
 
-            if sents:
-                yield sent
+        return result_list
 
     def word_frequency(self, participant=ALL_PARTICIPANTS, keep_case=True):
         """
@@ -1351,10 +1427,6 @@ class SingleReader:
             treated as distinct types. If *keep_case* is False, all case
             distinctions are collapsed, with all word tokens forced to be in
             lowercase.
-
-        :return: a Counter dict of word-frequency pairs
-
-        :rtype: Counter
         """
         output = Counter()
 
@@ -1382,10 +1454,6 @@ class SingleReader:
             exact match for the participant code ``'CHI'``, for instance).
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
-
-        :return: a set of part-of-speech tags
-
-        :rtype: set
         """
         output_set = set()
         tagged_words = self.tagged_words(participant=participant)
@@ -1398,8 +1466,8 @@ class SingleReader:
 
     def word_ngrams(self, n, participant=ALL_PARTICIPANTS, keep_case=True):
         """
-        Return a Counter dict of *n*-grams for *participant*. Each ngram is
-            an n-tuple of words.
+        Return a Counter dict of *n*-grams (as an *n*-tuple of words)
+        for *participant*.
 
         :param participant: The participant(s) of interest (default is all
             participants if unspecified). This parameter is flexible.
@@ -1418,10 +1486,6 @@ class SingleReader:
             treated as distinct types. If *keep_case* is False, all case
             distinctions are collapsed, with all word tokens forced to be in
             lowercase.
-
-        :return: a Counter dict of ngram-frequency pairs
-
-        :rtype: Counter
         """
         if (type(n) is not int) or (n < 1):
             raise ValueError('n must be a positive integer: {}'.format(n))
@@ -1446,7 +1510,7 @@ class SingleReader:
     def MLU(self, participant='CHI'):
         """
         Return the mean length of utterance (MLU) in morphemes for *participant*
-            (default to ``'CHI'``); same as ``MLUm()``.
+        (default to ``'CHI'``); same as ``MLUm()``.
 
         :param participant: The participant specified, default to ``'CHI'``
         """
@@ -1456,7 +1520,7 @@ class SingleReader:
     def MLUm(self, participant='CHI'):
         """
         Return the mean length of utterance (MLU) in morphemes for *participant*
-            (default to ``'CHI'``); same as ``MLU()``.
+        (default to ``'CHI'``); same as ``MLU()``.
 
         :param participant: The participant specified, default to ``'CHI'``
         """
@@ -1466,7 +1530,7 @@ class SingleReader:
     def MLUw(self, participant='CHI'):
         """
         Return the mean length of utterance (MLU) in words for *participant*
-            (default to ``'CHI'``).
+        (default to ``'CHI'``).
 
         :param participant: The participant specified, default to ``'CHI'``
         """
@@ -1476,7 +1540,7 @@ class SingleReader:
     def TTR(self, participant='CHI'):
         """
         Return the type-token ratio (TTR) for *participant*
-            (default to ``'CHI'``).
+        (default to ``'CHI'``).
 
         :param participant: The participant specified, default to ``'CHI'``
         """
@@ -1484,10 +1548,12 @@ class SingleReader:
                        words_to_ignore=self.words_to_ignore)
 
     def search(self, search_item, participant=ALL_PARTICIPANTS,
-               match_entire_word=True, lemma=False, concordance=False):
+               match_entire_word=True, lemma=False,
+               output_tagged=True, output_sents=True):
         return self._search(search_item, participant=participant,
                             match_entire_word=match_entire_word, lemma=lemma,
-                            concordance=concordance)
+                            concordance=False, output_tagged=output_tagged,
+                            output_sents=output_sents)
 
     def concordance(self, search_item, participant=ALL_PARTICIPANTS,
                     match_entire_word=True, lemma=False):
@@ -1496,7 +1562,8 @@ class SingleReader:
                             concordance=True)
 
     def _search(self, search_item, participant=ALL_PARTICIPANTS,
-                match_entire_word=True, lemma=False, concordance=False):
+                match_entire_word=True, lemma=False, concordance=False,
+                output_tagged=True, output_sents=True):
         taggedsent_charnumber_list = list()
         # = list of (tagged_sent, char_number)
 
@@ -1539,8 +1606,23 @@ class SingleReader:
             return taggedsent_charnumber_list
 
         if not concordance:
-            return [tagged_sent
-                    for tagged_sent, _ in taggedsent_charnumber_list]
+
+            if output_sents:
+                add_function = lambda result_, sent_: result_.append(sent_)
+            else:
+                add_function = lambda result_, sent_: result_.extend(sent_)
+
+            if output_tagged:
+                sent_to_add = lambda sent_: sent_
+            else:
+                sent_to_add = lambda sent_: [x[0] for x in sent_]
+
+            result_list = list()
+
+            for tagged_sent, _ in taggedsent_charnumber_list:
+                add_function(result_list, sent_to_add(tagged_sent))
+
+            return result_list
         else:
             max_char_number = max([n for _, n in taggedsent_charnumber_list])
             result_list = list()
@@ -1654,7 +1736,7 @@ def clean_utterance(utterance):
     #    their signaling annotations (= "[:", "[::", "[/]", "[//]").
     # 3. Delete the unwanted words on the left of the signaling annotations.
 
-    angle_brackets_L2R_pairs = dict() # left-to-right
+    angle_brackets_l2r_pairs = dict() # left-to-right
     for index_ in find_indices(utterance, '<'):
         counter = 1
         for i in range(index_ + 1, len(utterance)):
@@ -1664,10 +1746,10 @@ def clean_utterance(utterance):
                 counter -= 1
 
             if counter == 0:
-                angle_brackets_L2R_pairs[index_] = i
+                angle_brackets_l2r_pairs[index_] = i
                 break
-    angle_brackets_R2L_pairs = {v: k
-                                for k, v in angle_brackets_L2R_pairs.items()}
+    angle_brackets_r2l_pairs = {v: k
+                                for k, v in angle_brackets_l2r_pairs.items()}
 
     index_pairs = list()  # characters bounded by index pairs are to be removed
 
@@ -1696,7 +1778,7 @@ def clean_utterance(utterance):
                     double_error_right_indices + \
                     single_error_right_indices + \
                     triple_slash_right_indices
-    index_pairs = index_pairs + [(angle_brackets_R2L_pairs[right], right)
+    index_pairs = index_pairs + [(angle_brackets_r2l_pairs[right], right)
                                   for right in sorted(right_indices)]
     indices_to_ignore = set()
     for left, right in index_pairs:

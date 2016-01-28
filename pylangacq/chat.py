@@ -1300,7 +1300,7 @@ class SingleReader:
         if tagged:
             sent_to_add = lambda sent_: sent_
         else:
-            sent_to_add = lambda sent_: [x[0] for x in sent_]
+            sent_to_add = lambda sent_: [x[0] for x in sent_ if x[0] != CLITIC]
 
         # noinspection PyTypeChecker
         for participant_code, tagged_sent in self._all_tagged_sents:
@@ -1615,7 +1615,8 @@ class SingleReader:
             if output_tagged:
                 sent_to_add = lambda sent_: sent_
             else:
-                sent_to_add = lambda sent_: [x[0] for x in sent_]
+                sent_to_add = lambda sent_: [x[0]
+                                             for x in sent_ if x[0] != CLITIC]
 
             result_list = list()
 

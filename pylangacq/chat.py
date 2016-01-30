@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import sys
 import os
 import fnmatch
 import re
@@ -58,10 +59,20 @@ class Reader:
 
         :param filenames: one or more filenames (absolute- or relative-path)
         """
+        if sys.platform.startswith('win'):
+            windows = True
+        else:
+            windows = False
+
         filenames_set = set()
         for filename in filenames:
             if type(filename) is not str:
                 raise ValueError('{} is not str'.format(repr(filename)))
+
+            if windows:
+                filename = filename.replace('/', os.sep)
+            else:
+                filename = filename.replace('\\', os.sep)
 
             abs_fullpath = os.path.abspath(filename)
             abs_dir = os.path.dirname(abs_fullpath)

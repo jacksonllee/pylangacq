@@ -5,6 +5,7 @@ import re
 # CLITIC is a str constant to represent what would be a clitic in tagged data.
 CLITIC = 'CLITIC'
 ALL_PARTICIPANTS = '**ALL**'
+ENCODING = 'utf8'
 
 
 def startswithoneof(inputstr, seq):

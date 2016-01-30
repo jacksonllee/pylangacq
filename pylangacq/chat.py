@@ -10,17 +10,17 @@ from multiprocessing import Pool
 
 from pylangacq.util import (startswithoneof, find_indices,
                             remove_extra_spaces, ListFromIterables,
-                            CLITIC, ALL_PARTICIPANTS)
+                            CLITIC, ALL_PARTICIPANTS, ENCODING)
 
 from pylangacq.measures import (get_MLUm, get_MLUw, get_TTR, get_IPSyn)
 
 
-def _create_fn_singlereader_tuple(fn):
+def _create_fn_singlereader_tuple(fn, encoding):
     """
     (for initializing a Reader instance; must be in top level of module
     so that multiprocessing works)
     """
-    return fn, SingleReader(fn)
+    return fn, SingleReader(fn, encoding=encoding)
 
 
 # noinspection PyPep8Naming
@@ -29,7 +29,7 @@ class Reader:
     A class for reading multiple CHAT files.
     """
 
-    def __init__(self, *filenames):
+    def __init__(self, *filenames, encoding=ENCODING):
         """
         :param filenames: One or more filenames. A filename may match exactly
             a CHAT file like ``eve01.cha`` or matches multiple files
@@ -47,6 +47,7 @@ class Reader:
         both ``eve*.cha`` and ``*01.cha``), but ``Reader`` filters away the
         duplicates.
         """
+        self.encoding = encoding
         self._input_filenames = filenames
         self._reset_reader(*self._input_filenames)
 
@@ -100,9 +101,11 @@ class Reader:
         self._filenames = filenames_set
         self._all_part_of_speech_tags = None
 
+        fname_encoding_list = [(fn, self.encoding) for fn in self._filenames]
+
         with Pool(maxtasksperchild=1) as p:
-            fn_to_tagged_sents_tuples = p.map(_create_fn_singlereader_tuple,
-                                               self._filenames)
+            fn_to_tagged_sents_tuples = p.starmap(_create_fn_singlereader_tuple,
+                                                  fname_encoding_list)
         self._fname_to_tagged_sents = dict(fn_to_tagged_sents_tuples)
 
     def __len__(self):
@@ -750,10 +753,12 @@ class SingleReader:
     A class for reading a single CHAT file.
     """
 
-    def __init__(self, filename):
+    def __init__(self, filename, encoding=ENCODING):
         """
         :param filename: The absolute path of the CHAT file
         """
+        self.encoding = encoding
+
         if type(filename) is not str:
             raise ValueError('filename must be str')
 
@@ -819,7 +824,7 @@ class SingleReader:
         """
         previous_line = ''
 
-        for line in open(self._filename, 'rU'):
+        for line in open(self._filename, mode='rU', encoding=self.encoding):
             previous_line = previous_line.strip()
             current_line = line.rstrip()  # don't remove leading \t
 

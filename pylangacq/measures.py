@@ -2,7 +2,7 @@
 
 from __future__ import division
 
-from pylangacq.chat import CLITIC
+from pylangacq.util import CLITIC
 from pylangacq.grammar import DependencyGraph
 
 

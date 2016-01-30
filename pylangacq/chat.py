@@ -9,13 +9,10 @@ from collections import Counter
 from multiprocessing import Pool
 
 from pylangacq.util import (startswithoneof, find_indices,
-                            remove_extra_spaces, ListFromIterables)
+                            remove_extra_spaces, ListFromIterables,
+                            CLITIC, ALL_PARTICIPANTS)
+
 from pylangacq.measures import (get_MLUm, get_MLUw, get_TTR, get_IPSyn)
-
-ALL_PARTICIPANTS = '**ALL**'
-
-# CLITIC is a str constant to represent what would be a clitic in tagged data.
-CLITIC = 'CLITIC'
 
 
 def _create_fn_singlereader_tuple(fn):

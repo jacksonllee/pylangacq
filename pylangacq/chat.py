@@ -5,6 +5,7 @@ import fnmatch
 import re
 from pprint import pformat
 from collections import Counter
+from multiprocessing import Pool
 
 from pylangacq.util import *
 from pylangacq.measures import *
@@ -13,6 +14,14 @@ ALL_PARTICIPANTS = '**ALL**'
 
 # CLITIC is a str constant to represent what would be a clitic in tagged data.
 CLITIC = 'CLITIC'
+
+
+def _create_fn_singlereader_tuple(fn):
+    """
+    (for initializing a Reader instance; must be in top level of module
+    so that multiprocessing works)
+    """
+    return fn, SingleReader(fn)
 
 
 # noinspection PyPep8Naming
@@ -81,8 +90,11 @@ class Reader:
 
         self._filenames = filenames_set
         self._all_part_of_speech_tags = None
-        self._fname_to_tagged_sents = {fn: SingleReader(fn)
-                                              for fn in self._filenames}
+
+        with Pool(maxtasksperchild=1) as p:
+            fn_to_tagged_sents_tuples = p.map(_create_fn_singlereader_tuple,
+                                               self._filenames)
+        self._fname_to_tagged_sents = dict(fn_to_tagged_sents_tuples)
 
     def __len__(self):
         """

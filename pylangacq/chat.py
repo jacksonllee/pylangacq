@@ -1415,8 +1415,9 @@ class SingleReader:
 
             if mor_items and ((len(words) + clitic_count) != len(mor_items)):
                 message = 'cannot align the utterance and %mor tiers:\n' + \
-                          'Tiers --\n{}\nCleaned-up utterance --\n{}'
-                raise ValueError(message.format(
+                          'Filename: {}\nTiers --\n{}\n' + \
+                          'Cleaned-up utterance --\n{}'
+                raise ValueError(message.format(self.filename(),
                     pformat(tiermarker_to_line), utterance))
 
             # %gra tier

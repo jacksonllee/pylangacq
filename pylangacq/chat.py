@@ -8,8 +8,9 @@ from pprint import pformat
 from collections import Counter
 from multiprocessing import Pool
 
-from pylangacq.util import *
-from pylangacq.measures import *
+from pylangacq.util import (startswithoneof, find_indices,
+                            remove_extra_spaces, ListFromIterables)
+from pylangacq.measures import (get_MLUm, get_MLUw, get_TTR, get_IPSyn)
 
 ALL_PARTICIPANTS = '**ALL**'
 
@@ -276,7 +277,7 @@ class Reader:
                 participant=participant, clean=clean)
                 for fn in self._filenames}
         else:
-            return IterableList(*(self._fname_to_tagged_sents[fn].utterances(
+            return ListFromIterables(*(self._fname_to_tagged_sents[fn].utterances(
                 participant=participant, clean=clean)
                 for fn in sorted(self._filenames)))
 
@@ -345,7 +346,7 @@ class Reader:
             return {fn: self._fname_to_tagged_sents[fn].words(
                 participant=participant) for fn in self._filenames}
         else:
-            return IterableList(*(self._fname_to_tagged_sents[fn].words(
+            return ListFromIterables(*(self._fname_to_tagged_sents[fn].words(
                 participant=participant) for fn in sorted(self._filenames)))
 
     def tagged_words(self, participant=ALL_PARTICIPANTS, by_files=False):
@@ -373,7 +374,7 @@ class Reader:
             return {fn: self._fname_to_tagged_sents[fn].tagged_words(
                 participant=participant) for fn in self._filenames}
         else:
-            return IterableList(*(self._fname_to_tagged_sents[fn].tagged_words(
+            return ListFromIterables(*(self._fname_to_tagged_sents[fn].tagged_words(
                 participant=participant)
                 for fn in sorted(self._filenames)))
 
@@ -402,7 +403,7 @@ class Reader:
             return {fn: self._fname_to_tagged_sents[fn].sents(
                 participant=participant) for fn in self._filenames}
         else:
-            return IterableList(*(self._fname_to_tagged_sents[fn].sents(
+            return ListFromIterables(*(self._fname_to_tagged_sents[fn].sents(
                 participant=participant)
                 for fn in sorted(self._filenames)))
 
@@ -431,7 +432,7 @@ class Reader:
             return {fn: self._fname_to_tagged_sents[fn].tagged_sents(
                 participant=participant) for fn in self._filenames}
         else:
-            return IterableList(*(self._fname_to_tagged_sents[fn].tagged_sents(
+            return ListFromIterables(*(self._fname_to_tagged_sents[fn].tagged_sents(
                 participant=participant)
                 for fn in sorted(self._filenames)))
 
@@ -602,6 +603,18 @@ class Reader:
         :rtype: dict(str: float)
         """
         return {fn: self._fname_to_tagged_sents[fn].TTR(
+            participant=participant) for fn in self._filenames}
+
+    def IPSyn(self, participant='CHI'):
+        """
+        Return a dict mapping a filename to the file's index of productive
+        syntax (IPSyn) for *participant* (default to ``'CHI'``).
+
+        :param participant: the participant specified, default to ``'CHI'``
+
+        :rtype: dict(str: int)
+        """
+        return {fn: self._fname_to_tagged_sents[fn].IPSyn(
             participant=participant) for fn in self._filenames}
 
     def search(self, search_item, participant=ALL_PARTICIPANTS,
@@ -1194,7 +1207,7 @@ class SingleReader:
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
         """
-        return IterableList(self._get_words(participant=participant,
+        return ListFromIterables(self._get_words(participant=participant,
                                             tagged=False, sents=False))
 
     def tagged_words(self, participant=ALL_PARTICIPANTS):
@@ -1213,7 +1226,7 @@ class SingleReader:
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
         """
-        return IterableList(self._get_words(participant=participant,
+        return ListFromIterables(self._get_words(participant=participant,
                                             tagged=True, sents=False))
 
     def sents(self, participant=ALL_PARTICIPANTS):
@@ -1234,7 +1247,7 @@ class SingleReader:
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
         """
-        return IterableList(self._get_words(participant=participant,
+        return ListFromIterables(self._get_words(participant=participant,
                                             tagged=False, sents=True))
 
     def tagged_sents(self, participant=ALL_PARTICIPANTS):
@@ -1255,7 +1268,7 @@ class SingleReader:
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
         """
-        return IterableList(self._get_words(participant=participant,
+        return ListFromIterables(self._get_words(participant=participant,
                                             tagged=True, sents=True))
 
     def _get_words(self, participant=ALL_PARTICIPANTS, tagged=True, sents=True):
@@ -1569,6 +1582,15 @@ class SingleReader:
         """
         return get_TTR(self.word_frequency(participant=participant),
                        words_to_ignore=self.words_to_ignore)
+
+    def IPSyn(self, participant='CHI'):
+        """
+        Return the index of productive syntax (IPSyn) for *participant*
+        (default to ``'CHI'``).
+
+        :param participant: The participant specified, default to ``'CHI'``
+        """
+        return get_IPSyn(self.tagged_sents(participant=participant))
 
     def search(self, search_item, participant=ALL_PARTICIPANTS,
                match_entire_word=True, lemma=False,

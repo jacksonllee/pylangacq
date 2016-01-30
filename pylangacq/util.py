@@ -90,12 +90,12 @@ def remove_extra_spaces(inputstr):
     return inputstr.strip()
 
 
-class IterableList(list):
+class ListFromIterables(list):
     """
     A class like ``list`` that can be initialized with iterables.
     """
     def __init__(self, *iterables):
-        super(IterableList, self).__init__()
+        super(ListFromIterables, self).__init__()
         self.input_iterables = iterables
         self.from_iterables()
 

@@ -124,6 +124,33 @@ class Reader:
             return [fn for fn, _ in sorted(self.age().items(),
                                            key=lambda x: x[1])]
 
+    def find_filename(self, file_basename):
+        """
+        Return the absolute-path filename of *file_basename*.
+
+        :param file_basename: CHAT file basename such as ``eve01.cha``
+        """
+        if type(file_basename) is not str:
+            raise ValueError('argument must be str')
+
+        if sys.platform.startswith('win'):
+            file_basename = file_basename.replace('/', os.sep)
+        else:
+            file_basename = file_basename.replace('\\', os.sep)
+
+        filename_matches = list()
+
+        for filename in self.filenames():
+            if filename.endswith(file_basename):
+                filename_matches.append(filename)
+
+        if len(filename_matches) == 0:
+            raise ValueError('no matching filename')
+        elif len(filename_matches) > 1:
+            raise ValueError('More than 1 matching filename')
+        else:
+            return filename_matches[0]
+
     def number_of_files(self):
         """
         Return the number of files.

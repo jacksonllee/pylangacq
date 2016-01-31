@@ -7,13 +7,35 @@ Full documentation: [http://pylangacq.org/](http://pylangacq.org/)
 Download and install
 --------------------
 
-PyLangAcq is currently available through GitHub:
+PyLangAcq requires Python 3.4 or above.
 
-    $ git clone https://github.com/pylangacq/pylangacq.git
-    $ cd pylangacq
-    $ python3 setup.py install
+* **The latest stable release** -- hosted at
+  [PyPI](https://pypi.python.org/pypi/pylangacq)
+  and therefore available via `pip`:
 
-Python 3.4 or above is required. The command `python3` is meant to point to your Python 3 interpreter.
+  ```
+  $ python3 -m pip install pylangacq
+  ```
+
+  `python3` is meant to point to your Python 3 interpreter.
+  Administrative privileges (e.g., `sudo` on Unix-like systems) may be required.
+
+  The stable release version is what the full documentation describes,
+  unless otherwise noted.
+
+* **Under testing and development** -- available at the
+  [GitHub repository](https://github.com/pylangacq/pylangacq)
+
+  This version likely contains experimental code not yet documented.
+  You may obtain it via `git`:
+
+  ```
+  $ git clone https://github.com/pylangacq/pylangacq.git
+  $ cd pylangacq
+  $ python3 setup.py install
+  ```
+
+See [changlog](changelog.md) for updates in progress.
 
 
 How to cite
@@ -31,12 +53,6 @@ Syntax highlighting for CHAT transcripts
 ----------------------------------------
 
 See the directory [`chat-syntax-highlighting`](chat-syntax-highlighting).
-
-
-Changlog
---------
-
-See [changlog](changelog.md)
 
 
 License

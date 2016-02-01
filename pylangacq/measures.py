@@ -67,7 +67,8 @@ def get_TTR(word_freq_dict, words_to_ignore=None):
 # noinspection PyPep8Naming
 def get_IPSyn(tagged_sents):
     """Index of Productive Syntax (IPSyn)"""
-    tagged_sents = tagged_sents[: 100]
+    if len(tagged_sents) > 100:
+        tagged_sents = tagged_sents[: 100]
 
     scoring_board = {'N1': 0, 'N2': 0, 'N3': 0, 'N4': 0, 'N5': 0, 'N6': 0,
                      'N7': 0, 'N8': 0, 'N9': 0, 'N10': 0, 'N11': 0,

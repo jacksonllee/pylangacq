@@ -2,7 +2,7 @@
 
 from __future__ import division
 
-from pylangacq.util import CLITIC
+from pylangacq.util import (CLITIC, get_lemma_from_mor)
 from pylangacq.grammar import DependencyGraph
 
 
@@ -154,13 +154,7 @@ def get_IPSyn(tagged_sents):
             if turn_off_scoring_board(item):
                 break
 
-    def get_lemma_from_mor(mor):
-        """
-        Extract lemma from *mor*
-        """
-        lemma, _, _ = mor.partition('-')
-        lemma, _, _ = lemma.partition('&')
-        return lemma
+
 
     # noinspection PyPep8Naming
     @test_item

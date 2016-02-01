@@ -95,6 +95,15 @@ def remove_extra_spaces(inputstr):
     return inputstr.strip()
 
 
+def get_lemma_from_mor(mor):
+    """
+    Extract lemma from *mor*
+    """
+    lemma, _, _ = mor.partition('-')
+    lemma, _, _ = lemma.partition('&')
+    return lemma
+
+
 class ListFromIterables(list):
     """
     A class like ``list`` that can be initialized with iterables.

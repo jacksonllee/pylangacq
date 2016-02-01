@@ -8,7 +8,7 @@ from pprint import pformat
 from collections import Counter
 from multiprocessing import Pool
 
-from pylangacq.util import (startswithoneof, find_indices,
+from pylangacq.util import (startswithoneof, find_indices, get_lemma_from_mor,
                             remove_extra_spaces, ListFromIterables,
                             CLITIC, ALL_PARTICIPANTS, ENCODING)
 
@@ -1659,10 +1659,7 @@ class SingleReader:
                 # then shift test_item to lemma extract from mor
                 test_item = word
                 if lemma:
-                    # get lemma from mor (remove morphological info by - and &)
-                    test_item = mor
-                    test_item, _, _ = test_item.partition('-')
-                    test_item, _, _ = test_item.partition('&')
+                    test_item = get_lemma_from_mor(mor)
 
                 # run the match test
                 # if match, keep the tagged_sent and compute char_number

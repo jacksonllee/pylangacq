@@ -9,7 +9,8 @@ from collections import Counter
 from multiprocessing import Pool
 
 from pylangacq.util import (startswithoneof, find_indices, get_lemma_from_mor,
-                            remove_extra_spaces, ListFromIterables,
+                            remove_extra_spaces, convert_date_to_tuple,
+                            ListFromIterables,
                             CLITIC, ALL_PARTICIPANTS, ENCODING)
 
 from pylangacq.measures import (get_MLUm, get_MLUw, get_TTR, get_IPSyn)
@@ -249,14 +250,24 @@ class Reader:
         return {fn: self._fname_to_tagged_sents[fn].languages()
                 for fn in self._filenames}
 
-    def date(self):
+    def date_of_recording(self):
         """
-        Return a dict mapping an absolute-path filename to the date in the form
-        of a 3-tuple of (year, month, day).
+        Return a dict mapping an absolute-path filename to the date of recording
+        in the form of (year, month, day).
 
         :rtype: dict(str: tuple(int, int, int))
         """
-        return {fn: self._fname_to_tagged_sents[fn].date()
+        return {fn: self._fname_to_tagged_sents[fn].date_of_recording()
+                for fn in self._filenames}
+
+    def date_of_birth(self):
+        """
+        Return a dict mapping an absolute-path filename to the date-of-birth
+        dict for that file.
+
+        :rtype: dict(str: dict(str: tuple(int, int, int)))
+        """
+        return {fn: self._fname_to_tagged_sents[fn].date_of_birth()
                 for fn in self._filenames}
 
     def age(self, participant='CHI', month=False):
@@ -1086,7 +1097,7 @@ class SingleReader:
 
         return languages_list
 
-    def date(self):
+    def date_of_recording(self):
         """
         Return the date of recording as a tuple of (*year*, *month*, *day*).
         If any errors arise (e.g., there's no date), return ``None``.
@@ -1095,29 +1106,38 @@ class SingleReader:
         """
         try:
             date_str = self._headers['Date']
-            day_str, month_str, year_str = date_str.split('-')
-            day = int(day_str)
-            year = int(year_str)
-
-            month_to_int = {
-                'JAN': 1,
-                'FEB': 2,
-                'MAR': 3,
-                'APR': 4,
-                'MAY': 5,
-                'JUN': 6,
-                'JUL': 7,
-                'AUG': 8,
-                'SEP': 9,
-                'OCT': 10,
-                'NOV': 11,
-                'DEC': 12,
-            }
-
-            month = month_to_int[month_str]
-            return year, month, day
-        except (ValueError, KeyError):
+        except KeyError:
             return None
+
+        return convert_date_to_tuple(date_str)
+
+    def date_of_birth(self):
+        """
+        Return the dates of birth as
+        dict(participant code: (*year*, *month*, *day*)).
+        If no date of birth is given for a participant,
+        the value is ``None`` instead of the tuple.
+
+        :rtype: dict(str: (int, int, int))
+        """
+        header_keys = self._headers.keys()
+        participant_to_date = dict()
+
+        for header in header_keys:
+            if not header.startswith('Birth of'):
+                continue
+
+            # e.g., header is 'Birth of CHI', participant is 'CHI'
+            _, _, participant = header.split()
+            date_str = self._headers[header]
+
+            participant_to_date[participant] = convert_date_to_tuple(date_str)
+
+        for participant in self.participants():
+            if participant not in participant_to_date:
+                participant_to_date[participant] = None
+
+        return participant_to_date
 
     def age(self, participant='CHI', month=False):
         """

@@ -104,6 +104,36 @@ def get_lemma_from_mor(mor):
     return lemma
 
 
+def convert_date_to_tuple(date_str):
+    """
+    Convert *date_str* to (year, month, day),
+    e.g., from ``'01-FEB-2016'`` to ``(2016, 2, 1)``.
+    """
+    try:
+        day_str, month_str, year_str = date_str.split('-')
+        day = int(day_str)
+        year = int(year_str)
+
+        month_to_int = {
+            'JAN': 1,
+            'FEB': 2,
+            'MAR': 3,
+            'APR': 4,
+            'MAY': 5,
+            'JUN': 6,
+            'JUL': 7,
+            'AUG': 8,
+            'SEP': 9,
+            'OCT': 10,
+            'NOV': 11,
+            'DEC': 12,
+        }
+
+        month = month_to_int[month_str]
+        return year, month, day
+    except ValueError:
+        return None
+
 class ListFromIterables(list):
     """
     A class like ``list`` that can be initialized with iterables.

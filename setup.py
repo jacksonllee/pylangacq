@@ -7,8 +7,13 @@ if py_version < (3, 4):
     sys.exit('Error: PyLangAcq requires Python 3.4 or above.\n'
              'You are using Python {}.{}.'.format(*py_version))
 
-version_filename = path.join(path.dirname(__file__), 'pylangacq', 'VERSION')
-with open(version_filename) as f:
+if __name__ == '__main__':
+    version_filename = 'VERSION_DEV'
+else:
+    version_filename = 'VERSION'
+
+version_path = path.join(path.dirname(__file__), 'pylangacq', version_filename)
+with open(version_path) as f:
     package_version = f.read().strip()
 
 setup(name="pylangacq",
@@ -51,5 +56,5 @@ setup(name="pylangacq",
         'Topic :: Text Processing :: Linguistic'
     ],
 
-    package_data = {'pylangacq': ['VERSION']}
+    package_data = {'pylangacq': ['VERSION', 'VERSION_DEV']}
 )

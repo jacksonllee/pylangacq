@@ -1745,6 +1745,7 @@ class SingleReader:
         # 2) Valian in Eng-NA-MOR
         # 3) YipMatthews in Biling
         # 4) LeeWongLeung in EastAsian/Cantonese
+        # 5) CromptonPater, Goad, Inkelas, and Providence in PhonBank English
 
         # *** At the end of each step, apply remove_extra_spaces(). ***
 
@@ -1763,6 +1764,7 @@ class SingleReader:
         # (2.), (3.5) etc for pauses
 
         # [?] for best guess
+        # ‹ and › used in conjunction with [?]
         # [!] for stressing
 
         # "[*] [/" replaced by "[/"
@@ -1784,6 +1786,8 @@ class SingleReader:
 
         utterance = utterance.replace('[?]', '')
         utterance = utterance.replace('[!]', '')
+        utterance = utterance.replace('‹', '')
+        utterance = utterance.replace('›', '')
 
         utterance = utterance.replace('[*] [/', '[/')
         utterance = utterance.replace('] [*]', ']')
@@ -1813,7 +1817,7 @@ class SingleReader:
         utterance = utterance.replace('“', ' “ ')
         utterance = utterance.replace('”', ' ” ')
         utterance = re.sub('[^\+],', ' , ', utterance)
-        utterance = re.sub('[^\[\./]\?', ' ? ', utterance)
+        utterance = re.sub('[^\[\./!]\?', ' ? ', utterance)
         # utterance = re.sub('[^\(\[\.\+]\.', ' . ', utterance)
         utterance = remove_extra_spaces(utterance)
         # print('step 2:', utterance)
@@ -1907,7 +1911,8 @@ class SingleReader:
                            '+"', '+,', '&', '<&'}
         escape_words = {'0', '++', '+<',
                         '(.)', '(..)', '(...)',
-                        'xxx', 'www', 'yyy'}
+                        'xxx', 'www', 'yyy', 'xxx:',
+                        ':', ';'}
         keep_prefixes = {'+"/', '+,/', '+".'}
 
         words = utterance.split()

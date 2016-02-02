@@ -51,11 +51,11 @@ Technical report [TR-2016-02](http://www.cs.uchicago.edu/research/publications/t
 Department of Computer Science, University of Chicago.
 
     @TechReport{lee-et-al-pylangacq:2016,
-      Title                    = {Working with CHAT transcripts in Python},
-      Author                   = {Lee, Jackson L. and Burkholder, Ross and Flinn, Gallagher B. and Coppess, Emily R.},
-      Institution              = {Department of Computer Science, University of Chicago},
-      Year                     = {2016},
-      Number                   = {TR-2016-02},
+      Title       = {Working with CHAT transcripts in Python},
+      Author      = {Lee, Jackson L. and Burkholder, Ross and Flinn, Gallagher B. and Coppess, Emily R.},
+      Institution = {Department of Computer Science, University of Chicago},
+      Year        = {2016},
+      Number      = {TR-2016-02},
     }
 
 

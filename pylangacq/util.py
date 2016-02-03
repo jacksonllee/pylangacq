@@ -183,11 +183,10 @@ def clean_utterance(utterance, phon=False):
     :rtype: str
     """
     # Function tested with the following CHILDES datasets:
-    # 1) Brown (Adam, Eve, and Sarah) in Eng-NA-MOR
-    # 2) Valian in Eng-NA-MOR
-    # 3) YipMatthews in Biling
-    # 4) LeeWongLeung in EastAsian/Cantonese
-    # 5) CromptonPater, Goad, Inkelas, and Providence in PhonBank English
+    # 1) Brent, Brown, HSLLD, Kuczaj, MacWhinney, Valian in Eng-NA-MOR
+    # 2) YipMatthews in Biling
+    # 3) LeeWongLeung in EastAsian/Cantonese
+    # 4) CromptonPater, Goad, Inkelas, and Providence in PhonBank English
 
     # *** At the end of each step, apply remove_extra_spaces(). ***
 
@@ -204,6 +203,7 @@ def clean_utterance(utterance, phon=False):
     # whatever for audio/video time stamps? the  character is 0x15
     # [<] and [>] for overlapping, including [<1], [>2] etc with numbers
     # (2.), (3.5) etc for pauses
+    # [%act: whatever] for actions etc
 
     # [?] for best guess
     # ‹ and › used in conjunction with [?]
@@ -225,6 +225,7 @@ def clean_utterance(utterance, phon=False):
     utterance = re.sub('\[<\d?\]', '', utterance)
     utterance = re.sub('\[>\d?\]', '', utterance)
     utterance = re.sub('\(\d+?\.?\d*?\)', '', utterance)
+    utterance = re.sub('\[%act: [^\[]+?\]', '', utterance)
 
     utterance = utterance.replace('[?]', '')
     utterance = utterance.replace('[!]', '')
@@ -249,6 +250,7 @@ def clean_utterance(utterance, phon=False):
     #     , (comma)
     #     ? (question mark)
     #     . (period) <-- commented out at the moment
+    #     (.) (short pause)
     # then pad them with extra spaces.
 
     utterance = utterance.replace('<', ' <')
@@ -258,14 +260,16 @@ def clean_utterance(utterance, phon=False):
     utterance = utterance.replace(']', '] ')
     utterance = utterance.replace('“', ' “ ')
     utterance = utterance.replace('”', ' ” ')
-    utterance = re.sub('[^\+],', ' , ', utterance)
+    utterance = utterance.replace(',', ' , ')  # works together with next line
+    utterance = utterance.replace('+ ,', '+,')
     utterance = re.sub('[^\[\./!]\?', ' ? ', utterance)
     # utterance = re.sub('[^\(\[\.\+]\.', ' . ', utterance)
+    utterance = utterance.replace('(.)', ' (.) ')
     utterance = remove_extra_spaces(utterance)
     # print('step 2:', utterance)
 
     # Step 3:
-    # Handle [/], [//], [///] for repetitions/reformulation
+    # Handle [/], [//], [///], [/?] for repetitions/reformulation
     #        [: xx] or [:: xx] for errors
     #
     # Discard "xx [/]", "<xx yy> [/]", "xx [//]", "<xx yy> [//]".
@@ -309,6 +313,11 @@ def clean_utterance(utterance, phon=False):
     index_pairs += [(begin + 1, begin + 4)
                     for begin in single_overlap_right_indices]
 
+    # remove ' [/?]'
+    slash_question_indices = find_indices(utterance, '> \[/\?\]')
+    index_pairs += [(begin + 1, begin + 4)
+                    for begin in slash_question_indices]
+
     # remove ' [::'
     double_error_right_indices = find_indices(utterance, '> \[::')
     index_pairs += [(begin + 1, begin + 4)
@@ -323,7 +332,9 @@ def clean_utterance(utterance, phon=False):
                     single_overlap_right_indices + \
                     double_error_right_indices + \
                     single_error_right_indices + \
-                    triple_slash_right_indices
+                    triple_slash_right_indices + \
+                    slash_question_indices
+
     index_pairs = index_pairs + [(angle_brackets_r2l_pairs[right], right)
                                   for right in sorted(right_indices)]
     indices_to_ignore = set()
@@ -340,6 +351,7 @@ def clean_utterance(utterance, phon=False):
     utterance = re.sub('\S+? \[/\]', '', utterance)
     utterance = re.sub('\S+? \[//\]', '', utterance)
     utterance = re.sub('\S+? \[///\]', '', utterance)
+    utterance = re.sub('\S+? \[/\?\]', '', utterance)
 
     utterance = re.sub('\S+? \[::', '', utterance)
     utterance = re.sub('\S+? \[:', '', utterance)
@@ -351,7 +363,7 @@ def clean_utterance(utterance, phon=False):
 
     escape_prefixes = {'[?', '[/', '[<', '[>', '[:', '[!', '[*',
                        '+"', '+,', '<&'}
-    escape_words = {'0', '++', '+<',
+    escape_words = {'0', '++', '+<', '+^',
                     '(.)', '(..)', '(...)',
                     ':', ';'}
     keep_prefixes = {'+"/', '+,/', '+".'}

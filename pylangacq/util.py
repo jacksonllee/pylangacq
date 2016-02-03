@@ -150,6 +150,25 @@ def convert_date_to_tuple(date_str):
         return None
 
 
+def clean_word(word):
+    new_word = word.replace('(', '').replace(')', '')
+
+    if '@' in new_word:
+        new_word = new_word[: new_word.index('@')]
+
+    replace_pairs = [(':', ''),
+                     (';', ''),
+                     ('+', '')
+                    ]
+
+    new_word = replace_all(new_word, replace_pairs)
+
+    if new_word.startswith('&'):
+        new_word = new_word[1:]
+
+    return new_word
+
+
 def clean_utterance(utterance, phon=False):
     """
     Filter away the CHAT-style annotations in *utterance*.

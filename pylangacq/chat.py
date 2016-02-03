@@ -10,6 +10,7 @@ from multiprocessing import Pool
 
 from pylangacq.util import (get_lemma_from_mor, convert_date_to_tuple,
                             clean_utterance, get_participant_code,
+                            clean_word,
                             ListFromIterables,
                             CLITIC, ALL_PARTICIPANTS, ENCODING)
 
@@ -1489,7 +1490,7 @@ class SingleReader:
             for word, mor, gra in zip(utterance_items, mor_items, gra_items):
                 pos, _, mor = mor.partition('|')
 
-                output_word = (word, pos.upper(), mor, gra)
+                output_word = (clean_word(word), pos.upper(), mor, gra)
                 # pos in uppercase follows NLTK convention
                 sent.append(output_word)
 

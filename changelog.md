@@ -3,7 +3,16 @@ Change log
 
 Current stable release version: 0.8
 
-Version 0.9 in progress
+Version 0.9.0 in progress
+
+* Phonetics and phonology -- develop capabilities to handle PhonBank data:
+  * Recognize and parse `%pho` and `%mod` tiers
+  * Improve `clean_utterance()`
+* Add parameter `encoding` in `read_chat()`
+* Add `get_lemma_from_mor()`
+* Add `date_of_recording()` and `date_of_birth()`; deprecate `date()`
+* Add `clean_word()`
+* Restrict `get_IPSyn()` to only the first 100 utterances
 
 Version 0.8 2016-01-30
 

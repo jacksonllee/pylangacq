@@ -1,6 +1,8 @@
 PyLangAcq: Language acquisition research in Python
 ==================================================
 
+[![Build Status](https://travis-ci.org/pylangacq/pylangacq.svg?branch=master)](https://travis-ci.org/pylangacq/pylangacq)
+
 Full documentation: [http://pylangacq.org/](http://pylangacq.org/)
 
 

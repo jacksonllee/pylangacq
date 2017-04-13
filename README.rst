@@ -38,12 +38,6 @@ Department of Computer Science, University of Chicago.
    }
 
 
-Syntax highlighting for CHAT transcripts
-----------------------------------------
-
-See the directory [`chat-syntax-highlighting`](chat-syntax-highlighting).
-
-
 Change log
 ----------
 

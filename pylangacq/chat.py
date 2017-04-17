@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""blah"""
+
 import sys
 import os
 import fnmatch
 import re
 from pprint import pformat
 from collections import Counter
-from multiprocessing import Pool
 
 from pylangacq.util import (get_lemma_from_mor, convert_date_to_tuple,
                             clean_utterance, get_participant_code,
@@ -17,15 +18,6 @@ from pylangacq.util import (get_lemma_from_mor, convert_date_to_tuple,
 from pylangacq.measures import (get_MLUm, get_MLUw, get_TTR, get_IPSyn)
 
 
-def _create_fn_singlereader_tuple(fn, encoding):
-    """
-    (for initializing a Reader instance; must be in top level of module
-    so that multiprocessing works)
-    """
-    return fn, SingleReader(fn, encoding=encoding)
-
-
-# noinspection PyPep8Naming
 class Reader:
     """
     A class for reading multiple CHAT files.
@@ -103,12 +95,10 @@ class Reader:
         self._filenames = filenames_set
         self._all_part_of_speech_tags = None
 
-        fname_encoding_list = [(fn, self.encoding) for fn in self._filenames]
-
-        with Pool(maxtasksperchild=1) as p:
-            fn_to_tagged_sents_tuples = p.starmap(_create_fn_singlereader_tuple,
-                                                  fname_encoding_list)
-        self._fname_to_tagged_sents = dict(fn_to_tagged_sents_tuples)
+        self._fname_to_reader = dict()
+        for fn in self._filenames:
+            self._fname_to_reader[fn] = SingleReader(fn,
+                                                     encoding=self.encoding)
 
     def __len__(self):
         """
@@ -185,10 +175,10 @@ class Reader:
         :rtype: int, or dict(str: int)
         """
         if by_files:
-            return {fn: self._fname_to_tagged_sents[fn].number_of_utterances(
+            return {fn: self._fname_to_reader[fn].number_of_utterances(
                 participant=participant) for fn in self._filenames}
         else:
-            return sum(self._fname_to_tagged_sents[fn].number_of_utterances(
+            return sum(self._fname_to_reader[fn].number_of_utterances(
                 participant=participant) for fn in self._filenames)
 
     def headers(self):
@@ -198,7 +188,7 @@ class Reader:
 
         :rtype: dict(str: dict)
         """
-        return {fn: self._fname_to_tagged_sents[fn].headers()
+        return {fn: self._fname_to_reader[fn].headers()
                 for fn in self._filenames}
 
     def index_to_tiers(self):
@@ -208,7 +198,7 @@ class Reader:
 
         :rtype: dict(str: dict)
         """
-        return {fn: self._fname_to_tagged_sents[fn].index_to_tiers()
+        return {fn: self._fname_to_reader[fn].index_to_tiers()
                 for fn in self._filenames}
 
     def participants(self):
@@ -218,7 +208,7 @@ class Reader:
 
         :rtype: dict(str: dict)
         """
-        return {fn: self._fname_to_tagged_sents[fn].participants()
+        return {fn: self._fname_to_reader[fn].participants()
                 for fn in self._filenames}
 
     def participant_codes(self, by_files=False):
@@ -232,12 +222,12 @@ class Reader:
         :rtype: set(str), or dict(str: set(str))
         """
         if by_files:
-            return {fn: self._fname_to_tagged_sents[fn].participant_codes()
+            return {fn: self._fname_to_reader[fn].participant_codes()
                     for fn in self._filenames}
         else:
             output_set = set()
             for fn in self._filenames:
-                for code in self._fname_to_tagged_sents[fn].participant_codes():
+                for code in self._fname_to_reader[fn].participant_codes():
                     output_set.add(code)
             return output_set
 
@@ -248,7 +238,7 @@ class Reader:
 
         :rtype: dict(str: list(str))
         """
-        return {fn: self._fname_to_tagged_sents[fn].languages()
+        return {fn: self._fname_to_reader[fn].languages()
                 for fn in self._filenames}
 
     def date_of_recording(self):
@@ -258,7 +248,7 @@ class Reader:
 
         :rtype: dict(str: tuple(int, int, int))
         """
-        return {fn: self._fname_to_tagged_sents[fn].date_of_recording()
+        return {fn: self._fname_to_reader[fn].date_of_recording()
                 for fn in self._filenames}
 
     def date_of_birth(self):
@@ -268,7 +258,7 @@ class Reader:
 
         :rtype: dict(str: dict(str: tuple(int, int, int)))
         """
-        return {fn: self._fname_to_tagged_sents[fn].date_of_birth()
+        return {fn: self._fname_to_reader[fn].date_of_birth()
                 for fn in self._filenames}
 
     def age(self, participant='CHI', month=False):
@@ -282,7 +272,7 @@ class Reader:
 
         :rtype: dict(str: tuple(int, int, int)) or dict(str: float)
         """
-        return {fn: self._fname_to_tagged_sents[fn].age(
+        return {fn: self._fname_to_reader[fn].age(
             participant=participant, month=month)
                 for fn in self._filenames}
 
@@ -312,11 +302,11 @@ class Reader:
         :rtype: list(str), or dict(str: list(str))
         """
         if by_files:
-            return {fn: self._fname_to_tagged_sents[fn].utterances(
+            return {fn: self._fname_to_reader[fn].utterances(
                 participant=participant, clean=clean)
                 for fn in self._filenames}
         else:
-            return ListFromIterables(*(self._fname_to_tagged_sents[fn].utterances(
+            return ListFromIterables(*(self._fname_to_reader[fn].utterances(
                 participant=participant, clean=clean)
                 for fn in sorted(self._filenames)))
 
@@ -349,14 +339,14 @@ class Reader:
         :rtype: Counter, or dict(str: Counter)
         """
         if by_files:
-            return {fn: self._fname_to_tagged_sents[fn].word_frequency(
+            return {fn: self._fname_to_reader[fn].word_frequency(
                 participant=participant, keep_case=keep_case)
                     for fn in self._filenames}
         else:
             output_counter = Counter()
             for fn in self._filenames:
                 output_counter.update(
-                    self._fname_to_tagged_sents[fn].word_frequency(
+                    self._fname_to_reader[fn].word_frequency(
                         participant=participant, keep_case=keep_case))
             return output_counter
 
@@ -382,10 +372,10 @@ class Reader:
         :rtype: list(str), or dict(str: list(str))
         """
         if by_files:
-            return {fn: self._fname_to_tagged_sents[fn].words(
+            return {fn: self._fname_to_reader[fn].words(
                 participant=participant) for fn in self._filenames}
         else:
-            return ListFromIterables(*(self._fname_to_tagged_sents[fn].words(
+            return ListFromIterables(*(self._fname_to_reader[fn].words(
                 participant=participant) for fn in sorted(self._filenames)))
 
     def tagged_words(self, participant=ALL_PARTICIPANTS, by_files=False):
@@ -410,10 +400,10 @@ class Reader:
         :rtype: list(tuple), or dict(str: list(tuple))
         """
         if by_files:
-            return {fn: self._fname_to_tagged_sents[fn].tagged_words(
+            return {fn: self._fname_to_reader[fn].tagged_words(
                 participant=participant) for fn in self._filenames}
         else:
-            return ListFromIterables(*(self._fname_to_tagged_sents[fn].tagged_words(
+            return ListFromIterables(*(self._fname_to_reader[fn].tagged_words(
                 participant=participant)
                 for fn in sorted(self._filenames)))
 
@@ -439,10 +429,10 @@ class Reader:
         :rtype: list(list(str)), or dict(str: list(list(str)))
         """
         if by_files:
-            return {fn: self._fname_to_tagged_sents[fn].sents(
+            return {fn: self._fname_to_reader[fn].sents(
                 participant=participant) for fn in self._filenames}
         else:
-            return ListFromIterables(*(self._fname_to_tagged_sents[fn].sents(
+            return ListFromIterables(*(self._fname_to_reader[fn].sents(
                 participant=participant)
                 for fn in sorted(self._filenames)))
 
@@ -468,10 +458,10 @@ class Reader:
         :rtype: list(list(tuple)), or dict(str: list(list(tuple)))
         """
         if by_files:
-            return {fn: self._fname_to_tagged_sents[fn].tagged_sents(
+            return {fn: self._fname_to_reader[fn].tagged_sents(
                 participant=participant) for fn in self._filenames}
         else:
-            return ListFromIterables(*(self._fname_to_tagged_sents[fn].tagged_sents(
+            return ListFromIterables(*(self._fname_to_reader[fn].tagged_sents(
                 participant=participant)
                 for fn in sorted(self._filenames)))
 
@@ -497,11 +487,11 @@ class Reader:
         :rtype: set or dict(str: set)
         """
         if by_files:
-            return {fn: self._fname_to_tagged_sents[fn].part_of_speech_tags(
+            return {fn: self._fname_to_reader[fn].part_of_speech_tags(
                 participant=participant) for fn in self._filenames}
         else:
             return set().union(*(
-                self._fname_to_tagged_sents[fn].part_of_speech_tags(
+                self._fname_to_reader[fn].part_of_speech_tags(
                 participant=participant) for fn in self._filenames))
 
     def update(self, reader):
@@ -582,14 +572,14 @@ class Reader:
         :rtype: Counter, or dict(str: Counter)
         """
         if by_files:
-            return {fn: self._fname_to_tagged_sents[fn].word_ngrams(n,
-                participant=participant, keep_case=keep_case)
+            return {fn: self._fname_to_reader[fn].word_ngrams(n,
+                                                              participant=participant, keep_case=keep_case)
                     for fn in self._filenames}
         else:
             output_counter = Counter()
             for fn in self._filenames:
                 output_counter.update(
-                    self._fname_to_tagged_sents[fn].word_ngrams(
+                    self._fname_to_reader[fn].word_ngrams(
                         n, participant=participant, keep_case=keep_case))
             return output_counter
 
@@ -603,7 +593,7 @@ class Reader:
 
         :rtype: dict(str: float)
         """
-        return {fn: self._fname_to_tagged_sents[fn].MLU(
+        return {fn: self._fname_to_reader[fn].MLU(
             participant=participant) for fn in self._filenames}
 
     def MLUm(self, participant='CHI'):
@@ -616,7 +606,7 @@ class Reader:
 
         :rtype: dict(str: float)
         """
-        return {fn: self._fname_to_tagged_sents[fn].MLUm(
+        return {fn: self._fname_to_reader[fn].MLUm(
             participant=participant) for fn in self._filenames}
 
     def MLUw(self, participant='CHI'):
@@ -629,7 +619,7 @@ class Reader:
 
         :rtype: dict(str: float)
         """
-        return {fn: self._fname_to_tagged_sents[fn].MLUw(
+        return {fn: self._fname_to_reader[fn].MLUw(
             participant=participant) for fn in self._filenames}
 
     def TTR(self, participant='CHI'):
@@ -641,7 +631,7 @@ class Reader:
 
         :rtype: dict(str: float)
         """
-        return {fn: self._fname_to_tagged_sents[fn].TTR(
+        return {fn: self._fname_to_reader[fn].TTR(
             participant=participant) for fn in self._filenames}
 
     def IPSyn(self, participant='CHI'):
@@ -653,7 +643,7 @@ class Reader:
 
         :rtype: dict(str: int)
         """
-        return {fn: self._fname_to_tagged_sents[fn].IPSyn(
+        return {fn: self._fname_to_reader[fn].IPSyn(
             participant=participant) for fn in self._filenames}
 
     def search(self, search_item, participant=ALL_PARTICIPANTS,
@@ -700,7 +690,7 @@ class Reader:
         :rtype: list, or dict(str: list)
         """
         if by_files:
-            return {fn: self._fname_to_tagged_sents[fn].search(
+            return {fn: self._fname_to_reader[fn].search(
                 search_item, participant=participant,
                 match_entire_word=match_entire_word, lemma=lemma,
                 output_tagged=output_tagged, output_sents=output_sents)
@@ -708,7 +698,7 @@ class Reader:
         else:
             output_list = list()
             for fn in self.filenames(sorted_by_age=True):
-                output_list.extend(self._fname_to_tagged_sents[fn].search(
+                output_list.extend(self._fname_to_reader[fn].search(
                     search_item, participant=participant,
                     match_entire_word=match_entire_word, lemma=lemma,
                     output_tagged=output_tagged, output_sents=output_sents))
@@ -747,19 +737,19 @@ class Reader:
         :rtype: list, or dict(str: list)
         """
         if by_files:
-            return {fn: self._fname_to_tagged_sents[fn].concordance(
+            return {fn: self._fname_to_reader[fn].concordance(
                 search_item, participant=participant,
                 match_entire_word=match_entire_word, lemma=lemma)
                     for fn in self._filenames}
         else:
             output_list = list()
             for fn in self.filenames(sorted_by_age=True):
-                output_list.extend(self._fname_to_tagged_sents[fn].concordance(
+                output_list.extend(self._fname_to_reader[fn].concordance(
                     search_item, participant=participant,
                     match_entire_word=match_entire_word, lemma=lemma))
             return output_list
 
-# noinspection PyPep8Naming
+
 class SingleReader:
     """
     A class for reading a single CHAT file.

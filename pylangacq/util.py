@@ -8,27 +8,6 @@ ALL_PARTICIPANTS = '**ALL**'
 ENCODING = 'utf8'
 
 
-def endswithoneof(inputstr, seq):
-    """
-    Check if *inputstr* ends with one of the items in seq. If it does, return
-        the item that it ends with. If it doe not, return ``None``.
-
-    :param inputstr: input string
-
-    :param seq: sequences of items to check
-
-    :return: the item the the input string ends with (``None`` if not found)
-
-    :rtype: str or None
-    """
-    seq = set(seq)
-    for item in seq:
-        if inputstr.endswith(item):
-            return item
-    else:
-        return None
-
-
 def find_indices(longstr, substring):
     """
     Find all indices of non-overlapping occurrences of substring in *longstr*

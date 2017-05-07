@@ -1,15 +1,12 @@
+# -*- coding: utf-8 -*-
+
 import os
 from pylangacq.chat import Reader
 from pylangacq.util import ENCODING
 
-VERSION_ERROR = 'unknown version; VERSION file not found'
-version_filename = os.path.join(os.path.dirname(__file__), 'VERSION')
 
-try:
-    with open(version_filename) as f:
-        __version__ = f.read().strip()
-except FileNotFoundError:
-    __version__ = VERSION_ERROR
+with open(os.path.join(os.path.dirname(__file__), 'VERSION')) as f:
+    __version__ = f.read().strip()
 
 
 def read_chat(*filenames, encoding=ENCODING):

@@ -8,21 +8,6 @@ ALL_PARTICIPANTS = '**ALL**'
 ENCODING = 'utf8'
 
 
-class ListFromIterables(list):
-    """
-    A class like ``list`` that can be initialized with iterables.
-    """
-    def __init__(self, *iterables):
-        super(ListFromIterables, self).__init__()
-        self.input_iterables = iterables
-        self.from_iterables()
-
-    def from_iterables(self):
-        for it in self.input_iterables:
-            for element in it:
-                self.append(element)
-
-
 def startswithoneof(inputstr, seq):
     """
     Check if *inputstr* starts with one of the items in seq. If it does, return

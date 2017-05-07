@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""blah"""
+"""Classes for interfacing with CHAT data files."""
 
 import sys
 import os
@@ -8,11 +8,12 @@ import fnmatch
 import re
 from pprint import pformat
 from collections import Counter
+from itertools import chain
+
 
 from pylangacq.util import (get_lemma_from_mor, convert_date_to_tuple,
                             clean_utterance, get_participant_code,
                             clean_word,
-                            ListFromIterables,
                             CLITIC, ALL_PARTICIPANTS, ENCODING)
 
 from pylangacq.measures import (get_MLUm, get_MLUw, get_TTR, get_IPSyn)
@@ -306,9 +307,12 @@ class Reader:
                 participant=participant, clean=clean)
                 for fn in self._filenames}
         else:
-            return ListFromIterables(*(self._fname_to_reader[fn].utterances(
-                participant=participant, clean=clean)
-                for fn in sorted(self._filenames)))
+            return list(
+                chain.from_iterable(
+                    self._fname_to_reader[fn].utterances(
+                        participant=participant, clean=clean)
+                    for fn in sorted(self._filenames))
+            )
 
     def word_frequency(self, participant=ALL_PARTICIPANTS, keep_case=True,
                        by_files=False):
@@ -375,8 +379,12 @@ class Reader:
             return {fn: self._fname_to_reader[fn].words(
                 participant=participant) for fn in self._filenames}
         else:
-            return ListFromIterables(*(self._fname_to_reader[fn].words(
-                participant=participant) for fn in sorted(self._filenames)))
+            return list(
+                chain.from_iterable(
+                    self._fname_to_reader[fn].words(
+                        participant=participant)
+                    for fn in sorted(self._filenames))
+            )
 
     def tagged_words(self, participant=ALL_PARTICIPANTS, by_files=False):
         """
@@ -403,9 +411,12 @@ class Reader:
             return {fn: self._fname_to_reader[fn].tagged_words(
                 participant=participant) for fn in self._filenames}
         else:
-            return ListFromIterables(*(self._fname_to_reader[fn].tagged_words(
-                participant=participant)
-                for fn in sorted(self._filenames)))
+            return list(
+                chain.from_iterable(
+                    self._fname_to_reader[fn].tagged_words(
+                        participant=participant)
+                    for fn in sorted(self._filenames))
+            )
 
     def sents(self, participant=ALL_PARTICIPANTS, by_files=False):
         """
@@ -432,9 +443,12 @@ class Reader:
             return {fn: self._fname_to_reader[fn].sents(
                 participant=participant) for fn in self._filenames}
         else:
-            return ListFromIterables(*(self._fname_to_reader[fn].sents(
-                participant=participant)
-                for fn in sorted(self._filenames)))
+            return list(
+                chain.from_iterable(
+                    self._fname_to_reader[fn].sents(
+                        participant=participant)
+                    for fn in sorted(self._filenames))
+            )
 
     def tagged_sents(self, participant=ALL_PARTICIPANTS, by_files=False):
         """
@@ -461,9 +475,12 @@ class Reader:
             return {fn: self._fname_to_reader[fn].tagged_sents(
                 participant=participant) for fn in self._filenames}
         else:
-            return ListFromIterables(*(self._fname_to_reader[fn].tagged_sents(
-                participant=participant)
-                for fn in sorted(self._filenames)))
+            return list(
+                chain.from_iterable(
+                    self._fname_to_reader[fn].tagged_sents(
+                        participant=participant)
+                    for fn in sorted(self._filenames))
+            )
 
     def part_of_speech_tags(self, participant=ALL_PARTICIPANTS, by_files=False):
         """
@@ -1251,8 +1268,8 @@ class SingleReader:
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
         """
-        return ListFromIterables(self._get_words(participant=participant,
-                                            tagged=False, sents=False))
+        return self._get_words(participant=participant,
+                               tagged=False, sents=False)
 
     def tagged_words(self, participant=ALL_PARTICIPANTS):
         """
@@ -1270,8 +1287,8 @@ class SingleReader:
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
         """
-        return ListFromIterables(self._get_words(participant=participant,
-                                            tagged=True, sents=False))
+        return self._get_words(participant=participant,
+                               tagged=True, sents=False)
 
     def sents(self, participant=ALL_PARTICIPANTS):
         """
@@ -1291,8 +1308,8 @@ class SingleReader:
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
         """
-        return ListFromIterables(self._get_words(participant=participant,
-                                            tagged=False, sents=True))
+        return self._get_words(participant=participant,
+                               tagged=False, sents=True)
 
     def tagged_sents(self, participant=ALL_PARTICIPANTS):
         """
@@ -1312,8 +1329,8 @@ class SingleReader:
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
         """
-        return ListFromIterables(self._get_words(participant=participant,
-                                            tagged=True, sents=True))
+        return self._get_words(participant=participant,
+                               tagged=True, sents=True)
 
     def _get_words(self, participant=ALL_PARTICIPANTS, tagged=True, sents=True):
         """

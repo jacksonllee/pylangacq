@@ -8,27 +8,6 @@ ALL_PARTICIPANTS = '**ALL**'
 ENCODING = 'utf8'
 
 
-def startswithoneof(inputstr, seq):
-    """
-    Check if *inputstr* starts with one of the items in seq. If it does, return
-        the item that it starts with. If it doe not, return ``None``.
-
-    :param inputstr: input string
-
-    :param seq: sequences of items to check
-
-    :return: the item the the input string starts with (``None`` if not found)
-
-    :rtype: str or None
-    """
-    seq = set(seq)
-    for item in seq:
-        if inputstr.startswith(item):
-            return item
-    else:
-        return None
-
-
 def endswithoneof(inputstr, seq):
     """
     Check if *inputstr* ends with one of the items in seq. If it does, return
@@ -369,8 +348,8 @@ def clean_utterance(utterance, phon=False):
         word = re.sub('\]\Z', '', word)  # remove final ]
 
         not_an_escape_word = word not in escape_words
-        no_escape_prefix = not startswithoneof(word, escape_prefixes)
-        has_keep_prefix = startswithoneof(word, keep_prefixes)
+        no_escape_prefix = not any(word.startswith(e) for e in escape_prefixes)
+        has_keep_prefix = any(word.startswith(k) for k in keep_prefixes)
 
         if (not_an_escape_word and no_escape_prefix) or has_keep_prefix:
             new_words.append(word)

@@ -86,4 +86,4 @@ See `CHANGELOG.md <CHANGELOG.md>`_.
 License
 -------
 
-See `LICENSE.txt <LICENSE.txt>`_.
+The MIT License. Please see `LICENSE.txt <LICENSE.txt>`_.

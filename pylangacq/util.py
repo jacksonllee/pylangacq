@@ -23,22 +23,6 @@ def find_indices(longstr, substring):
     return [m.start() for m in re.finditer(substring, longstr)]
 
 
-def replace_all(inputstr, replacee_replacer_pairs):
-    """
-    Replace in *inputstr* all replacers by the corresponding replacees in
-        *replacee_replacer_pairs*.
-
-    :param inputstr: input string
-
-    :param replacee_replacer_pairs: pairs of (replacee, replacer)
-
-    :return: string with all replacees replaced by their respective replacers
-    """
-    for replacee, replacer in replacee_replacer_pairs:
-        inputstr = inputstr.replace(replacee, replacer)
-    return inputstr
-
-
 def remove_extra_spaces(inputstr):
     """
     Remove extra spaces in *inputstr* so that there are only single
@@ -94,17 +78,16 @@ def convert_date_to_tuple(date_str):
 
 
 def clean_word(word):
-    new_word = word.replace('(', '').replace(')', '')
+    new_word = (word
+                .replace('(', '')
+                .replace(')', '')
+                .replace(':', '')
+                .replace(';', '')
+                .replace('+', '')
+                )
 
     if '@' in new_word:
         new_word = new_word[: new_word.index('@')]
-
-    replace_pairs = [(':', ''),
-                     (';', ''),
-                     ('+', '')
-                    ]
-
-    new_word = replace_all(new_word, replace_pairs)
 
     if new_word.startswith('&'):
         new_word = new_word[1:]

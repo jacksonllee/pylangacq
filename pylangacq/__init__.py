@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import os
-from pylangacq.chat import ENCODING, Reader
+
+from pylangacq.chat import Reader
+from pylangacq.util import ENCODING
 
 
 with open(os.path.join(os.path.dirname(__file__), 'VERSION')) as f:

@@ -3,7 +3,7 @@
 from __future__ import division
 
 from pylangacq.util import CLITIC, get_lemma_from_mor
-from pylangacq.grammar import DependencyGraph
+from pylangacq.dependency import DependencyGraph
 
 
 # noinspection PyPep8Naming

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pylangacq.grammar import DependencyGraph
+from pylangacq.dependency import DependencyGraph
 
 
 _CHAT_GRAPH_DATA = [

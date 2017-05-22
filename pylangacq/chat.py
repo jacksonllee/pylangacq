@@ -10,6 +10,8 @@ from pprint import pformat
 from collections import Counter
 from itertools import chain
 
+import six
+
 from pylangacq.measures import get_MLUm, get_MLUw, get_TTR, get_IPSyn
 from pylangacq.util import (ENCODING, ALL_PARTICIPANTS, CLITIC,
                             get_participant_code, convert_date_to_tuple,
@@ -57,7 +59,7 @@ class Reader:
 
         filenames_set = set()
         for filename in filenames:
-            if type(filename) is not str:
+            if type(filename) is not six.text_type:
                 raise ValueError('{} is not str'.format(repr(filename)))
 
             if windows:
@@ -123,7 +125,7 @@ class Reader:
 
         :param file_basename: CHAT file basename such as ``eve01.cha``
         """
-        if type(file_basename) is not str:
+        if type(file_basename) is not six.text_type:
             raise ValueError('argument must be str')
 
         if sys.platform.startswith('win'):
@@ -506,7 +508,7 @@ class Reader:
         else:
             return set().union(*(
                 self._fname_to_reader[fn].part_of_speech_tags(
-                participant=participant) for fn in self._filenames))
+                    participant=participant) for fn in self._filenames))
 
     def update(self, reader):
         """
@@ -586,8 +588,8 @@ class Reader:
         :rtype: Counter, or dict(str: Counter)
         """
         if by_files:
-            return {fn: self._fname_to_reader[fn].word_ngrams(n,
-                                                              participant=participant, keep_case=keep_case)
+            return {fn: self._fname_to_reader[fn].word_ngrams(
+                n, participant=participant, keep_case=keep_case)
                     for fn in self._filenames}
         else:
             output_counter = Counter()
@@ -775,7 +777,7 @@ class SingleReader:
         """
         self.encoding = encoding
 
-        if type(filename) is not str:
+        if type(filename) is not six.text_type:
             raise ValueError('filename must be str')
 
         self._filename = os.path.abspath(filename)
@@ -1232,7 +1234,7 @@ class SingleReader:
         if participant == ALL_PARTICIPANTS:
             return all_participant_codes
 
-        if type(participant) is str:
+        if type(participant) is six.text_type:
             check_participants = {participant}
         elif hasattr(participant, '__iter__'):
             check_participants = set(participant)
@@ -1737,6 +1739,3 @@ class SingleReader:
                 result_list.append(sent_str)
 
             return result_list
-
-
-

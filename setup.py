@@ -31,6 +31,8 @@ def main():
 
         package_data={'pylangacq': ['VERSION']},
 
+        install_requires=['six>=1.10.0'],
+
         zip_safe=False,
 
         classifiers=[

@@ -1,20 +1,27 @@
-Change log
-==========
+# Change log
 
-Current stable release version: 0.8
+## [Unreleased]
 
-Version 0.9.0 in progress
-
+* Python 2 and 3 cross compatibility
+* Rename the `grammar.py` module as `dependency.py`
+    * Rewrite the class `DependencyGraph`;
+      do not subclass from networkx's DiGraph anymore
+      (and we remove networkx as a dependency of this library)
+* Remove multiprocessing in reading data files.
+  Datasets are usually small enough that the performance gain, if any,
+  wouldn't be worth it for the potential issues w.r.t. spawning multiple
+  processes)
 * Phonetics and phonology -- develop capabilities to handle PhonBank data:
   * Recognize and parse `%pho` and `%mod` tiers
-  * Improve `clean_utterance()`
+* Improve `clean_utterance()`
 * Add parameter `encoding` in `read_chat()`
 * Add `get_lemma_from_mor()`
-* Add `date_of_recording()` and `date_of_birth()`; deprecate `date()`
+* Add `date_of_recording()` and `date_of_birth()`; remove `date()`
 * Add `clean_word()`
 * Restrict `get_IPSyn()` to only the first 100 utterances
+* Add tests
 
-Version 0.8 2016-01-30
+## v0.8 - 2016-01-30
 
 * Library now compatible only with Python 3.4 or above
 * For class `Reader`:
@@ -37,13 +44,13 @@ Version 0.8 2016-01-30
   * "Undo" collapses in transcriptions such as `[x 4]`
   * Various bug fixes
 
-Version 0.7 2016-01-06
+## v0.7 - 2016-01-06
 
 * Add `part_of_speech_tags()` in `SingleReader`
 * Add "all X" methods in `Reader`
 * Bug fixes: `clean_utterance()`, `DependencyGraph`
 
-Version 0.6 2015-12-27
+## v0.6 - 2015-12-27
 
 * `cha_lines` optimized
 * Methods added: `tagged_words()`, `words()`, `tagged_sents()`, `sents()`
@@ -55,7 +62,7 @@ Version 0.6 2015-12-27
 * Module `grammar` added, with class `DependencyGraph` being set up
 * Static methods in classes pulled out
 
-Version 0.5 2015-12-16
+## v0.5 - 2015-12-16
 
 * New `utterances()` method for extracting utterances from transcripts
 * `_clean_utterance` method developed
@@ -63,13 +70,13 @@ Version 0.5 2015-12-16
 * Standardizing terminology:
   use "participant(s)" consistently instead of "speaker(s)"
 
-Version 0.4 2015-12-13
+## v0.4 - 2015-12-13
 
 * New `number_of_utterances()` method for both `Reader` and `SingleReader`
 * To avoid confusion, `metadata()` method is removed.
 * Extraction of utterances and tiers with dict `index_to_tiers`
 
-Version 0.3 2015-12-09
+## v0.3 - 2015-12-09
 
 * Class `Reader` can read multiple `.cha` files.
   The methods associated with `Reader` are mostly a dict mapping
@@ -80,12 +87,12 @@ Version 0.3 2015-12-09
   (though a "new" `metadata()` method is defined and points to
   `headers()` for convenience).
 
-Version 0.2 2015-12-05
+## v0.2 - 2015-12-05
 
 * new methods for class `Reader`:
   `languages()`, `date()`, `participants()`, `participant_codes()`
 
-Version 0.1 2015-12-04
+## v0.1 - 2015-12-04
 
 * first commit; set up the `chat` submodule
 * class `Reader` defined for reading CHAT files,

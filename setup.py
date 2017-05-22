@@ -12,9 +12,6 @@ with open(path.join(THIS_DIR, 'pylangacq', 'VERSION')) as f:
 with open(path.join(THIS_DIR, 'README.rst')) as f:
     long_description = f.read()
 
-with open(path.join(THIS_DIR, 'requirements.txt')) as f:
-    requirements = [x.strip() for x in f.readlines()]
-
 
 def main():
     setup(
@@ -33,8 +30,6 @@ def main():
                   'acquisition', 'development', 'learning'],
 
         package_data={'pylangacq': ['VERSION']},
-
-        install_requires=requirements,
 
         zip_safe=False,
 

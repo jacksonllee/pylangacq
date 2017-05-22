@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Classes for interfacing with CHAT data files."""
+"""Interfacing with CHAT data files."""
 
 import sys
 import os
@@ -13,44 +13,95 @@ from itertools import chain
 import six
 
 from pylangacq.measures import get_MLUm, get_MLUw, get_TTR, get_IPSyn
-from pylangacq.util import (ENCODING, ALL_PARTICIPANTS, CLITIC,
+from pylangacq.util import (ENCODING, CLITIC,
                             get_participant_code, convert_date_to_tuple,
                             clean_utterance, clean_word, get_lemma_from_mor)
 
 
-class Reader:
+if six.PY2:
+    from io import open
+
+
+def read_chat(*filenames, encoding=ENCODING):
     """
-    A class for reading multiple CHAT files.
+    Create a ``Reader`` object based on *filenames*.
+
+    :param filenames: one or multiple filenames (absolute-path or relative to
+        the current directory; with or without glob matching patterns)
+
+    :param encoding: file encoding; defaults to 'utf8'. (New in version 0.9)
+    """
+    return Reader(*filenames, encoding=encoding)
+
+
+def params_in_docstring(*params):
+
+    docstring = ''
+    if 'participant' in params:
+        docstring += """participant : str or iterable, optional
+    The participant(s) of interest; if unspecified, all participants
+    are included. For one participant only, use ``'CHI'`` for the
+    target child only, for example. For multiple participants, use a
+    a sequence such as ``{'CHI', 'MOT'}``.
+"""
+    if 'exclude' in params:
+        docstring += """exclude : bool, optional
+    If ``True``, exclude all participants specified by ``participant``
+    instead. The participants of interest are the remaining ones.
+"""
+    if 'by_files' in params:
+        docstring += """by_files : bool, optional
+    If ``True``, return dict(absolute-path
+    filename: X for that file) instead of X for all files altogether.
+"""
+    if 'keep_case' in params:
+        docstring += """keep_case : bool, optional
+    If *keep_case* is True (the default), case distinctions are kept
+    and word tokens like "the" and "The" are treated as distinct types.
+    If *keep_case* is False, all case distinctions are collapsed, with
+    all word tokens forced to be in lowercase.
+"""
+
+    def real_decorator(func):
+        def wrapper(*args, **kwargs):
+            param_header = 'Parameters\n----------\n'
+
+            func.__doc__ = func.__doc__.replace(param_header,
+                                                param_header + docstring)
+            func(*args, **kwargs)
+        return wrapper
+    return real_decorator
+
+
+class Reader:
+    """A class for reading multiple CHAT files.
+
+    Parameters
+    ----------
+    *filenames
+        One or more filenames. A filename may match exactly a CHAT file
+        (e.g., ``'eve01.cha'``) or matches multiple files by glob patterns
+        (e.g., ``'eve*.cha'``, for ``'eve01.cha'``, ``'eve02.cha'``, etc.).
+        ``*`` matches any number (including zero) of characters, while
+        ``?`` matches exactly one character.
+        A filename can be either an absolute or relative path.
+        If no *filenames* are provided, an empty Reader instance is created.
+    encoding : str, optional
+        The encoding of the data files.
     """
 
     def __init__(self, *filenames, encoding=ENCODING):
-        """
-        :param filenames: One or more filenames. A filename may match exactly
-            a CHAT file like ``eve01.cha`` or matches multiple files
-            by glob patterns, e.g.,
-            ``eve*.cha`` can match ``eve01.cha``, ``eve02.cha``, etc.
-            Apart from ``*`` for any number (including zero) of characters,
-            ``?`` is another commonly used wildcard and matches one character.
-            A filename can be either an absolute or relative path.
-            if no *filenames* are provided, an empty Reader instance results.
-
-        The ``Reader`` class is set to find *unique* absolute-path filenames.
-        This means that a call such as ``Reader('eve*.cha', '*01.cha')``
-        (for all Eve files and all "01" files together) might seem to have
-        overlapping or duplicate results (like ``eve01.cha`` which satisfies
-        both ``eve*.cha`` and ``*01.cha``), but ``Reader`` filters away the
-        duplicates.
-        """
         self.encoding = encoding
         self._input_filenames = filenames
         self._reset_reader(*self._input_filenames)
 
     @staticmethod
     def _get_abs_filenames(*filenames):
-        """
-        Return a set of absolute-path filenames based on *filenames*.
+        """Return the set of absolute-path filenames based on *filenames*.
 
-        :param filenames: one or more filenames (absolute- or relative-path)
+        Parameters
+        ----------
+        *filenames
         """
         if sys.platform.startswith('win'):
             windows = True
@@ -101,17 +152,21 @@ class Reader:
                                                      encoding=self.encoding)
 
     def __len__(self):
-        """
-        Return the number of files.
-        """
+        """Return the number of files."""
         return len(self._filenames)
 
     def filenames(self, sorted_by_age=False):
-        """
-        Return the set of absolute-path filenames, or a list sorted by the
-        target child's age if *sorted_by_age* is True.
+        """Return the set of absolute-path filenames.
 
-        :rtype: set(str) or list(str)
+        Parameters
+        ----------
+        sorted_by_age : bool, optional
+            Whether to return the filenames as a list sorted by the target
+            child's age.
+
+        Returns
+        -------
+        set of str, or list of str
         """
         if not sorted_by_age:
             return self._filenames
@@ -120,10 +175,12 @@ class Reader:
                                            key=lambda x: x[1])]
 
     def find_filename(self, file_basename):
-        """
-        Return the absolute-path filename of *file_basename*.
+        """Return the absolute-path filename of *file_basename*.
 
-        :param file_basename: CHAT file basename such as ``eve01.cha``
+        Parameters
+        ----------
+        file_basename : str
+            CHAT file basename such as ``eve01.cha``
         """
         if type(file_basename) is not six.text_type:
             raise ValueError('argument must be str')
@@ -147,32 +204,25 @@ class Reader:
             return filename_matches[0]
 
     def number_of_files(self):
-        """
-        Return the number of files.
+        """Return the number of files.
+
+        Returns
+        -------
+        int
         """
         return len(self)
 
-    def number_of_utterances(self, participant=ALL_PARTICIPANTS,
+    @params_in_docstring('participant', 'exclude', 'by_files')
+    def number_of_utterances(self, participant=None, exclude=False,
                              by_files=False):
-        """
-        Return the number of utterances for *participant* in all files.
+        """Return the number of utterances for *participant* in all files.
 
-        :param participant: The participant(s) of interest (default is all
-            participants if unspecified). This parameter is flexible.
-            Set it to be ``'CHI'`` for the target child only, for example.
-            If multiple participants are desired, this parameter can take
-            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
-            question. Underlyingly, this parameter actually performs
-            regular expression matching
-            (so passing ``'CHI'`` to this parameter is an
-            exact match for the participant code ``'CHI'``, for instance).
-            For child-directed speech (i.e., targeting all participant
-            except ``'CHI'``), use ``^(?!.*CHI).*$``.
+        Parameters
+        ----------
 
-        :param by_files: If True (default: False), return dict(absolute-path
-            filename: X for that file) instead of X for all files altogether.
-
-        :rtype: int, or dict(str: int)
+        Returns
+        -------
+        int or dict(str: int)
         """
         if by_files:
             return {fn: self._fname_to_reader[fn].number_of_utterances(
@@ -182,44 +232,45 @@ class Reader:
                 participant=participant) for fn in self._filenames)
 
     def headers(self):
-        """
-        Return a dict mapping an absolute-path filename to the headers of
-        that file.
+        """Return a dict mapping a file path to the headers of that file.
 
-        :rtype: dict(str: dict)
+        Returns
+        -------
+        dict(str: dict
         """
         return {fn: self._fname_to_reader[fn].headers()
                 for fn in self._filenames}
 
     def index_to_tiers(self):
-        """
-        Return a dict mapping an absolute-path filename to the file's
-        index_to_tiers dict.
+        """Return a dict mapping a file path to the file's index_to_tiers dict.
 
-        :rtype: dict(str: dict)
+        Returns
+        -------
+        dict(str: dict
         """
         return {fn: self._fname_to_reader[fn].index_to_tiers()
                 for fn in self._filenames}
 
     def participants(self):
-        """
-        Return a dict mapping an absolute-path filename to the file's
-        participant info dict.
+        """Return a dict mapping a file path to the file's participant info.
 
-        :rtype: dict(str: dict)
+        Returns
+        -------
+        dict(str: dict
         """
         return {fn: self._fname_to_reader[fn].participants()
                 for fn in self._filenames}
 
+    @params_in_docstring('by_files')
     def participant_codes(self, by_files=False):
-        """
-        Return the participant codes (e.g., ``{'CHI', 'MOT'}``)
-        from all files.
+        """Return the participant codes (e.g., ``{'CHI', 'MOT'}``).
 
-        :param by_files: If True (default: False), return dict(absolute-path
-            filename: X for that file) instead of X for all files altogether.
+        Parameters
+        ----------
 
-        :rtype: set(str), or dict(str: set(str))
+        Returns
+        -------
+        set(str) or dict(str: set(str))
         """
         if by_files:
             return {fn: self._fname_to_reader[fn].participant_codes()
@@ -232,74 +283,69 @@ class Reader:
             return output_set
 
     def languages(self):
-        """
-        Return a dict mapping an absolute-path filename to the list of
-        languages used.
+        """Return a map from a file path to the languages used.
 
-        :rtype: dict(str: list(str))
+        Returns
+        -------
+        dict(str: list(str))
         """
         return {fn: self._fname_to_reader[fn].languages()
                 for fn in self._filenames}
 
     def date_of_recording(self):
-        """
-        Return a dict mapping an absolute-path filename to the date of recording
-        in the form of (year, month, day).
+        """Return a map from a file path to the date of recording.
 
-        :rtype: dict(str: tuple(int, int, int))
+        The date of recording is in the form of (year, month, day).
+
+        Returns
+        -------
+        dict(str: tuple(int, int, int))
         """
         return {fn: self._fname_to_reader[fn].date_of_recording()
                 for fn in self._filenames}
 
     def date_of_birth(self):
-        """
-        Return a dict mapping an absolute-path filename to the date-of-birth
-        dict for that file.
+        """Return a map from a file path to the date of birth.
 
-        :rtype: dict(str: dict(str: tuple(int, int, int)))
+        Returns
+        -------
+        dict(str: dict(str: tuple(int, int, int)))
         """
         return {fn: self._fname_to_reader[fn].date_of_birth()
                 for fn in self._filenames}
 
     def age(self, participant='CHI', month=False):
-        """
-        Return a dict mapping an absolute-path filename to the *participant*'s
-        age in the form of (years, months, days).
+        """Return a map from a file path to the *participant*'s age.
 
-        :param participant: The specified participant; defaults to ``'CHI'``
+        The age is in the form of (years, months, days).
 
-        :param month: If True (default: False), return a float as age in months.
+        Parameters
+        ----------
+        participant : str, optional
+            The specified participant
+        month : bool, optional
+            If ``True``, age is in months.
 
-        :rtype: dict(str: tuple(int, int, int)) or dict(str: float)
+        Returns
+        -------
+        dict(str: tuple(int, int, int)) or dict(str: float)
         """
         return {fn: self._fname_to_reader[fn].age(
-            participant=participant, month=month)
-                for fn in self._filenames}
+            participant=participant, month=month) for fn in self._filenames}
 
-    def utterances(self, participant=ALL_PARTICIPANTS, clean=True,
+    @params_in_docstring('participant', 'by_files')
+    def utterances(self, participant=None, exclude=False, clean=True,
                    by_files=False):
-        """
-        Return a list of (*participant*, utterance) pairs from all files.
+        """Return a list of (*participant*, utterance) pairs from all files.
 
-        :param participant: The participant(s) of interest (default is all
-            participants if unspecified). This parameter is flexible.
-            Set it to be ``'CHI'`` for the target child only, for example.
-            If multiple participants are desired, this parameter can take
-            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
-            question. Underlyingly, this parameter actually performs
-            regular expression matching
-            (so passing ``'CHI'`` to this parameter is an
-            exact match for the participant code ``'CHI'``, for instance).
-            For child-directed speech (i.e., targeting all participant
-            except ``'CHI'``), use ``^(?!.*CHI).*$``.
+        Parameters
+        ----------
+        clean : bool, optional
+            Whether to filter away the CHAT annotations in the utterance.
 
-        :param clean: Whether to filter away the CHAT annotations in the
-            utterance; defaults to ``True``.
-
-        :param by_files: If True (default: False), return dict(absolute-path
-            filename: X for that file) instead of X for all files altogether.
-
-        :rtype: list(str), or dict(str: list(str))
+        Returns
+        -------
+        list(str) or dict(str: list(str))
         """
         if by_files:
             return {fn: self._fname_to_reader[fn].utterances(
@@ -313,33 +359,17 @@ class Reader:
                     for fn in sorted(self._filenames))
             )
 
-    def word_frequency(self, participant=ALL_PARTICIPANTS, keep_case=True,
+    @params_in_docstring('participant', 'keep_case', 'by_files')
+    def word_frequency(self, participant=None, exclude=False, keep_case=True,
                        by_files=False):
-        """
-        Return a Counter of word frequency dict for *participant* in all files.
+        """Return a word frequency counter for *participant* in all files.
 
-        :param participant: The participant(s) of interest (default is all
-            participants if unspecified). This parameter is flexible.
-            Set it to be ``'CHI'`` for the target child only, for example.
-            If multiple participants are desired, this parameter can take
-            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
-            question. Underlyingly, this parameter actually performs
-            regular expression matching
-            (so passing ``'CHI'`` to this parameter is an
-            exact match for the participant code ``'CHI'``, for instance).
-            For child-directed speech (i.e., targeting all participant
-            except ``'CHI'``), use ``^(?!.*CHI).*$``.
+        Parameters
+        ----------
 
-        :param keep_case: If *keep_case* is True (the default), case
-            distinctions are kept and word tokens like "the" and "The" are
-            treated as distinct types. If *keep_case* is False, all case
-            distinctions are collapsed, with all word tokens forced to be in
-            lowercase.
-
-        :param by_files: If True (default: False), return dict(absolute-path
-            filename: X for that file) instead of X for all files altogether.
-
-        :rtype: Counter, or dict(str: Counter)
+        Returns
+        -------
+        Counter, or dict(str: Counter)
         """
         if by_files:
             return {fn: self._fname_to_reader[fn].word_frequency(
@@ -353,26 +383,16 @@ class Reader:
                         participant=participant, keep_case=keep_case))
             return output_counter
 
-    def words(self, participant=ALL_PARTICIPANTS, by_files=False):
-        """
-        Return a list of words by *participant* in all files.
+    @params_in_docstring('participant', 'by_files')
+    def words(self, participant=None, exclude=False, by_files=False):
+        """Return a list of words by *participant* in all files.
 
-        :param participant: The participant(s) of interest (default is all
-            participants if unspecified). This parameter is flexible.
-            Set it to be ``'CHI'`` for the target child only, for example.
-            If multiple participants are desired, this parameter can take
-            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
-            question. Underlyingly, this parameter actually performs
-            regular expression matching
-            (so passing ``'CHI'`` to this parameter is an
-            exact match for the participant code ``'CHI'``, for instance).
-            For child-directed speech (i.e., targeting all participant
-            except ``'CHI'``), use ``^(?!.*CHI).*$``.
+        Parameters
+        ----------
 
-        :param by_files: If True (default: False), return dict(absolute-path
-            filename: X for that file) instead of X for all files altogether.
-
-        :rtype: list(str), or dict(str: list(str))
+        Returns
+        -------
+        list(str) or dict(str: list(str))
         """
         if by_files:
             return {fn: self._fname_to_reader[fn].words(
@@ -385,26 +405,16 @@ class Reader:
                     for fn in sorted(self._filenames))
             )
 
-    def tagged_words(self, participant=ALL_PARTICIPANTS, by_files=False):
-        """
-        Return a list of tagged words by *participant* in all files.
+    @params_in_docstring('participant', 'by_files')
+    def tagged_words(self, participant=None, exclude=False, by_files=False):
+        """Return a list of tagged words by *participant* in all files.
 
-        :param participant: The participant(s) of interest (default is all
-            participants if unspecified). This parameter is flexible.
-            Set it to be ``'CHI'`` for the target child only, for example.
-            If multiple participants are desired, this parameter can take
-            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
-            question. Underlyingly, this parameter actually performs
-            regular expression matching
-            (so passing ``'CHI'`` to this parameter is an
-            exact match for the participant code ``'CHI'``, for instance).
-            For child-directed speech (i.e., targeting all participant
-            except ``'CHI'``), use ``^(?!.*CHI).*$``.
+        Parameters
+        ----------
 
-        :param by_files: If True (default: False), return dict(absolute-path
-            filename: X for that file) instead of X for all files altogether.
-
-        :rtype: list(tuple), or dict(str: list(tuple))
+        Returns
+        -------
+        list(tuple) or dict(str: list(tuple))
         """
         if by_files:
             return {fn: self._fname_to_reader[fn].tagged_words(
@@ -417,26 +427,16 @@ class Reader:
                     for fn in sorted(self._filenames))
             )
 
-    def sents(self, participant=ALL_PARTICIPANTS, by_files=False):
-        """
-        Return a list of sents by *participant* in all files.
+    @params_in_docstring('participant', 'by_files')
+    def sents(self, participant=None, exclude=False, by_files=False):
+        """Return a list of sents by *participant* in all files.
 
-        :param participant: The participant(s) of interest (default is all
-            participants if unspecified). This parameter is flexible.
-            Set it to be ``'CHI'`` for the target child only, for example.
-            If multiple participants are desired, this parameter can take
-            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
-            question. Underlyingly, this parameter actually performs
-            regular expression matching
-            (so passing ``'CHI'`` to this parameter is an
-            exact match for the participant code ``'CHI'``, for instance).
-            For child-directed speech (i.e., targeting all participant
-            except ``'CHI'``), use ``^(?!.*CHI).*$``.
+        Parameters
+        ----------
 
-        :param by_files: If True (default: False), return dict(absolute-path
-            filename: X for that file) instead of X for all files altogether.
-
-        :rtype: list(list(str)), or dict(str: list(list(str)))
+        Returns
+        -------
+        list(list(str)) or dict(str: list(list(str)))
         """
         if by_files:
             return {fn: self._fname_to_reader[fn].sents(
@@ -449,26 +449,16 @@ class Reader:
                     for fn in sorted(self._filenames))
             )
 
-    def tagged_sents(self, participant=ALL_PARTICIPANTS, by_files=False):
-        """
-        Return a list of tagged sents by *participant* in all files.
+    @params_in_docstring('participant', 'by_files')
+    def tagged_sents(self, participant=None, exclude=False, by_files=False):
+        """Return a list of tagged sents by *participant* in all files.
 
-        :param participant: The participant(s) of interest (default is all
-            participants if unspecified). This parameter is flexible.
-            Set it to be ``'CHI'`` for the target child only, for example.
-            If multiple participants are desired, this parameter can take
-            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
-            question. Underlyingly, this parameter actually performs
-            regular expression matching
-            (so passing ``'CHI'`` to this parameter is an
-            exact match for the participant code ``'CHI'``, for instance).
-            For child-directed speech (i.e., targeting all participant
-            except ``'CHI'``), use ``^(?!.*CHI).*$``.
+        Parameters
+        ----------
 
-        :param by_files: If True (default: False), return dict(absolute-path
-            filename: X for that file) instead of X for all files altogether.
-
-        :rtype: list(list(tuple)), or dict(str: list(list(tuple)))
+        Returns
+        -------
+        list(list(tuple)) or dict(str: list(list(tuple)))
         """
         if by_files:
             return {fn: self._fname_to_reader[fn].tagged_sents(
@@ -481,26 +471,17 @@ class Reader:
                     for fn in sorted(self._filenames))
             )
 
-    def part_of_speech_tags(self, participant=ALL_PARTICIPANTS, by_files=False):
-        """
-        Return the part-of-speech tags in the data for *participant*.
+    @params_in_docstring('participant', 'by_files')
+    def part_of_speech_tags(self, participant=None, exclude=False,
+                            by_files=False):
+        """Return the part-of-speech tags in the data for *participant*.
 
-        :param participant: The participant(s) of interest (default is all
-            participants if unspecified). This parameter is flexible.
-            Set it to be ``'CHI'`` for the target child only, for example.
-            If multiple participants are desired, this parameter can take
-            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
-            question. Underlyingly, this parameter actually performs
-            regular expression matching
-            (so passing ``'CHI'`` to this parameter is an
-            exact match for the participant code ``'CHI'``, for instance).
-            For child-directed speech (i.e., targeting all participant
-            except ``'CHI'``), use ``^(?!.*CHI).*$``.
+        Parameters
+        ----------
 
-        :param by_files: If True (default: False), return dict(absolute-path
-            filename: X for that file) instead of X for all files altogether.
-
-        :rtype: set or dict(str: set)
+        Returns
+        -------
+        set or dict(str: set)
         """
         if by_files:
             return {fn: self._fname_to_reader[fn].part_of_speech_tags(
@@ -511,16 +492,14 @@ class Reader:
                     participant=participant) for fn in self._filenames))
 
     def update(self, reader):
-        """
-        Combine the current CHAT Reader instance with *reader*.
+        """Combine the current CHAT Reader instance with ``reader``.
 
-        :param reader: a ``Reader`` instance
+        Parameters
+        ----------
+        reader : Reader
         """
         if type(reader) is Reader:
             add_filenames = reader.filenames()
-        elif type(reader) is SingleReader:
-            add_filenames = set()
-            add_filenames.add(reader.filename())
         else:
             raise ValueError('invalid reader')
 
@@ -528,19 +507,24 @@ class Reader:
         self._reset_reader(*tuple(new_filenames), check=False)
 
     def add(self, *filenames):
-        """
-        Add one or multiple CHAT files to the current reader by *filenames*.
-            *filenames* may take glob patterns with wildcards ``*`` and ``?``.
+        """Add one or more CHAT ``filenames`` to the current reader.
+
+        Parameters
+        ----------
+        *filenames
+            Filenames may take glob patterns with wildcards ``*`` and ``?``.
         """
         add_filenames = self._get_abs_filenames(*filenames)
         new_filenames = self.filenames() | add_filenames
         self._reset_reader(*tuple(new_filenames), check=False)
 
     def remove(self, *filenames):
-        """
-        Remove one or multiple CHAT files from the current reader by
-        *filenames*.
-        *filenames* may take glob patterns with wildcards ``*`` and ``?``.
+        """Remove one or more CHAT ``filenames`` from the current reader.
+
+        Parameters
+        ----------
+        *filenames
+            Filenames may take glob patterns with wildcards ``*`` and ``?``.
         """
         remove_filenames = self._get_abs_filenames(*filenames)
         new_filenames = set(self.filenames())
@@ -554,38 +538,17 @@ class Reader:
         self._reset_reader(*tuple(new_filenames), check=False)
 
     def clear(self):
-        """
-        Clear everything and reset as an empty Reader instance.
-        """
+        """Clear everything and reset as an empty Reader instance."""
         self._reset_reader()
 
-    def word_ngrams(self, n, participant=ALL_PARTICIPANTS, keep_case=True,
+    @params_in_docstring('participant', 'keep_case', 'by_files')
+    def word_ngrams(self, n, participant=None, exclude=False, keep_case=True,
                     by_files=False):
-        """
-        Return a Counter of word *n*-grams by *participant* in all files.
+        """Return a word ``n``-gram counter by ``participant`` in all files.
 
-        :param participant: The participant(s) of interest (default is all
-            participants if unspecified). This parameter is flexible.
-            Set it to be ``'CHI'`` for the target child only, for example.
-            If multiple participants are desired, this parameter can take
-            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
-            question. Underlyingly, this parameter actually performs
-            regular expression matching
-            (so passing ``'CHI'`` to this parameter is an
-            exact match for the participant code ``'CHI'``, for instance).
-            For child-directed speech (i.e., targeting all participant
-            except ``'CHI'``), use ``^(?!.*CHI).*$``.
-
-        :param keep_case: If *keep_case* is True (the default), case
-            distinctions are kept and word tokens like "the" and "The" are
-            treated as distinct types. If *keep_case* is False, all case
-            distinctions are collapsed, with all word tokens forced to be in
-            lowercase.
-
-        :param by_files: If True (default: False), return dict(absolute-path
-            filename: X for that file) instead of X for all files altogether.
-
-        :rtype: Counter, or dict(str: Counter)
+        Returns
+        -------
+        Counter, or dict(str: Counter)
         """
         if by_files:
             return {fn: self._fname_to_reader[fn].word_ngrams(
@@ -600,110 +563,117 @@ class Reader:
             return output_counter
 
     def MLU(self, participant='CHI'):
-        """
-        Return a dict mapping a filename to the file's mean length of utterance
-        (MLU) in morphemes for *participant*
-        (default to ``'CHI'``); same as ``MLUm()``.
+        """Return a map from a file path to the file's MLU by morphemes.
 
-        :param participant: the participant specified, default to ``'CHI'``
+        MLU = mean length of utterance. This method is identical to ``MLUm``.
 
-        :rtype: dict(str: float)
+        Parameters
+        ----------
+        participant : str, optional
+            The specified participant (default to ``'CHI'``).
+
+        Returns
+        -------
+        dict(str: float)
         """
         return {fn: self._fname_to_reader[fn].MLU(
             participant=participant) for fn in self._filenames}
 
     def MLUm(self, participant='CHI'):
-        """
-        Return a dict mapping a filename to the file's mean length of utterance
-        (MLU) in morphemes for *participant*
-        (default to ``'CHI'``); same as ``MLU()``.
+        """Return a map from a file path to the file's MLU by morphemes.
 
-        :param participant: the participant specified, default to ``'CHI'``
+        MLU = mean length of utterance. This method is identical to ``MLUm``.
 
-        :rtype: dict(str: float)
+        Parameters
+        ----------
+        participant : str, optional
+            The specified participant (default to ``'CHI'``).
+
+        Returns
+        -------
+        dict(str: float)
         """
         return {fn: self._fname_to_reader[fn].MLUm(
             participant=participant) for fn in self._filenames}
 
     def MLUw(self, participant='CHI'):
-        """
-        Return a dict mapping a filename to the file's mean length of utterance
-        (MLU) in words for *participant*
-        (default to ``'CHI'``).
+        """Return a map from a file path to the file's MLU by words.
 
-        :param participant: the participant specified, default to ``'CHI'``
+        MLU = mean length of utterance.
 
-        :rtype: dict(str: float)
+        Parameters
+        ----------
+        participant : str, optional
+            The specified participant (default to ``'CHI'``).
+
+        Returns
+        -------
+        dict(str: float)
         """
         return {fn: self._fname_to_reader[fn].MLUw(
             participant=participant) for fn in self._filenames}
 
     def TTR(self, participant='CHI'):
-        """
-        Return a dict mapping a filename to the file's type-token ratio (TTR)
-        for *participant* (default to ``'CHI'``).
+        """Return a map from a file path to the file's TTR.
 
-        :param participant: the participant specified, default to ``'CHI'``
+        TTR = type-token ratio
 
-        :rtype: dict(str: float)
+        Parameters
+        ----------
+        participant : str, optional
+            The specified participant (default to ``'CHI'``).
+
+        Returns
+        -------
+        dict(str: float)
         """
         return {fn: self._fname_to_reader[fn].TTR(
             participant=participant) for fn in self._filenames}
 
     def IPSyn(self, participant='CHI'):
-        """
-        Return a dict mapping a filename to the file's index of productive
-        syntax (IPSyn) for *participant* (default to ``'CHI'``).
+        """Return a map from a file path to the file's IPSyn.
 
-        :param participant: the participant specified, default to ``'CHI'``
+        IPSyn = index of productive syntax
 
-        :rtype: dict(str: int)
+        Parameters
+        ----------
+        participant : str, optional
+            The specified participant (default to ``'CHI'``).
+
+        Returns
+        -------
+        dict(str: int)
         """
         return {fn: self._fname_to_reader[fn].IPSyn(
             participant=participant) for fn in self._filenames}
 
-    def search(self, search_item, participant=ALL_PARTICIPANTS,
+    @params_in_docstring('participant', 'by_files')
+    def search(self, search_item, participant=None, exclude=False,
                match_entire_word=True, lemma=False,
                output_tagged=True, output_sents=True,
                by_files=False):
-        """
-        Return a list of elements containing *search_item* by *participant*
-        in all files. Depending on *output_tagged* and *output_sents*,
-        each element can be either a list of tagged or untagged words, or simply
-        a word string.
+        """Return a list of elements containing *search_item* by *participant*.
 
-        :param search_item: word or lemma to search for.
+        Parameters
+        ----------
+        search_item : str
+            Word or lemma to search for.
+        match_entire_word : bool, optional
+            Whether to match for the entire word.
+        lemma : bool, optional
+            Whether the ``search_item`` refers to the lemma (from "mor" in the
+            tagged word) instead.
+        output_tagged : bool, optional
+            Whether a word in the return object is a tagged word of the
+            (word, pos, mor, rel) tuple; otherwise just a word string.
+        output_sents : bool, optional
+            Whether each element in the return object is a list for each
+            utterance; otherwise each element is a word (tagged or untagged)
+            without the utterance structure.
 
-        :param participant: The participant(s) of interest (default is all
-            participants if unspecified). This parameter is flexible.
-            Set it to be ``'CHI'`` for the target child only, for example.
-            If multiple participants are desired, this parameter can take
-            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
-            question. Underlyingly, this parameter actually performs
-            regular expression matching
-            (so passing ``'CHI'`` to this parameter is an
-            exact match for the participant code ``'CHI'``, for instance).
-            For child-directed speech (i.e., targeting all participant
-            except ``'CHI'``), use ``^(?!.*CHI).*$``.
-
-        :param match_entire_word: If False (default: True), substring
-            matching is performed.
-
-        :param lemma: If True (default: False), *search_item* refers to the
-            lemma (from "mor" in the tagged word) instead.
-
-        :param output_tagged: If True (default), a word in the return object is
-            a tagged word of the (word, pos, mor, rel) tuple; otherwise just
-            a word string.
-
-        :param output_sents: If True (default), each element in the return
-            object is a list for each utterance; otherwise each element is
-            a word (tagged or untagged) without the utterance structure.
-
-        :param by_files: If True (default: False), return dict(absolute-path
-            filename: X for that file) instead of X for all files altogether.
-
-        :rtype: list, or dict(str: list)
+        Returns
+        -------
+        list or dict(str: list)
         """
         if by_files:
             return {fn: self._fname_to_reader[fn].search(
@@ -720,7 +690,7 @@ class Reader:
                     output_tagged=output_tagged, output_sents=output_sents))
             return output_list
 
-    def concordance(self, search_item, participant=ALL_PARTICIPANTS,
+    def concordance(self, search_item, participant=None, exclude=False,
                     match_entire_word=True, lemma=False, by_files=False):
         """
         Return a list of utterances (as strings) each containing *search_item*
@@ -767,14 +737,10 @@ class Reader:
 
 
 class SingleReader:
-    """
-    A class for reading a single CHAT file.
-    """
+    """A class for reading a single CHAT file."""
 
     def __init__(self, filename, encoding=ENCODING):
-        """
-        :param filename: The absolute path of the CHAT file
-        """
+
         self.encoding = encoding
 
         if type(filename) is not six.text_type:
@@ -802,43 +768,17 @@ class SingleReader:
         self.pos_to_ignore = {'', '!', '+...', '0', '?', 'BEG'}
 
     def __len__(self):
-        """
-        Return the number of utterances.
-        """
         return len(self._index_to_tiers)
 
-    def number_of_utterances(self, participant=ALL_PARTICIPANTS):
-        """
-        Return the number of utterances by *participant*.
-
-        :param participant: The participant(s) of interest (default is all
-            participants if unspecified). This parameter is flexible.
-            Set it to be ``'CHI'`` for the target child only, for example.
-            If multiple participants are desired, this parameter can take
-            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
-            question. Underlyingly, this parameter actually performs
-            regular expression matching
-            (so passing ``'CHI'`` to this parameter is an
-            exact match for the participant code ``'CHI'``, for instance).
-            For child-directed speech (i.e., targeting all participant
-            except ``'CHI'``), use ``^(?!.*CHI).*$``.
-        """
+    def number_of_utterances(self, participant=None, exclude=False):
         return len(self.utterances(participant=participant))
 
     def filename(self):
-        """
-        Return the absolute-path filename.
-        """
         return self._filename
 
     def cha_lines(self):
-        """
-        A generator of lines in the CHAT file,
+        """A generator of lines in the CHAT file,
         with the tab-character line continuations undone.
-
-        :return: A generator of all cleaned-up lines in the CHAT file
-
-        :rtype: generator
         """
         previous_line = ''
 
@@ -854,8 +794,8 @@ class SingleReader:
                 current_line = current_line.replace('%x', '%', 1)
 
             if previous_line and current_line.startswith('\t'):
-                previous_line = '{} {}'.format(previous_line,
-                                               current_line.strip())  # strip \t
+                previous_line = '{} {}'.format(
+                    previous_line, current_line.strip())  # strip \t
             elif previous_line:
                 yield previous_line
                 previous_line = current_line
@@ -864,11 +804,7 @@ class SingleReader:
         yield previous_line  # don't forget the very last line!
 
     def _tier_markers(self):
-        """
-        Determine what the %-tiers are.
-
-        :return: The set of %-beginning tier markers used in the CHAT file
-        """
+        """Determine what the %-tiers are."""
         result = set()
         for tiermarkers_to_tiers in self._index_to_tiers.values():
             for tier_marker in tiermarkers_to_tiers.keys():
@@ -1156,7 +1092,7 @@ class SingleReader:
 
         :param participant: The participant specified, default to ``'CHI'``
 
-        :param month: If True (default: False), return a float as age in months.
+        :param month: If True (default: False), return age in months.
 
         :return: The age as a 3-tuple of (years, months, days).
             If any errors arise (e.g., there's no age), ``None`` is returned.
@@ -1182,7 +1118,7 @@ class SingleReader:
         except (KeyError, IndexError, ValueError):
             return None
 
-    def utterances(self, participant=ALL_PARTICIPANTS, clean=True):
+    def utterances(self, participant=None, exclude=False, clean=True):
         """
         Return a list of the utterances by *participant*
         as (*participant*, *utterance*) pairs.
@@ -1203,7 +1139,7 @@ class SingleReader:
             utterance; default to ``True``.
         """
         output = list()
-        participants = self._determine_participants(participant)
+        participants = self._determine_participants(participant, exclude)
 
         for i in range(len(self)):
             tiermarker_to_line = self._index_to_tiers[i]
@@ -1218,7 +1154,7 @@ class SingleReader:
                     break
         return output
 
-    def _determine_participants(self, participant):
+    def _determine_participants(self, participant, exclude):
         """
         Determine the target participants.
 
@@ -1231,7 +1167,7 @@ class SingleReader:
         """
         all_participant_codes = self.participant_codes()
 
-        if participant == ALL_PARTICIPANTS:
+        if participant is None:
             return all_participant_codes
 
         if type(participant) is six.text_type:
@@ -1251,7 +1187,7 @@ class SingleReader:
 
         return output_participant_set
 
-    def words(self, participant=ALL_PARTICIPANTS):
+    def words(self, participant=None):
         """
         Return a list of words by *participant*.
 
@@ -1270,7 +1206,7 @@ class SingleReader:
         return self._get_words(participant=participant,
                                tagged=False, sents=False)
 
-    def tagged_words(self, participant=ALL_PARTICIPANTS):
+    def tagged_words(self, participant=None, exclude=False):
         """
         Return a list of tagged words by *participant*.
 
@@ -1289,7 +1225,7 @@ class SingleReader:
         return self._get_words(participant=participant,
                                tagged=True, sents=False)
 
-    def sents(self, participant=ALL_PARTICIPANTS):
+    def sents(self, participant=None, exclude=False):
         """
         Return a list of sents by *participant*.
 
@@ -1310,7 +1246,7 @@ class SingleReader:
         return self._get_words(participant=participant,
                                tagged=False, sents=True)
 
-    def tagged_sents(self, participant=ALL_PARTICIPANTS):
+    def tagged_sents(self, participant=None, exclude=False):
         """
         Return a list of tagged sents by *participant*.
 
@@ -1331,7 +1267,8 @@ class SingleReader:
         return self._get_words(participant=participant,
                                tagged=True, sents=True)
 
-    def _get_words(self, participant=ALL_PARTICIPANTS, tagged=True, sents=True):
+    def _get_words(self, participant=None, exclude=False, tagged=True,
+                   sents=True):
         """
         Extract words for the specified participant(s).
 
@@ -1370,8 +1307,8 @@ class SingleReader:
             where in the original data, "thought" is the transcription,
             %mor has "v|think&PAST", and %gra is "3|0|ROOT"
 
-        This word representation is an extension of NLTK, where a tagged word is
-            typically a 2-tuple of (word, PoS).
+        This word representation is an extension of NLTK, where a tagged word
+            is typically a 2-tuple of (word, PoS).
 
         If PoS, mor, gra correspond to a "word" that is a clitic (due to the
             tilde in the original CHAT data), then word is 'CLITIC'.
@@ -1382,11 +1319,11 @@ class SingleReader:
 
         :param sents: If ``sents`` (using NLTK terminology) is True,
             words from the same utterance (= "sentence") are grouped
-            together into a list which is in turn yielded. Otherwise, individual
-            words are directly yielded without utterance structure.
+            together into a list which is in turn yielded. Otherwise,
+            individual words are directly yielded without utterance structure.
         """
         result_list = list()
-        participants = self._determine_participants(participant)
+        participants = self._determine_participants(participant, exclude)
 
         if sents:
             add_function = lambda result_, sent_: result_.append(sent_)
@@ -1398,7 +1335,6 @@ class SingleReader:
         else:
             sent_to_add = lambda sent_: [x[0] for x in sent_ if x[0] != CLITIC]
 
-        # noinspection PyTypeChecker
         for participant_code, tagged_sent in self._all_tagged_sents:
             if participant_code not in participants:
                 continue
@@ -1504,7 +1440,7 @@ class SingleReader:
 
         return result_list
 
-    def word_frequency(self, participant=ALL_PARTICIPANTS, keep_case=True):
+    def word_frequency(self, participant=None, exclude=False, keep_case=True):
         """
         Return the word frequency Counter dict for *participant*.
 
@@ -1537,7 +1473,7 @@ class SingleReader:
 
         return output
 
-    def part_of_speech_tags(self, participant=ALL_PARTICIPANTS):
+    def part_of_speech_tags(self, participant=None, exclude=False):
         """
         Return the set of part-of-speech tags in the data for *participant*.
 
@@ -1562,7 +1498,7 @@ class SingleReader:
 
         return output_set
 
-    def word_ngrams(self, n, participant=ALL_PARTICIPANTS, keep_case=True):
+    def word_ngrams(self, n, participant=None, exclude=False, keep_case=True):
         """
         Return a Counter dict of *n*-grams (as an *n*-tuple of words)
         for *participant*.
@@ -1607,7 +1543,7 @@ class SingleReader:
 
     def MLU(self, participant='CHI'):
         """
-        Return the mean length of utterance (MLU) in morphemes for *participant*
+        Return the MLU in morphemes for *participant*
         (default to ``'CHI'``); same as ``MLUm()``.
 
         :param participant: The participant specified, default to ``'CHI'``
@@ -1617,7 +1553,7 @@ class SingleReader:
 
     def MLUm(self, participant='CHI'):
         """
-        Return the mean length of utterance (MLU) in morphemes for *participant*
+        Return the MLU in morphemes for *participant*
         (default to ``'CHI'``); same as ``MLU()``.
 
         :param participant: The participant specified, default to ``'CHI'``
@@ -1654,21 +1590,22 @@ class SingleReader:
         """
         return get_IPSyn(self.tagged_sents(participant=participant))
 
-    def search(self, search_item, participant=ALL_PARTICIPANTS,
+    def search(self, search_item, participant=None, exclude=False,
                match_entire_word=True, lemma=False,
                output_tagged=True, output_sents=True):
         return self._search(search_item, participant=participant,
+                            exclude=exclude,
                             match_entire_word=match_entire_word, lemma=lemma,
                             concordance=False, output_tagged=output_tagged,
                             output_sents=output_sents)
 
-    def concordance(self, search_item, participant=ALL_PARTICIPANTS,
+    def concordance(self, search_item, participant=None, exclude=False,
                     match_entire_word=True, lemma=False):
         return self._search(search_item, participant=participant,
                             match_entire_word=match_entire_word, lemma=lemma,
                             concordance=True)
 
-    def _search(self, search_item, participant=ALL_PARTICIPANTS,
+    def _search(self, search_item, participant=None, exclude=False,
                 match_entire_word=True, lemma=False, concordance=False,
                 output_tagged=True, output_sents=True):
         taggedsent_charnumber_list = list()

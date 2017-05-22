@@ -1,0 +1,6 @@
+[flake8]
+
+# allow lambda expressions
+ignore = E731
+
+exclude = pylangacq/__init__.py

@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 
-import networkx as nx
 
-
-class DependencyGraph(nx.DiGraph):
+class DependencyGraph(object):
     """
-    DependencyGraph is a class based on the networkx directed graph for
-        modeling dependency graphs in dependency grammar.
+    DependencyGraph is a class representing dependency graphs in dependency
+        grammar.
     """
-    def __init__(self, data, form='CHAT'):
+    def __init__(self, data):
         """
         Initialize dependency graph.
 
@@ -16,14 +14,33 @@ class DependencyGraph(nx.DiGraph):
 
         :param form: format of the input data
         """
-        super(DependencyGraph, self).__init__()
+        self.node = {}  # from node to dict (node's properties)
+        self.edge = {}  # from node to node to dict (edge's properties)
+
         self.data = data
         self._faulty = False
 
-        if form == 'CHAT':
-            self._create_graph_from_chat()
-        else:
-            raise ValueError('invalid graph data format: {}'.format(form))
+        self._create_graph_from_chat()
+
+    def add_edge(self, node1, node2, **kwargs):
+        if node1 not in self.node:
+            self.node[node1] = {}
+        if node2 not in self.node:
+            self.node[node2] = {}
+
+        if node1 not in self.edge:
+            self.edge[node1] = {}
+        self.edge[node1][node2] = kwargs
+
+    def edges(self):
+        result = {}
+        for node1, node2_to_properties in self.edge.items():
+            for node2 in node2_to_properties.keys():
+                result[node1] = node2
+        return result
+
+    def number_of_nodes(self):
+        return len(self.node)
 
     def _create_graph_from_chat(self):
         """

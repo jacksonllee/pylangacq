@@ -36,7 +36,7 @@ def test_dep_graph_to_tikz():
     \\depedge{9}{8}{OBJ}
     \\depedge{10}{3}{PUNCT}
 \\end{dependency}
-""".strip()
+""".strip()  # noqa
 
 
 def test_dep_graph_to_conll():

@@ -4,7 +4,6 @@ import re
 
 
 CLITIC = 'CLITIC'
-ALL_PARTICIPANTS = '**ALL**'
 ENCODING = 'utf8'
 
 

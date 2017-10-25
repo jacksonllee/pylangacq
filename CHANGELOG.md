@@ -1,53 +1,53 @@
 # Change log
 
-## [Unreleased]
+## v0.9.0 [Unreleased]
 
 * Python 2 and 3 cross compatibility
-* Rename the `grammar.py` module as `dependency.py`
+* Renamed the `grammar.py` module as `dependency.py`
     * Rewrite the class `DependencyGraph`;
       do not subclass from networkx's DiGraph anymore
       (and we remove networkx as a dependency of this library)
-* Remove multiprocessing in reading data files.
+* Removed multiprocessing in reading data files.
   Datasets are usually small enough that the performance gain, if any,
   wouldn't be worth it for the potential issues w.r.t. spawning multiple
   processes)
-* Phonetics and phonology -- develop capabilities to handle PhonBank data:
-  * Recognize and parse `%pho` and `%mod` tiers
-* Improve `clean_utterance()`
-* Add parameter `encoding` in `read_chat()`
-* Add `get_lemma_from_mor()`
-* Add `date_of_recording()` and `date_of_birth()`; remove `date()`
-* Add `clean_word()`
-* Restrict `get_IPSyn()` to only the first 100 utterances
-* Add tests
+* Developed capabilities to handle PhonBank data for
+  handling `%pho` and `%mod` tiers
+* Improved `clean_utterance()`
+* Added parameter `encoding` in `read_chat()`
+* Added `get_lemma_from_mor()`
+* Added `date_of_recording()` and `date_of_birth()`; remove `date()`
+* Added `clean_word()`
+* Restricted `get_IPSyn()` to only the first 100 utterances
+* Added tests
 
 ## v0.8 - 2016-01-30
 
 * Library now compatible only with Python 3.4 or above
 * For class `Reader`:
 
-  * Define `read_chat()` for initializing a `Reader` object
-  * Add parameter `by_files` to various methods; remove the "all_" methods
-  * Add reader manipulation methods:
+  * Defined `read_chat()` for initializing a `Reader` object
+  * Added parameter `by_files` to various methods; remove the "all_" methods
+  * Added reader manipulation methods:
     `update()`, `add()`, `remove()`, `clear()`
-  * Add parameter `sorted_by_age` in `filenames()`
-  * Add parameter `month` in `age()`
-  * Add `word_ngrams()`
-  * Add `find_filename()`
-  * Add language development measures: `MLUm()`, `MLUw()`, `TTR()`, `IPSyn()`
-  * Add `search()` and `concordance()`
-  * Allow regular expression matching for parameter `participant`
-  * Add output formats for dependency graphs: `to_tikz()` and `to_conll()`
-  * Distinguish `participant_name` and `participant_role` in metadata
+  * Added parameter `sorted_by_age` in `filenames()`
+  * Added parameter `month` in `age()`
+  * Added `word_ngrams()`
+  * Added `find_filename()`
+  * Added language development measures: `MLUm()`, `MLUw()`, `TTR()`, `IPSyn()`
+  * Added `search()` and `concordance()`
+  * Allowed regular expression matching for parameter `participant`
+  * Added output formats for dependency graphs: `to_tikz()` and `to_conll()`
+  * Distinguished `participant_name` and `participant_role` in metadata
   * The `@Languages` header contents are treated as a list
     but not a set now for ordering in bi/multilingualism
-  * "Undo" collapses in transcriptions such as `[x 4]`
+  * Undid collapses in transcriptions such as `[x 4]`
   * Various bug fixes
 
 ## v0.7 - 2016-01-06
 
-* Add `part_of_speech_tags()` in `SingleReader`
-* Add "all X" methods in `Reader`
+* Added `part_of_speech_tags()` in `SingleReader`
+* Added "all X" methods in `Reader`
 * Bug fixes: `clean_utterance()`, `DependencyGraph`
 
 ## v0.6 - 2015-12-27

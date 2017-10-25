@@ -1,0 +1,154 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>measures — Developmental measures &#8212; PyLangAcq 0.9.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="dependency — Modeling syntax and semantics" href="dependency.html" />
+    <link rel="prev" title="chat — Reading and parsing CHAT transcripts" href="chat.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="measures-developmental-measures">
+<span id="measures"></span><h1><code class="docutils literal"><span class="pre">measures</span></code> — Developmental measures<a class="headerlink" href="#measures-developmental-measures" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal"><span class="pre">measures</span></code> module has the source code for computing language
+developmental measures. While the functions defined in the <code class="docutils literal"><span class="pre">measures</span></code> are
+not called directly by the user in general,
+they are called indirectly through <code class="docutils literal"><span class="pre">Reader</span></code> methods.
+See <a class="reference internal" href="devmeasures.html#devmeasures"><span class="std std-ref">Developmental measures</span></a> for usage.</p>
+<span class="target" id="module-pylangacq.measures"></span><dl class="function">
+<dt id="pylangacq.measures.get_IPSyn">
+<code class="descclassname">pylangacq.measures.</code><code class="descname">get_IPSyn</code><span class="sig-paren">(</span><em>tagged_sents</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/measures.html#get_IPSyn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.measures.get_IPSyn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Index of Productive Syntax (IPSyn)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pylangacq.measures.get_MLUm">
+<code class="descclassname">pylangacq.measures.</code><code class="descname">get_MLUm</code><span class="sig-paren">(</span><em>tagged_sents</em>, <em>pos_to_ignore=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/measures.html#get_MLUm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.measures.get_MLUm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mean length of utterance (MLU) in morphemes</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pylangacq.measures.get_MLUw">
+<code class="descclassname">pylangacq.measures.</code><code class="descname">get_MLUw</code><span class="sig-paren">(</span><em>sents</em>, <em>words_to_ignore=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/measures.html#get_MLUw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.measures.get_MLUw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mean length of utterance (MLU) in words</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pylangacq.measures.get_TTR">
+<code class="descclassname">pylangacq.measures.</code><code class="descname">get_TTR</code><span class="sig-paren">(</span><em>word_freq_dict</em>, <em>words_to_ignore=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/measures.html#get_TTR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.measures.get_TTR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Type-token ratio (TTR)</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="toc.html">PyLangAcq</a></h1>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">PyLangAcq: Language Acquisition Research in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Download and install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="read.html">Reading data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Accessing metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transcriptions.html">Transcriptions and annotations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="devmeasures.html">Developmental measures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="freq.html">Word frequency and ngrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="concord.html">Word search and concordance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lex.html">Lexicon and morphology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phono.html">Phonetics and phonology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synsem.html">Syntax and semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disca.html">Discourse and conversational analysis</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference.html">Library reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="chat.html"><code class="docutils literal"><span class="pre">chat</span></code> — Reading and parsing CHAT transcripts</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal"><span class="pre">measures</span></code> — Developmental measures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dependency.html"><code class="docutils literal"><span class="pre">dependency</span></code> — Modeling syntax and semantics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html"><code class="docutils literal"><span class="pre">util</span></code> — General functions and constants</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="toc.html">Documentation overview</a><ul>
+  <li><a href="reference.html">Library reference</a><ul>
+      <li>Previous: <a href="chat.html" title="previous chapter"><code class="docutils literal"><span class="pre">chat</span></code> — Reading and parsing CHAT transcripts</a></li>
+      <li>Next: <a href="dependency.html" title="next chapter"><code class="docutils literal"><span class="pre">dependency</span></code> — Modeling syntax and semantics</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015-2017, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.9.0 | Documentation last updated on October 25, 2017.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

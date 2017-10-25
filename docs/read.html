@@ -1,0 +1,380 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Reading data &#8212; PyLangAcq 0.9.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Accessing metadata" href="metadata.html" />
+    <link rel="prev" title="Tutorial" href="tutorial.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="reading-data">
+<span id="read"></span><h1>Reading data<a class="headerlink" href="#reading-data" title="Permalink to this headline">¶</a></h1>
+<p>This page provides details of the CHAT data format that PyLangAcq assumes and
+explains how CHAT data files are read.</p>
+<ul class="simple">
+<li><a class="reference internal" href="#chat-format"><span class="std std-ref">The CHAT transcription format</span></a></li>
+<li><a class="reference internal" href="#initialize-reader"><span class="std std-ref">Initializing a Reader instance</span></a></li>
+<li><a class="reference internal" href="#reader-properties"><span class="std std-ref">Reader methods</span></a></li>
+<li><a class="reference internal" href="#add-remove-transcripts"><span class="std std-ref">Adding and removing transcripts in a reader</span></a></li>
+</ul>
+<div class="section" id="the-chat-transcription-format">
+<span id="chat-format"></span><h2>The CHAT transcription format<a class="headerlink" href="#the-chat-transcription-format" title="Permalink to this headline">¶</a></h2>
+<p>PyLangAcq is designed to handle the CHAT transcription format as used in the
+CHILDES database for language acquisition research.
+The bare minimum of what PyLangAcq assumes about CHAT is explained here.
+(As of January 2016, PyLangAcq conforms to the latest
+<a class="reference external" href="http://childes.psy.cmu.edu/manuals/CHAT.pdf">CHAT manual</a>
+dated September 22, 2015.)</p>
+<p><strong>Headers</strong></p>
+<p>A CHAT transcript file (typically with the extension name <code class="docutils literal"><span class="pre">.cha</span></code>, though not
+strictly required) provides metadata headers using lines starting with <code class="docutils literal"><span class="pre">&#64;</span></code>.
+Among the many possible headers,
+<code class="docutils literal"><span class="pre">&#64;Participants</span></code> and <code class="docutils literal"><span class="pre">&#64;ID</span></code> are of particular interest:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@Participants</span><span class="p">:</span> <span class="n">XX1</span> <span class="n">Name1</span> <span class="n">Role1</span> <span class="p">,</span> <span class="n">XX2</span> <span class="n">Name2</span> <span class="n">Role2</span>
+<span class="nd">@ID</span><span class="p">:</span> <span class="o">||</span><span class="n">XX1</span><span class="o">|</span><span class="mi">1</span><span class="p">;</span><span class="mf">6.</span><span class="o">||||</span><span class="n">Role1</span><span class="o">|||</span>
+<span class="nd">@ID</span><span class="p">:</span> <span class="o">||</span><span class="n">XX2</span><span class="o">|||||</span><span class="n">Role2</span><span class="o">|||</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">&#64;Participants</span></code> header states the participants of the transcript. In this
+hypothetical example shown just above, there are two participants.
+Each participant has a participant code (e.g., <code class="docutils literal"><span class="pre">XX1</span></code>), a participant name
+(e.g., <code class="docutils literal"><span class="pre">Name1</span></code>), and a participant role (e.g., <code class="docutils literal"><span class="pre">Role1</span></code>).
+The participant code must be an alphanumeric three-character string
+which begins with a letter, and all letters must be in uppercase.
+The participant code must come first, immediately
+followed by a space, and then by the participant name, and in turn by
+another space and then the participant role. A comma separates
+information between two participants.</p>
+<p>If there are <code class="docutils literal"><span class="pre">&#64;ID</span></code> headers, they must appear after, but not before, the
+<code class="docutils literal"><span class="pre">&#64;Participants</span></code> header.
+The number of <code class="docutils literal"><span class="pre">&#64;ID</span></code> headers is equal to the number of participants.
+An <code class="docutils literal"><span class="pre">&#64;ID</span></code> header contains detailed information about a
+participant:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">language</span><span class="o">|</span><span class="n">corpus</span><span class="o">|</span><span class="n">participant_code</span><span class="o">|</span><span class="n">age</span><span class="o">|</span><span class="n">sex</span><span class="o">|</span><span class="n">group</span><span class="o">|</span><span class="n">SES</span><span class="o">|</span><span class="n">participant_role</span><span class="o">|</span><span class="n">education</span><span class="o">|</span><span class="n">custom</span><span class="o">|</span>
+</pre></div>
+</div>
+<p>Within <code class="docutils literal"><span class="pre">&#64;ID</span></code>, the fields <code class="docutils literal"><span class="pre">participant_code</span></code> and <code class="docutils literal"><span class="pre">participant_role</span></code>
+must match the information of the relevant participant in the <code class="docutils literal"><span class="pre">&#64;Participants</span></code>
+header.
+Often of interest in language acquisition research is the age of the
+participant (e.g., the target child). For instance, the age of
+participant <code class="docutils literal"><span class="pre">XX1</span></code> is 1 year and 6 months, as given by <code class="docutils literal"><span class="pre">1;6.</span></code>.
+Fields are left empty if no information is available.</p>
+<p>While all other <code class="docutils literal"><span class="pre">&#64;</span></code> headers are optional, PyLangAcq has built-in functions
+specifically for <code class="docutils literal"><span class="pre">&#64;Languages</span></code> and <code class="docutils literal"><span class="pre">&#64;Date</span></code> for potential usage.</p>
+<p><strong>Transcriptions</strong></p>
+<p>After the headers come the transcriptions. All transcriptions are signaled by
+<code class="docutils literal"><span class="pre">*</span></code> at the beginning of the line:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">XX1</span><span class="p">:</span> <span class="n">good</span> <span class="n">morning</span> <span class="o">.</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">*</span></code> is immediately followed by the participant code (e.g., <code class="docutils literal"><span class="pre">XX1</span></code>), and then
+by a colon <code class="docutils literal"><span class="pre">:</span></code> and a space (or tab). Then the transcribed line follows.</p>
+<p>For research purposes, many CHAT transcripts have additional tiers signaled by
+<code class="docutils literal"><span class="pre">%mor</span></code> (for morphological information such as part-of-speech tag and lemma),
+<code class="docutils literal"><span class="pre">%gra</span></code> (for dependency and grammatical relations), and other <code class="docutils literal"><span class="pre">%</span></code> tiers.
+Much of what PyLangAcq can do relies on the annotations in these tiers with
+rich linguistic information.</p>
+<p><strong>Line continuations</strong></p>
+<p>For any header and transcription lines that are too long, line continuations
+are allowed in CHAT files with a tab character (denoted by <code class="docutils literal"><span class="pre">&lt;TAB&gt;</span></code> below), from:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">XX1</span><span class="p">:</span> <span class="n">this</span> <span class="n">line</span> <span class="ow">is</span> <span class="n">to</span> <span class="n">demonstrate</span> <span class="n">how</span> <span class="n">line</span> <span class="n">continuations</span> <span class="n">are</span> <span class="n">done</span> <span class="ow">in</span> <span class="n">CHAT</span> <span class="o">.</span>
+</pre></div>
+</div>
+<p>to:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">XX1</span><span class="p">:</span> <span class="n">this</span> <span class="n">line</span> <span class="ow">is</span> <span class="n">to</span> <span class="n">demonstrate</span> <span class="n">how</span> <span class="n">line</span> <span class="n">continuations</span>
+<span class="o">&lt;</span><span class="n">TAB</span><span class="o">&gt;</span><span class="n">are</span> <span class="n">done</span> <span class="ow">in</span> <span class="n">CHAT</span> <span class="o">.</span>
+</pre></div>
+</div>
+<p>This implies that all lines in a CHAT file must begin with any of the following
+characters only: <code class="docutils literal"><span class="pre">&#64;</span></code>, <code class="docutils literal"><span class="pre">*</span></code>, <code class="docutils literal"><span class="pre">%</span></code>, <code class="docutils literal"><span class="pre">&lt;TAB&gt;</span></code>.</p>
+</div>
+<div class="section" id="initializing-a-reader-instance">
+<span id="initialize-reader"></span><h2>Initializing a Reader instance<a class="headerlink" href="#initializing-a-reader-instance" title="Permalink to this headline">¶</a></h2>
+<p>Assuming that the CHAT transcripts for the Brown portion of CHILDES
+(i.e., <code class="docutils literal"><span class="pre">eve01.cha</span></code>, <code class="docutils literal"><span class="pre">eve02.cha</span></code> etc.)
+are at the current directory:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span> <span class="kn">as</span> <span class="nn">pla</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pla</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="s1">&#39;Brown/Eve/*.cha&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The UTF-8 file encoding is assumed for all CHAT files.</p>
+</div>
+<p><code class="docutils literal"><span class="pre">read_chat()</span></code> can take one or multiple filenames.
+These filenames can be either relative paths to the current directory
+(as exemplified here) or
+absolute paths. Filename pattern matching with <code class="docutils literal"><span class="pre">*</span></code>
+(wildcard for zero or more characters) and <code class="docutils literal"><span class="pre">?</span></code> (wildcard for one or more
+characters) can be used. In this example with Eve’s files, <code class="docutils literal"><span class="pre">*</span></code> matches all
+the 20 CHAT
+files in the subdirectory <code class="docutils literal"><span class="pre">Brown/Eve/</span></code> relative to the current directory.</p>
+<p><code class="docutils literal"><span class="pre">read_chat()</span></code> returns an instance of the
+<code class="docutils literal"><span class="pre">pylangacq.chat.Reader</span></code>
+class. For example, <code class="docutils literal"><span class="pre">eve</span></code> is a <code class="docutils literal"><span class="pre">pylangacq.chat.Reader</span></code> instance,
+or simply <code class="docutils literal"><span class="pre">Reader</span></code> instance for short.
+Most of the functionality of PyLangAcq is accessed via methods of <code class="docutils literal"><span class="pre">Reader</span></code>
+instances, in the form of <code class="docutils literal"><span class="pre">reader_instance.method_name()</span></code>.</p>
+</div>
+<div class="section" id="reader-methods">
+<span id="reader-properties"></span><h2>Reader methods<a class="headerlink" href="#reader-methods" title="Permalink to this headline">¶</a></h2>
+<p>Basic information of a <code class="docutils literal"><span class="pre">Reader</span></code> instance such as <code class="docutils literal"><span class="pre">eve</span></code> can be accessed
+as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">number_of_files</span><span class="p">()</span>  <span class="c1"># from eve01.cha through eve20.cha</span>
+<span class="go">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">eve</span><span class="p">)</span>  <span class="c1"># same as number_of_files()</span>
+<span class="go">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">number_of_utterances</span><span class="p">()</span>  <span class="c1"># across all 20 files and all participants</span>
+<span class="go">26980</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">find_filename</span><span class="p">(</span><span class="s1">&#39;eve01.cha&#39;</span><span class="p">)</span>  <span class="c1"># return the absolute path for a file basename</span>
+<span class="go">&#39;/home/joesmith/Brown/Eve/eve01.cha&#39;</span>
+</pre></div>
+</div>
+<p>The bulk of the library documentation is about the various <code class="docutils literal"><span class="pre">Reader</span></code> methods.
+The full API details can be found in <a class="reference internal" href="chat.html#reader-api"><span class="std std-ref">The Reader class API</span></a>.</p>
+<p>For the method <code class="docutils literal"><span class="pre">number_of_utterances()</span></code>, an utterance is a transcription line that
+begins with <code class="docutils literal"><span class="pre">*</span></code> in the CHAT transcripts.</p>
+<p>Many methods of <code class="docutils literal"><span class="pre">Reader</span></code> have a dual structure in terms of the return object.
+It depends on whether or not you are interested in an return object that
+organizes contents by the individual source files.
+These methods have the optional parameter <code class="docutils literal"><span class="pre">by_files</span></code> (default: <code class="docutils literal"><span class="pre">False</span></code>).
+For a given method <code class="docutils literal"><span class="pre">some_method()</span></code> called for a <code class="docutils literal"><span class="pre">Reader</span></code> instance named <code class="docutils literal"><span class="pre">reader_instance</span></code>:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="30%" />
+<col width="70%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Method</th>
+<th class="head">Return object</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">reader_instance.some_method()</span></code></td>
+<td>whatever <code class="docutils literal"><span class="pre">some_method()</span></code> is for all files in <code class="docutils literal"><span class="pre">reader_instance</span></code>, with no knowledge of the file structure</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">reader_instance.some_method(by_files=True)</span></code></td>
+<td>dict(absolute-path filename: <code class="docutils literal"><span class="pre">some_method()</span></code> for that file)</td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal"><span class="pre">number_of_utterances()</span></code> is one of the methods with <code class="docutils literal"><span class="pre">by_files</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">number_of_utterances</span><span class="p">()</span>  <span class="c1"># by_files is False by default</span>
+<span class="go">26980</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">counts_by_files</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">number_of_utterances</span><span class="p">(</span><span class="n">by_files</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># dict(filename: num of utterances)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">abs_filename</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">counts_by_files</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">abs_filename</span><span class="p">),</span> <span class="n">n</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">eve01.cha 1601</span>
+<span class="go">eve02.cha 1304</span>
+<span class="go">eve03.cha 619</span>
+<span class="go">eve04.cha 1456</span>
+<span class="go">eve05.cha 1479</span>
+<span class="go">eve06.cha 1075</span>
+<span class="go">eve07.cha 1277</span>
+<span class="go">eve08.cha 2058</span>
+<span class="go">eve09.cha 1024</span>
+<span class="go">eve10.cha 1060</span>
+<span class="go">eve11.cha 952</span>
+<span class="go">eve12.cha 1339</span>
+<span class="go">eve13.cha 959</span>
+<span class="go">eve14.cha 1094</span>
+<span class="go">eve15.cha 1651</span>
+<span class="go">eve16.cha 1500</span>
+<span class="go">eve17.cha 2156</span>
+<span class="go">eve18.cha 1760</span>
+<span class="go">eve19.cha 1348</span>
+<span class="go">eve20.cha 1268</span>
+</pre></div>
+</div>
+<p>(Many data access methods have the parameter <code class="docutils literal"><span class="pre">by_files</span></code>
+for the dual possibilities of return objects;
+see <a class="reference internal" href="transcriptions.html#transcriptions"><span class="std std-ref">Transcriptions and annotations</span></a>.)</p>
+<p>We are often interested in what concerns specific participants in the data,
+e.g., the target child whose participant code is <code class="docutils literal"><span class="pre">'CHI'</span></code>.
+Many
+methods accept an optional argument to specify the parameter <code class="docutils literal"><span class="pre">participant</span></code>
+(see also <a class="reference internal" href="transcriptions.html#cds"><span class="std std-ref">Child speech versus child directed speech</span></a>):</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">abs_filename</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">number_of_utterances</span><span class="p">(</span><span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">abs_filename</span><span class="p">),</span> <span class="n">n</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">eve01.cha 749</span>
+<span class="go">eve02.cha 488</span>
+<span class="go">eve03.cha 253</span>
+<span class="go">eve04.cha 590</span>
+<span class="go">eve05.cha 707</span>
+<span class="go">eve06.cha 542</span>
+<span class="go">eve07.cha 528</span>
+<span class="go">eve08.cha 959</span>
+<span class="go">eve09.cha 521</span>
+<span class="go">eve10.cha 547</span>
+<span class="go">eve11.cha 447</span>
+<span class="go">eve12.cha 648</span>
+<span class="go">eve13.cha 460</span>
+<span class="go">eve14.cha 476</span>
+<span class="go">eve15.cha 724</span>
+<span class="go">eve16.cha 641</span>
+<span class="go">eve17.cha 904</span>
+<span class="go">eve18.cha 791</span>
+<span class="go">eve19.cha 653</span>
+<span class="go">eve20.cha 539</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="adding-and-removing-transcripts-in-a-reader">
+<span id="add-remove-transcripts"></span><h2>Adding and removing transcripts in a reader<a class="headerlink" href="#adding-and-removing-transcripts-in-a-reader" title="Permalink to this headline">¶</a></h2>
+<p>It is possible to add or remove transcripts in a <code class="docutils literal"><span class="pre">Reader</span></code> instance;
+this is important where dynamic data handling is needed.
+Three methods are available:
+<code class="docutils literal"><span class="pre">add()</span></code>, <code class="docutils literal"><span class="pre">remove()</span></code>, <code class="docutils literal"><span class="pre">update()</span></code>, and <code class="docutils literal"><span class="pre">clear()</span></code>.</p>
+<p>To illustrate, we initialize <code class="docutils literal"><span class="pre">corpus</span></code> as an empty <code class="docutils literal"><span class="pre">Reader</span></code> instance:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span> <span class="o">=</span> <span class="n">pla</span><span class="o">.</span><span class="n">read_chat</span><span class="p">()</span>  <span class="c1"># empty, no filenames given</span>
+</pre></div>
+</div>
+<p>To add transcripts, use <code class="docutils literal"><span class="pre">add()</span></code> which takes one or more filenames
+as arguments:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;Brown/Eve/eve0*.cha&#39;</span><span class="p">)</span>  <span class="c1"># from eve01.cha to eve09.cha</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">number_of_files</span><span class="p">()</span>
+<span class="go">9</span>
+</pre></div>
+</div>
+<p>To remove transcripts with <code class="docutils literal"><span class="pre">remove()</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;Brown/Eve/eve09.cha&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">number_of_files</span><span class="p">()</span>
+<span class="go">8</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">update()</span></code> takes a <code class="docutils literal"><span class="pre">Reader</span></code> instance and updates the current one:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">eve</span><span class="p">)</span>  <span class="c1"># 20 files from Eve</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">number_of_files</span><span class="p">()</span>
+<span class="go">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">eve01</span><span class="p">)</span>      <span class="c1"># Trying to add duplicate files</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">number_of_files</span><span class="p">()</span>  <span class="c1"># does not result in errors or duplicates</span>
+<span class="go">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;Brown/Adam/*.cha&#39;</span><span class="p">)</span>  <span class="c1"># Add 55 files, from adam01.cha to adam55.cha</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">number_of_files</span><span class="p">()</span>
+<span class="go">75</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">clear()</span></code> applies to a <code class="docutils literal"><span class="pre">Reader</span></code> instance to clear everything and reset it
+as an empty <code class="docutils literal"><span class="pre">Reader</span></code> instance:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">number_of_files</span><span class="p">()</span>
+<span class="go">0</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="toc.html">PyLangAcq</a></h1>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">PyLangAcq: Language Acquisition Research in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Download and install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Reading data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-chat-transcription-format">The CHAT transcription format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#initializing-a-reader-instance">Initializing a Reader instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reader-methods">Reader methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-and-removing-transcripts-in-a-reader">Adding and removing transcripts in a reader</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Accessing metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transcriptions.html">Transcriptions and annotations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="devmeasures.html">Developmental measures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="freq.html">Word frequency and ngrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="concord.html">Word search and concordance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lex.html">Lexicon and morphology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phono.html">Phonetics and phonology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synsem.html">Syntax and semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disca.html">Discourse and conversational analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Library reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="toc.html">Documentation overview</a><ul>
+      <li>Previous: <a href="tutorial.html" title="previous chapter">Tutorial</a></li>
+      <li>Next: <a href="metadata.html" title="next chapter">Accessing metadata</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015-2017, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.9.0 | Documentation last updated on October 25, 2017.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

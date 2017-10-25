@@ -1,0 +1,290 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Accessing metadata &#8212; PyLangAcq 0.9.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Transcriptions and annotations" href="transcriptions.html" />
+    <link rel="prev" title="Reading data" href="read.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="accessing-metadata">
+<span id="metadata"></span><h1>Accessing metadata<a class="headerlink" href="#accessing-metadata" title="Permalink to this headline">¶</a></h1>
+<p>A <code class="docutils literal"><span class="pre">Reader</span></code> object has an array of methods for accessing metadata
+(based on headers given by the <code class="docutils literal"><span class="pre">&#64;</span></code> lines) and data
+(the transcriptions with <code class="docutils literal"><span class="pre">*</span></code> and dependent tiers with <code class="docutils literal"><span class="pre">%</span></code>).
+This page introduces the metadata methods.
+For data methods, see <a class="reference internal" href="transcriptions.html#transcriptions"><span class="std std-ref">Transcriptions and annotations</span></a>.
+For details of the <code class="docutils literal"><span class="pre">Reader</span></code> class, see <a class="reference internal" href="chat.html#reader-api"><span class="std std-ref">The Reader class API</span></a>.</p>
+<p>Metadata methods for handling information from the <code class="docutils literal"><span class="pre">&#64;</span></code> headers:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="16%" />
+<col width="84%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Method</th>
+<th class="head">Return object</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">participant_codes()</span></code></td>
+<td>set of participant codes across all files; if <code class="docutils literal"><span class="pre">by_file</span></code> is <code class="docutils literal"><span class="pre">True</span></code>, then dict(filename: set of participant codes) instead</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">participants()</span></code></td>
+<td>dict(filename: dict(participant code: dict of the <code class="docutils literal"><span class="pre">&#64;ID</span></code> information for that participant))</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">age()</span></code></td>
+<td>dict(filename: tuple of (<em>years</em>, <em>months</em>, <em>days</em>))</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">languages()</span></code></td>
+<td>dict(filename: list of languages based on the <code class="docutils literal"><span class="pre">&#64;Languages</span></code> header)</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">date()</span></code></td>
+<td>dict(filename: tuple of (<em>year</em>, <em>month</em>, <em>day</em>))</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">headers()</span></code></td>
+<td>dict(filename: dict(header name: the content of that header))</td>
+</tr>
+</tbody>
+</table>
+<p>Among these methods, only <code class="docutils literal"><span class="pre">participant_codes()</span></code> has the optional parameter
+<code class="docutils literal"><span class="pre">by_files</span></code>.</p>
+<p>To illustrate metadata access methods, it is helpful to be familiar with what
+the headers (= the lines beginning with <code class="docutils literal"><span class="pre">&#64;</span></code>) look like in a CHAT transcript
+such as <code class="docutils literal"><span class="pre">eve01.cha</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@UTF8</span>
+<span class="nd">@PID</span><span class="p">:</span>       <span class="mi">11312</span><span class="o">/</span><span class="n">c</span><span class="o">-</span><span class="mi">00034743</span><span class="o">-</span><span class="mi">1</span>
+<span class="nd">@Begin</span>
+<span class="nd">@Languages</span><span class="p">:</span> <span class="n">eng</span>
+<span class="nd">@Participants</span><span class="p">:</span>      <span class="n">CHI</span> <span class="n">Eve</span> <span class="n">Target_Child</span> <span class="p">,</span> <span class="n">MOT</span> <span class="n">Sue</span> <span class="n">Mother</span> <span class="p">,</span> <span class="n">COL</span> <span class="n">Colin</span> <span class="n">Investigator</span> <span class="p">,</span> <span class="n">RIC</span> <span class="n">Richard</span> <span class="n">Investigator</span>
+<span class="nd">@ID</span><span class="p">:</span>        <span class="n">eng</span><span class="o">|</span><span class="n">Brown</span><span class="o">|</span><span class="n">CHI</span><span class="o">|</span><span class="mi">1</span><span class="p">;</span><span class="mf">6.</span><span class="o">|</span><span class="n">female</span><span class="o">|||</span><span class="n">Target_Child</span><span class="o">|||</span>
+<span class="nd">@ID</span><span class="p">:</span>        <span class="n">eng</span><span class="o">|</span><span class="n">Brown</span><span class="o">|</span><span class="n">MOT</span><span class="o">|||||</span><span class="n">Mother</span><span class="o">|||</span>
+<span class="nd">@ID</span><span class="p">:</span>        <span class="n">eng</span><span class="o">|</span><span class="n">Brown</span><span class="o">|</span><span class="n">COL</span><span class="o">|||||</span><span class="n">Investigator</span><span class="o">|||</span>
+<span class="nd">@ID</span><span class="p">:</span>        <span class="n">eng</span><span class="o">|</span><span class="n">Brown</span><span class="o">|</span><span class="n">RIC</span><span class="o">|||||</span><span class="n">Investigator</span><span class="o">|||</span>
+<span class="nd">@Date</span><span class="p">:</span>      <span class="mi">15</span><span class="o">-</span><span class="n">OCT</span><span class="o">-</span><span class="mi">1962</span>
+<span class="nd">@Time</span> <span class="n">Duration</span><span class="p">:</span>     <span class="mi">10</span><span class="p">:</span><span class="mi">00</span><span class="o">-</span><span class="mi">11</span><span class="p">:</span><span class="mi">00</span>
+</pre></div>
+</div>
+<p>Using the metadata access methods:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span> <span class="kn">as</span> <span class="nn">pla</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pla</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="s1">&#39;Brown/Eve/*.cha&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve01_filename</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">find_filename</span><span class="p">(</span><span class="s1">&#39;eve01.cha&#39;</span><span class="p">)</span>  <span class="c1"># absolute-path filename of eve01.cha</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">participant_codes</span><span class="p">()</span>  <span class="c1"># across all 20 files</span>
+<span class="go">{&#39;RIC&#39;, &#39;COL&#39;, &#39;URS&#39;, &#39;FAT&#39;, &#39;GLO&#39;, &#39;CHI&#39;, &#39;MOT&#39;}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">participant_codes</span><span class="p">(</span><span class="n">by_files</span><span class="o">=</span><span class="bp">True</span><span class="p">)[</span><span class="n">eve01_filename</span><span class="p">]</span>  <span class="c1"># only for eve01.cha</span>
+<span class="go">{&#39;COL&#39;, &#39;CHI&#39;, &#39;MOT&#39;, &#39;RIC&#39;}</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">participants</span><span class="p">()[</span><span class="n">eve01_filename</span><span class="p">])</span>
+<span class="go">{&#39;CHI&#39;: {&#39;SES&#39;: &#39;&#39;,</span>
+<span class="go">         &#39;age&#39;: &#39;1;6.&#39;,</span>
+<span class="go">         &#39;corpus&#39;: &#39;Brown&#39;,</span>
+<span class="go">         &#39;custom&#39;: &#39;&#39;,</span>
+<span class="go">         &#39;education&#39;: &#39;&#39;,</span>
+<span class="go">         &#39;group&#39;: &#39;&#39;,</span>
+<span class="go">         &#39;language&#39;: &#39;eng&#39;,</span>
+<span class="go">         &#39;participant_name&#39;: &#39;Eve&#39;,</span>
+<span class="go">         &#39;participant_role&#39;: &#39;Target_Child&#39;,</span>
+<span class="go">         &#39;sex&#39;: &#39;female&#39;},</span>
+<span class="go"> &#39;COL&#39;: {&#39;SES&#39;: &#39;&#39;,</span>
+<span class="go">         &#39;age&#39;: &#39;&#39;,</span>
+<span class="go">         &#39;corpus&#39;: &#39;Brown&#39;,</span>
+<span class="go">         &#39;custom&#39;: &#39;&#39;,</span>
+<span class="go">         &#39;education&#39;: &#39;&#39;,</span>
+<span class="go">         &#39;group&#39;: &#39;&#39;,</span>
+<span class="go">         &#39;language&#39;: &#39;eng&#39;,</span>
+<span class="go">         &#39;participant_name&#39;: &#39;Colin&#39;,</span>
+<span class="go">         &#39;participant_role&#39;: &#39;Investigator&#39;,</span>
+<span class="go">         &#39;sex&#39;: &#39;&#39;},</span>
+<span class="go"> &#39;MOT&#39;: {&#39;SES&#39;: &#39;&#39;,</span>
+<span class="go">         &#39;age&#39;: &#39;&#39;,</span>
+<span class="go">         &#39;corpus&#39;: &#39;Brown&#39;,</span>
+<span class="go">         &#39;custom&#39;: &#39;&#39;,</span>
+<span class="go">         &#39;education&#39;: &#39;&#39;,</span>
+<span class="go">         &#39;group&#39;: &#39;&#39;,</span>
+<span class="go">         &#39;language&#39;: &#39;eng&#39;,</span>
+<span class="go">         &#39;participant_name&#39;: &#39;Sue&#39;,</span>
+<span class="go">         &#39;participant_role&#39;: &#39;Mother&#39;,</span>
+<span class="go">         &#39;sex&#39;: &#39;&#39;},</span>
+<span class="go"> &#39;RIC&#39;: {&#39;SES&#39;: &#39;&#39;,</span>
+<span class="go">         &#39;age&#39;: &#39;&#39;,</span>
+<span class="go">         &#39;corpus&#39;: &#39;Brown&#39;,</span>
+<span class="go">         &#39;custom&#39;: &#39;&#39;,</span>
+<span class="go">         &#39;education&#39;: &#39;&#39;,</span>
+<span class="go">         &#39;group&#39;: &#39;&#39;,</span>
+<span class="go">         &#39;language&#39;: &#39;eng&#39;,</span>
+<span class="go">         &#39;participant_name&#39;: &#39;Richard&#39;,</span>
+<span class="go">         &#39;participant_role&#39;: &#39;Investigator&#39;,</span>
+<span class="go">         &#39;sex&#39;: &#39;&#39;}}</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">age</span><span class="p">()[</span><span class="n">eve01_filename</span><span class="p">]</span>  <span class="c1"># defaults to the target child&#39;s age; (years, months, days)</span>
+<span class="go">(1, 6, 0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">age</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="bp">True</span><span class="p">)[</span><span class="n">eve01_filename</span><span class="p">]</span>  <span class="c1"># target child&#39;s age in months</span>
+<span class="go">18.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">age</span><span class="p">(</span><span class="n">participant</span><span class="o">=</span><span class="s1">&#39;MOT&#39;</span><span class="p">)[</span><span class="n">eve01_filename</span><span class="p">]</span>  <span class="c1"># no age info for MOT</span>
+<span class="go">(0, 0, 0)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">languages</span><span class="p">()[</span><span class="n">eve01_filename</span><span class="p">]</span>  <span class="c1"># list but not set; ordering matters in bi/multilingualism</span>
+<span class="go">[&#39;eng&#39;]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">date</span><span class="p">()[</span><span class="n">eve01_filename</span><span class="p">]</span>  <span class="c1"># date of recording</span>
+<span class="go">(1962, 10, 17)</span>
+</pre></div>
+</div>
+<p>If the CHAT file has headers that are not covered by specific built-in
+methods illustrated above, they are always accessible with <code class="docutils literal"><span class="pre">headers()</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">headers</span><span class="p">()[</span><span class="n">eve01_filename</span><span class="p">])</span>
+<span class="go">{&#39;Date&#39;: &#39;17-OCT-1962&#39;,</span>
+<span class="go"> &#39;Languages&#39;: &#39;eng&#39;,</span>
+<span class="go"> &#39;PID&#39;: &#39;11312/c-00034743-1&#39;,</span>
+<span class="go"> &#39;Participants&#39;: {&#39;CHI&#39;: {&#39;SES&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;age&#39;: &#39;1;6.&#39;,</span>
+<span class="go">                          &#39;corpus&#39;: &#39;Brown&#39;,</span>
+<span class="go">                          &#39;custom&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;education&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;group&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;language&#39;: &#39;eng&#39;,</span>
+<span class="go">                          &#39;participant_name&#39;: &#39;Eve&#39;,</span>
+<span class="go">                          &#39;participant_role&#39;: &#39;Target_Child&#39;,</span>
+<span class="go">                          &#39;sex&#39;: &#39;female&#39;},</span>
+<span class="go">                  &#39;COL&#39;: {&#39;SES&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;age&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;corpus&#39;: &#39;Brown&#39;,</span>
+<span class="go">                          &#39;custom&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;education&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;group&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;language&#39;: &#39;eng&#39;,</span>
+<span class="go">                          &#39;participant_name&#39;: &#39;Colin&#39;,</span>
+<span class="go">                          &#39;participant_role&#39;: &#39;Investigator&#39;,</span>
+<span class="go">                          &#39;sex&#39;: &#39;&#39;},</span>
+<span class="go">                  &#39;MOT&#39;: {&#39;SES&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;age&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;corpus&#39;: &#39;Brown&#39;,</span>
+<span class="go">                          &#39;custom&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;education&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;group&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;language&#39;: &#39;eng&#39;,</span>
+<span class="go">                          &#39;participant_name&#39;: &#39;Sue&#39;,</span>
+<span class="go">                          &#39;participant_role&#39;: &#39;Mother&#39;,</span>
+<span class="go">                          &#39;sex&#39;: &#39;&#39;},</span>
+<span class="go">                  &#39;RIC&#39;: {&#39;SES&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;age&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;corpus&#39;: &#39;Brown&#39;,</span>
+<span class="go">                          &#39;custom&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;education&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;group&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;language&#39;: &#39;eng&#39;,</span>
+<span class="go">                          &#39;participant_name&#39;: &#39;Richard&#39;,</span>
+<span class="go">                          &#39;participant_role&#39;: &#39;Investigator&#39;,</span>
+<span class="go">                          &#39;sex&#39;: &#39;&#39;}},</span>
+<span class="go"> &#39;Tape Location&#39;: &#39;850&#39;,</span>
+<span class="go"> &#39;Time Duration&#39;: &#39;11:30-12:00&#39;,</span>
+<span class="go"> &#39;UTF8&#39;: &#39;&#39;}</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="toc.html">PyLangAcq</a></h1>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">PyLangAcq: Language Acquisition Research in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Download and install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="read.html">Reading data</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Accessing metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transcriptions.html">Transcriptions and annotations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="devmeasures.html">Developmental measures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="freq.html">Word frequency and ngrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="concord.html">Word search and concordance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lex.html">Lexicon and morphology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phono.html">Phonetics and phonology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synsem.html">Syntax and semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disca.html">Discourse and conversational analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Library reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="toc.html">Documentation overview</a><ul>
+      <li>Previous: <a href="read.html" title="previous chapter">Reading data</a></li>
+      <li>Next: <a href="transcriptions.html" title="next chapter">Transcriptions and annotations</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015-2017, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.9.0 | Documentation last updated on October 25, 2017.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

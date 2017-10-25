@@ -1,9 +1,4 @@
-/doc/
+docs/_sources/*
 /test_dev/
-/pylangacq/__pycache__/
-/pylangacq.egg-info/
-.idea/
 
-build-doc.sh
 pypi_upload.sh
-*~

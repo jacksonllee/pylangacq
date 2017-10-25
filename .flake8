@@ -1,4 +1,0 @@
-[flake8]
-
-# allow lambda expressions
-ignore = E731

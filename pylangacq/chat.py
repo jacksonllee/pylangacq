@@ -73,7 +73,7 @@ def params_in_docstring(*params):
     return real_decorator
 
 
-class Reader:
+class Reader(object):
     """A class for reading multiple CHAT files.
 
     Parameters
@@ -736,7 +736,7 @@ class Reader:
             return output_list
 
 
-class SingleReader:
+class SingleReader(object):
     """A class for reading a single CHAT file."""
 
     def __init__(self, filename, encoding=ENCODING):

@@ -9,7 +9,7 @@ from pylangacq.dependency import DependencyGraph
 # noinspection PyPep8Naming
 def get_MLUm(tagged_sents, pos_to_ignore=None):
     """Mean length of utterance (MLU) in morphemes"""
-    # *tagged_sents* are already filtered for the desired participant like 'CHI'
+    # *tagged_sents* already filtered for the desired participant like 'CHI'
     total_utterance_count = 0
     total_morpheme_count = 0
 
@@ -70,48 +70,50 @@ def get_IPSyn(tagged_sents):
     if len(tagged_sents) > 100:
         tagged_sents = tagged_sents[: 100]
 
-    scoring_board = {'N1': 0, 'N2': 0, 'N3': 0, 'N4': 0, 'N5': 0, 'N6': 0,
-                     'N7': 0, 'N8': 0, 'N9': 0, 'N10': 0, 'N11': 0,
+    scoring_board = {
+        'N1': 0, 'N2': 0, 'N3': 0, 'N4': 0, 'N5': 0, 'N6': 0,
+        'N7': 0, 'N8': 0, 'N9': 0, 'N10': 0, 'N11': 0,
 
-                     'V1': 0, 'V2': 0, 'V3': 0, 'V4': 0, 'V5': 0, 'V6': 0,
-                     'V7': 0, 'V8': 0, 'V9': 0, 'V10': 0, 'V11': 0, 'V12': 0,
-                     'V13': 0, 'V14': 0, 'V15': 0, 'V16': 0,
+        'V1': 0, 'V2': 0, 'V3': 0, 'V4': 0, 'V5': 0, 'V6': 0,
+        'V7': 0, 'V8': 0, 'V9': 0, 'V10': 0, 'V11': 0, 'V12': 0,
+        'V13': 0, 'V14': 0, 'V15': 0, 'V16': 0,
 
-                     'Q1': 0, 'Q2': 0, 'Q3': 0, 'Q4': 0, 'Q5': 0, 'Q6': 0,
-                     'Q7': 0, 'Q8': 0, 'Q9': 0, 'Q10': 0,
+        'Q1': 0, 'Q2': 0, 'Q3': 0, 'Q4': 0, 'Q5': 0, 'Q6': 0,
+        'Q7': 0, 'Q8': 0, 'Q9': 0, 'Q10': 0,
 
-                     'S1': 0, 'S2': 0, 'S3': 0, 'S4': 0, 'S5': 0, 'S6': 0,
-                     'S7': 0, 'S8': 0, 'S9': 0, 'S10': 0, 'S11': 0, 'S12': 0,
-                     'S13': 0, 'S14': 0, 'S15': 0, 'S16': 0, 'S17': 0, 'S18': 0,
-                     'S19': 0,
-                    }
+        'S1': 0, 'S2': 0, 'S3': 0, 'S4': 0, 'S5': 0, 'S6': 0,
+        'S7': 0, 'S8': 0, 'S9': 0, 'S10': 0, 'S11': 0, 'S12': 0,
+        'S13': 0, 'S14': 0, 'S15': 0, 'S16': 0, 'S17': 0, 'S18': 0,
+        'S19': 0,
+    }
 
-    scoring_board_stop = {'N1': False, 'N2': False, 'N3': False, 'N4': False,
-                          'N5': False, 'N6': False, 'N7': False, 'N8': False,
-                          'N9': False, 'N10': False, 'N11': False,
+    scoring_board_stop = {
+        'N1': False, 'N2': False, 'N3': False, 'N4': False,
+        'N5': False, 'N6': False, 'N7': False, 'N8': False,
+        'N9': False, 'N10': False, 'N11': False,
 
-                          'V1': False, 'V2': False, 'V3': False, 'V4': False,
-                          'V5': False, 'V6': False, 'V7': False, 'V8': False,
-                          'V9': False, 'V10': False, 'V11': False, 'V12': False,
-                          'V13': False, 'V14': False, 'V15': False,
-                          'V16': False,
+        'V1': False, 'V2': False, 'V3': False, 'V4': False,
+        'V5': False, 'V6': False, 'V7': False, 'V8': False,
+        'V9': False, 'V10': False, 'V11': False, 'V12': False,
+        'V13': False, 'V14': False, 'V15': False,
+        'V16': False,
 
-                          'Q1': False, 'Q2': False, 'Q3': False, 'Q4': False,
-                          'Q5': False, 'Q6': False, 'Q7': False, 'Q8': False,
-                          'Q9': False, 'Q10': False,
+        'Q1': False, 'Q2': False, 'Q3': False, 'Q4': False,
+        'Q5': False, 'Q6': False, 'Q7': False, 'Q8': False,
+        'Q9': False, 'Q10': False,
 
-                          'S1': False, 'S2': False, 'S3': False, 'S4': False,
-                          'S5': False, 'S6': False, 'S7': False, 'S8': False,
-                          'S9': False, 'S10': False, 'S11': False, 'S12': False,
-                          'S13': False, 'S14': False, 'S15': False,
-                          'S16': False, 'S17': False, 'S18': False,
-                          'S19': False,
-                        }
+        'S1': False, 'S2': False, 'S3': False, 'S4': False,
+        'S5': False, 'S6': False, 'S7': False, 'S8': False,
+        'S9': False, 'S10': False, 'S11': False, 'S12': False,
+        'S13': False, 'S14': False, 'S15': False,
+        'S16': False, 'S17': False, 'S18': False,
+        'S19': False,
+    }
 
     def add_one_point_if_needed(item):
         """
         Add one point to *item* if necessary. If *item* has scored 2 points,
-        avoid its further scoring by setting scoring_board_stop[*item*] to True.
+        avoid further scoring by setting scoring_board_stop[*item*] to True.
 
         :param item: check item like 'N1', 'Q3' etc
         """
@@ -154,9 +156,6 @@ def get_IPSyn(tagged_sents):
             if turn_off_scoring_board(item):
                 break
 
-
-
-    # noinspection PyPep8Naming
     @test_item
     def N1(graph):
         """
@@ -465,7 +464,7 @@ def get_IPSyn(tagged_sents):
                       'better'}
 
         for i in range(1, graph.number_of_nodes() - 1):
-            pos2 = graph.node[i+1]['pos']
+            pos2 = graph.node[i + 1]['pos']
             if pos2 != 'V':
                 continue
 
@@ -538,7 +537,7 @@ def get_IPSyn(tagged_sents):
         for i in range(1, graph.number_of_nodes() - 1):
             pos = graph.node[i]['pos']
             word = graph.node[i]['word']
-            pos2 = graph.node[i+1]['pos']
+            pos2 = graph.node[i + 1]['pos']
 
             if pos.startswith('MOD') and pos2 == 'V' and word != CLITIC:
                 scoring_board['V9'] += 1
@@ -652,7 +651,7 @@ def get_IPSyn(tagged_sents):
 
             mor2 = graph.node[i + 1]['mor']
 
-            if mor2 in {'', 'beg', 'end'}:  # if mor2 is some sort of punctuation
+            if mor2 in {'', 'beg', 'end'}:  # if mor2 is a punctuation
                 scoring_board['V15'] += 1
                 add_one_point_if_needed('V4')
                 add_one_point_if_needed('V6')
@@ -739,8 +738,8 @@ def get_IPSyn(tagged_sents):
             word1 = graph.node[i]['word']
             mor2 = graph.node[i + 1]['mor']
 
-            if word1 in {'no', 'not', 'can\'t', 'don\'t'} and \
-                            mor2 not in {'', 'beg', 'end'}:
+            if (word1 in {'no', 'not', 'can\'t', 'don\'t'} and
+                    mor2 not in {'', 'beg', 'end'}):
                 scoring_board['Q3'] += 1
 
             if turn_off_scoring_board('Q3'):
@@ -890,14 +889,14 @@ def get_IPSyn(tagged_sents):
             pos1 = graph.node[i]['pos']
 
             if i != 1:
-                wh_test = graph.node[i-1]['pos']
+                wh_test = graph.node[i - 1]['pos']
             else:
                 wh_test = 'dummy'
 
             if pos1 in {'COP', 'MOD', 'AUX'} and not wh_test.endswith('WH'):
 
-                for j in graph.edge[i+1].keys():
-                    rel2 = graph.edge[i+1][j]['rel']
+                for j in graph.edge[i + 1].keys():
+                    rel2 = graph.edge[i + 1][j]['rel']
 
                     if rel2 == 'SUBJ':
                         scoring_board['Q8'] += 1
@@ -1051,12 +1050,12 @@ def get_IPSyn(tagged_sents):
                 if i != test_verb:
                     continue
 
-                if dep < test_verb and \
-                                graph.edge[dep][test_verb]['rel'] == 'SUBJ':
+                if (dep < test_verb and
+                        graph.edge[dep][test_verb]['rel'] == 'SUBJ'):
                     has_subject = True
 
-                if dep > test_verb and \
-                                graph.edge[dep][test_verb]['rel'] == 'OBJ':
+                if (dep > test_verb and
+                        graph.edge[dep][test_verb]['rel'] == 'OBJ'):
                     has_object = True
 
             if has_subject and has_object:
@@ -1104,8 +1103,7 @@ def get_IPSyn(tagged_sents):
             verbs.append(head)
             deps_of_verbs.append(dep)
 
-        if len(verbs) == 2 and \
-                not tuple(verbs) in all_edges and not tuple(verbs) in all_edges:
+        if len(verbs) == 2 and not tuple(verbs) in all_edges:
             scoring_board['S6'] += 1
 
         if turn_off_scoring_board('S6'):
@@ -1128,8 +1126,8 @@ def get_IPSyn(tagged_sents):
             mor3 = graph.node[i + 2]['mor']
 
             punctuations = {'', 'beg', 'end'}
-            if pos2 == 'CONJ' and \
-                    not mor1 in punctuations and not mor3 in punctuations:
+            if (pos2 == 'CONJ' and
+                    mor1 not in punctuations and mor3 not in punctuations):
                 scoring_board['S7'] += 1
                 add_one_point_if_needed('S5')
 
@@ -1235,8 +1233,8 @@ def get_IPSyn(tagged_sents):
         for dep, head in graph.edges():
             subject_count_increment = False
 
-            if graph.edge[dep][head]['rel'] == 'SUBJ' and \
-                            graph.node[dep]['word'] != CLITIC:
+            if (graph.edge[dep][head]['rel'] == 'SUBJ' and
+                    graph.node[dep]['word'] != CLITIC):
                 subject_count += 1
                 subject_count_increment = True
 
@@ -1288,7 +1286,8 @@ def get_IPSyn(tagged_sents):
                 continue
 
             inf = False
-            if dep+1 in graph.nodes() and graph.node[dep+1]['word'] == 'INF':
+            if (dep + 1 in graph.nodes() and
+                    graph.node[dep + 1]['word'] == 'INF'):
                 inf = True
 
             # we want the head of wh-word to NOT have ROOT as rel

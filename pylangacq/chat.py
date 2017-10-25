@@ -374,7 +374,7 @@ class Reader:
         if by_files:
             return {fn: self._fname_to_reader[fn].word_frequency(
                 participant=participant, keep_case=keep_case)
-                    for fn in self._filenames}
+                for fn in self._filenames}
         else:
             output_counter = Counter()
             for fn in self._filenames:
@@ -553,7 +553,7 @@ class Reader:
         if by_files:
             return {fn: self._fname_to_reader[fn].word_ngrams(
                 n, participant=participant, keep_case=keep_case)
-                    for fn in self._filenames}
+                for fn in self._filenames}
         else:
             output_counter = Counter()
             for fn in self._filenames:
@@ -680,7 +680,7 @@ class Reader:
                 search_item, participant=participant,
                 match_entire_word=match_entire_word, lemma=lemma,
                 output_tagged=output_tagged, output_sents=output_sents)
-                    for fn in self._filenames}
+                for fn in self._filenames}
         else:
             output_list = list()
             for fn in self.filenames(sorted_by_age=True):
@@ -726,7 +726,7 @@ class Reader:
             return {fn: self._fname_to_reader[fn].concordance(
                 search_item, participant=participant,
                 match_entire_word=match_entire_word, lemma=lemma)
-                    for fn in self._filenames}
+                for fn in self._filenames}
         else:
             output_list = list()
             for fn in self.filenames(sorted_by_age=True):
@@ -1112,7 +1112,7 @@ class SingleReader:
             day_int = int(day_str) if day_str.isdigit() else 0
 
             if month:
-                return year_int*12 + month_int + day_int/30
+                return year_int * 12 + month_int + day_int / 30
             else:
                 return year_int, month_int, day_int
         except (KeyError, IndexError, ValueError):
@@ -1383,7 +1383,8 @@ class SingleReader:
                 message = 'cannot align the utterance and %mor tiers:\n' + \
                           'Filename: {}\nTiers --\n{}\n' + \
                           'Cleaned-up utterance --\n{}'
-                raise ValueError(message.format(self.filename(),
+                raise ValueError(message.format(
+                    self.filename(),
                     pformat(tiermarker_to_line), utterance))
 
             # %gra tier
@@ -1638,8 +1639,8 @@ class SingleReader:
                     preceding_words = [tagged_sent[k][0] for k in range(i)]
                     preceding_words = [w for w in preceding_words
                                        if w != CLITIC]  # remove CLITIC
-                    char_number = sum([len(w) for w in preceding_words]) + \
-                                  len(preceding_words) - 1  # plus spaces
+                    char_number = (sum([len(w) for w in preceding_words]) +
+                                   len(preceding_words) - 1)  # plus spaces
                     taggedsent_charnumber_list.append((tagged_sent,
                                                        char_number))
 
@@ -1672,7 +1673,8 @@ class SingleReader:
             for tagged_sent, char_number in taggedsent_charnumber_list:
                 sent = [word for word, _, _, _ in tagged_sent
                         if word != CLITIC]
-                sent_str = ' '*(max_char_number - char_number) + ' '.join(sent)
+                sent_str = (' ' * (max_char_number - char_number) +
+                            ' '.join(sent))
                 result_list.append(sent_str)
 
             return result_list

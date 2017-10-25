@@ -1,9 +1,8 @@
 # For tests
-flake8>=3.3.0,<=3.3.99
-pytest>=3.0.7,<=3.0.99
-pytest-cov>=2.4.0,<=2.4.99
+flake8>=3.5.0,<=3.5.99
+pytest>=3.2.3,<=3.2.99
+pytest-cov>=2.5.1,<=2.5.99
 #
 # For docs
 alabaster>=0.7.10,<=0.7.99
-numpydoc>=0.6.0,<=0.6.99
-Sphinx>=1.6.1,<=1.6.99
+Sphinx>=1.6.5,<=1.6.99

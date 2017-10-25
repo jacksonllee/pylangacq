@@ -137,7 +137,8 @@ class Reader(object):
                                                 abs_fullpath))
         return filenames_set
 
-    def _reset_reader(self, *filenames, check=True):
+    def _reset_reader(self, *filenames, **kwargs):
+        check = kwargs.get('check', True)
         filenames_set = set()
 
         if not check:
@@ -751,7 +752,7 @@ class SingleReader(object):
         self._filename = os.path.abspath(filename)
 
         if not os.path.isfile(self._filename):
-            raise FileNotFoundError(self._filename)
+            raise FileNotFoundError(self._filename)  # noqa F821 (py2 compat)
 
         self._headers = self._get_headers()
         self._index_to_tiers = self._get_index_to_tiers()
@@ -1673,8 +1674,8 @@ class SingleReader(object):
             result_list = list()
 
             for tagged_sent, char_number in taggedsent_charnumber_list:
-                sent = [word for word, _, _, _ in tagged_sent
-                        if word != CLITIC]
+                sent = [word_ for word_, _, _, _ in tagged_sent
+                        if word_ != CLITIC]
                 sent_str = (' ' * (max_char_number - char_number) +
                             ' '.join(sent))
                 result_list.append(sent_str)

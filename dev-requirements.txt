@@ -6,3 +6,6 @@ pytest-cov>=2.5.1,<=2.5.99
 # For docs
 alabaster>=0.7.10,<=0.7.99
 Sphinx>=1.6.5,<=1.6.99
+#
+# For PyPI releases
+twine>=1.9.1

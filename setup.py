@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from os import path
 from setuptools import (setup, find_packages)
 
@@ -11,6 +9,9 @@ with open(path.join(THIS_DIR, 'pylangacq', 'VERSION')) as f:
 
 with open(path.join(THIS_DIR, 'README.rst')) as f:
     long_description = f.read()
+
+with open(path.join(THIS_DIR, 'requirements.txt')) as f:
+    requirements = [x.strip() for x in f.readlines()]
 
 
 def main():
@@ -31,7 +32,7 @@ def main():
 
         package_data={'pylangacq': ['VERSION']},
 
-        install_requires=['six>=1.10.0'],
+        install_requires=requirements,
 
         zip_safe=False,
 

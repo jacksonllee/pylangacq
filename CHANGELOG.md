@@ -1,6 +1,6 @@
 # Change log
 
-## v0.9.0 [Unreleased]
+## v0.9.0 - 2017-10-25
 
 * Python 2 and 3 cross compatibility
 * Renamed the `grammar.py` module as `dependency.py`

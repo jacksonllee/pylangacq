@@ -9,10 +9,6 @@ PyLangAcq
    :target: https://pypi.python.org/pypi/pylangacq
    :alt: Supported Python versions
 
-.. image:: https://img.shields.io/pypi/wheel/pylangacq.svg
-   :target: https://pypi.python.org/pypi/pylangacq
-   :alt: Wheel
-
 .. image:: https://travis-ci.org/pylangacq/pylangacq.svg?branch=master
    :target: https://travis-ci.org/pylangacq/pylangacq
    :alt: Build
@@ -46,12 +42,6 @@ PyLangAcq is available via `pip`:
    $ pip install pylangacq
 
 PyLangAcq works with Python 2.7 and 3.4+.
-
-
-Quickstart
-----------
-
-TODO
 
 
 How to cite

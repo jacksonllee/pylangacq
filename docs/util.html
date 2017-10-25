@@ -1,0 +1,225 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>util — General functions and constants &#8212; PyLangAcq 0.9.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="dependency — Modeling syntax and semantics" href="dependency.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="util-general-functions-and-constants">
+<span id="util"></span><h1><code class="docutils literal"><span class="pre">util</span></code> — General functions and constants<a class="headerlink" href="#util-general-functions-and-constants" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal"><span class="pre">util</span></code> module defines general functions and constants used throughout
+the library.</p>
+<span class="target" id="module-pylangacq.util"></span><dl class="function">
+<dt id="pylangacq.util.clean_utterance">
+<code class="descclassname">pylangacq.util.</code><code class="descname">clean_utterance</code><span class="sig-paren">(</span><em>utterance</em>, <em>phon=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/util.html#clean_utterance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.util.clean_utterance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter away the CHAT-style annotations in <em>utterance</em>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>utterance</strong> – The utterance as a str</li>
+<li><strong>phon</strong> – whether we are handling PhonBank data; defaults to False.
+If True, words like “xxx” and “yyy” won’t be removed.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The utterance without CHAT annotations</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pylangacq.util.convert_date_to_tuple">
+<code class="descclassname">pylangacq.util.</code><code class="descname">convert_date_to_tuple</code><span class="sig-paren">(</span><em>date_str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/util.html#convert_date_to_tuple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.util.convert_date_to_tuple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert <em>date_str</em> to (year, month, day),
+e.g., from <code class="docutils literal"><span class="pre">'01-FEB-2016'</span></code> to <code class="docutils literal"><span class="pre">(2016,</span> <span class="pre">2,</span> <span class="pre">1)</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pylangacq.util.find_indices">
+<code class="descclassname">pylangacq.util.</code><code class="descname">find_indices</code><span class="sig-paren">(</span><em>longstr</em>, <em>substring</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/util.html#find_indices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.util.find_indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find all indices of non-overlapping occurrences of substring in <em>longstr</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>longstr</strong> – the long string</li>
+<li><strong>substring</strong> – the substring to find</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list of indices of the long string for where substring occurs</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pylangacq.util.get_lemma_from_mor">
+<code class="descclassname">pylangacq.util.</code><code class="descname">get_lemma_from_mor</code><span class="sig-paren">(</span><em>mor</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/util.html#get_lemma_from_mor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.util.get_lemma_from_mor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract lemma from <em>mor</em></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pylangacq.util.get_participant_code">
+<code class="descclassname">pylangacq.util.</code><code class="descname">get_participant_code</code><span class="sig-paren">(</span><em>tier_marker_seq</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/util.html#get_participant_code"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.util.get_participant_code" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the participant code from a tier marker set.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tier_marker_seq</strong> – A sequence of tier markers like
+<code class="docutils literal"><span class="pre">{'CHI',</span> <span class="pre">'%mor',</span> <span class="pre">'%gra'}</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A participant code, e.g., <code class="docutils literal"><span class="pre">'CHI'</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str, or None if no participant code is found</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pylangacq.util.remove_extra_spaces">
+<code class="descclassname">pylangacq.util.</code><code class="descname">remove_extra_spaces</code><span class="sig-paren">(</span><em>inputstr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/util.html#remove_extra_spaces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.util.remove_extra_spaces" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Remove extra spaces in <em>inputstr</em> so that there are only single</dt>
+<dd>(but not double, triple etc) spaces.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inputstr</strong> – input string</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">string with replacers replaced by corresponding replacees</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="toc.html">PyLangAcq</a></h1>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">PyLangAcq: Language Acquisition Research in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Download and install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="read.html">Reading data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Accessing metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transcriptions.html">Transcriptions and annotations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="devmeasures.html">Developmental measures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="freq.html">Word frequency and ngrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="concord.html">Word search and concordance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lex.html">Lexicon and morphology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phono.html">Phonetics and phonology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synsem.html">Syntax and semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disca.html">Discourse and conversational analysis</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference.html">Library reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="chat.html"><code class="docutils literal"><span class="pre">chat</span></code> — Reading and parsing CHAT transcripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="measures.html"><code class="docutils literal"><span class="pre">measures</span></code> — Developmental measures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dependency.html"><code class="docutils literal"><span class="pre">dependency</span></code> — Modeling syntax and semantics</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal"><span class="pre">util</span></code> — General functions and constants</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="toc.html">Documentation overview</a><ul>
+  <li><a href="reference.html">Library reference</a><ul>
+      <li>Previous: <a href="dependency.html" title="previous chapter"><code class="docutils literal"><span class="pre">dependency</span></code> — Modeling syntax and semantics</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015-2017, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.9.0 | Documentation last updated on October 25, 2017.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

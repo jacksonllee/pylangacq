@@ -22,16 +22,17 @@ if six.PY2:
     from io import open
 
 
-def read_chat(*filenames, encoding=ENCODING):
+def read_chat(*filenames, **kwargs):
     """
     Create a ``Reader`` object based on *filenames*.
 
     :param filenames: one or multiple filenames (absolute-path or relative to
         the current directory; with or without glob matching patterns)
 
-    :param encoding: file encoding; defaults to 'utf8'. (New in version 0.9)
+    :param kwargs: Only the keyword ``encoding`` is recognized, which defaults
+        to 'utf8'. (New in version 0.9)
     """
-    return Reader(*filenames, encoding=encoding)
+    return Reader(*filenames, **kwargs)
 
 
 def params_in_docstring(*params):
@@ -86,12 +87,13 @@ class Reader(object):
         ``?`` matches exactly one character.
         A filename can be either an absolute or relative path.
         If no *filenames* are provided, an empty Reader instance is created.
-    encoding : str, optional
-        The encoding of the data files.
+    **kwargs
+        Only the keyword ``encoding`` is recognized, which defaults
+        to 'utf8'. (New in version 0.9)
     """
 
-    def __init__(self, *filenames, encoding=ENCODING):
-        self.encoding = encoding
+    def __init__(self, *filenames, **kwargs):
+        self.encoding = kwargs.get('encoding', ENCODING)
         self._input_filenames = filenames
         self._reset_reader(*self._input_filenames)
 

@@ -1,0 +1,256 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>pylangacq.dependency &#8212; PyLangAcq 0.9.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.9.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pylangacq.dependency</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+
+<div class="viewcode-block" id="DependencyGraph"><a class="viewcode-back" href="../../dependency.html#pylangacq.dependency.DependencyGraph">[docs]</a><span class="k">class</span> <span class="nc">DependencyGraph</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    DependencyGraph is a class representing dependency graphs in dependency</span>
+<span class="sd">        grammar.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize dependency graph.</span>
+
+<span class="sd">        :param data: input data</span>
+
+<span class="sd">        :param form: format of the input data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># from node to dict (node&#39;s properties)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edge</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># from node to node to dict (edge&#39;s properties)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_faulty</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_create_graph_from_chat</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">add_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">node1</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">node1</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">node2</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">node2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">if</span> <span class="n">node1</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">node1</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">node1</span><span class="p">][</span><span class="n">node2</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span>
+
+    <span class="k">def</span> <span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2_to_properties</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">node2</span> <span class="ow">in</span> <span class="n">node2_to_properties</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">result</span><span class="p">[</span><span class="n">node1</span><span class="p">]</span> <span class="o">=</span> <span class="n">node2</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="nf">number_of_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_create_graph_from_chat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create dependency graph based on the input data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">word</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">mor</span><span class="p">,</span> <span class="n">gra</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">,</span> <span class="n">relation</span> <span class="o">=</span> <span class="n">gra</span>  <span class="c1"># e.g., (1, 3, &#39;LINK&#39;)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="n">node1</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="n">node2</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="n">relation</span> <span class="o">=</span> <span class="s1">&#39;**ERROR**&#39;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_faulty</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">,</span> <span class="n">rel</span><span class="o">=</span><span class="n">relation</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">node1</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;word&#39;</span><span class="p">:</span> <span class="n">word</span><span class="p">,</span>
+                                <span class="s1">&#39;pos&#39;</span><span class="p">:</span> <span class="n">pos</span><span class="p">,</span>
+                                <span class="s1">&#39;mor&#39;</span><span class="p">:</span> <span class="n">mor</span><span class="p">,</span>
+                                <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;word&#39;</span><span class="p">:</span> <span class="s1">&#39;ROOT&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;pos&#39;</span><span class="p">:</span> <span class="s1">&#39;ROOT&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;mor&#39;</span><span class="p">:</span> <span class="s1">&#39;ROOT&#39;</span><span class="p">,</span>
+                        <span class="p">}</span>
+
+<div class="viewcode-block" id="DependencyGraph.faulty"><a class="viewcode-back" href="../../dependency.html#pylangacq.dependency.DependencyGraph.faulty">[docs]</a>    <span class="k">def</span> <span class="nf">faulty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return True or False for whether the graph is faulty for dependency</span>
+<span class="sd">            information.</span>
+
+<span class="sd">        :return: True or False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faulty</span></div>
+
+<div class="viewcode-block" id="DependencyGraph.to_tikz"><a class="viewcode-back" href="../../dependency.html#pylangacq.dependency.DependencyGraph.to_tikz">[docs]</a>    <span class="k">def</span> <span class="nf">to_tikz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the dependency graph as LaTeX tikz-dependency code.</span>
+
+<span class="sd">        :return: The LaTeX tikz-dependency code for drawing the graph</span>
+
+<span class="sd">        :rtype: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tikz_dep_code</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+        <span class="c1"># get graph info</span>
+        <span class="n">dep_to_head</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">())</span>
+        <span class="n">number_of_nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span>
+
+        <span class="c1"># add \begin{deptext}...\end{deptext}</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s1">&#39;word&#39;</span><span class="p">]</span>
+                 <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">number_of_nodes</span><span class="p">)]</span>
+        <span class="n">deptext_template</span> <span class="o">=</span> <span class="s1">&#39;    </span><span class="se">\\</span><span class="s1">begin{{deptext}}[column sep=1em]</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> \
+                           <span class="s1">&#39;        </span><span class="si">{}</span><span class="s1"> </span><span class="se">\\\\</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> \
+                           <span class="s1">&#39;    </span><span class="se">\\</span><span class="s1">end{{deptext}}</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">tikz_dep_code</span> <span class="o">+=</span> <span class="n">deptext_template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39; </span><span class="se">\\</span><span class="s1">&amp; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">words</span><span class="p">))</span>
+
+        <span class="c1"># add the \deproot line</span>
+        <span class="n">dep_shooting_to_root</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">root_rel</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">dep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">number_of_nodes</span><span class="p">):</span>
+            <span class="n">head</span> <span class="o">=</span> <span class="n">dep_to_head</span><span class="p">[</span><span class="n">dep</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">head</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">dep_shooting_to_root</span> <span class="o">=</span> <span class="n">dep</span>
+                <span class="n">root_rel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">dep_shooting_to_root</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;rel&#39;</span><span class="p">]</span>
+                <span class="k">break</span>
+        <span class="n">tikz_dep_code</span> <span class="o">+=</span> <span class="s1">&#39;    </span><span class="se">\\</span><span class="s1">deproot{{</span><span class="si">{}</span><span class="s1">}}{{</span><span class="si">{}</span><span class="s1">}}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">dep_shooting_to_root</span><span class="p">,</span> <span class="n">root_rel</span><span class="p">)</span>
+
+        <span class="c1"># add the \depedge lines</span>
+        <span class="k">for</span> <span class="n">dep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">number_of_nodes</span><span class="p">):</span>
+            <span class="n">head</span> <span class="o">=</span> <span class="n">dep_to_head</span><span class="p">[</span><span class="n">dep</span><span class="p">]</span>
+            <span class="n">rel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="n">head</span><span class="p">][</span><span class="s1">&#39;rel&#39;</span><span class="p">]</span>
+            <span class="n">tikz_dep_code</span> <span class="o">+=</span> <span class="s1">&#39;    </span><span class="se">\\</span><span class="s1">depedge{{</span><span class="si">{}</span><span class="s1">}}{{</span><span class="si">{}</span><span class="s1">}}{{</span><span class="si">{}</span><span class="s1">}}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">dep</span><span class="p">,</span> <span class="n">head</span><span class="p">,</span> <span class="n">rel</span><span class="p">)</span>
+
+        <span class="c1"># return tikz_dep_code</span>
+        <span class="c1"># wrapped inside \begin{dependency}...\end{dependency}</span>
+        <span class="n">dependency_template</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">begin{{dependency}}[theme = simple]</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> \
+                              <span class="s1">&#39;</span><span class="si">{}</span><span class="se">\\</span><span class="s1">end{{dependency}}&#39;</span>
+        <span class="k">return</span> <span class="n">dependency_template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tikz_dep_code</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DependencyGraph.to_conll"><a class="viewcode-back" href="../../dependency.html#pylangacq.dependency.DependencyGraph.to_conll">[docs]</a>    <span class="k">def</span> <span class="nf">to_conll</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the dependency graph in the CoNLL format.</span>
+
+<span class="sd">        :return: The CoNLL format of the dependency graph</span>
+
+<span class="sd">        :rtype: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">collector</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">dep_to_head</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">())</span>
+
+        <span class="k">for</span> <span class="n">dep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()):</span>
+            <span class="n">head</span> <span class="o">=</span> <span class="n">dep_to_head</span><span class="p">[</span><span class="n">dep</span><span class="p">]</span>
+            <span class="n">word</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="s1">&#39;word&#39;</span><span class="p">]</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span>
+            <span class="n">rel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="n">head</span><span class="p">][</span><span class="s1">&#39;rel&#39;</span><span class="p">]</span>
+            <span class="n">collector</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">head</span><span class="p">,</span> <span class="n">rel</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">collector</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../toc.html">PyLangAcq</a></h1>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">PyLangAcq: Language Acquisition Research in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../download.html">Download and install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../read.html">Reading data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../metadata.html">Accessing metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../transcriptions.html">Transcriptions and annotations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../devmeasures.html">Developmental measures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../freq.html">Word frequency and ngrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../concord.html">Word search and concordance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lex.html">Lexicon and morphology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../phono.html">Phonetics and phonology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../synsem.html">Syntax and semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../disca.html">Discourse and conversational analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference.html">Library reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../toc.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015-2017, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.9.0 | Documentation last updated on October 25, 2017.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

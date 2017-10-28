@@ -19,7 +19,7 @@ from pylangacq.util import (ENCODING, CLITIC,
 
 
 if six.PY2:
-    from io import open
+    from io import open  # pragma: no coverage  (doesn't run in py >=3)
 
 
 def read_chat(*filenames, **kwargs):

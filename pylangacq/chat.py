@@ -149,7 +149,7 @@ class Reader(object):
         self._filenames = filenames_set
         self._all_part_of_speech_tags = None
 
-        self._fname_to_reader = dict()
+        self._fname_to_reader = {}
         for fn in self._filenames:
             self._fname_to_reader[fn] = SingleReader(fn,
                                                      encoding=self.encoding)
@@ -193,7 +193,7 @@ class Reader(object):
         else:
             file_basename = file_basename.replace('\\', os.sep)
 
-        filename_matches = list()
+        filename_matches = []
 
         for filename in self.filenames():
             if filename.endswith(file_basename):
@@ -685,7 +685,7 @@ class Reader(object):
                 output_tagged=output_tagged, output_sents=output_sents)
                 for fn in self._filenames}
         else:
-            output_list = list()
+            output_list = []
             for fn in self.filenames(sorted_by_age=True):
                 output_list.extend(self._fname_to_reader[fn].search(
                     search_item, participant=participant,
@@ -731,7 +731,7 @@ class Reader(object):
                 match_entire_word=match_entire_word, lemma=lemma)
                 for fn in self._filenames}
         else:
-            output_list = list()
+            output_list = []
             for fn in self.filenames(sorted_by_age=True):
                 output_list.extend(self._fname_to_reader[fn].concordance(
                     search_item, participant=participant,
@@ -836,7 +836,7 @@ class SingleReader(object):
         return self._index_to_tiers
 
     def _get_index_to_tiers(self):
-        result_with_collapses = dict()
+        result_with_collapses = {}
         index_ = -1  # utterance index (1st utterance is index 0)
         utterance = None
 
@@ -858,7 +858,7 @@ class SingleReader(object):
                     ' '.join(line_split[1:])
 
         # handle collapses such as [x 4]
-        result_without_collapses = dict()
+        result_without_collapses = {}
         new_index = -1  # utterance index (1st utterance is index 0)
         collapse_pattern = re.compile('\[x \d+?\]')  # e.g., "[x <number(s)>]"
         number_regex = re.compile('\d+')
@@ -912,7 +912,7 @@ class SingleReader(object):
         return self._headers
 
     def _get_headers(self):
-        headname_to_entry = dict()
+        headname_to_entry = {}
 
         for line in self.cha_lines():
 
@@ -929,7 +929,7 @@ class SingleReader(object):
             head = head.rstrip(':')  # remove ending ":", if any
 
             if head == 'Participants':
-                headname_to_entry['Participants'] = dict()
+                headname_to_entry['Participants'] = {}
 
                 participants = line.split(',')
 
@@ -1017,7 +1017,7 @@ class SingleReader(object):
         try:
             return self._headers['Participants']
         except KeyError:
-            return dict()
+            return {}
 
     def participant_codes(self):
         """
@@ -1033,7 +1033,7 @@ class SingleReader(object):
         Return the list of the languages involved based on the @Languages
         header.
         """
-        languages_list = list()
+        languages_list = []
 
         try:
             languages_line = self._headers['Languages']
@@ -1071,7 +1071,7 @@ class SingleReader(object):
         :rtype: dict(str: (int, int, int))
         """
         header_keys = self._headers.keys()
-        participant_to_date = dict()
+        participant_to_date = {}
 
         for header in header_keys:
             if not header.startswith('Birth of'):
@@ -1141,7 +1141,7 @@ class SingleReader(object):
         :param clean: Whether to filter away the CHAT annotations in the
             utterance; default to ``True``.
         """
-        output = list()
+        output = []
         participants = self._determine_participants(participant, exclude)
 
         for i in range(len(self)):
@@ -1325,7 +1325,7 @@ class SingleReader(object):
             together into a list which is in turn yielded. Otherwise,
             individual words are directly yielded without utterance structure.
         """
-        result_list = list()
+        result_list = []
         participants = self._determine_participants(participant, exclude)
 
         if sents:
@@ -1347,7 +1347,7 @@ class SingleReader(object):
         return result_list
 
     def _create_all_tagged_sents(self):
-        result_list = list()
+        result_list = []
 
         for i in range(self.number_of_utterances()):
             tiermarker_to_line = self._index_to_tiers[i]
@@ -1359,10 +1359,10 @@ class SingleReader(object):
             words = utterance.split()
 
             # %mor tier
-            clitic_indices = list()  # indices at the word items
+            clitic_indices = []  # indices at the word items
             clitic_count = 0
 
-            mor_items = list()
+            mor_items = []
             if '%mor' in tiermarker_to_line:
                 mor_split = tiermarker_to_line['%mor'].split()
 
@@ -1391,12 +1391,12 @@ class SingleReader(object):
                     pformat(tiermarker_to_line), utterance))
 
             # %gra tier
-            gra_items = list()
+            gra_items = []
             if '%gra' in tiermarker_to_line:
                 for item in tiermarker_to_line['%gra'].split():
                     # an item is a string like '1|2|SUBJ'
 
-                    item_list = list()
+                    item_list = []
                     for element in item.split('|'):
                         try:
                             converted_element = int(element)
@@ -1431,7 +1431,7 @@ class SingleReader(object):
             if not gra_items:
                 gra_items = [''] * len(utterance_items)
 
-            sent = list()
+            sent = []
 
             for word, mor, gra in zip(utterance_items, mor_items, gra_items):
                 pos, _, mor = mor.partition('|')
@@ -1612,7 +1612,7 @@ class SingleReader(object):
     def _search(self, search_item, participant=None, exclude=False,
                 match_entire_word=True, lemma=False, concordance=False,
                 output_tagged=True, output_sents=True):
-        taggedsent_charnumber_list = list()
+        taggedsent_charnumber_list = []
         # = list of (tagged_sent, char_number)
 
         # set up the match function
@@ -1663,7 +1663,7 @@ class SingleReader(object):
                 sent_to_add = lambda sent_: [x[0]
                                              for x in sent_ if x[0] != CLITIC]
 
-            result_list = list()
+            result_list = []
 
             for tagged_sent, _ in taggedsent_charnumber_list:
                 add_function(result_list, sent_to_add(tagged_sent))
@@ -1671,7 +1671,7 @@ class SingleReader(object):
             return result_list
         else:
             max_char_number = max([n for _, n in taggedsent_charnumber_list])
-            result_list = list()
+            result_list = []
 
             for tagged_sent, char_number in taggedsent_charnumber_list:
                 sent = [word_ for word_, _, _, _ in tagged_sent

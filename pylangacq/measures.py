@@ -946,7 +946,7 @@ def get_IPSyn(tagged_sents):
 
         # Part 2: test for "normal" tag questions
         good_pos = {'COP NEG PRO ?', 'COP PRO ?'}
-        collate = list()
+        collate = []
 
         for i in range(1, graph.number_of_nodes()):
             collate.append(graph.node[i]['pos'])
@@ -1091,8 +1091,8 @@ def get_IPSyn(tagged_sents):
             return
 
         all_edges = graph.edges()
-        verbs = list()
-        deps_of_verbs = list()
+        verbs = []
+        deps_of_verbs = []
 
         for dep, head in all_edges:
             head_pos = graph.node[head]['pos']
@@ -1318,7 +1318,7 @@ def get_IPSyn(tagged_sents):
         if not graph.number_of_nodes() > 3:
             return
 
-        dep_head_pairs_for_obj = list()
+        dep_head_pairs_for_obj = []
 
         for dep, head in graph.edges():
             rel = graph.edge[dep][head]['rel']
@@ -1450,7 +1450,7 @@ def get_IPSyn(tagged_sents):
         # for now: check if CONJ precedes two SUBJ's
 
         conj_position = graph.number_of_nodes()  # decrement if CONJ is found
-        subj_position_list = list()
+        subj_position_list = []
 
         for dep, head in graph.edges():
             pos = graph.node[dep]['pos']

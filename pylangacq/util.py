@@ -119,7 +119,7 @@ def clean_utterance(utterance, phon=False):
     #    plus their signaling annotations (= "[:", "[::", "[/]", "[//]").
     # 3. Delete the unwanted words on the left of the signaling annotations.
 
-    angle_brackets_l2r_pairs = dict()  # left-to-right
+    angle_brackets_l2r_pairs = {}  # left-to-right
     for index_ in find_indices(utterance, '<'):
         counter = 1
         for i in range(index_ + 1, len(utterance)):
@@ -134,7 +134,7 @@ def clean_utterance(utterance, phon=False):
     angle_brackets_r2l_pairs = {v: k
                                 for k, v in angle_brackets_l2r_pairs.items()}
 
-    index_pairs = list()  # characters bounded by index pairs to be removed
+    index_pairs = []  # characters bounded by index pairs to be removed
 
     # remove ' [///]'
     triple_slash_right_indices = find_indices(utterance, '> \[///\]')
@@ -216,7 +216,7 @@ def clean_utterance(utterance, phon=False):
         escape_prefixes.update({'0'})
 
     words = utterance.split()
-    new_words = list()
+    new_words = []
 
     for word in words:
         word = re.sub('\A<', '', word)   # remove beginning <

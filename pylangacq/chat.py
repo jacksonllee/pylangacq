@@ -10,15 +10,13 @@ from pprint import pformat
 from collections import Counter
 from itertools import chain
 
-import six
-
 from pylangacq.measures import get_MLUm, get_MLUw, get_TTR, get_IPSyn
 from pylangacq.util import (ENCODING, CLITIC,
                             get_participant_code, convert_date_to_tuple,
                             clean_utterance, clean_word, get_lemma_from_mor)
 
 
-if six.PY2:
+if sys.version_info[0] == 2:
     from io import open  # pragma: no coverage  (doesn't run in py >=3)
 
 
@@ -112,7 +110,7 @@ class Reader(object):
 
         filenames_set = set()
         for filename in filenames:
-            if type(filename) is not six.text_type:
+            if not isinstance(filename, str):
                 raise ValueError('{} is not str'.format(repr(filename)))
 
             if windows:
@@ -185,7 +183,7 @@ class Reader(object):
         file_basename : str
             CHAT file basename such as ``eve01.cha``
         """
-        if type(file_basename) is not six.text_type:
+        if not isinstance(file_basename, str):
             raise ValueError('argument must be str')
 
         if sys.platform.startswith('win'):
@@ -746,7 +744,7 @@ class SingleReader(object):
 
         self.encoding = encoding
 
-        if type(filename) is not six.text_type:
+        if not isinstance(filename, str):
             raise ValueError('filename must be str')
 
         self._filename = os.path.abspath(filename)
@@ -1173,7 +1171,7 @@ class SingleReader(object):
         if participant is None:
             return all_participant_codes
 
-        if type(participant) is six.text_type:
+        if isinstance(participant, str):
             check_participants = {participant}
         elif hasattr(participant, '__iter__'):
             check_participants = set(participant)

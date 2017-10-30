@@ -22,14 +22,11 @@ def download_brown_zip(zip_path):
         raise
 
 
-def extract_brown_zip(zip_path):
-    with zipfile.ZipFile(zip_path) as brown_zip:
-        brown_zip.extractall()
-
-
 def test_brown_zip_is_available():
+    """Verify Brown zip is available for download and can be unzipped."""
     with tempfile.NamedTemporaryFile() as temp_zip_file:
         zip_path = temp_zip_file.name
 
         download_brown_zip(zip_path)
-        extract_brown_zip(zip_path)
+        with zipfile.ZipFile(zip_path) as brown_zip:
+            brown_zip.extractall()

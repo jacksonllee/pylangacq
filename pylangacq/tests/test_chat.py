@@ -1,7 +1,6 @@
-from __future__ import print_function
-
 import zipfile
 
+import pytest
 import requests
 
 
@@ -14,12 +13,15 @@ def download_brown_zip(zip_path):
         with open(zip_path, 'wb') as brown_zip_file:
             with requests.get(BROWN_URL) as r:
                 brown_zip_file.write(r.content)
-    except:  # pragma: no cover  # noqa
-        print('Error in downloading Brown zip: '
-              'network problems or invalid URL for Brown zip?\n'
-              'If URL needs updating, tutorial.rst in docs has to be updated '
-              'as well\n.')
-        raise
+    except Exception as e:  # pragma: no cover
+        msg = ('Error in downloading Brown zip: '
+               'network problems or invalid URL for Brown zip? '
+               'If URL needs updating, tutorial.rst in docs '
+               'has to be updated as well.')
+        try:
+            raise e
+        finally:
+            pytest.exit(msg)
 
 
 def test_brown_zip_is_available():

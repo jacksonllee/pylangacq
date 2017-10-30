@@ -1,4 +1,5 @@
 docs/_sources/*
-/test_dev/
 
-pypi_upload.sh
+# Test data
+Brown/*
+brown.zip

@@ -175,8 +175,9 @@ class Reader(object):
         if not sorted_by_age:
             return self._filenames
         else:
-            return [fn for fn, _ in sorted(self.age().items(),
-                                           key=lambda x: x[1])]
+            # sort by filename first (so filenames with same age are sorted)
+            return [fn for fn, _ in
+                    sorted(sorted(self.age().items()), key=lambda x: x[1])]
 
     def find_filename(self, file_basename):
         """Return the absolute-path filename of *file_basename*.

@@ -10,8 +10,10 @@ from pylangacq import read_chat
 
 BROWN_URL = 'https://childes.talkbank.org/data/Eng-NA/Brown.zip'
 BROWN_ZIP_PATH = 'brown.zip'
-BROWN_EVE_FILE_PATH_1 = os.path.join('Brown', 'Eve', '010600a.cha')
-BROWN_EVE_FILE_PATH_2 = os.path.join('Brown', 'Eve', '010600b.cha')
+BROWN_EVE_DIR = os.path.join('Brown', 'Eve')
+BROWN_EVE_FILE_PATH_1 = os.path.join(BROWN_EVE_DIR, '010600a.cha')
+BROWN_EVE_FILE_PATH_2 = os.path.join(BROWN_EVE_DIR, '010600b.cha')
+BROWN_EVE_FILE_PATH_ALL_FILES = os.path.join(BROWN_EVE_DIR, '*.cha')
 
 
 def test_download_and_extract_brown_zip_file():
@@ -38,8 +40,13 @@ def test_download_and_extract_brown_zip_file():
 
 
 @pytest.fixture
-def eve():
+def eve_one_file():
     return read_chat(BROWN_EVE_FILE_PATH_1, encoding='utf-8')
+
+
+@pytest.fixture
+def eve_all_files():
+    return read_chat(BROWN_EVE_FILE_PATH_ALL_FILES, encoding='utf-8')
 
 
 def test_read_chat_wrong_filename_type():
@@ -47,56 +54,63 @@ def test_read_chat_wrong_filename_type():
         read_chat(42)
 
 
-def test_number_of_files(eve):
-    assert len(eve) == eve.number_of_files() == 1
+def test_number_of_files(eve_one_file):
+    assert len(eve_one_file) == eve_one_file.number_of_files() == 1
 
 
-def test_update(eve):
+def test_update(eve_one_file):
     new_eve = read_chat(BROWN_EVE_FILE_PATH_2)
-    eve.update(new_eve)
-    assert len(eve) == 2
+    eve_one_file.update(new_eve)
+    assert len(eve_one_file) == 2
 
 
-def test_update_wrong_reader_type(eve):
+def test_update_wrong_reader_type(eve_one_file):
     with pytest.raises(ValueError):
-        eve.update(42)
+        eve_one_file.update(42)
 
 
-def test_add(eve):
+def test_add(eve_one_file):
     # Add an already-existing filename => no change in filename count
-    assert len(eve) == 1
-    eve.add(BROWN_EVE_FILE_PATH_1)
-    assert len(eve) == 1
+    assert len(eve_one_file) == 1
+    eve_one_file.add(BROWN_EVE_FILE_PATH_1)
+    assert len(eve_one_file) == 1
 
     # Add a new filename => filename count increments by 1
-    len_eve = len(eve)
-    eve.add(BROWN_EVE_FILE_PATH_2)
-    assert len(eve) == len_eve + 1
+    len_eve = len(eve_one_file)
+    eve_one_file.add(BROWN_EVE_FILE_PATH_2)
+    assert len(eve_one_file) == len_eve + 1
 
     # Add a non-existing file => should throw an error
     with pytest.raises(ValueError):
-        eve.add('foo')
+        eve_one_file.add('foo')
 
 
-def test_remove(eve):
+def test_remove(eve_one_file):
     # Remove a non-existing file => should throw an error
     with pytest.raises(ValueError):
-        eve.remove('foo')
+        eve_one_file.remove('foo')
 
     # Remove an existing file NOT in reader => should throw an error
     with tempfile.NamedTemporaryFile() as dummy_file:
         dummy_filename = dummy_file.name
         with pytest.raises(ValueError):
-            eve.remove(dummy_filename)
+            eve_one_file.remove(dummy_filename)
 
     # Remove an existing filename in reader => filename count decrement by 1
-    len_eve = len(eve)
-    eve.remove(BROWN_EVE_FILE_PATH_1)
-    assert len(eve) == len_eve - 1
+    len_eve = len(eve_one_file)
+    eve_one_file.remove(BROWN_EVE_FILE_PATH_1)
+    assert len(eve_one_file) == len_eve - 1
 
 
-def test_clear(eve):
+def test_clear(eve_one_file):
     """Clear and reset the reader => no filenames left"""
-    assert len(eve) > 0
-    eve.clear()
-    assert len(eve) == 0
+    assert len(eve_one_file) > 0
+    eve_one_file.clear()
+    assert len(eve_one_file) == 0
+
+
+def test_filenames(eve_all_files):
+    expected_filenames = [os.path.abspath(os.path.join(BROWN_EVE_DIR, x))
+                          for x in sorted(os.listdir(BROWN_EVE_DIR))]
+    assert eve_all_files.filenames() == set(expected_filenames)
+    assert eve_all_files.filenames(sorted_by_age=True) == expected_filenames

@@ -30,6 +30,7 @@ def read_chat(*filenames, **kwargs):
     :param kwargs: Only the keyword ``encoding`` is recognized, which defaults
         to 'utf8'. (New in version 0.9)
     """
+    # TODO: Should error if any of "filenames" give no actual filenames?
     return Reader(*filenames, **kwargs)
 
 
@@ -518,6 +519,8 @@ class Reader(object):
             Filenames may take glob patterns with wildcards ``*`` and ``?``.
         """
         add_filenames = self._get_abs_filenames(*filenames)
+        if not add_filenames:
+            raise ValueError('No files to add!')
         new_filenames = self.filenames() | add_filenames
         self._reset_reader(*tuple(new_filenames), check=False)
 
@@ -530,11 +533,13 @@ class Reader(object):
             Filenames may take glob patterns with wildcards ``*`` and ``?``.
         """
         remove_filenames = self._get_abs_filenames(*filenames)
+        if not remove_filenames:
+            raise ValueError('No files to remove!')
         new_filenames = set(self.filenames())
 
         for remove_filename in remove_filenames:
             if remove_filename not in self.filenames():
-                raise KeyError('filename not found')
+                raise ValueError('filename not found')
             else:
                 new_filenames.remove(remove_filename)
 

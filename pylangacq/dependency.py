@@ -92,9 +92,9 @@ class DependencyGraph(object):
         # add \begin{deptext}...\end{deptext}
         words = [self.node[n]['word']
                  for n in range(1, number_of_nodes)]
-        deptext_template = '    \\begin{{deptext}}[column sep=1em]\n' + \
-                           '        {} \\\\ \n' + \
-                           '    \\end{{deptext}}\n'
+        deptext_template = (u'    \\begin{{deptext}}[column sep=1em]\n'
+                            '        {} \\\\ \n'
+                            '    \\end{{deptext}}\n')
         tikz_dep_code += deptext_template.format(' \\& '.join(words))
 
         # add the \deproot line
@@ -106,20 +106,20 @@ class DependencyGraph(object):
                 dep_shooting_to_root = dep
                 root_rel = self.edge[dep_shooting_to_root][0]['rel']
                 break
-        tikz_dep_code += '    \\deproot{{{}}}{{{}}}\n'.format(
+        tikz_dep_code += u'    \\deproot{{{}}}{{{}}}\n'.format(
             dep_shooting_to_root, root_rel)
 
         # add the \depedge lines
         for dep in range(1, number_of_nodes):
             head = dep_to_head[dep]
             rel = self.edge[dep][head]['rel']
-            tikz_dep_code += '    \\depedge{{{}}}{{{}}}{{{}}}\n'.format(
+            tikz_dep_code += u'    \\depedge{{{}}}{{{}}}{{{}}}\n'.format(
                 dep, head, rel)
 
         # return tikz_dep_code
         # wrapped inside \begin{dependency}...\end{dependency}
-        dependency_template = '\\begin{{dependency}}[theme = simple]\n' + \
-                              '{}\\end{{dependency}}'
+        dependency_template = (u'\\begin{{dependency}}[theme = simple]\n'
+                               '{}\\end{{dependency}}')
         return dependency_template.format(tikz_dep_code)
 
     def to_conll(self):
@@ -138,6 +138,6 @@ class DependencyGraph(object):
             word = self.node[dep]['word']
             pos = self.node[dep]['pos']
             rel = self.edge[dep][head]['rel']
-            collector.append('{} {} {} {}'.format(word, pos, head, rel))
+            collector.append(u'{} {} {} {}'.format(word, pos, head, rel))
 
         return '\n'.join(collector)

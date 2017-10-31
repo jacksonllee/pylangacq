@@ -125,7 +125,7 @@ class Reader(object):
                 abs_dir = os.path.dirname(abs_dir)
 
             if not os.path.isdir(abs_dir):
-                raise ValueError('invalid filename: {}'.format(filename))
+                raise ValueError('invalid filename: {}'.format(repr(filename)))
 
             candidate_filenames = [os.path.join(dir_, fn)
                                    for dir_, _, fns in os.walk(abs_dir)
@@ -795,7 +795,7 @@ class SingleReader(object):
                 current_line = current_line.replace('%x', '%', 1)
 
             if previous_line and current_line.startswith('\t'):
-                previous_line = '{} {}'.format(
+                previous_line = u'{} {}'.format(
                     previous_line, current_line.strip())  # strip \t
             elif previous_line:
                 yield previous_line
@@ -1524,7 +1524,7 @@ class SingleReader(object):
             lowercase.
         """
         if (type(n) is not int) or (n < 1):
-            raise ValueError('n must be a positive integer: {}'.format(n))
+            raise ValueError('n must be a positive integer: %r' % n)
 
         if n == 1:
             return self.word_frequency(participant=participant,

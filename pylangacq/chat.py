@@ -121,11 +121,13 @@ class Reader(object):
             abs_fullpath = os.path.abspath(filename)
             abs_dir = os.path.dirname(abs_fullpath)
             glob_match_pattern = re.compile('.*[\*\?\[\]].*')
-            while glob_match_pattern.search(abs_dir):
+            while glob_match_pattern.search(abs_dir):  # pragma: no cover
                 abs_dir = os.path.dirname(abs_dir)
 
-            if not os.path.isdir(abs_dir):
-                raise ValueError('invalid filename: {}'.format(repr(filename)))
+            if not os.path.isdir(abs_dir):  # pragma: no cover
+                msg = (u'{} is not a directory. Filename {} is likely invalid.'
+                       .format(abs_dir, filename))
+                raise ValueError(msg)
 
             candidate_filenames = [os.path.join(dir_, fn)
                                    for dir_, _, fns in os.walk(abs_dir)

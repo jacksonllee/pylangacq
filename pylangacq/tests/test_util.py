@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
+
 from pylangacq.util import (clean_utterance, get_participant_code, clean_word,
                             convert_date_to_tuple, get_lemma_from_mor,
                             remove_extra_spaces, find_indices)

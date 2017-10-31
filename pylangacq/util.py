@@ -52,6 +52,8 @@ def clean_utterance(utterance, phon=False):
     # "[*] [/" replaced by "[/"
     # "] [*]" replaced by "]"
 
+    # print('utterance:', utterance, type(utterance))
+
     utterance = re.sub('\[= [^\[]+?\]', '', utterance)
     utterance = re.sub('\[x \d+?\]', '', utterance)
     utterance = re.sub('\[\+ [^\[]+?\]', '', utterance)
@@ -67,13 +69,13 @@ def clean_utterance(utterance, phon=False):
     utterance = re.sub('\(\d+?\.?\d*?\)', '', utterance)
     utterance = re.sub('\[%act: [^\[]+?\]', '', utterance)
 
-    utterance = utterance.replace('[?]', '')
-    utterance = utterance.replace('[!]', '')
-    utterance = utterance.replace('‹', '')
-    utterance = utterance.replace('›', '')
+    utterance = re.sub('\[\?\]', '', utterance)
+    utterance = re.sub('\[\!\]', '', utterance)
+    utterance = re.sub(r'‹', '', utterance)
+    utterance = re.sub(r'›', '', utterance)
 
-    utterance = utterance.replace('[*] [/', '[/')
-    utterance = utterance.replace('] [*]', ']')
+    utterance = re.sub(r'\[\*\] \[/', '[/', utterance)
+    utterance = re.sub(r'\] \[\*\]', ']', utterance)
 
     utterance = remove_extra_spaces(utterance)
     # print('step 1:', utterance)
@@ -93,18 +95,18 @@ def clean_utterance(utterance, phon=False):
     #     (.) (short pause)
     # then pad them with extra spaces.
 
-    utterance = utterance.replace('<', ' <')
-    utterance = utterance.replace('+ <', '+<')
-    utterance = utterance.replace('>', '> ')
-    utterance = utterance.replace('[', ' [')
-    utterance = utterance.replace(']', '] ')
-    utterance = utterance.replace('“', ' “ ')
-    utterance = utterance.replace('”', ' ” ')
-    utterance = utterance.replace(',', ' , ')  # works together with next line
-    utterance = utterance.replace('+ ,', '+,')
+    utterance = re.sub(r'<', ' <', utterance)
+    utterance = re.sub(r'\+ <', '+<', utterance)
+    utterance = re.sub(r'>', '> ', utterance)
+    utterance = re.sub(r'\[', ' [', utterance)
+    utterance = re.sub(r'\]', '] ', utterance)
+    utterance = re.sub(r'“', ' “ ', utterance)
+    utterance = re.sub(r'”', ' ” ', utterance)
+    utterance = re.sub(r',', ' , ', utterance)  # works together with next line
+    utterance = re.sub(r'\+ ,', '+,', utterance)
     utterance = re.sub('[^\[\./!]\?', ' ? ', utterance)
     # utterance = re.sub('[^\(\[\.\+]\.', ' . ', utterance)
-    utterance = utterance.replace('(.)', ' (.) ')
+    utterance = re.sub(r'\(\.\)', ' (.) ', utterance)
     utterance = remove_extra_spaces(utterance)
     # print('step 2:', utterance)
 

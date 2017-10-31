@@ -104,7 +104,7 @@ class Reader(object):
         *filenames
         """
         if sys.platform.startswith('win'):
-            windows = True
+            windows = True  # pragma: no cover
         else:
             windows = False
 
@@ -114,7 +114,7 @@ class Reader(object):
                 raise ValueError('{} is not str'.format(repr(filename)))
 
             if windows:
-                filename = filename.replace('/', os.sep)
+                filename = filename.replace('/', os.sep)  # pragma: no cover
             else:
                 filename = filename.replace('\\', os.sep)
 

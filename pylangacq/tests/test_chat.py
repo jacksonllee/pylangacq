@@ -43,5 +43,10 @@ def eve(brown_zip_path):
     return read_chat(eve_data_path, encoding='utf-8')
 
 
+def test_read_chat_wrong_filename_type():
+    with pytest.raises(ValueError):
+        read_chat(42)
+
+
 def test_number_of_files(eve):
     assert len(eve) == eve.number_of_files() == 20

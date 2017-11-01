@@ -3,7 +3,7 @@
 ## v0.10.0 - 2017-11-01
 
 * Fixed unicode handling across Python 2 and 3
-* Removed method `find_filename` of `Reader`
+* Renamed method `find_filename` of `Reader` as `abspath`.
 * Fixed bug in `Reader` method decorators
 * Handled multiple dates of recording in one CHAT file.
   The method `dates_of_recording` of a `Reader` instance now returns a list

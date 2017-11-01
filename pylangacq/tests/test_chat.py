@@ -16,6 +16,9 @@ BROWN_EVE_FILE_PATH_2 = os.path.join(BROWN_EVE_DIR, '010600b.cha')
 BROWN_EVE_FILE_PATH_ALL_FILES = os.path.join(BROWN_EVE_DIR, '*.cha')
 
 
+@pytest.mark.skipif('TRAVIS' not in os.environ,
+                    reason='assuming Brown/ available, speed up local dev '
+                           'for running tests without download')
 def test_download_and_extract_brown_zip_file():
     """pytest runs tests in the same order they are defined in the test
     module, and so this test for downloading and unzipping the Brown zip

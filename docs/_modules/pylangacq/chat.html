@@ -60,7 +60,7 @@
     <span class="kn">from</span> <span class="nn">io</span> <span class="k">import</span> <span class="nb">open</span>  <span class="c1"># pragma: no coverage  (doesn&#39;t run in py &gt;=3)</span>
 
 
-<div class="viewcode-block" id="read_chat"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.read_chat">[docs]</a><span class="k">def</span> <span class="nf">read_chat</span><span class="p">(</span><span class="o">*</span><span class="n">filenames</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">read_chat</span><span class="p">(</span><span class="o">*</span><span class="n">filenames</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a ``Reader`` object based on *filenames*.</span>
 
@@ -71,7 +71,7 @@
 <span class="sd">        to &#39;utf8&#39;. (New in version 0.9)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># TODO: Should error if any of &quot;filenames&quot; give no actual filenames?</span>
-    <span class="k">return</span> <span class="n">Reader</span><span class="p">(</span><span class="o">*</span><span class="n">filenames</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">Reader</span><span class="p">(</span><span class="o">*</span><span class="n">filenames</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">params_in_docstring</span><span class="p">(</span><span class="o">*</span><span class="n">params</span><span class="p">):</span>
@@ -348,6 +348,15 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">fn</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">age</span><span class="p">(</span>
             <span class="n">participant</span><span class="o">=</span><span class="n">participant</span><span class="p">,</span> <span class="n">months</span><span class="o">=</span><span class="n">months</span><span class="p">)</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">}</span></div>
+
+    <span class="k">def</span> <span class="nf">abspath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">basename</span><span class="p">):</span>
+        <span class="c1"># TODO: docstring</span>
+        <span class="c1"># TODO: tests</span>
+        <span class="k">for</span> <span class="n">file_path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span> <span class="o">==</span> <span class="n">basename</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">file_path</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No such file.&#39;</span><span class="p">)</span>
 
     <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">utterances</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>

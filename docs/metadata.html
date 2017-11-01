@@ -101,12 +101,11 @@ such as <code class="docutils literal"><span class="pre">eve01.cha</span></code>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span> <span class="kn">as</span> <span class="nn">pla</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pla</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="s1">&#39;Brown/Eve/*.cha&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eve01_filename</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">find_filename</span><span class="p">(</span><span class="s1">&#39;eve01.cha&#39;</span><span class="p">)</span>  <span class="c1"># absolute-path filename of eve01.cha</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve01_filename</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;010600a.cha&#39;</span><span class="p">)</span>  <span class="c1"># get the absolute path of Eve&#39;s first data file</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">participant_codes</span><span class="p">()</span>  <span class="c1"># across all 20 files</span>
 <span class="go">{&#39;RIC&#39;, &#39;COL&#39;, &#39;URS&#39;, &#39;FAT&#39;, &#39;GLO&#39;, &#39;CHI&#39;, &#39;MOT&#39;}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">participant_codes</span><span class="p">(</span><span class="n">by_files</span><span class="o">=</span><span class="bp">True</span><span class="p">)[</span><span class="n">eve01_filename</span><span class="p">]</span>  <span class="c1"># only for eve01.cha</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">participant_codes</span><span class="p">(</span><span class="n">by_files</span><span class="o">=</span><span class="bp">True</span><span class="p">)[</span><span class="n">eve01_filename</span><span class="p">]</span>  <span class="c1"># only for 010600a.cha</span>
 <span class="go">{&#39;COL&#39;, &#39;CHI&#39;, &#39;MOT&#39;, &#39;RIC&#39;}</span>
-<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">participants</span><span class="p">()[</span><span class="n">eve01_filename</span><span class="p">])</span>
 <span class="go">{&#39;CHI&#39;: {&#39;SES&#39;: &#39;&#39;,</span>
 <span class="go">         &#39;age&#39;: &#39;1;6.&#39;,</span>
@@ -148,29 +147,26 @@ such as <code class="docutils literal"><span class="pre">eve01.cha</span></code>
 <span class="go">         &#39;participant_name&#39;: &#39;Richard&#39;,</span>
 <span class="go">         &#39;participant_role&#39;: &#39;Investigator&#39;,</span>
 <span class="go">         &#39;sex&#39;: &#39;&#39;}}</span>
-<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">age</span><span class="p">()[</span><span class="n">eve01_filename</span><span class="p">]</span>  <span class="c1"># defaults to the target child&#39;s age; (years, months, days)</span>
 <span class="go">(1, 6, 0)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">age</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="bp">True</span><span class="p">)[</span><span class="n">eve01_filename</span><span class="p">]</span>  <span class="c1"># target child&#39;s age in months</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">age</span><span class="p">(</span><span class="n">months</span><span class="o">=</span><span class="bp">True</span><span class="p">)[</span><span class="n">eve01_filename</span><span class="p">]</span>  <span class="c1"># target child&#39;s age in months</span>
 <span class="go">18.0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">age</span><span class="p">(</span><span class="n">participant</span><span class="o">=</span><span class="s1">&#39;MOT&#39;</span><span class="p">)[</span><span class="n">eve01_filename</span><span class="p">]</span>  <span class="c1"># no age info for MOT</span>
 <span class="go">(0, 0, 0)</span>
-<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">languages</span><span class="p">()[</span><span class="n">eve01_filename</span><span class="p">]</span>  <span class="c1"># list but not set; ordering matters in bi/multilingualism</span>
 <span class="go">[&#39;eng&#39;]</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">date</span><span class="p">()[</span><span class="n">eve01_filename</span><span class="p">]</span>  <span class="c1"># date of recording</span>
-<span class="go">(1962, 10, 17)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">dates_of_recording</span><span class="p">()[</span><span class="n">eve01_filename</span><span class="p">]</span>  <span class="c1"># some CHAT files have multiple dates</span>
+<span class="go">[(1962, 10, 15), (1962, 10, 17)]</span>
 </pre></div>
 </div>
 <p>If the CHAT file has headers that are not covered by specific built-in
 methods illustrated above, they are always accessible with <code class="docutils literal"><span class="pre">headers()</span></code>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">headers</span><span class="p">()[</span><span class="n">eve01_filename</span><span class="p">])</span>
-<span class="go">{&#39;Date&#39;: &#39;17-OCT-1962&#39;,</span>
+<span class="go">{&#39;Date&#39;: [&#39;15-OCT-1962&#39;, &#39;17-OCT-1962&#39;],</span>
 <span class="go"> &#39;Languages&#39;: &#39;eng&#39;,</span>
 <span class="go"> &#39;PID&#39;: &#39;11312/c-00034743-1&#39;,</span>
 <span class="go"> &#39;Participants&#39;: {&#39;CHI&#39;: {&#39;SES&#39;: &#39;&#39;,</span>
-<span class="go">                          &#39;age&#39;: &#39;1;6.&#39;,</span>
+<span class="go">                          &#39;age&#39;: &#39;1;6.0&#39;,</span>
 <span class="go">                          &#39;corpus&#39;: &#39;Brown&#39;,</span>
 <span class="go">                          &#39;custom&#39;: &#39;&#39;,</span>
 <span class="go">                          &#39;education&#39;: &#39;&#39;,</span>

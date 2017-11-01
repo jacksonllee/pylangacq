@@ -1,5 +1,11 @@
 # Change log
 
+## v0.10.0 - 2017-11-01
+
+* Fixed unicode handling across Python 2 and 3
+* Removed method `find_filename` of `Reader`
+* Fixed bug in `Reader` method decorators
+
 ## v0.9.0 - 2017-10-25
 
 * Python 2 and 3 cross compatibility

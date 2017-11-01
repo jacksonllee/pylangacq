@@ -49,12 +49,11 @@ Using the metadata access methods:
     >>> from pprint import pprint
     >>> import pylangacq as pla
     >>> eve = pla.read_chat('Brown/Eve/*.cha')
-    >>> eve01_filename = eve.find_filename('eve01.cha')  # absolute-path filename of eve01.cha
+    >>> eve01_filename = eve.abspath('010600a.cha')  # get the absolute path of Eve's first data file
     >>> eve.participant_codes()  # across all 20 files
     {'RIC', 'COL', 'URS', 'FAT', 'GLO', 'CHI', 'MOT'}
-    >>> eve.participant_codes(by_files=True)[eve01_filename]  # only for eve01.cha
+    >>> eve.participant_codes(by_files=True)[eve01_filename]  # only for 010600a.cha
     {'COL', 'CHI', 'MOT', 'RIC'}
-    >>>
     >>> pprint(eve.participants()[eve01_filename])
     {'CHI': {'SES': '',
              'age': '1;6.',
@@ -96,19 +95,16 @@ Using the metadata access methods:
              'participant_name': 'Richard',
              'participant_role': 'Investigator',
              'sex': ''}}
-    >>>
     >>> eve.age()[eve01_filename]  # defaults to the target child's age; (years, months, days)
     (1, 6, 0)
-    >>> eve.age(month=True)[eve01_filename]  # target child's age in months
+    >>> eve.age(months=True)[eve01_filename]  # target child's age in months
     18.0
     >>> eve.age(participant='MOT')[eve01_filename]  # no age info for MOT
     (0, 0, 0)
-    >>>
     >>> eve.languages()[eve01_filename]  # list but not set; ordering matters in bi/multilingualism
     ['eng']
-    >>>
-    >>> eve.date()[eve01_filename]  # date of recording
-    (1962, 10, 17)
+    >>> eve.dates_of_recording()[eve01_filename]  # some CHAT files have multiple dates
+    [(1962, 10, 15), (1962, 10, 17)]
 
 If the CHAT file has headers that are not covered by specific built-in
 methods illustrated above, they are always accessible with ``headers()``:
@@ -116,11 +112,11 @@ methods illustrated above, they are always accessible with ``headers()``:
 .. code-block:: python
 
     >>> pprint(eve.headers()[eve01_filename])
-    {'Date': '17-OCT-1962',
+    {'Date': ['15-OCT-1962', '17-OCT-1962'],
      'Languages': 'eng',
      'PID': '11312/c-00034743-1',
      'Participants': {'CHI': {'SES': '',
-                              'age': '1;6.',
+                              'age': '1;6.0',
                               'corpus': 'Brown',
                               'custom': '',
                               'education': '',

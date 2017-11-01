@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Accessing metadata &#8212; PyLangAcq 0.9.0 documentation</title>
+    <title>Accessing metadata &#8212; PyLangAcq 0.10.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.0',
+        VERSION:     '0.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -71,8 +71,8 @@ For details of the <code class="docutils literal"><span class="pre">Reader</span
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">languages()</span></code></td>
 <td>dict(filename: list of languages based on the <code class="docutils literal"><span class="pre">&#64;Languages</span></code> header)</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">date()</span></code></td>
-<td>dict(filename: tuple of (<em>year</em>, <em>month</em>, <em>day</em>))</td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">dates_of_recording()</span></code></td>
+<td>dict(filename: list(tuple of (<em>year</em>, <em>month</em>, <em>day</em>)))</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">headers()</span></code></td>
 <td>dict(filename: dict(header name: the content of that header))</td>
@@ -275,7 +275,7 @@ methods illustrated above, they are always accessible with <code class="docutils
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2017, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.9.0 | Documentation last updated on October 25, 2017.
+      &copy;2015-2017, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on November 01, 2017.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>

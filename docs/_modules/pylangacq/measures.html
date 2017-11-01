@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>pylangacq.measures &#8212; PyLangAcq 0.9.0 documentation</title>
+    <title>pylangacq.measures &#8212; PyLangAcq 0.10.0 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.9.0',
+        VERSION:     '0.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -986,7 +986,7 @@
 
         <span class="c1"># Part 2: test for &quot;normal&quot; tag questions</span>
         <span class="n">good_pos</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;COP NEG PRO ?&#39;</span><span class="p">,</span> <span class="s1">&#39;COP PRO ?&#39;</span><span class="p">}</span>
-        <span class="n">collate</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">collate</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">graph</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()):</span>
             <span class="n">collate</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">])</span>
@@ -1131,8 +1131,8 @@
             <span class="k">return</span>
 
         <span class="n">all_edges</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span>
-        <span class="n">verbs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-        <span class="n">deps_of_verbs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">verbs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">deps_of_verbs</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">all_edges</span><span class="p">:</span>
             <span class="n">head_pos</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">head</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span>
@@ -1358,7 +1358,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">graph</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
             <span class="k">return</span>
 
-        <span class="n">dep_head_pairs_for_obj</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">dep_head_pairs_for_obj</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
             <span class="n">rel</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="n">head</span><span class="p">][</span><span class="s1">&#39;rel&#39;</span><span class="p">]</span>
@@ -1490,7 +1490,7 @@
         <span class="c1"># for now: check if CONJ precedes two SUBJ&#39;s</span>
 
         <span class="n">conj_position</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span>  <span class="c1"># decrement if CONJ is found</span>
-        <span class="n">subj_position_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">subj_position_list</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
             <span class="n">pos</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span>
@@ -1573,7 +1573,7 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2017, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.9.0 | Documentation last updated on October 25, 2017.
+      &copy;2015-2017, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on November 01, 2017.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>

@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Tutorial &#8212; PyLangAcq 0.9.0 documentation</title>
+    <title>Tutorial &#8212; PyLangAcq 0.10.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.0',
+        VERSION:     '0.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -52,6 +52,18 @@ relevant pages of the library documentation for more advanced usage.</p>
 <li><a class="reference internal" href="#use-word-freq"><span class="std std-ref">Word frequency info, ngrams, search, and concordance</span></a></li>
 <li><a class="reference internal" href="#by-lx-areas"><span class="std std-ref">Acquisition by linguistic areas</span></a></li>
 </ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Python 3 syntax is used throughout this tutorial and other pages.
+If you are using Python 2, the “print” statements such as:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;something&#39;</span><span class="p">,</span> <span class="s1">&#39;something else&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>should be converted to the following:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="nb">print</span> <span class="s1">&#39;something&#39;</span><span class="p">,</span> <span class="s1">&#39;something else&#39;</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="testing-the-library-installation">
 <span id="test-install"></span><h2>Testing the library installation<a class="headerlink" href="#testing-the-library-installation" title="Permalink to this headline">¶</a></h2>
 <p>To test that PyLangAcq is installed on your system (see <a class="reference internal" href="download.html#download"><span class="std std-ref">Download and install</span></a>), open your terminal with
@@ -71,8 +83,7 @@ we can read the Eve data using PyLangAcq:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pla</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="s1">&#39;Brown/Eve/*.cha&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><code class="docutils literal"><span class="pre">'Brown/Eve/*.cha'</span></code> matches all the 20 <code class="docutils literal"><span class="pre">'.cha'</span></code> files for Eve
-(<code class="docutils literal"><span class="pre">'eve01.cha'</span></code>, <code class="docutils literal"><span class="pre">'eve02.cha'</span></code>, etc):</p>
+<p><code class="docutils literal"><span class="pre">'Brown/Eve/*.cha'</span></code> matches all the 20 <code class="docutils literal"><span class="pre">'.cha'</span></code> files for Eve:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">number_of_files</span><span class="p">()</span>
 <span class="go">20</span>
 </pre></div>
@@ -138,26 +149,26 @@ to check out the word counts in <code class="docutils literal"><span class="pre"
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">filenames</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">words_by_files</span><span class="p">[</span><span class="n">filename</span><span class="p">]))</span>
 <span class="gp">...</span>
-<span class="go">eve01.cha 5843</span>
-<span class="go">eve02.cha 5310</span>
-<span class="go">eve03.cha 2494</span>
-<span class="go">eve04.cha 5757</span>
-<span class="go">eve05.cha 5715</span>
-<span class="go">eve06.cha 4353</span>
-<span class="go">eve07.cha 5320</span>
-<span class="go">eve08.cha 8902</span>
-<span class="go">eve09.cha 4466</span>
-<span class="go">eve10.cha 4535</span>
-<span class="go">eve11.cha 4200</span>
-<span class="go">eve12.cha 6218</span>
-<span class="go">eve13.cha 4469</span>
-<span class="go">eve14.cha 5203</span>
-<span class="go">eve15.cha 8099</span>
-<span class="go">eve16.cha 7385</span>
-<span class="go">eve17.cha 10885</span>
-<span class="go">eve18.cha 8425</span>
-<span class="go">eve19.cha 6929</span>
-<span class="go">eve20.cha 5625</span>
+<span class="go">010600a.cha 5843</span>
+<span class="go">010600b.cha 5310</span>
+<span class="go">010700a.cha 2492</span>
+<span class="go">010700b.cha 5757</span>
+<span class="go">010800.cha 5715</span>
+<span class="go">010900a.cha 4353</span>
+<span class="go">010900b.cha 5320</span>
+<span class="go">010900c.cha 8902</span>
+<span class="go">011000a.cha 4466</span>
+<span class="go">011000b.cha 4535</span>
+<span class="go">011100a.cha 4200</span>
+<span class="go">011100b.cha 6218</span>
+<span class="go">020000a.cha 4469</span>
+<span class="go">020000b.cha 5203</span>
+<span class="go">020100a.cha 8099</span>
+<span class="go">020100b.cha 7385</span>
+<span class="go">020200a.cha 10885</span>
+<span class="go">020200b.cha 8425</span>
+<span class="go">020300a.cha 6929</span>
+<span class="go">020300b.cha 5625</span>
 </pre></div>
 </div>
 <p><code class="docutils literal"><span class="pre">words()</span></code> and other methods can optionally take the argument <em>participant</em>.
@@ -173,17 +184,17 @@ and <em>rel</em> is the dependency and grammatical relation:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">tagged_word</span> <span class="ow">in</span> <span class="n">mother_tagged_words</span><span class="p">[:</span><span class="mi">20</span><span class="p">]:</span>
 <span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">tagged_word</span><span class="p">)</span>
 <span class="gp">...</span>
-<span class="go">(&#39;you&#39;, &#39;PRO&#39;, &#39;you&#39;, (1, 2, &#39;SUBJ&#39;))</span>
+<span class="go">(&#39;you&#39;, &#39;PRO:PER&#39;, &#39;you&#39;, (1, 2, &#39;SUBJ&#39;))</span>
 <span class="go">(&#39;0v&#39;, &#39;0V&#39;, &#39;v&#39;, (2, 0, &#39;ROOT&#39;))</span>
 <span class="go">(&#39;more&#39;, &#39;QN&#39;, &#39;more&#39;, (3, 4, &#39;QUANT&#39;))</span>
 <span class="go">(&#39;cookies&#39;, &#39;N&#39;, &#39;cookie-PL&#39;, (4, 2, &#39;OBJ&#39;))</span>
 <span class="go">(&#39;?&#39;, &#39;?&#39;, &#39;&#39;, (5, 2, &#39;PUNCT&#39;))</span>
-<span class="go">(&#39;how_about&#39;, &#39;ADV:WH&#39;, &#39;how_about&#39;, (1, 3, &#39;LINK&#39;))</span>
+<span class="go">(&#39;how_about&#39;, &#39;ADV:INT&#39;, &#39;how_about&#39;, (1, 3, &#39;LINK&#39;))</span>
 <span class="go">(&#39;another&#39;, &#39;QN&#39;, &#39;another&#39;, (2, 3, &#39;QUANT&#39;))</span>
-<span class="go">(&#39;graham+cracker&#39;, &#39;N&#39;, &#39;+n|graham+n|cracker&#39;, (3, 0, &#39;INCROOT&#39;))</span>
+<span class="go">(&#39;grahamcracker&#39;, &#39;N&#39;, &#39;+n|graham+n|cracker&#39;, (3, 0, &#39;INCROOT&#39;))</span>
 <span class="go">(&#39;?&#39;, &#39;?&#39;, &#39;&#39;, (4, 3, &#39;PUNCT&#39;))</span>
 <span class="go">(&#39;would&#39;, &#39;MOD&#39;, &#39;will&amp;COND&#39;, (1, 3, &#39;AUX&#39;))</span>
-<span class="go">(&#39;that&#39;, &#39;DET&#39;, &#39;that&#39;, (2, 3, &#39;DET&#39;))</span>
+<span class="go">(&#39;that&#39;, &#39;PRO:REL&#39;, &#39;that&#39;, (2, 3, &#39;LINK&#39;))</span>
 <span class="go">(&#39;do&#39;, &#39;V&#39;, &#39;do&#39;, (3, 0, &#39;ROOT&#39;))</span>
 <span class="go">(&#39;just&#39;, &#39;ADV&#39;, &#39;just&#39;, (4, 3, &#39;JCT&#39;))</span>
 <span class="go">(&#39;as_well&#39;, &#39;ADV&#39;, &#39;as_well&#39;, (5, 3, &#39;JCT&#39;))</span>
@@ -191,7 +202,7 @@ and <em>rel</em> is the dependency and grammatical relation:</p>
 <span class="go">(&#39;here&#39;, &#39;ADV&#39;, &#39;here&#39;, (1, 0, &#39;INCROOT&#39;))</span>
 <span class="go">(&#39;.&#39;, &#39;.&#39;, &#39;&#39;, (2, 1, &#39;PUNCT&#39;))</span>
 <span class="go">(&#39;here&#39;, &#39;ADV&#39;, &#39;here&#39;, (1, 3, &#39;JCT&#39;))</span>
-<span class="go">(&#39;you&#39;, &#39;PRO&#39;, &#39;you&#39;, (2, 3, &#39;SUBJ&#39;))</span>
+<span class="go">(&#39;you&#39;, &#39;PRO:PER&#39;, &#39;you&#39;, (2, 3, &#39;SUBJ&#39;))</span>
 <span class="go">(&#39;go&#39;, &#39;V&#39;, &#39;go&#39;, (3, 0, &#39;ROOT&#39;))</span>
 </pre></div>
 </div>
@@ -203,26 +214,26 @@ and <em>rel</em> is the dependency and grammatical relation:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">filename</span><span class="p">,</span> <span class="n">mlum</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">MLUm</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
 <span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">mlum</span><span class="p">)</span>
 <span class="gp">...</span>
-<span class="go">eve01.cha 2.267022696929239</span>
-<span class="go">eve02.cha 2.4487704918032787</span>
-<span class="go">eve03.cha 2.7628458498023716</span>
-<span class="go">eve04.cha 2.5762711864406778</span>
-<span class="go">eve05.cha 2.8585572842998586</span>
-<span class="go">eve06.cha 3.177121771217712</span>
-<span class="go">eve07.cha 3.1231060606060606</span>
-<span class="go">eve08.cha 3.3743482794577684</span>
-<span class="go">eve09.cha 3.817658349328215</span>
-<span class="go">eve10.cha 3.7915904936014626</span>
-<span class="go">eve11.cha 3.865771812080537</span>
-<span class="go">eve12.cha 4.157407407407407</span>
-<span class="go">eve13.cha 4.239130434782608</span>
-<span class="go">eve14.cha 3.9600840336134455</span>
-<span class="go">eve15.cha 4.4502762430939224</span>
-<span class="go">eve16.cha 4.4243369734789395</span>
-<span class="go">eve17.cha 4.46570796460177</span>
-<span class="go">eve18.cha 4.288242730720607</span>
-<span class="go">eve19.cha 4.347626339969372</span>
-<span class="go">eve20.cha 3.163265306122449</span>
+<span class="go">010600a.cha 2.265687583444593</span>
+<span class="go">010600b.cha 2.4487704918032787</span>
+<span class="go">010700a.cha 2.7628458498023716</span>
+<span class="go">010700b.cha 2.5728813559322035</span>
+<span class="go">010800.cha 2.8528995756718527</span>
+<span class="go">010900a.cha 3.1660516605166054</span>
+<span class="go">010900b.cha 3.115530303030303</span>
+<span class="go">010900c.cha 3.3733055265901983</span>
+<span class="go">011000a.cha 3.817658349328215</span>
+<span class="go">011000b.cha 3.7915904936014626</span>
+<span class="go">011100a.cha 3.859060402684564</span>
+<span class="go">011100b.cha 4.154320987654321</span>
+<span class="go">020000a.cha 4.239130434782608</span>
+<span class="go">020000b.cha 3.96218487394958</span>
+<span class="go">020100a.cha 4.44475138121547</span>
+<span class="go">020100b.cha 4.405616224648986</span>
+<span class="go">020200a.cha 4.462389380530974</span>
+<span class="go">020200b.cha 4.2768647281921615</span>
+<span class="go">020300a.cha 4.339969372128637</span>
+<span class="go">020300b.cha 3.1521335807050095</span>
 </pre></div>
 </div>
 <p>Other language developmental measures, such as type-token ratio (TTR) and
@@ -234,11 +245,11 @@ More on <a class="reference internal" href="devmeasures.html#devmeasures"><span 
 <p>For word combinatorics, use <code class="docutils literal"><span class="pre">word_frequency()</span></code> and <code class="docutils literal"><span class="pre">word_ngrams()</span></code>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_frequency</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<span class="go">[(&#39;.&#39;, 20130), (&#39;?&#39;, 6359), (&#39;you&#39;, 3695), (&#39;the&#39;, 2524), (&#39;it&#39;, 2363)]</span>
+<span class="go">[(&#39;.&#39;, 20130), (&#39;?&#39;, 6358), (&#39;you&#39;, 3695), (&#39;the&#39;, 2524), (&#39;it&#39;, 2365)]</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bigrams</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_ngrams</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bigrams</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<span class="go">[((&#39;it&#39;, &#39;.&#39;), 703), ((&#39;that&#39;, &#39;?&#39;), 618), ((&#39;what&#39;, &#39;?&#39;), 560), ((&#39;yeah&#39;, &#39;.&#39;), 510), ((&#39;there&#39;, &#39;.&#39;), 471)]</span>
+<span class="go">[((&#39;it&#39;, &#39;.&#39;), 705), ((&#39;that&#39;, &#39;?&#39;), 619), ((&#39;what&#39;, &#39;?&#39;), 560), ((&#39;yeah&#39;, &#39;.&#39;), 510), ((&#39;there&#39;, &#39;.&#39;), 471)]</span>
 </pre></div>
 </div>
 <p>More on <a class="reference internal" href="freq.html#freq"><span class="std std-ref">Word frequency and ngrams</span></a>.</p>
@@ -330,7 +341,7 @@ contact <a class="reference external" href="http://jacksonllee.com/">Jackson L. 
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2017, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.9.0 | Documentation last updated on October 25, 2017.
+      &copy;2015-2017, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on November 01, 2017.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>

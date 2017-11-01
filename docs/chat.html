@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>chat — Reading and parsing CHAT transcripts &#8212; PyLangAcq 0.9.0 documentation</title>
+    <title>chat — Reading and parsing CHAT transcripts &#8212; PyLangAcq 0.10.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.0',
+        VERSION:     '0.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -83,8 +83,8 @@ instead.</p>
 <tr class="row-odd"><td><a class="reference internal" href="#pylangacq.chat.Reader.filenames" title="pylangacq.chat.Reader.filenames"><code class="xref py py-obj docutils literal"><span class="pre">filenames</span></code></a>([sorted_by_age])</td>
 <td>Return the set of absolute-path filenames.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylangacq.chat.Reader.find_filename" title="pylangacq.chat.Reader.find_filename"><code class="xref py py-obj docutils literal"><span class="pre">find_filename</span></code></a>(file_basename)</td>
-<td>Return the absolute-path filename of <em>file_basename</em>.</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">find_filename</span></code></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pylangacq.chat.Reader.number_of_files" title="pylangacq.chat.Reader.number_of_files"><code class="xref py py-obj docutils literal"><span class="pre">number_of_files</span></code></a>()</td>
 <td>Return the number of files.</td>
@@ -107,7 +107,7 @@ instead.</p>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">date</span></code></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylangacq.chat.Reader.age" title="pylangacq.chat.Reader.age"><code class="xref py py-obj docutils literal"><span class="pre">age</span></code></a>([participant,&nbsp;month])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylangacq.chat.Reader.age" title="pylangacq.chat.Reader.age"><code class="xref py py-obj docutils literal"><span class="pre">age</span></code></a>([participant,&nbsp;months])</td>
 <td>Return a map from a file path to the <em>participant</em>’s age.</td>
 </tr>
 </tbody>
@@ -275,13 +275,13 @@ to ‘utf8’. (New in version 0.9)</dd>
 
 <dl class="method">
 <dt id="pylangacq.chat.Reader.age">
-<code class="descname">age</code><span class="sig-paren">(</span><em>participant='CHI'</em>, <em>month=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.age"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.age" title="Permalink to this definition">¶</a></dt>
+<code class="descname">age</code><span class="sig-paren">(</span><em>participant='CHI'</em>, <em>months=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.age"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.age" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a map from a file path to the <em>participant</em>’s age.</p>
 <p>The age is in the form of (years, months, days).</p>
 <dl class="docutils">
 <dt>participant <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
 <dd>The specified participant</dd>
-<dt>month <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span></dt>
+<dt>months <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span></dt>
 <dd>If <code class="docutils literal"><span class="pre">True</span></code>, age is in months.</dd>
 </dl>
 <p>dict(str: tuple(int, int, int)) or dict(str: float)</p>
@@ -340,11 +340,11 @@ filename: X for that file) instead of X for all files altogether.</li>
 </dd></dl>
 
 <dl class="method">
-<dt id="pylangacq.chat.Reader.date_of_recording">
-<code class="descname">date_of_recording</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.date_of_recording"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.date_of_recording" title="Permalink to this definition">¶</a></dt>
+<dt id="pylangacq.chat.Reader.dates_of_recording">
+<code class="descname">dates_of_recording</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.dates_of_recording"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.dates_of_recording" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a map from a file path to the date of recording.</p>
 <p>The date of recording is in the form of (year, month, day).</p>
-<p>dict(str: tuple(int, int, int))</p>
+<p>dict(str: list(tuple(int, int, int)))</p>
 </dd></dl>
 
 <dl class="method">
@@ -360,27 +360,17 @@ child’s age.</dd>
 </dd></dl>
 
 <dl class="method">
-<dt id="pylangacq.chat.Reader.find_filename">
-<code class="descname">find_filename</code><span class="sig-paren">(</span><em>file_basename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.find_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.find_filename" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the absolute-path filename of <em>file_basename</em>.</p>
-<dl class="docutils">
-<dt>file_basename <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd>CHAT file basename such as <code class="docutils literal"><span class="pre">eve01.cha</span></code></dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
 <dt id="pylangacq.chat.Reader.headers">
 <code class="descname">headers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.headers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.headers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a dict mapping a file path to the headers of that file.</p>
-<p>dict(str: dict</p>
+<p>dict(str: dict)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylangacq.chat.Reader.index_to_tiers">
 <code class="descname">index_to_tiers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.index_to_tiers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.index_to_tiers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a dict mapping a file path to the file’s index_to_tiers dict.</p>
-<p>dict(str: dict</p>
+<p>dict(str: dict)</p>
 </dd></dl>
 
 <dl class="method">
@@ -498,7 +488,7 @@ child’s age.</dd>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2017, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.9.0 | Documentation last updated on October 25, 2017.
+      &copy;2015-2017, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on November 01, 2017.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>

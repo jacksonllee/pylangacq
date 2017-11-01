@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>pylangacq.dependency &#8212; PyLangAcq 0.9.0 documentation</title>
+    <title>pylangacq.dependency &#8212; PyLangAcq 0.10.0 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.9.0',
+        VERSION:     '0.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -132,9 +132,9 @@
         <span class="c1"># add \begin{deptext}...\end{deptext}</span>
         <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s1">&#39;word&#39;</span><span class="p">]</span>
                  <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">number_of_nodes</span><span class="p">)]</span>
-        <span class="n">deptext_template</span> <span class="o">=</span> <span class="s1">&#39;    </span><span class="se">\\</span><span class="s1">begin{{deptext}}[column sep=1em]</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> \
-                           <span class="s1">&#39;        </span><span class="si">{}</span><span class="s1"> </span><span class="se">\\\\</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> \
-                           <span class="s1">&#39;    </span><span class="se">\\</span><span class="s1">end{{deptext}}</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">deptext_template</span> <span class="o">=</span> <span class="p">(</span><span class="sa">u</span><span class="s1">&#39;    </span><span class="se">\\</span><span class="s1">begin{{deptext}}[column sep=1em]</span><span class="se">\n</span><span class="s1">&#39;</span>
+                            <span class="s1">&#39;        </span><span class="si">{}</span><span class="s1"> </span><span class="se">\\\\</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span>
+                            <span class="s1">&#39;    </span><span class="se">\\</span><span class="s1">end{{deptext}}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="n">tikz_dep_code</span> <span class="o">+=</span> <span class="n">deptext_template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39; </span><span class="se">\\</span><span class="s1">&amp; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">words</span><span class="p">))</span>
 
         <span class="c1"># add the \deproot line</span>
@@ -146,20 +146,20 @@
                 <span class="n">dep_shooting_to_root</span> <span class="o">=</span> <span class="n">dep</span>
                 <span class="n">root_rel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">dep_shooting_to_root</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;rel&#39;</span><span class="p">]</span>
                 <span class="k">break</span>
-        <span class="n">tikz_dep_code</span> <span class="o">+=</span> <span class="s1">&#39;    </span><span class="se">\\</span><span class="s1">deproot{{</span><span class="si">{}</span><span class="s1">}}{{</span><span class="si">{}</span><span class="s1">}}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">tikz_dep_code</span> <span class="o">+=</span> <span class="sa">u</span><span class="s1">&#39;    </span><span class="se">\\</span><span class="s1">deproot{{</span><span class="si">{}</span><span class="s1">}}{{</span><span class="si">{}</span><span class="s1">}}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="n">dep_shooting_to_root</span><span class="p">,</span> <span class="n">root_rel</span><span class="p">)</span>
 
         <span class="c1"># add the \depedge lines</span>
         <span class="k">for</span> <span class="n">dep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">number_of_nodes</span><span class="p">):</span>
             <span class="n">head</span> <span class="o">=</span> <span class="n">dep_to_head</span><span class="p">[</span><span class="n">dep</span><span class="p">]</span>
             <span class="n">rel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="n">head</span><span class="p">][</span><span class="s1">&#39;rel&#39;</span><span class="p">]</span>
-            <span class="n">tikz_dep_code</span> <span class="o">+=</span> <span class="s1">&#39;    </span><span class="se">\\</span><span class="s1">depedge{{</span><span class="si">{}</span><span class="s1">}}{{</span><span class="si">{}</span><span class="s1">}}{{</span><span class="si">{}</span><span class="s1">}}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">tikz_dep_code</span> <span class="o">+=</span> <span class="sa">u</span><span class="s1">&#39;    </span><span class="se">\\</span><span class="s1">depedge{{</span><span class="si">{}</span><span class="s1">}}{{</span><span class="si">{}</span><span class="s1">}}{{</span><span class="si">{}</span><span class="s1">}}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="n">dep</span><span class="p">,</span> <span class="n">head</span><span class="p">,</span> <span class="n">rel</span><span class="p">)</span>
 
         <span class="c1"># return tikz_dep_code</span>
         <span class="c1"># wrapped inside \begin{dependency}...\end{dependency}</span>
-        <span class="n">dependency_template</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">begin{{dependency}}[theme = simple]</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> \
-                              <span class="s1">&#39;</span><span class="si">{}</span><span class="se">\\</span><span class="s1">end{{dependency}}&#39;</span>
+        <span class="n">dependency_template</span> <span class="o">=</span> <span class="p">(</span><span class="sa">u</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">begin{{dependency}}[theme = simple]</span><span class="se">\n</span><span class="s1">&#39;</span>
+                               <span class="s1">&#39;</span><span class="si">{}</span><span class="se">\\</span><span class="s1">end{{dependency}}&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">dependency_template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tikz_dep_code</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DependencyGraph.to_conll"><a class="viewcode-back" href="../../dependency.html#pylangacq.dependency.DependencyGraph.to_conll">[docs]</a>    <span class="k">def</span> <span class="nf">to_conll</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -178,7 +178,7 @@
             <span class="n">word</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="s1">&#39;word&#39;</span><span class="p">]</span>
             <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span>
             <span class="n">rel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="n">head</span><span class="p">][</span><span class="s1">&#39;rel&#39;</span><span class="p">]</span>
-            <span class="n">collector</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">head</span><span class="p">,</span> <span class="n">rel</span><span class="p">))</span>
+            <span class="n">collector</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">head</span><span class="p">,</span> <span class="n">rel</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">collector</span><span class="p">)</span></div></div>
 </pre></div>
@@ -241,7 +241,7 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2017, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.9.0 | Documentation last updated on October 25, 2017.
+      &copy;2015-2017, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on November 01, 2017.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>

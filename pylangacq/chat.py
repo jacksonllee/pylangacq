@@ -212,7 +212,7 @@ class Reader(object):
 
         Returns
         -------
-        dict(str: dict
+        dict(str: dict)
         """
         return {fn: self._fname_to_reader[fn].headers()
                 for fn in self._filenames}
@@ -222,7 +222,7 @@ class Reader(object):
 
         Returns
         -------
-        dict(str: dict
+        dict(str: dict)
         """
         return {fn: self._fname_to_reader[fn].index_to_tiers()
                 for fn in self._filenames}

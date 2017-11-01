@@ -268,16 +268,16 @@ class Reader(object):
         return {fn: self._fname_to_reader[fn].languages()
                 for fn in self._filenames}
 
-    def date_of_recording(self):
+    def dates_of_recording(self):
         """Return a map from a file path to the date of recording.
 
         The date of recording is in the form of (year, month, day).
 
         Returns
         -------
-        dict(str: tuple(int, int, int))
+        dict(str: list(tuple(int, int, int)))
         """
-        return {fn: self._fname_to_reader[fn].date_of_recording()
+        return {fn: self._fname_to_reader[fn].dates_of_recording()
                 for fn in self._filenames}
 
     def date_of_birth(self):
@@ -937,6 +937,11 @@ class SingleReader(object):
 
                 headname_to_entry['Participants'][code].update(head_to_info)
 
+            elif head == 'Date':
+                if 'Date' not in headname_to_entry:
+                    headname_to_entry['Date'] = []
+                headname_to_entry['Date'].append(line)
+
             else:
                 headname_to_entry[head] = line
 
@@ -1024,19 +1029,19 @@ class SingleReader(object):
 
         return languages_list
 
-    def date_of_recording(self):
+    def dates_of_recording(self):
         """
         Return the date of recording as a tuple of (*year*, *month*, *day*).
         If any errors arise (e.g., there's no date), return ``None``.
 
-        :rtype: (int, int, int)
+        :rtype: list(tuple(int, int, int))
         """
         try:
-            date_str = self._headers['Date']
+            dates = self._headers['Date']
         except KeyError:
             return None
 
-        return convert_date_to_tuple(date_str)
+        return [convert_date_to_tuple(date) for date in dates]
 
     def date_of_birth(self):
         """

@@ -290,7 +290,7 @@ class Reader(object):
         return {fn: self._fname_to_reader[fn].date_of_birth()
                 for fn in self._filenames}
 
-    def age(self, participant='CHI', month=False):
+    def age(self, participant='CHI', months=False):
         """Return a map from a file path to the *participant*'s age.
 
         The age is in the form of (years, months, days).
@@ -299,7 +299,7 @@ class Reader(object):
         ----------
         participant : str, optional
             The specified participant
-        month : bool, optional
+        months : bool, optional
             If ``True``, age is in months.
 
         Returns
@@ -307,7 +307,7 @@ class Reader(object):
         dict(str: tuple(int, int, int)) or dict(str: float)
         """
         return {fn: self._fname_to_reader[fn].age(
-            participant=participant, month=month) for fn in self._filenames}
+            participant=participant, months=months) for fn in self._filenames}
 
     @params_in_docstring('participant', 'by_files')
     def utterances(self, participant=None, exclude=False, clean=True,
@@ -1071,13 +1071,13 @@ class SingleReader(object):
 
         return participant_to_date
 
-    def age(self, participant='CHI', month=False):
+    def age(self, participant='CHI', months=False):
         """
         Return the age of *participant* as a tuple or a float.
 
         :param participant: The participant specified, default to ``'CHI'``
 
-        :param month: If True (default: False), return age in months.
+        :param months: If True (default: False), return age in months.
 
         :return: The age as a 3-tuple of (years, months, days).
             If any errors arise (e.g., there's no age), ``None`` is returned.
@@ -1096,7 +1096,7 @@ class SingleReader(object):
             month_int = int(month_str) if month_str.isdigit() else 0
             day_int = int(day_str) if day_str.isdigit() else 0
 
-            if month:
+            if months:
                 return year_int * 12 + month_int + day_int / 30
             else:
                 return year_int, month_int, day_int

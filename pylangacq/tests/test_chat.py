@@ -118,7 +118,16 @@ def test_filenames(eve_all_files):
 
 @pytest.mark.xfail(reason='actual count is 1601 for some reason?')
 def test_number_of_utterances(eve_one_file):
+    # Eve's 010600a.cha has 1588 occurrences of "\n*"
     assert eve_one_file.number_of_utterances() == 1588
     assert eve_one_file.number_of_utterances(by_files=True) == {
         BROWN_EVE_FILE_PATH_1: 1588
+    }
+
+
+def test_participant_codes(eve_one_file):
+    expected_codes = {'CHI', 'MOT', 'COL', 'RIC'}
+    assert eve_one_file.participant_codes() == expected_codes
+    assert eve_one_file.participant_codes(by_files=True) == {
+        BROWN_EVE_FILE_PATH_1: expected_codes
     }

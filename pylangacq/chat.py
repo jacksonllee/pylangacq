@@ -309,6 +309,15 @@ class Reader(object):
         return {fn: self._fname_to_reader[fn].age(
             participant=participant, months=months) for fn in self._filenames}
 
+    def abspath(self, basename):
+        # TODO: docstring
+        # TODO: tests
+        for file_path in self._filenames:
+            if os.path.basename(file_path) == basename:
+                return file_path
+        else:
+            raise ValueError('No such file.')
+
     @params_in_docstring('participant', 'by_files')
     def utterances(self, participant=None, exclude=False, clean=True,
                    by_files=False):

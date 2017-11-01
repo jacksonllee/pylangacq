@@ -5,6 +5,9 @@
 * Fixed unicode handling across Python 2 and 3
 * Removed method `find_filename` of `Reader`
 * Fixed bug in `Reader` method decorators
+* Handled multiple dates of recording in one CHAT file.
+  The method `dates_of_recording` of a `Reader` instance now returns a list
+  of dates.
 
 ## v0.9.0 - 2017-10-25
 

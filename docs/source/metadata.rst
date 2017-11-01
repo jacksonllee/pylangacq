@@ -12,16 +12,16 @@ For details of the ``Reader`` class, see :ref:`reader_api`.
 
 Metadata methods for handling information from the ``@`` headers:
 
-=======================  =========================================================================================
-Method                   Return object
-=======================  =========================================================================================
-``participant_codes()``  set of participant codes across all files; if ``by_file`` is ``True``, then dict(filename: set of participant codes) instead
-``participants()``       dict(filename: dict(participant code: dict of the ``@ID`` information for that participant))
-``age()``                dict(filename: tuple of (*years*, *months*, *days*))
-``languages()``          dict(filename: list of languages based on the ``@Languages`` header)
-``date()``               dict(filename: tuple of (*year*, *month*, *day*))
-``headers()``            dict(filename: dict(header name: the content of that header))
-=======================  =========================================================================================
+========================  =========================================================================================
+Method                    Return object
+========================  =========================================================================================
+``participant_codes()``   set of participant codes across all files; if ``by_file`` is ``True``, then dict(filename: set of participant codes) instead
+``participants()``        dict(filename: dict(participant code: dict of the ``@ID`` information for that participant))
+``age()``                 dict(filename: tuple of (*years*, *months*, *days*))
+``languages()``           dict(filename: list of languages based on the ``@Languages`` header)
+``dates_of_recording()``  dict(filename: list(tuple of (*year*, *month*, *day*)))
+``headers()``             dict(filename: dict(header name: the content of that header))
+========================  =========================================================================================
 
 Among these methods, only ``participant_codes()`` has the optional parameter
 ``by_files``.

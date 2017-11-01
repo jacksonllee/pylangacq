@@ -31,13 +31,13 @@ strictly required) provides metadata headers using lines starting with ``@``.
 Among the many possible headers,
 ``@Participants`` and ``@ID`` are of particular interest::
 
-    @Participants: XX1 Name1 Role1 , XX2 Name2 Role2
-    @ID: ||XX1|1;6.||||Role1|||
-    @ID: ||XX2|||||Role2|||
+    @Participants: Code1 Name1 Role1 , Code2 Name2 Role2
+    @ID: ||Code1|1;6.||||Role1|||
+    @ID: ||Code2|||||Role2|||
 
 The ``@Participants`` header states the participants of the transcript. In this
 hypothetical example shown just above, there are two participants.
-Each participant has a participant code (e.g., ``XX1``), a participant name
+Each participant has a participant code (e.g., ``Code1``), a participant name
 (e.g., ``Name1``), and a participant role (e.g., ``Role1``).
 The participant code must be an alphanumeric three-character string
 which begins with a letter, and all letters must be in uppercase.
@@ -59,7 +59,7 @@ must match the information of the relevant participant in the ``@Participants``
 header.
 Often of interest in language acquisition research is the age of the
 participant (e.g., the target child). For instance, the age of
-participant ``XX1`` is 1 year and 6 months, as given by ``1;6.``.
+participant ``Code1`` is 1 year and 6 months, as given by ``1;6.``.
 Fields are left empty if no information is available.
 
 While all other ``@`` headers are optional, PyLangAcq has built-in functions
@@ -71,9 +71,9 @@ specifically for ``@Languages`` and ``@Date`` for potential usage.
 After the headers come the transcriptions. All transcriptions are signaled by
 ``*`` at the beginning of the line::
 
-    *XX1: good morning .
+    *Code1: good morning .
 
-``*`` is immediately followed by the participant code (e.g., ``XX1``), and then
+``*`` is immediately followed by the participant code (e.g., ``Code1``), and then
 by a colon ``:`` and a space (or tab). Then the transcribed line follows.
 
 For research purposes, many CHAT transcripts have additional tiers signaled by
@@ -88,11 +88,11 @@ rich linguistic information.
 For any header and transcription lines that are too long, line continuations
 are allowed in CHAT files with a tab character (denoted by ``<TAB>`` below), from::
 
-    *XX1: this line is to demonstrate how line continuations are done in CHAT .
+    *Code1: this line is to demonstrate how line continuations are done in CHAT .
 
 to::
 
-    *XX1: this line is to demonstrate how line continuations
+    *Code1: this line is to demonstrate how line continuations
     <TAB>are done in CHAT .
 
 This implies that all lines in a CHAT file must begin with any of the following
@@ -114,7 +114,12 @@ are at the current directory:
     >>> eve = pla.read_chat('Brown/Eve/*.cha')
 
 .. NOTE::
-   The UTF-8 file encoding is assumed for all CHAT files.
+   The UTF-8 encoding is assumed for all CHAT files.
+   If your data files are encoded differently (e.g., in Latin-1 instead),
+   ``read_chat`` takes the keyword argument ``'encoding'``. For instance,
+   you can read in data like this::
+
+      data = pla.read_chat('path/to/data/files', encoding='latin1')
 
 ``read_chat()`` can take one or multiple filenames.
 These filenames can be either relative paths to the current directory
@@ -147,9 +152,7 @@ as follows:
     >>> len(eve)  # same as number_of_files()
     20
     >>> eve.number_of_utterances()  # across all 20 files and all participants
-    26980
-    >>> eve.find_filename('eve01.cha')  # return the absolute path for a file basename
-    '/home/joesmith/Brown/Eve/eve01.cha'
+    26979
 
 The bulk of the library documentation is about the various ``Reader`` methods.
 The full API details can be found in :ref:`reader_api`.
@@ -176,32 +179,32 @@ Method                                          Return object
 .. code-block:: python
 
     >>> eve.number_of_utterances()  # by_files is False by default
-    26980
+    26979
     >>> counts_by_files = eve.number_of_utterances(by_files=True)  # dict(filename: num of utterances)
     >>> import os
     >>> for abs_filename, n in sorted(counts_by_files.items()):
     ...     print(os.path.basename(abs_filename), n)
     ...
-    eve01.cha 1601
-    eve02.cha 1304
-    eve03.cha 619
-    eve04.cha 1456
-    eve05.cha 1479
-    eve06.cha 1075
-    eve07.cha 1277
-    eve08.cha 2058
-    eve09.cha 1024
-    eve10.cha 1060
-    eve11.cha 952
-    eve12.cha 1339
-    eve13.cha 959
-    eve14.cha 1094
-    eve15.cha 1651
-    eve16.cha 1500
-    eve17.cha 2156
-    eve18.cha 1760
-    eve19.cha 1348
-    eve20.cha 1268
+    010600a.cha 1601
+    010600b.cha 1304
+    010700a.cha 618
+    010700b.cha 1456
+    010800.cha 1479
+    010900a.cha 1075
+    010900b.cha 1277
+    010900c.cha 2058
+    011000a.cha 1024
+    011000b.cha 1060
+    011100a.cha 952
+    011100b.cha 1339
+    020000a.cha 959
+    020000b.cha 1094
+    020100a.cha 1651
+    020100b.cha 1500
+    020200a.cha 2156
+    020200b.cha 1760
+    020300a.cha 1348
+    020300b.cha 1268
 
 (Many data access methods have the parameter ``by_files``
 for the dual possibilities of return objects;
@@ -218,26 +221,26 @@ methods accept an optional argument to specify the parameter ``participant``
     >>> for abs_filename, n in sorted(eve.number_of_utterances(participant='CHI', by_files=True).items()):
     ...     print(os.path.basename(abs_filename), n)
     ...
-    eve01.cha 749
-    eve02.cha 488
-    eve03.cha 253
-    eve04.cha 590
-    eve05.cha 707
-    eve06.cha 542
-    eve07.cha 528
-    eve08.cha 959
-    eve09.cha 521
-    eve10.cha 547
-    eve11.cha 447
-    eve12.cha 648
-    eve13.cha 460
-    eve14.cha 476
-    eve15.cha 724
-    eve16.cha 641
-    eve17.cha 904
-    eve18.cha 791
-    eve19.cha 653
-    eve20.cha 539
+    010600a.cha 749
+    010600b.cha 488
+    010700a.cha 253
+    010700b.cha 590
+    010800.cha 707
+    010900a.cha 542
+    010900b.cha 528
+    010900c.cha 959
+    011000a.cha 521
+    011000b.cha 547
+    011100a.cha 447
+    011100b.cha 648
+    020000a.cha 460
+    020000b.cha 476
+    020100a.cha 724
+    020100b.cha 641
+    020200a.cha 904
+    020200b.cha 791
+    020300a.cha 653
+    020300b.cha 539
 
 
 .. _add_remove_transcripts:
@@ -261,31 +264,28 @@ as arguments:
 
 .. code-block:: python
 
-    >>> corpus.add('Brown/Eve/eve0*.cha')  # from eve01.cha to eve09.cha
+    >>> corpus.add('Brown/Eve/01*.cha')  # all data prior to 2;0. (files are conveniently named by age)
     >>> corpus.number_of_files()
-    9
+    12
 
 To remove transcripts with ``remove()``:
 
 .. code-block:: python
 
-    >>> corpus.remove('Brown/Eve/eve09.cha')
+    >>> corpus.remove('Brown/Eve/010*.cha')  # remove data files prior to 1;10.
     >>> corpus.number_of_files()
-    8
+    4
 
 ``update()`` takes a ``Reader`` instance and updates the current one:
 
 .. code-block:: python
 
-    >>> corpus.update(eve)  # 20 files from Eve
+    >>> new_corpus = pla.read_chat('Brown/Eve/02*.cha')  # all data from 2;0.
+    >>> new_corpus.number_of_files()
+    8
+    >>> corpus.update(new_corpus)  # use "update" to combine new_corpus into corpus
     >>> corpus.number_of_files()
-    20
-    >>> corpus.update(eve01)      # Trying to add duplicate files
-    >>> corpus.number_of_files()  # does not result in errors or duplicates
-    20
-    >>> corpus.add('Brown/Adam/*.cha')  # Add 55 files, from adam01.cha to adam55.cha
-    >>> corpus.number_of_files()
-    75
+    12
 
 ``clear()`` applies to a ``Reader`` instance to clear everything and reset it
 as an empty ``Reader`` instance:

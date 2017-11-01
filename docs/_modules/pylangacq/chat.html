@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>pylangacq.chat &#8212; PyLangAcq 0.9.0 documentation</title>
+    <title>pylangacq.chat &#8212; PyLangAcq 0.10.0 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.9.0',
+        VERSION:     '0.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -50,16 +50,14 @@
 <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Counter</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">chain</span>
 
-<span class="kn">import</span> <span class="nn">six</span>
-
 <span class="kn">from</span> <span class="nn">pylangacq.measures</span> <span class="k">import</span> <span class="n">get_MLUm</span><span class="p">,</span> <span class="n">get_MLUw</span><span class="p">,</span> <span class="n">get_TTR</span><span class="p">,</span> <span class="n">get_IPSyn</span>
 <span class="kn">from</span> <span class="nn">pylangacq.util</span> <span class="k">import</span> <span class="p">(</span><span class="n">ENCODING</span><span class="p">,</span> <span class="n">CLITIC</span><span class="p">,</span>
                             <span class="n">get_participant_code</span><span class="p">,</span> <span class="n">convert_date_to_tuple</span><span class="p">,</span>
                             <span class="n">clean_utterance</span><span class="p">,</span> <span class="n">clean_word</span><span class="p">,</span> <span class="n">get_lemma_from_mor</span><span class="p">)</span>
 
 
-<span class="k">if</span> <span class="n">six</span><span class="o">.</span><span class="n">PY2</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">io</span> <span class="k">import</span> <span class="nb">open</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">io</span> <span class="k">import</span> <span class="nb">open</span>  <span class="c1"># pragma: no coverage  (doesn&#39;t run in py &gt;=3)</span>
 
 
 <div class="viewcode-block" id="read_chat"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.read_chat">[docs]</a><span class="k">def</span> <span class="nf">read_chat</span><span class="p">(</span><span class="o">*</span><span class="n">filenames</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -72,6 +70,7 @@
 <span class="sd">    :param kwargs: Only the keyword ``encoding`` is recognized, which defaults</span>
 <span class="sd">        to &#39;utf8&#39;. (New in version 0.9)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># TODO: Should error if any of &quot;filenames&quot; give no actual filenames?</span>
     <span class="k">return</span> <span class="n">Reader</span><span class="p">(</span><span class="o">*</span><span class="n">filenames</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
@@ -109,7 +108,7 @@
 
             <span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">param_header</span><span class="p">,</span>
                                                 <span class="n">param_header</span> <span class="o">+</span> <span class="n">docstring</span><span class="p">)</span>
-            <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">wrapper</span>
     <span class="k">return</span> <span class="n">real_decorator</span>
 
@@ -146,28 +145,30 @@
 <span class="sd">        *filenames</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;win&#39;</span><span class="p">):</span>
-            <span class="n">windows</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">windows</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># pragma: no cover</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">windows</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="n">filenames_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">six</span><span class="o">.</span><span class="n">text_type</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> is not str&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">filename</span><span class="p">)))</span>
 
             <span class="k">if</span> <span class="n">windows</span><span class="p">:</span>
-                <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span>  <span class="c1"># pragma: no cover</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span>
 
             <span class="n">abs_fullpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
             <span class="n">abs_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">abs_fullpath</span><span class="p">)</span>
             <span class="n">glob_match_pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;.*[\*\?\[\]].*&#39;</span><span class="p">)</span>
-            <span class="k">while</span> <span class="n">glob_match_pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">abs_dir</span><span class="p">):</span>
+            <span class="k">while</span> <span class="n">glob_match_pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">abs_dir</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
                 <span class="n">abs_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">abs_dir</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">abs_dir</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;invalid filename: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">abs_dir</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="sa">u</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> is not a directory. Filename </span><span class="si">{}</span><span class="s1"> is likely invalid.&#39;</span>
+                       <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">abs_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">))</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
             <span class="n">candidate_filenames</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dir_</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
                                    <span class="k">for</span> <span class="n">dir_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">fns</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">abs_dir</span><span class="p">)</span>
@@ -189,7 +190,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span> <span class="o">=</span> <span class="n">filenames_set</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_all_part_of_speech_tags</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span> <span class="o">=</span> <span class="n">SingleReader</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span>
                                                      <span class="n">encoding</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span>
@@ -214,37 +215,9 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">sorted_by_age</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">[</span><span class="n">fn</span> <span class="k">for</span> <span class="n">fn</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span>
-                                           <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span></div>
-
-<div class="viewcode-block" id="Reader.find_filename"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.find_filename">[docs]</a>    <span class="k">def</span> <span class="nf">find_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_basename</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return the absolute-path filename of *file_basename*.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        file_basename : str</span>
-<span class="sd">            CHAT file basename such as ``eve01.cha``</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">file_basename</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">six</span><span class="o">.</span><span class="n">text_type</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;argument must be str&#39;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;win&#39;</span><span class="p">):</span>
-            <span class="n">file_basename</span> <span class="o">=</span> <span class="n">file_basename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">file_basename</span> <span class="o">=</span> <span class="n">file_basename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span>
-
-        <span class="n">filename_matches</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-
-        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">file_basename</span><span class="p">):</span>
-                <span class="n">filename_matches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filename_matches</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;no matching filename&#39;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">filename_matches</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;More than 1 matching filename&#39;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">filename_matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+            <span class="c1"># sort by filename first (so filenames with same age are sorted)</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">fn</span> <span class="k">for</span> <span class="n">fn</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span>
+                    <span class="nb">sorted</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span></div>
 
 <div class="viewcode-block" id="Reader.number_of_files"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.number_of_files">[docs]</a>    <span class="k">def</span> <span class="nf">number_of_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the number of files.</span>
@@ -279,7 +252,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        dict(str: dict</span>
+<span class="sd">        dict(str: dict)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">fn</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">headers</span><span class="p">()</span>
                 <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">}</span></div>
@@ -289,7 +262,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        dict(str: dict</span>
+<span class="sd">        dict(str: dict)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">fn</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">index_to_tiers</span><span class="p">()</span>
                 <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">}</span></div>
@@ -335,16 +308,16 @@
         <span class="k">return</span> <span class="p">{</span><span class="n">fn</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">languages</span><span class="p">()</span>
                 <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">}</span></div>
 
-<div class="viewcode-block" id="Reader.date_of_recording"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.date_of_recording">[docs]</a>    <span class="k">def</span> <span class="nf">date_of_recording</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.dates_of_recording"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.dates_of_recording">[docs]</a>    <span class="k">def</span> <span class="nf">dates_of_recording</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a map from a file path to the date of recording.</span>
 
 <span class="sd">        The date of recording is in the form of (year, month, day).</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        dict(str: tuple(int, int, int))</span>
+<span class="sd">        dict(str: list(tuple(int, int, int)))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">{</span><span class="n">fn</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">date_of_recording</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">fn</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">dates_of_recording</span><span class="p">()</span>
                 <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">}</span></div>
 
 <div class="viewcode-block" id="Reader.date_of_birth"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.date_of_birth">[docs]</a>    <span class="k">def</span> <span class="nf">date_of_birth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -357,7 +330,7 @@
         <span class="k">return</span> <span class="p">{</span><span class="n">fn</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">date_of_birth</span><span class="p">()</span>
                 <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">}</span></div>
 
-<div class="viewcode-block" id="Reader.age"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.age">[docs]</a>    <span class="k">def</span> <span class="nf">age</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.age"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.age">[docs]</a>    <span class="k">def</span> <span class="nf">age</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">,</span> <span class="n">months</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a map from a file path to the *participant*&#39;s age.</span>
 
 <span class="sd">        The age is in the form of (years, months, days).</span>
@@ -366,7 +339,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        participant : str, optional</span>
 <span class="sd">            The specified participant</span>
-<span class="sd">        month : bool, optional</span>
+<span class="sd">        months : bool, optional</span>
 <span class="sd">            If ``True``, age is in months.</span>
 
 <span class="sd">        Returns</span>
@@ -374,7 +347,7 @@
 <span class="sd">        dict(str: tuple(int, int, int)) or dict(str: float)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">fn</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">age</span><span class="p">(</span>
-            <span class="n">participant</span><span class="o">=</span><span class="n">participant</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="n">month</span><span class="p">)</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">}</span></div>
+            <span class="n">participant</span><span class="o">=</span><span class="n">participant</span><span class="p">,</span> <span class="n">months</span><span class="o">=</span><span class="n">months</span><span class="p">)</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">}</span></div>
 
     <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">utterances</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -558,6 +531,8 @@
 <span class="sd">            Filenames may take glob patterns with wildcards ``*`` and ``?``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">add_filenames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_abs_filenames</span><span class="p">(</span><span class="o">*</span><span class="n">filenames</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">add_filenames</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No files to add!&#39;</span><span class="p">)</span>
         <span class="n">new_filenames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="p">()</span> <span class="o">|</span> <span class="n">add_filenames</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_reset_reader</span><span class="p">(</span><span class="o">*</span><span class="nb">tuple</span><span class="p">(</span><span class="n">new_filenames</span><span class="p">),</span> <span class="n">check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
@@ -570,11 +545,13 @@
 <span class="sd">            Filenames may take glob patterns with wildcards ``*`` and ``?``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">remove_filenames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_abs_filenames</span><span class="p">(</span><span class="o">*</span><span class="n">filenames</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">remove_filenames</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No files to remove!&#39;</span><span class="p">)</span>
         <span class="n">new_filenames</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="p">())</span>
 
         <span class="k">for</span> <span class="n">remove_filename</span> <span class="ow">in</span> <span class="n">remove_filenames</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">remove_filename</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="p">():</span>
-                <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;filename not found&#39;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;filename not found&#39;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">new_filenames</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">remove_filename</span><span class="p">)</span>
 
@@ -725,7 +702,7 @@
                 <span class="n">output_tagged</span><span class="o">=</span><span class="n">output_tagged</span><span class="p">,</span> <span class="n">output_sents</span><span class="o">=</span><span class="n">output_sents</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">}</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">output_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="n">output_list</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="p">(</span><span class="n">sorted_by_age</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
                 <span class="n">output_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
                     <span class="n">search_item</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="n">participant</span><span class="p">,</span>
@@ -771,7 +748,7 @@
                 <span class="n">match_entire_word</span><span class="o">=</span><span class="n">match_entire_word</span><span class="p">,</span> <span class="n">lemma</span><span class="o">=</span><span class="n">lemma</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">}</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">output_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="n">output_list</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="p">(</span><span class="n">sorted_by_age</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
                 <span class="n">output_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">concordance</span><span class="p">(</span>
                     <span class="n">search_item</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="n">participant</span><span class="p">,</span>
@@ -786,7 +763,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="n">encoding</span>
 
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">six</span><span class="o">.</span><span class="n">text_type</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;filename must be str&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
@@ -837,7 +814,7 @@
                 <span class="n">current_line</span> <span class="o">=</span> <span class="n">current_line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%x</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;%&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">previous_line</span> <span class="ow">and</span> <span class="n">current_line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">):</span>
-                <span class="n">previous_line</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">previous_line</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="n">previous_line</span><span class="p">,</span> <span class="n">current_line</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>  <span class="c1"># strip \t</span>
             <span class="k">elif</span> <span class="n">previous_line</span><span class="p">:</span>
                 <span class="k">yield</span> <span class="n">previous_line</span>
@@ -876,7 +853,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index_to_tiers</span>
 
     <span class="k">def</span> <span class="nf">_get_index_to_tiers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">result_with_collapses</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">result_with_collapses</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">index_</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># utterance index (1st utterance is index 0)</span>
         <span class="n">utterance</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -898,7 +875,7 @@
                     <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line_split</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
 
         <span class="c1"># handle collapses such as [x 4]</span>
-        <span class="n">result_without_collapses</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">result_without_collapses</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">new_index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># utterance index (1st utterance is index 0)</span>
         <span class="n">collapse_pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;\[x \d+?\]&#39;</span><span class="p">)</span>  <span class="c1"># e.g., &quot;[x &lt;number(s)&gt;]&quot;</span>
         <span class="n">number_regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;\d+&#39;</span><span class="p">)</span>
@@ -952,7 +929,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_headers</span>
 
     <span class="k">def</span> <span class="nf">_get_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">headname_to_entry</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">headname_to_entry</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cha_lines</span><span class="p">():</span>
 
@@ -969,7 +946,7 @@
             <span class="n">head</span> <span class="o">=</span> <span class="n">head</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>  <span class="c1"># remove ending &quot;:&quot;, if any</span>
 
             <span class="k">if</span> <span class="n">head</span> <span class="o">==</span> <span class="s1">&#39;Participants&#39;</span><span class="p">:</span>
-                <span class="n">headname_to_entry</span><span class="p">[</span><span class="s1">&#39;Participants&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+                <span class="n">headname_to_entry</span><span class="p">[</span><span class="s1">&#39;Participants&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
                 <span class="n">participants</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
 
@@ -999,6 +976,11 @@
                                         <span class="n">participant_info</span><span class="p">))</span>
 
                 <span class="n">headname_to_entry</span><span class="p">[</span><span class="s1">&#39;Participants&#39;</span><span class="p">][</span><span class="n">code</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">head_to_info</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">head</span> <span class="o">==</span> <span class="s1">&#39;Date&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s1">&#39;Date&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">headname_to_entry</span><span class="p">:</span>
+                    <span class="n">headname_to_entry</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">headname_to_entry</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">headname_to_entry</span><span class="p">[</span><span class="n">head</span><span class="p">]</span> <span class="o">=</span> <span class="n">line</span>
@@ -1057,7 +1039,7 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_headers</span><span class="p">[</span><span class="s1">&#39;Participants&#39;</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="k">return</span> <span class="nb">dict</span><span class="p">()</span>
+            <span class="k">return</span> <span class="p">{}</span>
 
     <span class="k">def</span> <span class="nf">participant_codes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1073,7 +1055,7 @@
 <span class="sd">        Return the list of the languages involved based on the @Languages</span>
 <span class="sd">        header.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">languages_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">languages_list</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="n">languages_line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_headers</span><span class="p">[</span><span class="s1">&#39;Languages&#39;</span><span class="p">]</span>
@@ -1087,19 +1069,19 @@
 
         <span class="k">return</span> <span class="n">languages_list</span>
 
-    <span class="k">def</span> <span class="nf">date_of_recording</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">dates_of_recording</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the date of recording as a tuple of (*year*, *month*, *day*).</span>
 <span class="sd">        If any errors arise (e.g., there&#39;s no date), return ``None``.</span>
 
-<span class="sd">        :rtype: (int, int, int)</span>
+<span class="sd">        :rtype: list(tuple(int, int, int))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">date_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_headers</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">]</span>
+            <span class="n">dates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_headers</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="k">return</span> <span class="n">convert_date_to_tuple</span><span class="p">(</span><span class="n">date_str</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">convert_date_to_tuple</span><span class="p">(</span><span class="n">date</span><span class="p">)</span> <span class="k">for</span> <span class="n">date</span> <span class="ow">in</span> <span class="n">dates</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">date_of_birth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1111,7 +1093,7 @@
 <span class="sd">        :rtype: dict(str: (int, int, int))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">header_keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_headers</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-        <span class="n">participant_to_date</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">participant_to_date</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="k">for</span> <span class="n">header</span> <span class="ow">in</span> <span class="n">header_keys</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">header</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;Birth of&#39;</span><span class="p">):</span>
@@ -1129,13 +1111,13 @@
 
         <span class="k">return</span> <span class="n">participant_to_date</span>
 
-    <span class="k">def</span> <span class="nf">age</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">age</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">,</span> <span class="n">months</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the age of *participant* as a tuple or a float.</span>
 
 <span class="sd">        :param participant: The participant specified, default to ``&#39;CHI&#39;``</span>
 
-<span class="sd">        :param month: If True (default: False), return age in months.</span>
+<span class="sd">        :param months: If True (default: False), return age in months.</span>
 
 <span class="sd">        :return: The age as a 3-tuple of (years, months, days).</span>
 <span class="sd">            If any errors arise (e.g., there&#39;s no age), ``None`` is returned.</span>
@@ -1154,7 +1136,7 @@
             <span class="n">month_int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">month_str</span><span class="p">)</span> <span class="k">if</span> <span class="n">month_str</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="k">else</span> <span class="mi">0</span>
             <span class="n">day_int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">day_str</span><span class="p">)</span> <span class="k">if</span> <span class="n">day_str</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="k">else</span> <span class="mi">0</span>
 
-            <span class="k">if</span> <span class="n">month</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">months</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">year_int</span> <span class="o">*</span> <span class="mi">12</span> <span class="o">+</span> <span class="n">month_int</span> <span class="o">+</span> <span class="n">day_int</span> <span class="o">/</span> <span class="mi">30</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">year_int</span><span class="p">,</span> <span class="n">month_int</span><span class="p">,</span> <span class="n">day_int</span>
@@ -1181,7 +1163,7 @@
 <span class="sd">        :param clean: Whether to filter away the CHAT annotations in the</span>
 <span class="sd">            utterance; default to ``True``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">participants</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_determine_participants</span><span class="p">(</span><span class="n">participant</span><span class="p">,</span> <span class="n">exclude</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)):</span>
@@ -1213,7 +1195,7 @@
         <span class="k">if</span> <span class="n">participant</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">all_participant_codes</span>
 
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">participant</span><span class="p">)</span> <span class="ow">is</span> <span class="n">six</span><span class="o">.</span><span class="n">text_type</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">participant</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">check_participants</span> <span class="o">=</span> <span class="p">{</span><span class="n">participant</span><span class="p">}</span>
         <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">participant</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">):</span>
             <span class="n">check_participants</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">participant</span><span class="p">)</span>
@@ -1365,7 +1347,7 @@
 <span class="sd">            together into a list which is in turn yielded. Otherwise,</span>
 <span class="sd">            individual words are directly yielded without utterance structure.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">result_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">result_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">participants</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_determine_participants</span><span class="p">(</span><span class="n">participant</span><span class="p">,</span> <span class="n">exclude</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">sents</span><span class="p">:</span>
@@ -1387,7 +1369,7 @@
         <span class="k">return</span> <span class="n">result_list</span>
 
     <span class="k">def</span> <span class="nf">_create_all_tagged_sents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">result_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">result_list</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_utterances</span><span class="p">()):</span>
             <span class="n">tiermarker_to_line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index_to_tiers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
@@ -1399,10 +1381,10 @@
             <span class="n">words</span> <span class="o">=</span> <span class="n">utterance</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
 
             <span class="c1"># %mor tier</span>
-            <span class="n">clitic_indices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>  <span class="c1"># indices at the word items</span>
+            <span class="n">clitic_indices</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># indices at the word items</span>
             <span class="n">clitic_count</span> <span class="o">=</span> <span class="mi">0</span>
 
-            <span class="n">mor_items</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="n">mor_items</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">if</span> <span class="s1">&#39;%mor&#39;</span> <span class="ow">in</span> <span class="n">tiermarker_to_line</span><span class="p">:</span>
                 <span class="n">mor_split</span> <span class="o">=</span> <span class="n">tiermarker_to_line</span><span class="p">[</span><span class="s1">&#39;%mor&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
 
@@ -1431,12 +1413,12 @@
                     <span class="n">pformat</span><span class="p">(</span><span class="n">tiermarker_to_line</span><span class="p">),</span> <span class="n">utterance</span><span class="p">))</span>
 
             <span class="c1"># %gra tier</span>
-            <span class="n">gra_items</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="n">gra_items</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">if</span> <span class="s1">&#39;</span><span class="si">%g</span><span class="s1">ra&#39;</span> <span class="ow">in</span> <span class="n">tiermarker_to_line</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">tiermarker_to_line</span><span class="p">[</span><span class="s1">&#39;</span><span class="si">%g</span><span class="s1">ra&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
                     <span class="c1"># an item is a string like &#39;1|2|SUBJ&#39;</span>
 
-                    <span class="n">item_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                    <span class="n">item_list</span> <span class="o">=</span> <span class="p">[]</span>
                     <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">):</span>
                         <span class="k">try</span><span class="p">:</span>
                             <span class="n">converted_element</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
@@ -1471,7 +1453,7 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="n">gra_items</span><span class="p">:</span>
                 <span class="n">gra_items</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">utterance_items</span><span class="p">)</span>
 
-            <span class="n">sent</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="n">sent</span> <span class="o">=</span> <span class="p">[]</span>
 
             <span class="k">for</span> <span class="n">word</span><span class="p">,</span> <span class="n">mor</span><span class="p">,</span> <span class="n">gra</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">utterance_items</span><span class="p">,</span> <span class="n">mor_items</span><span class="p">,</span> <span class="n">gra_items</span><span class="p">):</span>
                 <span class="n">pos</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">mor</span> <span class="o">=</span> <span class="n">mor</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)</span>
@@ -1566,7 +1548,7 @@
 <span class="sd">            lowercase.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">n</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;n must be a positive integer: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;n must be a positive integer: </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">n</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">word_frequency</span><span class="p">(</span><span class="n">participant</span><span class="o">=</span><span class="n">participant</span><span class="p">,</span>
@@ -1652,7 +1634,7 @@
     <span class="k">def</span> <span class="nf">_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_item</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">match_entire_word</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lemma</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">concordance</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">output_tagged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_sents</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="n">taggedsent_charnumber_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">taggedsent_charnumber_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="c1"># = list of (tagged_sent, char_number)</span>
 
         <span class="c1"># set up the match function</span>
@@ -1703,7 +1685,7 @@
                 <span class="n">sent_to_add</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">sent_</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                                              <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">sent_</span> <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">CLITIC</span><span class="p">]</span>
 
-            <span class="n">result_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="n">result_list</span> <span class="o">=</span> <span class="p">[]</span>
 
             <span class="k">for</span> <span class="n">tagged_sent</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">taggedsent_charnumber_list</span><span class="p">:</span>
                 <span class="n">add_function</span><span class="p">(</span><span class="n">result_list</span><span class="p">,</span> <span class="n">sent_to_add</span><span class="p">(</span><span class="n">tagged_sent</span><span class="p">))</span>
@@ -1711,7 +1693,7 @@
             <span class="k">return</span> <span class="n">result_list</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">max_char_number</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="n">n</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">taggedsent_charnumber_list</span><span class="p">])</span>
-            <span class="n">result_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="n">result_list</span> <span class="o">=</span> <span class="p">[]</span>
 
             <span class="k">for</span> <span class="n">tagged_sent</span><span class="p">,</span> <span class="n">char_number</span> <span class="ow">in</span> <span class="n">taggedsent_charnumber_list</span><span class="p">:</span>
                 <span class="n">sent</span> <span class="o">=</span> <span class="p">[</span><span class="n">word_</span> <span class="k">for</span> <span class="n">word_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">tagged_sent</span>
@@ -1781,7 +1763,7 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2017, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.9.0 | Documentation last updated on October 25, 2017.
+      &copy;2015-2017, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on November 01, 2017.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>

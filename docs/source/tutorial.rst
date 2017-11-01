@@ -15,6 +15,17 @@ relevant pages of the library documentation for more advanced usage.
 * :ref:`by_lx_areas`
 
 
+.. NOTE::
+   Python 3 syntax is used throughout this tutorial and other pages.
+   If you are using Python 2, the "print" statements such as::
+
+       print('something', 'something else')
+
+   should be converted to the following::
+
+       print 'something', 'something else'
+
+
 .. _test_install:
 
 Testing the library installation
@@ -44,8 +55,7 @@ we can read the Eve data using PyLangAcq:
     >>> import pylangacq as pla
     >>> eve = pla.read_chat('Brown/Eve/*.cha')
 
-``'Brown/Eve/*.cha'`` matches all the 20 ``'.cha'`` files for Eve
-(``'eve01.cha'``, ``'eve02.cha'``, etc):
+``'Brown/Eve/*.cha'`` matches all the 20 ``'.cha'`` files for Eve:
 
 .. code-block:: python
 
@@ -126,26 +136,26 @@ to check out the word counts in ``eve``:
     >>> for filename in sorted(filenames):
     ...     print(os.path.basename(filename), len(words_by_files[filename]))
     ...
-    eve01.cha 5843
-    eve02.cha 5310
-    eve03.cha 2494
-    eve04.cha 5757
-    eve05.cha 5715
-    eve06.cha 4353
-    eve07.cha 5320
-    eve08.cha 8902
-    eve09.cha 4466
-    eve10.cha 4535
-    eve11.cha 4200
-    eve12.cha 6218
-    eve13.cha 4469
-    eve14.cha 5203
-    eve15.cha 8099
-    eve16.cha 7385
-    eve17.cha 10885
-    eve18.cha 8425
-    eve19.cha 6929
-    eve20.cha 5625
+    010600a.cha 5843
+    010600b.cha 5310
+    010700a.cha 2492
+    010700b.cha 5757
+    010800.cha 5715
+    010900a.cha 4353
+    010900b.cha 5320
+    010900c.cha 8902
+    011000a.cha 4466
+    011000b.cha 4535
+    011100a.cha 4200
+    011100b.cha 6218
+    020000a.cha 4469
+    020000b.cha 5203
+    020100a.cha 8099
+    020100b.cha 7385
+    020200a.cha 10885
+    020200b.cha 8425
+    020300a.cha 6929
+    020300b.cha 5625
 
 ``words()`` and other methods can optionally take the argument *participant*.
 For instance, ``eve.words(participant='CHI')`` gets words by the target
@@ -164,17 +174,17 @@ and *rel* is the dependency and grammatical relation:
     >>> for tagged_word in mother_tagged_words[:20]:
     ...     print(tagged_word)
     ...
-    ('you', 'PRO', 'you', (1, 2, 'SUBJ'))
+    ('you', 'PRO:PER', 'you', (1, 2, 'SUBJ'))
     ('0v', '0V', 'v', (2, 0, 'ROOT'))
     ('more', 'QN', 'more', (3, 4, 'QUANT'))
     ('cookies', 'N', 'cookie-PL', (4, 2, 'OBJ'))
     ('?', '?', '', (5, 2, 'PUNCT'))
-    ('how_about', 'ADV:WH', 'how_about', (1, 3, 'LINK'))
+    ('how_about', 'ADV:INT', 'how_about', (1, 3, 'LINK'))
     ('another', 'QN', 'another', (2, 3, 'QUANT'))
-    ('graham+cracker', 'N', '+n|graham+n|cracker', (3, 0, 'INCROOT'))
+    ('grahamcracker', 'N', '+n|graham+n|cracker', (3, 0, 'INCROOT'))
     ('?', '?', '', (4, 3, 'PUNCT'))
     ('would', 'MOD', 'will&COND', (1, 3, 'AUX'))
-    ('that', 'DET', 'that', (2, 3, 'DET'))
+    ('that', 'PRO:REL', 'that', (2, 3, 'LINK'))
     ('do', 'V', 'do', (3, 0, 'ROOT'))
     ('just', 'ADV', 'just', (4, 3, 'JCT'))
     ('as_well', 'ADV', 'as_well', (5, 3, 'JCT'))
@@ -182,7 +192,7 @@ and *rel* is the dependency and grammatical relation:
     ('here', 'ADV', 'here', (1, 0, 'INCROOT'))
     ('.', '.', '', (2, 1, 'PUNCT'))
     ('here', 'ADV', 'here', (1, 3, 'JCT'))
-    ('you', 'PRO', 'you', (2, 3, 'SUBJ'))
+    ('you', 'PRO:PER', 'you', (2, 3, 'SUBJ'))
     ('go', 'V', 'go', (3, 0, 'ROOT'))
 
 More on :ref:`transcriptions`.
@@ -199,26 +209,26 @@ To get the mean length of utterance (MLU) in morphemes, use ``MLUm()``:
     >>> for filename, mlum in sorted(eve.MLUm().items()):
     ...     print(os.path.basename(filename), mlum)
     ...
-    eve01.cha 2.267022696929239
-    eve02.cha 2.4487704918032787
-    eve03.cha 2.7628458498023716
-    eve04.cha 2.5762711864406778
-    eve05.cha 2.8585572842998586
-    eve06.cha 3.177121771217712
-    eve07.cha 3.1231060606060606
-    eve08.cha 3.3743482794577684
-    eve09.cha 3.817658349328215
-    eve10.cha 3.7915904936014626
-    eve11.cha 3.865771812080537
-    eve12.cha 4.157407407407407
-    eve13.cha 4.239130434782608
-    eve14.cha 3.9600840336134455
-    eve15.cha 4.4502762430939224
-    eve16.cha 4.4243369734789395
-    eve17.cha 4.46570796460177
-    eve18.cha 4.288242730720607
-    eve19.cha 4.347626339969372
-    eve20.cha 3.163265306122449
+    010600a.cha 2.265687583444593
+    010600b.cha 2.4487704918032787
+    010700a.cha 2.7628458498023716
+    010700b.cha 2.5728813559322035
+    010800.cha 2.8528995756718527
+    010900a.cha 3.1660516605166054
+    010900b.cha 3.115530303030303
+    010900c.cha 3.3733055265901983
+    011000a.cha 3.817658349328215
+    011000b.cha 3.7915904936014626
+    011100a.cha 3.859060402684564
+    011100b.cha 4.154320987654321
+    020000a.cha 4.239130434782608
+    020000b.cha 3.96218487394958
+    020100a.cha 4.44475138121547
+    020100b.cha 4.405616224648986
+    020200a.cha 4.462389380530974
+    020200b.cha 4.2768647281921615
+    020300a.cha 4.339969372128637
+    020300b.cha 3.1521335807050095
 
 Other language developmental measures, such as type-token ratio (TTR) and
 Index of Productive Syntax (IPSyn), are also implemented.
@@ -236,11 +246,11 @@ For word combinatorics, use ``word_frequency()`` and ``word_ngrams()``:
 
     >>> word_freq = eve.word_frequency()
     >>> word_freq.most_common(5)
-    [('.', 20130), ('?', 6359), ('you', 3695), ('the', 2524), ('it', 2363)]
+    [('.', 20130), ('?', 6358), ('you', 3695), ('the', 2524), ('it', 2365)]
 
     >>> bigrams = eve.word_ngrams(2)
     >>> bigrams.most_common(5)
-    [(('it', '.'), 703), (('that', '?'), 618), (('what', '?'), 560), (('yeah', '.'), 510), (('there', '.'), 471)]
+    [(('it', '.'), 705), (('that', '?'), 619), (('what', '?'), 560), (('yeah', '.'), 510), (('there', '.'), 471)]
 
 More on :ref:`freq`.
 

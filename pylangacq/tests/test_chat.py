@@ -10,7 +10,7 @@ from pylangacq import read_chat
 
 BROWN_URL = 'https://childes.talkbank.org/data/Eng-NA/Brown.zip'
 BROWN_ZIP_PATH = 'brown.zip'
-BROWN_EVE_DIR = os.path.join('Brown', 'Eve')
+BROWN_EVE_DIR = os.path.abspath(os.path.join('Brown', 'Eve'))
 BROWN_EVE_FILE_PATH_1 = os.path.join(BROWN_EVE_DIR, '010600a.cha')
 BROWN_EVE_FILE_PATH_2 = os.path.join(BROWN_EVE_DIR, '010600b.cha')
 BROWN_EVE_FILE_PATH_ALL_FILES = os.path.join(BROWN_EVE_DIR, '*.cha')
@@ -114,3 +114,11 @@ def test_filenames(eve_all_files):
                           for x in sorted(os.listdir(BROWN_EVE_DIR))]
     assert eve_all_files.filenames() == set(expected_filenames)
     assert eve_all_files.filenames(sorted_by_age=True) == expected_filenames
+
+
+@pytest.mark.xfail(reason='actual count is 1601 for some reason?')
+def test_number_of_utterances(eve_one_file):
+    assert eve_one_file.number_of_utterances() == 1588
+    assert eve_one_file.number_of_utterances(by_files=True) == {
+        BROWN_EVE_FILE_PATH_1: 1588
+    }

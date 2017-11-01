@@ -54,7 +54,7 @@ eve = pla.read_chat('Brown/Eve/*.cha')  # reading in all 20 files from eve01.cha
 # In[3]:
 
 eve_filenames = eve.filenames(sorted_by_age=True)  # absolute-path filenames sorted by age
-eve_ages = eve.age(month=True)  # dict(filename: age in months)
+eve_ages = eve.age(months=True)  # dict(filename: age in months)
 eve_MLUs = eve.MLUm()  # dict(filename: MLUm)
 eve_age_MLU_pairs = [(eve_ages[fn], eve_MLUs[fn]) for fn in eve_filenames]  # list of (age, MLUm)
 
@@ -129,11 +129,11 @@ def visualize_can_eng_MLUw(child_name, can_reader, eng_reader, legend=True):
     x_label = '{}\'s age in months'.format(child_name)
     
     can_filenames = can_reader.filenames(sorted_by_age=True)
-    can_ages = can_reader.age(month=True)
+    can_ages = can_reader.age(months=True)
     can_MLUs = can_reader.MLUw()
     
     eng_filenames = eng_reader.filenames(sorted_by_age=True)
-    eng_ages = eng_reader.age(month=True)
+    eng_ages = eng_reader.age(months=True)
     eng_MLUs = eng_reader.MLUw()
     
     df = pd.DataFrame({x_label: [can_ages[fn] for fn in can_filenames] + [eng_ages[fn] for fn in eng_filenames],
@@ -186,7 +186,7 @@ mhz = pla.read_chat('LeeWongLeung/mhz/*.cha')
 # In[15]:
 
 mhz_filenames = mhz.filenames(sorted_by_age=True)  # list of absolute-path filenames sorted by age
-mhz_ages = mhz.age(month=True)  # dict(filename: age in months)
+mhz_ages = mhz.age(months=True)  # dict(filename: age in months)
 mhz_ages_sorted = [mhz_ages[fn] for fn in mhz_filenames]  # list of ages sorted by mhz_filenames
 mhz_tagged_words = mhz.tagged_words(by_files=True, participant='CHI')  # dict(filename: list of tagged words)
 

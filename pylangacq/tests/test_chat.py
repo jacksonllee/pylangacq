@@ -143,3 +143,8 @@ def test_languages(eve_one_file):
 def test_dates_of_recording(eve_one_file):
     assert eve_one_file.dates_of_recording() == {
         BROWN_EVE_FILE_PATH_1: [(1962, 10, 15), (1962, 10, 17)]}
+
+
+def test_age(eve_one_file):
+    assert eve_one_file.age() == {BROWN_EVE_FILE_PATH_1: (1, 6, 0)}
+    assert eve_one_file.age(months=True) == {BROWN_EVE_FILE_PATH_1: 18.0}

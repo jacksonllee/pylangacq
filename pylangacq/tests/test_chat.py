@@ -131,3 +131,7 @@ def test_participant_codes(eve_one_file):
     assert eve_one_file.participant_codes(by_files=True) == {
         BROWN_EVE_FILE_PATH_1: expected_codes
     }
+
+
+def test_languages(eve_one_file):
+    assert eve_one_file.languages() == {BROWN_EVE_FILE_PATH_1: ['eng']}

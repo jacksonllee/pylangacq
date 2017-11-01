@@ -68,7 +68,7 @@ def params_in_docstring(*params):
 
             func.__doc__ = func.__doc__.replace(param_header,
                                                 param_header + docstring)
-            func(*args, **kwargs)
+            return func(*args, **kwargs)
         return wrapper
     return real_decorator
 

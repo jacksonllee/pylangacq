@@ -21,29 +21,29 @@ Child speech versus child directed speech
 
 The distinction between child speech and child directed speech is important in
 language acquisition research. Many data and metadata access methods in
-PyLangAcq make this distinction possible by the optional argument *participant*
-which accepts a string
+PyLangAcq make this distinction possible by two optional arguments:
+*participant* and *exclude*.
+The *participant* parameter accepts a string
 of a participant code (e.g., ``'CHI'``, ``'MOT'``) or a sequence of
 participant codes (e.g., the set ``{'CHI', 'MOT'}`` to include both
-participants). The string(s) that *participant* takes are actually interpreted
-for regular expression matching,
-so ``'CHI'`` for *participant* means exactly matching the participant code
-``'CHI'``, for instance.
+participants).
+Similarly, the *exclude* parameter can be either a string or a sequence of
+strings, for excluding the specified participant codes.
 
 To get child speech, set *participant* as ``'CHI'``.
-To get child directed speech, set *participant* as ``'^(?!.*CHI).*$'`` to
-include all participant codes except ``'CHI'``. Examples:
+To get child directed speech, set *exclude* as ``'CHI'`` to
+exclude all participant codes except ``'CHI'``. Examples:
 
 .. code-block:: python
 
     >>> import pylangacq as pla
     >>> eve = pla.read_chat('Brown/Eve/*.cha')
     >>> eve.number_of_utterances()  # default: include all participants
-    26980
-    >>> eve.number_of_utterances(participant='CHI')  # only the target child
+    26979
+    >>> eve.number_of_utterances(participant='CHI')  # only the target child, for child speech
     12167
-    >>> eve.number_of_utterances(participant='^(?!.*CHI).*$')  # exclude the target child
-    14813
+    >>> eve.number_of_utterances(exclude='CHI')  # excludes the target child, for child-directed speech
+    14812
 
 Most methods default *participant* to be all participants, like
 ``number_of_utterances()`` just illustrated above
@@ -101,14 +101,14 @@ The list of "tagged" words from this utterance are a list of 4-tuples:
 
     [('but', 'CONJ', 'but', (1, 3, 'LINK')),
      ('I', 'PRO:SUB', 'I', (2, 3, 'SUBJ')),
-     ('thought', 'V', 'think&PAST', (3, 0, 'ROOT')),
-     ('you', 'PRO', 'you', (4, 3, 'OBJ')),
-     ('wanted', 'V', 'want-PAST', (5, 3, 'JCT')),
-     ('me', 'PRO:OBJ', 'me', (6, 5, 'POBJ')),
+     ('thought', 'V', 'think&PAST', (3, 5, 'CJCT')),
+     ('you', 'PRO:PER', 'you', (4, 5, 'SUBJ')),
+     ('wanted', 'V', 'want-PAST', (5, 0, 'ROOT')),
+     ('me', 'PRO:OBJ', 'me', (6, 5, 'OBJ')),
      ('to', 'INF', 'to', (7, 8, 'INF')),
-     ('turn', 'V', 'turn', (8, 3, 'XCOMP')),
-     ('it', 'PRO', 'it', (9, 8, 'OBJ')),
-     ('.', '.', '', (10, 3, 'PUNCT')),
+     ('turn', 'V', 'turn', (8, 5, 'XCOMP')),
+     ('it', 'PRO:PER', 'it', (9, 8, 'OBJ')),
+     ('.', '.', '', (10, 5, 'PUNCT')),
     ]
 
 The distinction of "simple" versus "tagged" words is reflected in the data

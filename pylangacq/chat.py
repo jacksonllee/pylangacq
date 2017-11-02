@@ -189,7 +189,7 @@ class Reader(object):
         return len(self)
 
     @params_in_docstring('participant', 'exclude', 'by_files')
-    def number_of_utterances(self, participant=None, exclude=False,
+    def number_of_utterances(self, participant=None, exclude=None,
                              by_files=False):
         """Return the number of utterances for *participant* in all files.
 
@@ -202,10 +202,12 @@ class Reader(object):
         """
         if by_files:
             return {fn: self._fname_to_reader[fn].number_of_utterances(
-                participant=participant) for fn in self._filenames}
+                participant=participant, exclude=exclude)
+                for fn in self._filenames}
         else:
             return sum(self._fname_to_reader[fn].number_of_utterances(
-                participant=participant) for fn in self._filenames)
+                participant=participant, exclude=exclude)
+                for fn in self._filenames)
 
     def headers(self):
         """Return a dict mapping a file path to the headers of that file.
@@ -319,7 +321,7 @@ class Reader(object):
             raise ValueError('No such file.')
 
     @params_in_docstring('participant', 'by_files')
-    def utterances(self, participant=None, exclude=False, clean=True,
+    def utterances(self, participant=None, exclude=None, clean=True,
                    by_files=False):
         """Return a list of (*participant*, utterance) pairs from all files.
 
@@ -334,18 +336,18 @@ class Reader(object):
         """
         if by_files:
             return {fn: self._fname_to_reader[fn].utterances(
-                participant=participant, clean=clean)
+                participant=participant, exclude=exclude, clean=clean)
                 for fn in self._filenames}
         else:
             return list(
                 chain.from_iterable(
                     self._fname_to_reader[fn].utterances(
-                        participant=participant, clean=clean)
+                        participant=participant, exclude=exclude, clean=clean)
                     for fn in sorted(self._filenames))
             )
 
     @params_in_docstring('participant', 'keep_case', 'by_files')
-    def word_frequency(self, participant=None, exclude=False, keep_case=True,
+    def word_frequency(self, participant=None, exclude=None, keep_case=True,
                        by_files=False):
         """Return a word frequency counter for *participant* in all files.
 
@@ -358,18 +360,19 @@ class Reader(object):
         """
         if by_files:
             return {fn: self._fname_to_reader[fn].word_frequency(
-                participant=participant, keep_case=keep_case)
+                participant=participant, exclude=exclude, keep_case=keep_case)
                 for fn in self._filenames}
         else:
             output_counter = Counter()
             for fn in self._filenames:
                 output_counter.update(
                     self._fname_to_reader[fn].word_frequency(
-                        participant=participant, keep_case=keep_case))
+                        participant=participant, exclude=exclude,
+                        keep_case=keep_case))
             return output_counter
 
     @params_in_docstring('participant', 'by_files')
-    def words(self, participant=None, exclude=False, by_files=False):
+    def words(self, participant=None, exclude=None, by_files=False):
         """Return a list of words by *participant* in all files.
 
         Parameters
@@ -381,17 +384,18 @@ class Reader(object):
         """
         if by_files:
             return {fn: self._fname_to_reader[fn].words(
-                participant=participant) for fn in self._filenames}
+                participant=participant, exclude=exclude)
+                for fn in self._filenames}
         else:
             return list(
                 chain.from_iterable(
                     self._fname_to_reader[fn].words(
-                        participant=participant)
+                        participant=participant, exclude=exclude)
                     for fn in sorted(self._filenames))
             )
 
     @params_in_docstring('participant', 'by_files')
-    def tagged_words(self, participant=None, exclude=False, by_files=False):
+    def tagged_words(self, participant=None, exclude=None, by_files=False):
         """Return a list of tagged words by *participant* in all files.
 
         Parameters
@@ -403,17 +407,18 @@ class Reader(object):
         """
         if by_files:
             return {fn: self._fname_to_reader[fn].tagged_words(
-                participant=participant) for fn in self._filenames}
+                participant=participant, exclude=exclude)
+                for fn in self._filenames}
         else:
             return list(
                 chain.from_iterable(
                     self._fname_to_reader[fn].tagged_words(
-                        participant=participant)
+                        participant=participant, exclude=exclude)
                     for fn in sorted(self._filenames))
             )
 
     @params_in_docstring('participant', 'by_files')
-    def sents(self, participant=None, exclude=False, by_files=False):
+    def sents(self, participant=None, exclude=None, by_files=False):
         """Return a list of sents by *participant* in all files.
 
         Parameters
@@ -425,17 +430,18 @@ class Reader(object):
         """
         if by_files:
             return {fn: self._fname_to_reader[fn].sents(
-                participant=participant) for fn in self._filenames}
+                participant=participant, exclude=exclude)
+                for fn in self._filenames}
         else:
             return list(
                 chain.from_iterable(
                     self._fname_to_reader[fn].sents(
-                        participant=participant)
+                        participant=participant, exclude=exclude)
                     for fn in sorted(self._filenames))
             )
 
     @params_in_docstring('participant', 'by_files')
-    def tagged_sents(self, participant=None, exclude=False, by_files=False):
+    def tagged_sents(self, participant=None, exclude=None, by_files=False):
         """Return a list of tagged sents by *participant* in all files.
 
         Parameters
@@ -447,17 +453,18 @@ class Reader(object):
         """
         if by_files:
             return {fn: self._fname_to_reader[fn].tagged_sents(
-                participant=participant) for fn in self._filenames}
+                participant=participant, exclude=exclude)
+                for fn in self._filenames}
         else:
             return list(
                 chain.from_iterable(
                     self._fname_to_reader[fn].tagged_sents(
-                        participant=participant)
+                        participant=participant, exclude=exclude)
                     for fn in sorted(self._filenames))
             )
 
     @params_in_docstring('participant', 'by_files')
-    def part_of_speech_tags(self, participant=None, exclude=False,
+    def part_of_speech_tags(self, participant=None, exclude=None,
                             by_files=False):
         """Return the part-of-speech tags in the data for *participant*.
 
@@ -470,11 +477,13 @@ class Reader(object):
         """
         if by_files:
             return {fn: self._fname_to_reader[fn].part_of_speech_tags(
-                participant=participant) for fn in self._filenames}
+                participant=participant, exclude=exclude)
+                for fn in self._filenames}
         else:
             return set().union(*(
                 self._fname_to_reader[fn].part_of_speech_tags(
-                    participant=participant) for fn in self._filenames))
+                    participant=participant, exclude=exclude)
+                for fn in self._filenames))
 
     def update(self, reader):
         """Combine the current CHAT Reader instance with ``reader``.
@@ -531,7 +540,7 @@ class Reader(object):
         self._reset_reader()
 
     @params_in_docstring('participant', 'keep_case', 'by_files')
-    def word_ngrams(self, n, participant=None, exclude=False, keep_case=True,
+    def word_ngrams(self, n, participant=None, exclude=None, keep_case=True,
                     by_files=False):
         """Return a word ``n``-gram counter by ``participant`` in all files.
 
@@ -541,14 +550,16 @@ class Reader(object):
         """
         if by_files:
             return {fn: self._fname_to_reader[fn].word_ngrams(
-                n, participant=participant, keep_case=keep_case)
+                n, participant=participant, exclude=exclude,
+                keep_case=keep_case)
                 for fn in self._filenames}
         else:
             output_counter = Counter()
             for fn in self._filenames:
                 output_counter.update(
                     self._fname_to_reader[fn].word_ngrams(
-                        n, participant=participant, keep_case=keep_case))
+                        n, participant=participant, exclude=exclude,
+                        keep_case=keep_case))
             return output_counter
 
     def MLU(self, participant='CHI'):
@@ -637,7 +648,7 @@ class Reader(object):
             participant=participant) for fn in self._filenames}
 
     @params_in_docstring('participant', 'by_files')
-    def search(self, search_item, participant=None, exclude=False,
+    def search(self, search_item, participant=None, exclude=None,
                match_entire_word=True, lemma=False,
                output_tagged=True, output_sents=True,
                by_files=False):
@@ -666,7 +677,7 @@ class Reader(object):
         """
         if by_files:
             return {fn: self._fname_to_reader[fn].search(
-                search_item, participant=participant,
+                search_item, participant=participant, exclude=exclude,
                 match_entire_word=match_entire_word, lemma=lemma,
                 output_tagged=output_tagged, output_sents=output_sents)
                 for fn in self._filenames}
@@ -674,12 +685,12 @@ class Reader(object):
             output_list = []
             for fn in self.filenames(sorted_by_age=True):
                 output_list.extend(self._fname_to_reader[fn].search(
-                    search_item, participant=participant,
+                    search_item, participant=participant, exclude=exclude,
                     match_entire_word=match_entire_word, lemma=lemma,
                     output_tagged=output_tagged, output_sents=output_sents))
             return output_list
 
-    def concordance(self, search_item, participant=None, exclude=False,
+    def concordance(self, search_item, participant=None, exclude=None,
                     match_entire_word=True, lemma=False, by_files=False):
         """
         Return a list of utterances (as strings) each containing *search_item*
@@ -713,14 +724,14 @@ class Reader(object):
         """
         if by_files:
             return {fn: self._fname_to_reader[fn].concordance(
-                search_item, participant=participant,
+                search_item, participant=participant, exclude=exclude,
                 match_entire_word=match_entire_word, lemma=lemma)
                 for fn in self._filenames}
         else:
             output_list = []
             for fn in self.filenames(sorted_by_age=True):
                 output_list.extend(self._fname_to_reader[fn].concordance(
-                    search_item, participant=participant,
+                    search_item, participant=participant, exclude=exclude,
                     match_entire_word=match_entire_word, lemma=lemma))
             return output_list
 
@@ -759,8 +770,8 @@ class SingleReader(object):
     def __len__(self):
         return len(self._index_to_tiers)
 
-    def number_of_utterances(self, participant=None, exclude=False):
-        return len(self.utterances(participant=participant))
+    def number_of_utterances(self, participant=None, exclude=None):
+        return len(self.utterances(participant=participant, exclude=exclude))
 
     def filename(self):
         return self._filename
@@ -1112,7 +1123,7 @@ class SingleReader(object):
         except (KeyError, IndexError, ValueError):
             return None
 
-    def utterances(self, participant=None, exclude=False, clean=True):
+    def utterances(self, participant=None, exclude=None, clean=True):
         """
         Return a list of the utterances by *participant*
         as (*participant*, *utterance*) pairs.
@@ -1149,39 +1160,50 @@ class SingleReader(object):
         return output
 
     def _determine_participants(self, participant, exclude):
+        """Determine the target participants.
+
+        Parameters
+        ----------
+        participant : str or iterable of str
+            Participants to include.
+            If unspecified or ``None``, all participant codes are included.
+        exclude : str or iterable of str
+            Participants to exclude.
+            If unspecified or ``None``, no participant codes are excluded.
+
+        Returns
+        -------
+        set of str
         """
-        Determine the target participants.
-
-        :param participant: Participant as str,
-            or a sequence of participants
-
-        :return: a set of participants of interest
-
-        :rtype: set
-        """
-        all_participant_codes = self.participant_codes()
+        if participant is None and exclude is None:
+            return self.participant_codes()
 
         if participant is None:
-            return all_participant_codes
-
-        if isinstance(participant, str):
-            check_participants = {participant}
+            include_participants = self.participant_codes()
+        elif isinstance(participant, str):
+            include_participants = {participant}
         elif hasattr(participant, '__iter__'):
-            check_participants = set(participant)
+            include_participants = set(participant)
         else:
-            raise TypeError('participant data type is invalid: {}'
+            raise TypeError('"participant" should be either str or '
+                            'an iterable of str: {}'
                             .format(repr(participant)))
 
-        output_participant_set = set()
+        if exclude is None:
+            exclude_participants = set()
+        elif isinstance(exclude, str):
+            exclude_participants = {exclude}
+        elif hasattr(exclude, '__iter__'):
+            exclude_participants = set(exclude)
+        else:
+            raise TypeError('"exclude" should be either str or '
+                            'an iterable of str: {}'
+                            .format(repr(exclude)))
 
-        for check_participant in check_participants:
-            for participant_code in all_participant_codes:
-                if re.fullmatch(check_participant, participant_code):
-                    output_participant_set.add(participant_code)
+        return {p for p in self.participant_codes()
+                if p in include_participants and p not in exclude_participants}
 
-        return output_participant_set
-
-    def words(self, participant=None):
+    def words(self, participant=None, exclude=None):
         """
         Return a list of words by *participant*.
 
@@ -1197,10 +1219,10 @@ class SingleReader(object):
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
         """
-        return self._get_words(participant=participant,
+        return self._get_words(participant=participant, exclude=exclude,
                                tagged=False, sents=False)
 
-    def tagged_words(self, participant=None, exclude=False):
+    def tagged_words(self, participant=None, exclude=None):
         """
         Return a list of tagged words by *participant*.
 
@@ -1216,10 +1238,10 @@ class SingleReader(object):
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
         """
-        return self._get_words(participant=participant,
+        return self._get_words(participant=participant, exclude=exclude,
                                tagged=True, sents=False)
 
-    def sents(self, participant=None, exclude=False):
+    def sents(self, participant=None, exclude=None):
         """
         Return a list of sents by *participant*.
 
@@ -1237,10 +1259,10 @@ class SingleReader(object):
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
         """
-        return self._get_words(participant=participant,
+        return self._get_words(participant=participant, exclude=exclude,
                                tagged=False, sents=True)
 
-    def tagged_sents(self, participant=None, exclude=False):
+    def tagged_sents(self, participant=None, exclude=None):
         """
         Return a list of tagged sents by *participant*.
 
@@ -1258,10 +1280,10 @@ class SingleReader(object):
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
         """
-        return self._get_words(participant=participant,
+        return self._get_words(participant=participant, exclude=exclude,
                                tagged=True, sents=True)
 
-    def _get_words(self, participant=None, exclude=False, tagged=True,
+    def _get_words(self, participant=None, exclude=None, tagged=True,
                    sents=True):
         """
         Extract words for the specified participant(s).
@@ -1435,7 +1457,7 @@ class SingleReader(object):
 
         return result_list
 
-    def word_frequency(self, participant=None, exclude=False, keep_case=True):
+    def word_frequency(self, participant=None, exclude=None, keep_case=True):
         """
         Return the word frequency Counter dict for *participant*.
 
@@ -1460,15 +1482,15 @@ class SingleReader(object):
         output = Counter()
 
         if keep_case:
-            for word in self.words(participant=participant):
+            for word in self.words(participant=participant, exclude=exclude):
                 output[word] += 1
         else:
-            for word in self.words(participant=participant):
+            for word in self.words(participant=participant, exclude=exclude):
                 output[word.lower()] += 1
 
         return output
 
-    def part_of_speech_tags(self, participant=None, exclude=False):
+    def part_of_speech_tags(self, participant=None, exclude=None):
         """
         Return the set of part-of-speech tags in the data for *participant*.
 
@@ -1485,7 +1507,8 @@ class SingleReader(object):
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
         """
         output_set = set()
-        tagged_words = self.tagged_words(participant=participant)
+        tagged_words = self.tagged_words(participant=participant,
+                                         exclude=exclude)
 
         for tagged_word in tagged_words:
             pos = tagged_word[1]
@@ -1493,7 +1516,7 @@ class SingleReader(object):
 
         return output_set
 
-    def word_ngrams(self, n, participant=None, exclude=False, keep_case=True):
+    def word_ngrams(self, n, participant=None, exclude=None, keep_case=True):
         """
         Return a Counter dict of *n*-grams (as an *n*-tuple of words)
         for *participant*.
@@ -1521,9 +1544,10 @@ class SingleReader(object):
 
         if n == 1:
             return self.word_frequency(participant=participant,
+                                       exclude=exclude,
                                        keep_case=keep_case)
 
-        sents = self.sents(participant=participant)
+        sents = self.sents(participant=participant, exclude=exclude)
         output_counter = Counter()
 
         for sent in sents:
@@ -1536,56 +1560,60 @@ class SingleReader(object):
 
         return output_counter
 
-    def MLU(self, participant='CHI'):
+    def MLU(self, participant='CHI', exclude=None):
         """
         Return the MLU in morphemes for *participant*
         (default to ``'CHI'``); same as ``MLUm()``.
 
         :param participant: The participant specified, default to ``'CHI'``
         """
-        return get_MLUm(self.tagged_sents(participant=participant),
+        return get_MLUm(self.tagged_sents(participant=participant,
+                                          exclude=exclude),
                         pos_to_ignore=self.pos_to_ignore)
 
-    def MLUm(self, participant='CHI'):
+    def MLUm(self, participant='CHI', exclude=None):
         """
         Return the MLU in morphemes for *participant*
         (default to ``'CHI'``); same as ``MLU()``.
 
         :param participant: The participant specified, default to ``'CHI'``
         """
-        return get_MLUm(self.tagged_sents(participant=participant),
+        return get_MLUm(self.tagged_sents(participant=participant,
+                                          exclude=exclude),
                         pos_to_ignore=self.pos_to_ignore)
 
-    def MLUw(self, participant='CHI'):
+    def MLUw(self, participant='CHI', exclude=None):
         """
         Return the mean length of utterance (MLU) in words for *participant*
         (default to ``'CHI'``).
 
         :param participant: The participant specified, default to ``'CHI'``
         """
-        return get_MLUw(self.sents(participant=participant),
+        return get_MLUw(self.sents(participant=participant, exclude=exclude),
                         words_to_ignore=self.words_to_ignore)
 
-    def TTR(self, participant='CHI'):
+    def TTR(self, participant='CHI', exclude=None):
         """
         Return the type-token ratio (TTR) for *participant*
         (default to ``'CHI'``).
 
         :param participant: The participant specified, default to ``'CHI'``
         """
-        return get_TTR(self.word_frequency(participant=participant),
+        return get_TTR(self.word_frequency(participant=participant,
+                                           exclude=exclude),
                        words_to_ignore=self.words_to_ignore)
 
-    def IPSyn(self, participant='CHI'):
+    def IPSyn(self, participant='CHI', exclude=None):
         """
         Return the index of productive syntax (IPSyn) for *participant*
         (default to ``'CHI'``).
 
         :param participant: The participant specified, default to ``'CHI'``
         """
-        return get_IPSyn(self.tagged_sents(participant=participant))
+        return get_IPSyn(self.tagged_sents(participant=participant,
+                                           exclude=exclude))
 
-    def search(self, search_item, participant=None, exclude=False,
+    def search(self, search_item, participant=None, exclude=None,
                match_entire_word=True, lemma=False,
                output_tagged=True, output_sents=True):
         return self._search(search_item, participant=participant,
@@ -1594,13 +1622,14 @@ class SingleReader(object):
                             concordance=False, output_tagged=output_tagged,
                             output_sents=output_sents)
 
-    def concordance(self, search_item, participant=None, exclude=False,
+    def concordance(self, search_item, participant=None, exclude=None,
                     match_entire_word=True, lemma=False):
         return self._search(search_item, participant=participant,
+                            exclude=exclude,
                             match_entire_word=match_entire_word, lemma=lemma,
                             concordance=True)
 
-    def _search(self, search_item, participant=None, exclude=False,
+    def _search(self, search_item, participant=None, exclude=None,
                 match_entire_word=True, lemma=False, concordance=False,
                 output_tagged=True, output_sents=True):
         taggedsent_charnumber_list = []
@@ -1612,7 +1641,10 @@ class SingleReader(object):
         else:
             match_function = lambda search_, test_: search_ in test_
 
-        for tagged_sent in self.tagged_sents(participant=participant):
+        tagged_sents = self.tagged_sents(participant=participant,
+                                         exclude=exclude)
+
+        for tagged_sent in tagged_sents:
             for i, tagged_word in enumerate(tagged_sent):
                 word, pos, mor, rel = tagged_word
 

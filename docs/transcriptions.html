@@ -178,30 +178,30 @@ access methods introduced in <a class="reference internal" href="#utterances"><s
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span> <span class="kn">as</span> <span class="nn">pla</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pla</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="s1">&#39;Brown/Eve/*.cha&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">words</span><span class="p">())</span>
-<span class="go">120133</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">words</span><span class="p">()[:</span><span class="mi">5</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">words</span><span class="p">())</span>  <span class="c1"># total number of words in Eve&#39;s data</span>
+<span class="go">120131</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">words</span><span class="p">()[:</span><span class="mi">5</span><span class="p">]</span>  <span class="c1"># first five words</span>
 <span class="go">[&#39;more&#39;, &#39;cookie&#39;, &#39;.&#39;, &#39;you&#39;, &#39;0v&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">tagged_words</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">tagged_words</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># first two tagged words</span>
 <span class="go">[(&#39;more&#39;, &#39;QN&#39;, &#39;more&#39;, (1, 2, &#39;QUANT&#39;)), (&#39;cookie&#39;, &#39;N&#39;, &#39;cookie&#39;, (2, 0, &#39;INCROOT&#39;))]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">sents</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">sents</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># first two sentences</span>
 <span class="go">[[&#39;more&#39;, &#39;cookie&#39;, &#39;.&#39;], [&#39;you&#39;, &#39;0v&#39;, &#39;more&#39;, &#39;cookies&#39;, &#39;?&#39;]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">tagged_sents</span><span class="p">()[:</span><span class="mi">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">tagged_sents</span><span class="p">()[:</span><span class="mi">2</span><span class="p">])</span>  <span class="c1"># first two tagged sentences</span>
 <span class="go">[[(&#39;more&#39;, &#39;QN&#39;, &#39;more&#39;, (1, 2, &#39;QUANT&#39;)),</span>
 <span class="go">  (&#39;cookie&#39;, &#39;N&#39;, &#39;cookie&#39;, (2, 0, &#39;INCROOT&#39;)),</span>
 <span class="go">  (&#39;.&#39;, &#39;.&#39;, &#39;&#39;, (3, 2, &#39;PUNCT&#39;))],</span>
-<span class="go"> [(&#39;you&#39;, &#39;PRO&#39;, &#39;you&#39;, (1, 2, &#39;SUBJ&#39;)),</span>
+<span class="go"> [(&#39;you&#39;, &#39;PRO:PER&#39;, &#39;you&#39;, (1, 2, &#39;SUBJ&#39;)),</span>
 <span class="go">  (&#39;0v&#39;, &#39;0V&#39;, &#39;v&#39;, (2, 0, &#39;ROOT&#39;)),</span>
 <span class="go">  (&#39;more&#39;, &#39;QN&#39;, &#39;more&#39;, (3, 4, &#39;QUANT&#39;)),</span>
 <span class="go">  (&#39;cookies&#39;, &#39;N&#39;, &#39;cookie-PL&#39;, (4, 2, &#39;OBJ&#39;)),</span>
 <span class="go">  (&#39;?&#39;, &#39;?&#39;, &#39;&#39;, (5, 2, &#39;PUNCT&#39;))]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">utterances</span><span class="p">()[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">utterances</span><span class="p">()[:</span><span class="mi">5</span><span class="p">])</span>  <span class="c1"># first five utterances (compare this output with &quot;sents&quot; above)</span>
 <span class="go">[(&#39;CHI&#39;, &#39;more cookie .&#39;),</span>
 <span class="go"> (&#39;MOT&#39;, &#39;you 0v more cookies ?&#39;),</span>
 <span class="go"> (&#39;MOT&#39;, &#39;how_about another graham+cracker ?&#39;),</span>
 <span class="go"> (&#39;MOT&#39;, &#39;would that do just as_well ?&#39;),</span>
 <span class="go"> (&#39;MOT&#39;, &#39;here .&#39;)]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">part_of_speech_tags</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">part_of_speech_tags</span><span class="p">())</span>  <span class="c1"># total number of distinct part-of-speech tags</span>
 <span class="go">65</span>
 </pre></div>
 </div>

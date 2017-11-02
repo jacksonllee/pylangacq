@@ -24,11 +24,10 @@ They share the following optional parameters:
   as a substring.
 
 
-The ``search(*search_item*)`` method has two additional optional parameters:
+The ``search(search_item)`` method has two additional optional parameters:
 
 * ``output_tagged`` -- default: True. If False, "words" in the return object
   are plain word token strings; otherwise they are tagged words of
   (word, pos, mor, rel).
 * ``output_sents`` -- default: True. If False, the return object is a list of
   words (tagged or untagged), rather than a list of sents.
-

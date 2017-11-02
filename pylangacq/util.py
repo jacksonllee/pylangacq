@@ -10,17 +10,19 @@ ENCODING = 'utf8'
 
 
 def clean_utterance(utterance, phon=False):
-    """
-    Filter away the CHAT-style annotations in *utterance*.
+    """Filter away the CHAT-style annotations in ``utterance``.
 
-    :param utterance: The utterance as a str
+    Parameters
+    ----------
+    utterance : str
+        The utterance as a str
+    phon : bool, optional
+        whether we are handling PhonBank data; defaults to False.
+        If ``True``, words like "xxx" and "yyy" won't be removed.
 
-    :param phon: whether we are handling PhonBank data; defaults to False.
-        If True, words like "xxx" and "yyy" won't be removed.
-
-    :return: The utterance without CHAT annotations
-
-    :rtype: str
+    Returns
+    -------
+    str
     """
     # Function tested with the following CHILDES datasets:
     # 1) Brent, Brown, HSLLD, Kuczaj, MacWhinney, Valian in Eng-NA-MOR
@@ -240,15 +242,18 @@ def clean_utterance(utterance, phon=False):
 
 
 def get_participant_code(tier_marker_seq):
-    """
-    Return the participant code from a tier marker set.
+    """Return the participant code from a tier marker set.
 
-    :param tier_marker_seq: A sequence of tier markers like
-        ``{'CHI', '%mor', '%gra'}``
+    Parameters
+    ----------
+    tier_marker_seq : iterable of str
+        A sequence of tier markers like ``{'CHI', '%mor', '%gra'}``
 
-    :return: A participant code, e.g., ``'CHI'``
-
-    :rtype: str, or None if no participant code is found
+    Returns
+    -------
+    str
+        A participant code, e.g., ``'CHI'``.
+        Return ``None`` if no participant code is found.
     """
     for tier_marker in tier_marker_seq:
         if not tier_marker.startswith('%'):
@@ -257,6 +262,16 @@ def get_participant_code(tier_marker_seq):
 
 
 def clean_word(word):
+    """Clean the word.
+
+    Parameters
+    ----------
+    word : str
+
+    Returns
+    -------
+    str
+    """
     new_word = (word
                 .replace('(', '')
                 .replace(')', '')
@@ -275,9 +290,21 @@ def clean_word(word):
 
 
 def convert_date_to_tuple(date_str):
-    """
-    Convert *date_str* to (year, month, day),
-    e.g., from ``'01-FEB-2016'`` to ``(2016, 2, 1)``.
+    """Convert ``date_str`` to (year, month, day).
+
+    Parameters
+    ----------
+    date_str : str
+
+
+    Returns
+    -------
+    (int, int, int)
+
+    Examples
+    --------
+    >>> convert_date_to_tuple('01-FEB-2016')
+    (2016, 2, 1)
     """
     try:
         day_str, month_str, year_str = date_str.split('-')
@@ -306,8 +333,15 @@ def convert_date_to_tuple(date_str):
 
 
 def get_lemma_from_mor(mor):
-    """
-    Extract lemma from *mor*
+    """Extract lemma from ``mor``.
+
+    Parameters
+    ----------
+    mor : tuple(str, str, str)
+
+    Returns
+    -------
+    str
     """
     lemma, _, _ = mor.partition('-')
     lemma, _, _ = lemma.partition('&')
@@ -315,13 +349,15 @@ def get_lemma_from_mor(mor):
 
 
 def remove_extra_spaces(inputstr):
-    """
-    Remove extra spaces in *inputstr* so that there are only single
-        (but not double, triple etc) spaces.
+    """Remove extra spaces in *inputstr* so that there are only single spaces.
 
-    :param inputstr: input string
+    Parameters
+    ----------
+    inputstr : str
 
-    :return: string with replacers replaced by corresponding replacees
+    Returns
+    -------
+    str
     """
     while '  ' in inputstr:
         inputstr = inputstr.replace('  ', ' ')
@@ -329,15 +365,16 @@ def remove_extra_spaces(inputstr):
 
 
 def find_indices(longstr, substring):
-    """
-    Find all indices of non-overlapping occurrences of substring in *longstr*
+    """Find all indices of non-overlapping ``substring`` in ``longstr``.
 
-    :param longstr: the long string
+    Parameters
+    ----------
+    longstr : str
+    substring : str
 
-    :param substring: the substring to find
-
-    :return: list of indices of the long string for where substring occurs
-
-    :rtype: list
+    Returns
+    -------
+    list of int
+        List of indices of the long string for where substring occurs
     """
     return [m.start() for m in re.finditer(substring, longstr)]

@@ -21,50 +21,57 @@ if sys.version_info[0] == 2:
 
 
 def read_chat(*filenames, **kwargs):
-    """
-    Create a ``Reader`` object based on *filenames*.
+    """Create a ``Reader`` object based on *filenames*.
 
-    :param filenames: one or multiple filenames (absolute-path or relative to
-        the current directory; with or without glob matching patterns)
-
-    :param kwargs: Only the keyword ``encoding`` is recognized, which defaults
+    Parameters
+    ----------
+    filenames : str or iterable or str, optional
+        One or more filenames. A filename may match exactly a CHAT file
+        (e.g., ``'eve01.cha'``) or matches multiple files by glob patterns
+        (e.g., ``'eve*.cha'``, for ``'eve01.cha'``, ``'eve02.cha'``, etc.).
+        ``*`` matches any number (including zero) of characters, while
+        ``?`` matches exactly one character.
+        A filename can be either an absolute or relative path.
+        If no *filenames* are provided, an empty Reader instance is created.
+    kwargs : dict, optional
+        Only the keyword ``encoding`` is recognized, which defaults
         to 'utf8'. (New in version 0.9)
+
+    Returns
+    -------
+    Reader
     """
     # TODO: Should error if any of "filenames" give no actual filenames?
     return Reader(*filenames, **kwargs)
 
 
 def params_in_docstring(*params):
-
     docstring = ''
     if 'participant' in params:
-        docstring += """participant : str or iterable, optional
-    The participant(s) of interest; if unspecified, all participants
-    are included. For one participant only, use ``'CHI'`` for the
-    target child only, for example. For multiple participants, use a
-    a sequence such as ``{'CHI', 'MOT'}``.
+        docstring += """    participant : str or iterable of str, optional
+    Participants of interest. If unspecified or ``None``, all participants
+    are included.
 """
     if 'exclude' in params:
-        docstring += """exclude : bool, optional
-    If ``True``, exclude all participants specified by ``participant``
-    instead. The participants of interest are the remaining ones.
+        docstring += """    exclude : str or iterable of str, optional
+    Participants to exclude. If unspecified or ``None``, no participants
+    are excluded.
 """
     if 'by_files' in params:
-        docstring += """by_files : bool, optional
+        docstring += """    by_files : bool, optional
     If ``True``, return dict(absolute-path
     filename: X for that file) instead of X for all files altogether.
 """
     if 'keep_case' in params:
-        docstring += """keep_case : bool, optional
-    If *keep_case* is True (the default), case distinctions are kept
-    and word tokens like "the" and "The" are treated as distinct types.
-    If *keep_case* is False, all case distinctions are collapsed, with
-    all word tokens forced to be in lowercase.
+        docstring += """    keep_case : bool, optional
+    If ``True`` (the default), case distinctions are kept, e.g.,
+    word tokens like "the" and "The" are treated as distinct.
+    If ``False``, all word tokens are forced to be in lowercase.
 """
 
     def real_decorator(func):
         def wrapper(*args, **kwargs):
-            param_header = 'Parameters\n----------\n'
+            param_header = 'Parameters\n        ----------\n'
 
             func.__doc__ = func.__doc__.replace(param_header,
                                                 param_header + docstring)
@@ -78,7 +85,7 @@ class Reader(object):
 
     Parameters
     ----------
-    *filenames
+    filenames : str or iterable or str, optional
         One or more filenames. A filename may match exactly a CHAT file
         (e.g., ``'eve01.cha'``) or matches multiple files by glob patterns
         (e.g., ``'eve*.cha'``, for ``'eve01.cha'``, ``'eve02.cha'``, etc.).
@@ -86,11 +93,10 @@ class Reader(object):
         ``?`` matches exactly one character.
         A filename can be either an absolute or relative path.
         If no *filenames* are provided, an empty Reader instance is created.
-    **kwargs
+    kwargs : dict, optional
         Only the keyword ``encoding`` is recognized, which defaults
         to 'utf8'. (New in version 0.9)
     """
-
     def __init__(self, *filenames, **kwargs):
         self.encoding = kwargs.get('encoding', ENCODING)
         self._input_filenames = filenames
@@ -98,12 +104,7 @@ class Reader(object):
 
     @staticmethod
     def _get_abs_filenames(*filenames):
-        """Return the set of absolute-path filenames based on *filenames*.
-
-        Parameters
-        ----------
-        *filenames
-        """
+        """Return the set of absolute-path filenames based on filenames."""
         if sys.platform.startswith('win'):
             windows = True  # pragma: no cover
         else:
@@ -156,7 +157,12 @@ class Reader(object):
                                                      encoding=self.encoding)
 
     def __len__(self):
-        """Return the number of files."""
+        """Return the number of files.
+
+        Returns
+        -------
+        int
+        """
         return len(self._filenames)
 
     def filenames(self, sorted_by_age=False):
@@ -170,7 +176,7 @@ class Reader(object):
 
         Returns
         -------
-        set of str, or list of str
+        set of str or list of str
         """
         if not sorted_by_age:
             return self._filenames
@@ -234,7 +240,7 @@ class Reader(object):
 
         Returns
         -------
-        dict(str: dict
+        dict(str: dict)
         """
         return {fn: self._fname_to_reader[fn].participants()
                 for fn in self._filenames}
@@ -312,7 +318,17 @@ class Reader(object):
             participant=participant, months=months) for fn in self._filenames}
 
     def abspath(self, basename):
-        # TODO: docstring
+        """Return the absolute path of ``basename``.
+
+        Parameters
+        ----------
+        basename : str
+            The basename (e.g., "foobar.cha") of the desired data file.
+
+        Returns
+        -------
+        str
+        """
         # TODO: tests
         for file_path in self._filenames:
             if os.path.basename(file_path) == basename:
@@ -320,7 +336,7 @@ class Reader(object):
         else:
             raise ValueError('No such file.')
 
-    @params_in_docstring('participant', 'by_files')
+    @params_in_docstring('participant', 'exclude', 'by_files')
     def utterances(self, participant=None, exclude=None, clean=True,
                    by_files=False):
         """Return a list of (*participant*, utterance) pairs from all files.
@@ -346,7 +362,7 @@ class Reader(object):
                     for fn in sorted(self._filenames))
             )
 
-    @params_in_docstring('participant', 'keep_case', 'by_files')
+    @params_in_docstring('participant', 'exclude', 'keep_case', 'by_files')
     def word_frequency(self, participant=None, exclude=None, keep_case=True,
                        by_files=False):
         """Return a word frequency counter for *participant* in all files.
@@ -371,7 +387,7 @@ class Reader(object):
                         keep_case=keep_case))
             return output_counter
 
-    @params_in_docstring('participant', 'by_files')
+    @params_in_docstring('participant', 'exclude', 'by_files')
     def words(self, participant=None, exclude=None, by_files=False):
         """Return a list of words by *participant* in all files.
 
@@ -394,7 +410,7 @@ class Reader(object):
                     for fn in sorted(self._filenames))
             )
 
-    @params_in_docstring('participant', 'by_files')
+    @params_in_docstring('participant', 'exclude', 'by_files')
     def tagged_words(self, participant=None, exclude=None, by_files=False):
         """Return a list of tagged words by *participant* in all files.
 
@@ -417,7 +433,7 @@ class Reader(object):
                     for fn in sorted(self._filenames))
             )
 
-    @params_in_docstring('participant', 'by_files')
+    @params_in_docstring('participant', 'exclude', 'by_files')
     def sents(self, participant=None, exclude=None, by_files=False):
         """Return a list of sents by *participant* in all files.
 
@@ -440,7 +456,7 @@ class Reader(object):
                     for fn in sorted(self._filenames))
             )
 
-    @params_in_docstring('participant', 'by_files')
+    @params_in_docstring('participant', 'exclude', 'by_files')
     def tagged_sents(self, participant=None, exclude=None, by_files=False):
         """Return a list of tagged sents by *participant* in all files.
 
@@ -463,7 +479,7 @@ class Reader(object):
                     for fn in sorted(self._filenames))
             )
 
-    @params_in_docstring('participant', 'by_files')
+    @params_in_docstring('participant', 'exclude', 'by_files')
     def part_of_speech_tags(self, participant=None, exclude=None,
                             by_files=False):
         """Return the part-of-speech tags in the data for *participant*.
@@ -539,7 +555,7 @@ class Reader(object):
         """Clear everything and reset as an empty Reader instance."""
         self._reset_reader()
 
-    @params_in_docstring('participant', 'keep_case', 'by_files')
+    @params_in_docstring('participant', 'exclude', 'keep_case', 'by_files')
     def word_ngrams(self, n, participant=None, exclude=None, keep_case=True,
                     by_files=False):
         """Return a word ``n``-gram counter by ``participant`` in all files.
@@ -647,7 +663,7 @@ class Reader(object):
         return {fn: self._fname_to_reader[fn].IPSyn(
             participant=participant) for fn in self._filenames}
 
-    @params_in_docstring('participant', 'by_files')
+    @params_in_docstring('participant', 'exclude', 'by_files')
     def search(self, search_item, participant=None, exclude=None,
                match_entire_word=True, lemma=False,
                output_tagged=True, output_sents=True,
@@ -690,37 +706,27 @@ class Reader(object):
                     output_tagged=output_tagged, output_sents=output_sents))
             return output_list
 
+    @params_in_docstring('participant', 'exclude', 'by_files')
     def concordance(self, search_item, participant=None, exclude=None,
                     match_entire_word=True, lemma=False, by_files=False):
-        """
-        Return a list of utterances (as strings) each containing *search_item*
-        by *participant*. All strings are aligned for *search_item* by space
+        """Return a list of utterances with *search_item* for *participant*.
+
+        All strings are aligned for *search_item* by space
         padding to create the word concordance effect.
 
-        :param search_item: word or lemma to search for.
-
-        :param participant: The participant(s) of interest (default is all
-            participants if unspecified). This parameter is flexible.
-            Set it to be ``'CHI'`` for the target child only, for example.
-            If multiple participants are desired, this parameter can take
-            a sequence such as ``{'CHI', 'MOT'}`` to pick the participants in
-            question. Underlyingly, this parameter actually performs
-            regular expression matching
-            (so passing ``'CHI'`` to this parameter is an
-            exact match for the participant code ``'CHI'``, for instance).
-            For child-directed speech (i.e., targeting all participant
-            except ``'CHI'``), use ``^(?!.*CHI).*$``.
-
-        :param match_entire_word: If False (default: True), substring
-            matching is performed.
-
-        :param lemma: If True (default: False), *search_item* refers to the
+        Parameters
+        ----------
+        search_item : str
+            Word or lemma to search for.
+        match_entire_word : bool, optional
+            If False (default: True), substring matching is performed.
+        lemma : bool, optional
+            If True (default: False), *search_item* refers to the
             lemma (from "mor" in the tagged word) instead.
 
-        :param by_files: If True (default: False), return dict(absolute-path
-            filename: X for that file) instead of X for all files altogether.
-
-        :rtype: list, or dict(str: list)
+        Returns
+        -------
+        list, or dict(str: list)
         """
         if by_files:
             return {fn: self._fname_to_reader[fn].concordance(

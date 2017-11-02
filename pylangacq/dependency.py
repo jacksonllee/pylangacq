@@ -1,28 +1,35 @@
-# -*- coding: utf-8 -*-
+"""Utilities for dependency grammar and parsing."""
 
 
 class DependencyGraph(object):
-    """
-    DependencyGraph is a class representing dependency graphs in dependency
-        grammar.
-    """
-    def __init__(self, data):
-        """
-        Initialize dependency graph.
+    """A DependencyGraph instance represents a sentence in dependency grammar.
 
-        :param data: input data
-
-        :param form: format of the input data
-        """
+    Parameters
+    ----------
+    tagged_sent : list of tuple(str, str, str, str)
+        A tagged sentence as a list of (word, pos, mor, rel).
+    """
+    def __init__(self, tagged_sent):
         self.node = {}  # from node to dict (node's properties)
         self.edge = {}  # from node to node to dict (edge's properties)
 
-        self.data = data
+        self.tagged_sent = tagged_sent
         self._faulty = False
 
         self._create_graph_from_chat()
 
     def add_edge(self, node1, node2, **kwargs):
+        """Add an edge between ``node1`` and ``node2``.
+
+        If a node doesn't yet exist, it is added to the graph.
+
+        Parameters
+        ----------
+        node1 : int
+        node2 : int
+        kwargs : dict, optional
+            Edge attributes
+        """
         if node1 not in self.node:
             self.node[node1] = {}
         if node2 not in self.node:
@@ -33,6 +40,12 @@ class DependencyGraph(object):
         self.edge[node1][node2] = kwargs
 
     def edges(self):
+        """Return the edges.
+
+        Returns
+        -------
+        dict(int: int)
+        """
         result = {}
         for node1, node2_to_properties in self.edge.items():
             for node2 in node2_to_properties.keys():
@@ -40,13 +53,17 @@ class DependencyGraph(object):
         return result
 
     def number_of_nodes(self):
+        """Return the number of nodes.
+
+        Returns
+        -------
+        int
+        """
         return len(self.node)
 
     def _create_graph_from_chat(self):
-        """
-        Create dependency graph based on the input data.
-        """
-        for word, pos, mor, gra in self.data:
+        """Create dependency graph based on the input data."""
+        for word, pos, mor, gra in self.tagged_sent:
             try:
                 node1, node2, relation = gra  # e.g., (1, 3, 'LINK')
             except ValueError:
@@ -67,21 +84,21 @@ class DependencyGraph(object):
                         }
 
     def faulty(self):
-        """
-        Return True or False for whether the graph is faulty for dependency
-            information.
+        """Determine whether the graph is faulty for dependency information.
 
-        :return: True or False
+        Returns
+        -------
+        bool
         """
         return self._faulty
 
     def to_tikz(self):
-        """
-        Return the dependency graph as LaTeX tikz-dependency code.
+        """Return the dependency graph as LaTeX tikz-dependency code.
 
-        :return: The LaTeX tikz-dependency code for drawing the graph
-
-        :rtype: str
+        Returns
+        -------
+        str
+            The LaTeX tikz-dependency code for drawing the graph
         """
         tikz_dep_code = ''
 
@@ -123,12 +140,12 @@ class DependencyGraph(object):
         return dependency_template.format(tikz_dep_code)
 
     def to_conll(self):
-        """
-        Return the dependency graph in the CoNLL format.
+        """Return the dependency graph in the CoNLL format.
 
-        :return: The CoNLL format of the dependency graph
-
-        :rtype: str
+        Returns
+        -------
+        str
+            The CoNLL format of the dependency graph
         """
         collector = list()
         dep_to_head = dict(self.edges())

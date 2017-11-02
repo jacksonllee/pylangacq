@@ -49,12 +49,24 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>filenames</strong> – one or multiple filenames (absolute-path or relative to
-the current directory; with or without glob matching patterns)</li>
-<li><strong>kwargs</strong> – Only the keyword <code class="docutils literal"><span class="pre">encoding</span></code> is recognized, which defaults
-to ‘utf8’. (New in version 0.9)</li>
-</ul>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filenames</strong> : str or iterable or str, optional</p>
+<blockquote>
+<div><p>One or more filenames. A filename may match exactly a CHAT file
+(e.g., <code class="docutils literal"><span class="pre">'eve01.cha'</span></code>) or matches multiple files by glob patterns
+(e.g., <code class="docutils literal"><span class="pre">'eve*.cha'</span></code>, for <code class="docutils literal"><span class="pre">'eve01.cha'</span></code>, <code class="docutils literal"><span class="pre">'eve02.cha'</span></code>, etc.).
+<code class="docutils literal"><span class="pre">*</span></code> matches any number (including zero) of characters, while
+<code class="docutils literal"><span class="pre">?</span></code> matches exactly one character.
+A filename can be either an absolute or relative path.
+If no <em>filenames</em> are provided, an empty Reader instance is created.</p>
+</div></blockquote>
+<p><strong>kwargs</strong> : dict, optional</p>
+<blockquote>
+<div><p>Only the keyword <code class="docutils literal"><span class="pre">encoding</span></code> is recognized, which defaults
+to ‘utf8’. (New in version 0.9)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Reader</p>
 </td>
 </tr>
 </tbody>
@@ -65,9 +77,13 @@ to ‘utf8’. (New in version 0.9)</li>
 <p>Modules:</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="chat.html"><code class="docutils literal"><span class="pre">chat</span></code> — Reading and parsing CHAT transcripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chat.html"><code class="docutils literal"><span class="pre">chat</span></code> — Reading and parsing CHAT transcripts</a><ul class="simple">
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="measures.html"><code class="docutils literal"><span class="pre">measures</span></code> — Developmental measures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dependency.html"><code class="docutils literal"><span class="pre">dependency</span></code> — Modeling syntax and semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dependency.html"><code class="docutils literal"><span class="pre">dependency</span></code> — Modeling syntax and semantics</a><ul class="simple">
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="util.html"><code class="docutils literal"><span class="pre">util</span></code> — General functions and constants</a></li>
 </ul>
 </div>

@@ -175,3 +175,8 @@ def test_tagged_words(eve_one_file):
         ('you', 'PRO:PER', 'you', (1, 2, 'SUBJ')),
         ('0v', '0V', 'v', (2, 0, 'ROOT')),
     ]
+
+
+def test_mlu_m(eve_one_file):
+    mlu_m = eve_one_file.MLUm()
+    assert almost_equal(mlu_m[BROWN_EVE_FILE_PATH_1], 2.27, tolerance=0.05)

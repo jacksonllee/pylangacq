@@ -430,7 +430,7 @@ def get_IPSyn(tagged_sents):
             subject = False
             predicate = False
 
-            for dep, head in graph.edges():
+            for dep, head in graph.edges().items():
                 if head != i:
                     continue
 
@@ -762,7 +762,7 @@ def get_IPSyn(tagged_sents):
         if first_word not in {'what', 'why', 'how', 'which', 'where', 'when'}:
             return
 
-        root = dict(graph.edges())[1]
+        root = graph.edges()[1]
 
         if graph.node[root]['pos'] == 'V':
             scoring_board['Q4'] += 1
@@ -782,7 +782,7 @@ def get_IPSyn(tagged_sents):
         if not graph.number_of_nodes() > 3:
             return
 
-        for dep, head in graph.edges():
+        for dep, head in graph.edges().items():
             if dep > head:
                 continue
 
@@ -823,7 +823,7 @@ def get_IPSyn(tagged_sents):
             if pos not in {'COP', 'MOD', 'AUX'}:
                 continue
 
-            for dep, head in graph.edges():
+            for dep, head in graph.edges().items():
                 if head != i:
                     continue
 
@@ -854,7 +854,7 @@ def get_IPSyn(tagged_sents):
             if pos not in {'MOD', 'COP', 'AUX'}:
                 continue
 
-            for dep, head in graph.edges():
+            for dep, head in graph.edges().items():
                 if head != i:
                     continue
 
@@ -983,7 +983,7 @@ def get_IPSyn(tagged_sents):
         if not graph.number_of_nodes() > 2:
             return
 
-        for dep, head in graph.edges():
+        for dep, head in graph.edges().items():
             if dep > head:
                 continue
 
@@ -1010,7 +1010,7 @@ def get_IPSyn(tagged_sents):
         if not graph.number_of_nodes() > 2:
             return
 
-        for dep, head in graph.edges():
+        for dep, head in graph.edges().items():
             if dep < head:
                 continue
 
@@ -1046,7 +1046,7 @@ def get_IPSyn(tagged_sents):
             has_subject = False
             has_object = False
 
-            for dep, test_verb in graph.edges():
+            for dep, test_verb in graph.edges().items():
                 if i != test_verb:
                     continue
 
@@ -1094,7 +1094,7 @@ def get_IPSyn(tagged_sents):
         verbs = []
         deps_of_verbs = []
 
-        for dep, head in all_edges:
+        for dep, head in all_edges.items():
             head_pos = graph.node[head]['pos']
 
             if head_pos != 'V':
@@ -1103,7 +1103,7 @@ def get_IPSyn(tagged_sents):
             verbs.append(head)
             deps_of_verbs.append(dep)
 
-        if len(verbs) == 2 and not tuple(verbs) in all_edges:
+        if len(verbs) == 2 and tuple(verbs) not in list(all_edges.items()):
             scoring_board['S6'] += 1
 
         if turn_off_scoring_board('S6'):
@@ -1148,7 +1148,7 @@ def get_IPSyn(tagged_sents):
         # -- main verb (ROOT for rel)
         # -- infinitive "to" with a head *not* being the main verb
 
-        for dep, head in graph.edges():
+        for dep, head in graph.edges().items():
             pos = graph.node[dep]['pos']
 
             if pos != 'INF':
@@ -1156,7 +1156,7 @@ def get_IPSyn(tagged_sents):
 
             inf_verb = head
 
-            for test_verb, new_head in graph.edges():
+            for test_verb, new_head in graph.edges().items():
                 if inf_verb != test_verb:
                     continue
 
@@ -1177,7 +1177,7 @@ def get_IPSyn(tagged_sents):
         (also needs a dependent verb, according to the examples)
         """
         targets = {'let', 'make', 'help', 'watch'}
-        all_edges = dict(graph.edges())
+        all_edges = graph.edges()
 
         for dep, head in all_edges.items():
             if dep != 1:
@@ -1230,7 +1230,7 @@ def get_IPSyn(tagged_sents):
 
         subject_count = 0
 
-        for dep, head in graph.edges():
+        for dep, head in graph.edges().items():
             subject_count_increment = False
 
             if (graph.edge[dep][head]['rel'] == 'SUBJ' and
@@ -1255,7 +1255,7 @@ def get_IPSyn(tagged_sents):
         if not graph.number_of_nodes() > 3:
             return
 
-        for dep, head in graph.edges():
+        for dep, head in graph.edges().items():
             dep_word = graph.node[dep]['word']
 
             if dep_word != 'and':
@@ -1280,7 +1280,7 @@ def get_IPSyn(tagged_sents):
         if not graph.number_of_nodes() > 3:
             return
 
-        for dep, head in graph.edges():
+        for dep, head in graph.edges().items():
             dep_pos = graph.node[dep]['pos']
             if not dep_pos.endswith('WH'):
                 continue
@@ -1320,7 +1320,7 @@ def get_IPSyn(tagged_sents):
 
         dep_head_pairs_for_obj = []
 
-        for dep, head in graph.edges():
+        for dep, head in graph.edges().items():
             rel = graph.edge[dep][head]['rel']
 
             if rel != 'OBJ':
@@ -1369,7 +1369,7 @@ def get_IPSyn(tagged_sents):
         if not graph.number_of_nodes() > 3:
             return
 
-        for dep, head in graph.edges():
+        for dep, head in graph.edges().items():
             if dep < head:
                 continue
 
@@ -1401,7 +1401,7 @@ def get_IPSyn(tagged_sents):
         # example of a hit case: "he wants me to go"
         # ("me" is the new subject for the infinitive clause)
 
-        for dep, head in graph.edges():
+        for dep, head in graph.edges().items():
             word = graph.node[dep]['word']
             pos = graph.node[dep]['pos']
 
@@ -1409,10 +1409,10 @@ def get_IPSyn(tagged_sents):
                 continue
 
             inf_verb = head   # "go" in the example
-            main_verb = dict(graph.edges())[inf_verb]  # "wants"
+            main_verb = graph.edges()[inf_verb]  # "wants"
 
             # check if there's an object of "wants"
-            for test_obj, test_main_verb in graph.edges():
+            for test_obj, test_main_verb in graph.edges().items():
                 if test_main_verb != main_verb:
                     continue
 
@@ -1452,7 +1452,7 @@ def get_IPSyn(tagged_sents):
         conj_position = graph.number_of_nodes()  # decrement if CONJ is found
         subj_position_list = []
 
-        for dep, head in graph.edges():
+        for dep, head in graph.edges().items():
             pos = graph.node[dep]['pos']
             rel = graph.edge[dep][head]['rel']
 

@@ -10,6 +10,7 @@
   of dates.
 * Implemented the `exclude` parameter in various `Reader` methods for
   excluding specific participants.
+* Fixed bug in IPSyn.
 
 ## v0.9.0 - 2017-10-25
 

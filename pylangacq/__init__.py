@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import os
 
 from pylangacq.chat import read_chat

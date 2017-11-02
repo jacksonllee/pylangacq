@@ -60,51 +60,58 @@
     <span class="kn">from</span> <span class="nn">io</span> <span class="k">import</span> <span class="nb">open</span>  <span class="c1"># pragma: no coverage  (doesn&#39;t run in py &gt;=3)</span>
 
 
-<span class="k">def</span> <span class="nf">read_chat</span><span class="p">(</span><span class="o">*</span><span class="n">filenames</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create a ``Reader`` object based on *filenames*.</span>
+<div class="viewcode-block" id="read_chat"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.read_chat">[docs]</a><span class="k">def</span> <span class="nf">read_chat</span><span class="p">(</span><span class="o">*</span><span class="n">filenames</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a ``Reader`` object based on *filenames*.</span>
 
-<span class="sd">    :param filenames: one or multiple filenames (absolute-path or relative to</span>
-<span class="sd">        the current directory; with or without glob matching patterns)</span>
-
-<span class="sd">    :param kwargs: Only the keyword ``encoding`` is recognized, which defaults</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filenames : str or iterable or str, optional</span>
+<span class="sd">        One or more filenames. A filename may match exactly a CHAT file</span>
+<span class="sd">        (e.g., ``&#39;eve01.cha&#39;``) or matches multiple files by glob patterns</span>
+<span class="sd">        (e.g., ``&#39;eve*.cha&#39;``, for ``&#39;eve01.cha&#39;``, ``&#39;eve02.cha&#39;``, etc.).</span>
+<span class="sd">        ``*`` matches any number (including zero) of characters, while</span>
+<span class="sd">        ``?`` matches exactly one character.</span>
+<span class="sd">        A filename can be either an absolute or relative path.</span>
+<span class="sd">        If no *filenames* are provided, an empty Reader instance is created.</span>
+<span class="sd">    kwargs : dict, optional</span>
+<span class="sd">        Only the keyword ``encoding`` is recognized, which defaults</span>
 <span class="sd">        to &#39;utf8&#39;. (New in version 0.9)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Reader</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># TODO: Should error if any of &quot;filenames&quot; give no actual filenames?</span>
-    <span class="k">return</span> <span class="n">Reader</span><span class="p">(</span><span class="o">*</span><span class="n">filenames</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Reader</span><span class="p">(</span><span class="o">*</span><span class="n">filenames</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">params_in_docstring</span><span class="p">(</span><span class="o">*</span><span class="n">params</span><span class="p">):</span>
-
     <span class="n">docstring</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
     <span class="k">if</span> <span class="s1">&#39;participant&#39;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-        <span class="n">docstring</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;participant : str or iterable, optional</span>
-<span class="s2">    The participant(s) of interest; if unspecified, all participants</span>
-<span class="s2">    are included. For one participant only, use ``&#39;CHI&#39;`` for the</span>
-<span class="s2">    target child only, for example. For multiple participants, use a</span>
-<span class="s2">    a sequence such as ``{&#39;CHI&#39;, &#39;MOT&#39;}``.</span>
+        <span class="n">docstring</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;    participant : str or iterable of str, optional</span>
+<span class="s2">    Participants of interest. If unspecified or ``None``, all participants</span>
+<span class="s2">    are included.</span>
 <span class="s2">&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="s1">&#39;exclude&#39;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-        <span class="n">docstring</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;exclude : bool, optional</span>
-<span class="s2">    If ``True``, exclude all participants specified by ``participant``</span>
-<span class="s2">    instead. The participants of interest are the remaining ones.</span>
+        <span class="n">docstring</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;    exclude : str or iterable of str, optional</span>
+<span class="s2">    Participants to exclude. If unspecified or ``None``, no participants</span>
+<span class="s2">    are excluded.</span>
 <span class="s2">&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="s1">&#39;by_files&#39;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-        <span class="n">docstring</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;by_files : bool, optional</span>
+        <span class="n">docstring</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;    by_files : bool, optional</span>
 <span class="s2">    If ``True``, return dict(absolute-path</span>
 <span class="s2">    filename: X for that file) instead of X for all files altogether.</span>
 <span class="s2">&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="s1">&#39;keep_case&#39;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-        <span class="n">docstring</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;keep_case : bool, optional</span>
-<span class="s2">    If *keep_case* is True (the default), case distinctions are kept</span>
-<span class="s2">    and word tokens like &quot;the&quot; and &quot;The&quot; are treated as distinct types.</span>
-<span class="s2">    If *keep_case* is False, all case distinctions are collapsed, with</span>
-<span class="s2">    all word tokens forced to be in lowercase.</span>
+        <span class="n">docstring</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;    keep_case : bool, optional</span>
+<span class="s2">    If ``True`` (the default), case distinctions are kept, e.g.,</span>
+<span class="s2">    word tokens like &quot;the&quot; and &quot;The&quot; are treated as distinct.</span>
+<span class="s2">    If ``False``, all word tokens are forced to be in lowercase.</span>
 <span class="s2">&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">real_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
         <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-            <span class="n">param_header</span> <span class="o">=</span> <span class="s1">&#39;Parameters</span><span class="se">\n</span><span class="s1">----------</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="n">param_header</span> <span class="o">=</span> <span class="s1">&#39;Parameters</span><span class="se">\n</span><span class="s1">        ----------</span><span class="se">\n</span><span class="s1">&#39;</span>
 
             <span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">param_header</span><span class="p">,</span>
                                                 <span class="n">param_header</span> <span class="o">+</span> <span class="n">docstring</span><span class="p">)</span>
@@ -118,7 +125,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    *filenames</span>
+<span class="sd">    filenames : str or iterable or str, optional</span>
 <span class="sd">        One or more filenames. A filename may match exactly a CHAT file</span>
 <span class="sd">        (e.g., ``&#39;eve01.cha&#39;``) or matches multiple files by glob patterns</span>
 <span class="sd">        (e.g., ``&#39;eve*.cha&#39;``, for ``&#39;eve01.cha&#39;``, ``&#39;eve02.cha&#39;``, etc.).</span>
@@ -126,11 +133,10 @@
 <span class="sd">        ``?`` matches exactly one character.</span>
 <span class="sd">        A filename can be either an absolute or relative path.</span>
 <span class="sd">        If no *filenames* are provided, an empty Reader instance is created.</span>
-<span class="sd">    **kwargs</span>
+<span class="sd">    kwargs : dict, optional</span>
 <span class="sd">        Only the keyword ``encoding`` is recognized, which defaults</span>
 <span class="sd">        to &#39;utf8&#39;. (New in version 0.9)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">filenames</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;encoding&#39;</span><span class="p">,</span> <span class="n">ENCODING</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_input_filenames</span> <span class="o">=</span> <span class="n">filenames</span>
@@ -138,12 +144,7 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_get_abs_filenames</span><span class="p">(</span><span class="o">*</span><span class="n">filenames</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return the set of absolute-path filenames based on *filenames*.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        *filenames</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Return the set of absolute-path filenames based on filenames.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;win&#39;</span><span class="p">):</span>
             <span class="n">windows</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># pragma: no cover</span>
         <span class="k">else</span><span class="p">:</span>
@@ -196,7 +197,12 @@
                                                      <span class="n">encoding</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return the number of files.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Return the number of files.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Reader.filenames"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.filenames">[docs]</a>    <span class="k">def</span> <span class="nf">filenames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sorted_by_age</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -210,7 +216,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        set of str, or list of str</span>
+<span class="sd">        set of str or list of str</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">sorted_by_age</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span>
@@ -274,7 +280,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        dict(str: dict</span>
+<span class="sd">        dict(str: dict)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">fn</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">participants</span><span class="p">()</span>
                 <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">}</span></div>
@@ -351,16 +357,26 @@
         <span class="k">return</span> <span class="p">{</span><span class="n">fn</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">age</span><span class="p">(</span>
             <span class="n">participant</span><span class="o">=</span><span class="n">participant</span><span class="p">,</span> <span class="n">months</span><span class="o">=</span><span class="n">months</span><span class="p">)</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">}</span></div>
 
-    <span class="k">def</span> <span class="nf">abspath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">basename</span><span class="p">):</span>
-        <span class="c1"># TODO: docstring</span>
+<div class="viewcode-block" id="Reader.abspath"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.abspath">[docs]</a>    <span class="k">def</span> <span class="nf">abspath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">basename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the absolute path of ``basename``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        basename : str</span>
+<span class="sd">            The basename (e.g., &quot;foobar.cha&quot;) of the desired data file.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># TODO: tests</span>
         <span class="k">for</span> <span class="n">file_path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span> <span class="o">==</span> <span class="n">basename</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">file_path</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No such file.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No such file.&#39;</span><span class="p">)</span></div>
 
-    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
+    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">utterances</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                    <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a list of (*participant*, utterance) pairs from all files.</span>
@@ -386,7 +402,7 @@
                     <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">))</span>
             <span class="p">)</span>
 
-    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;keep_case&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
+    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;keep_case&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">word_frequency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">keep_case</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                        <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a word frequency counter for *participant* in all files.</span>
@@ -411,7 +427,7 @@
                         <span class="n">keep_case</span><span class="o">=</span><span class="n">keep_case</span><span class="p">))</span>
             <span class="k">return</span> <span class="n">output_counter</span>
 
-    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
+    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">words</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a list of words by *participant* in all files.</span>
 
@@ -434,7 +450,7 @@
                     <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">))</span>
             <span class="p">)</span>
 
-    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
+    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">tagged_words</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a list of tagged words by *participant* in all files.</span>
 
@@ -457,7 +473,7 @@
                     <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">))</span>
             <span class="p">)</span>
 
-    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
+    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">sents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a list of sents by *participant* in all files.</span>
 
@@ -480,7 +496,7 @@
                     <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">))</span>
             <span class="p">)</span>
 
-    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
+    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">tagged_sents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a list of tagged sents by *participant* in all files.</span>
 
@@ -503,7 +519,7 @@
                     <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">))</span>
             <span class="p">)</span>
 
-    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
+    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">part_of_speech_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                             <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the part-of-speech tags in the data for *participant*.</span>
@@ -579,7 +595,7 @@
         <span class="sd">&quot;&quot;&quot;Clear everything and reset as an empty Reader instance.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_reset_reader</span><span class="p">()</span></div>
 
-    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;keep_case&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
+    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;keep_case&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">word_ngrams</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">keep_case</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                     <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a word ``n``-gram counter by ``participant`` in all files.</span>
@@ -687,7 +703,7 @@
         <span class="k">return</span> <span class="p">{</span><span class="n">fn</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">IPSyn</span><span class="p">(</span>
             <span class="n">participant</span><span class="o">=</span><span class="n">participant</span><span class="p">)</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">}</span></div>
 
-    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
+    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span>  <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_item</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                <span class="n">match_entire_word</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lemma</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                <span class="n">output_tagged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_sents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -730,37 +746,27 @@
                     <span class="n">output_tagged</span><span class="o">=</span><span class="n">output_tagged</span><span class="p">,</span> <span class="n">output_sents</span><span class="o">=</span><span class="n">output_sents</span><span class="p">))</span>
             <span class="k">return</span> <span class="n">output_list</span>
 
-<div class="viewcode-block" id="Reader.concordance"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.concordance">[docs]</a>    <span class="k">def</span> <span class="nf">concordance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_item</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">concordance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_item</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                     <span class="n">match_entire_word</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lemma</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return a list of utterances (as strings) each containing *search_item*</span>
-<span class="sd">        by *participant*. All strings are aligned for *search_item* by space</span>
+        <span class="sd">&quot;&quot;&quot;Return a list of utterances with *search_item* for *participant*.</span>
+
+<span class="sd">        All strings are aligned for *search_item* by space</span>
 <span class="sd">        padding to create the word concordance effect.</span>
 
-<span class="sd">        :param search_item: word or lemma to search for.</span>
-
-<span class="sd">        :param participant: The participant(s) of interest (default is all</span>
-<span class="sd">            participants if unspecified). This parameter is flexible.</span>
-<span class="sd">            Set it to be ``&#39;CHI&#39;`` for the target child only, for example.</span>
-<span class="sd">            If multiple participants are desired, this parameter can take</span>
-<span class="sd">            a sequence such as ``{&#39;CHI&#39;, &#39;MOT&#39;}`` to pick the participants in</span>
-<span class="sd">            question. Underlyingly, this parameter actually performs</span>
-<span class="sd">            regular expression matching</span>
-<span class="sd">            (so passing ``&#39;CHI&#39;`` to this parameter is an</span>
-<span class="sd">            exact match for the participant code ``&#39;CHI&#39;``, for instance).</span>
-<span class="sd">            For child-directed speech (i.e., targeting all participant</span>
-<span class="sd">            except ``&#39;CHI&#39;``), use ``^(?!.*CHI).*$``.</span>
-
-<span class="sd">        :param match_entire_word: If False (default: True), substring</span>
-<span class="sd">            matching is performed.</span>
-
-<span class="sd">        :param lemma: If True (default: False), *search_item* refers to the</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        search_item : str</span>
+<span class="sd">            Word or lemma to search for.</span>
+<span class="sd">        match_entire_word : bool, optional</span>
+<span class="sd">            If False (default: True), substring matching is performed.</span>
+<span class="sd">        lemma : bool, optional</span>
+<span class="sd">            If True (default: False), *search_item* refers to the</span>
 <span class="sd">            lemma (from &quot;mor&quot; in the tagged word) instead.</span>
 
-<span class="sd">        :param by_files: If True (default: False), return dict(absolute-path</span>
-<span class="sd">            filename: X for that file) instead of X for all files altogether.</span>
-
-<span class="sd">        :rtype: list, or dict(str: list)</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list, or dict(str: list)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">by_files</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">{</span><span class="n">fn</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">concordance</span><span class="p">(</span>
@@ -773,7 +779,7 @@
                 <span class="n">output_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">concordance</span><span class="p">(</span>
                     <span class="n">search_item</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="n">participant</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="n">exclude</span><span class="p">,</span>
                     <span class="n">match_entire_word</span><span class="o">=</span><span class="n">match_entire_word</span><span class="p">,</span> <span class="n">lemma</span><span class="o">=</span><span class="n">lemma</span><span class="p">))</span>
-            <span class="k">return</span> <span class="n">output_list</span></div></div>
+            <span class="k">return</span> <span class="n">output_list</span></div>
 
 
 <span class="k">class</span> <span class="nc">SingleReader</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>

@@ -36,6 +36,7 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.viewcode',
     'sphinx.ext.autosummary',
+    'numpydoc.numpydoc',
     'alabaster',
 ]
 

@@ -50,17 +50,19 @@
 
 
 <div class="viewcode-block" id="clean_utterance"><a class="viewcode-back" href="../../util.html#pylangacq.util.clean_utterance">[docs]</a><span class="k">def</span> <span class="nf">clean_utterance</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="n">phon</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Filter away the CHAT-style annotations in *utterance*.</span>
+    <span class="sd">&quot;&quot;&quot;Filter away the CHAT-style annotations in ``utterance``.</span>
 
-<span class="sd">    :param utterance: The utterance as a str</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    utterance : str</span>
+<span class="sd">        The utterance as a str</span>
+<span class="sd">    phon : bool, optional</span>
+<span class="sd">        whether we are handling PhonBank data; defaults to False.</span>
+<span class="sd">        If ``True``, words like &quot;xxx&quot; and &quot;yyy&quot; won&#39;t be removed.</span>
 
-<span class="sd">    :param phon: whether we are handling PhonBank data; defaults to False.</span>
-<span class="sd">        If True, words like &quot;xxx&quot; and &quot;yyy&quot; won&#39;t be removed.</span>
-
-<span class="sd">    :return: The utterance without CHAT annotations</span>
-
-<span class="sd">    :rtype: str</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Function tested with the following CHILDES datasets:</span>
     <span class="c1"># 1) Brent, Brown, HSLLD, Kuczaj, MacWhinney, Valian in Eng-NA-MOR</span>
@@ -280,15 +282,18 @@
 
 
 <div class="viewcode-block" id="get_participant_code"><a class="viewcode-back" href="../../util.html#pylangacq.util.get_participant_code">[docs]</a><span class="k">def</span> <span class="nf">get_participant_code</span><span class="p">(</span><span class="n">tier_marker_seq</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Return the participant code from a tier marker set.</span>
+    <span class="sd">&quot;&quot;&quot;Return the participant code from a tier marker set.</span>
 
-<span class="sd">    :param tier_marker_seq: A sequence of tier markers like</span>
-<span class="sd">        ``{&#39;CHI&#39;, &#39;%mor&#39;, &#39;%gra&#39;}``</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tier_marker_seq : iterable of str</span>
+<span class="sd">        A sequence of tier markers like ``{&#39;CHI&#39;, &#39;%mor&#39;, &#39;%gra&#39;}``</span>
 
-<span class="sd">    :return: A participant code, e.g., ``&#39;CHI&#39;``</span>
-
-<span class="sd">    :rtype: str, or None if no participant code is found</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        A participant code, e.g., ``&#39;CHI&#39;``.</span>
+<span class="sd">        Return ``None`` if no participant code is found.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">tier_marker</span> <span class="ow">in</span> <span class="n">tier_marker_seq</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">tier_marker</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;%&#39;</span><span class="p">):</span>
@@ -296,7 +301,17 @@
     <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<span class="k">def</span> <span class="nf">clean_word</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+<div class="viewcode-block" id="clean_word"><a class="viewcode-back" href="../../util.html#pylangacq.util.clean_word">[docs]</a><span class="k">def</span> <span class="nf">clean_word</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Clean the word.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    word : str</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">new_word</span> <span class="o">=</span> <span class="p">(</span><span class="n">word</span>
                 <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;(&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
                 <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;)&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
@@ -311,13 +326,25 @@
     <span class="k">if</span> <span class="n">new_word</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">):</span>
         <span class="n">new_word</span> <span class="o">=</span> <span class="n">new_word</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
 
-    <span class="k">return</span> <span class="n">new_word</span>
+    <span class="k">return</span> <span class="n">new_word</span></div>
 
 
 <div class="viewcode-block" id="convert_date_to_tuple"><a class="viewcode-back" href="../../util.html#pylangacq.util.convert_date_to_tuple">[docs]</a><span class="k">def</span> <span class="nf">convert_date_to_tuple</span><span class="p">(</span><span class="n">date_str</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Convert *date_str* to (year, month, day),</span>
-<span class="sd">    e.g., from ``&#39;01-FEB-2016&#39;`` to ``(2016, 2, 1)``.</span>
+    <span class="sd">&quot;&quot;&quot;Convert ``date_str`` to (year, month, day).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    date_str : str</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    (int, int, int)</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; convert_date_to_tuple(&#39;01-FEB-2016&#39;)</span>
+<span class="sd">    (2016, 2, 1)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">day_str</span><span class="p">,</span> <span class="n">month_str</span><span class="p">,</span> <span class="n">year_str</span> <span class="o">=</span> <span class="n">date_str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
@@ -346,8 +373,15 @@
 
 
 <div class="viewcode-block" id="get_lemma_from_mor"><a class="viewcode-back" href="../../util.html#pylangacq.util.get_lemma_from_mor">[docs]</a><span class="k">def</span> <span class="nf">get_lemma_from_mor</span><span class="p">(</span><span class="n">mor</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Extract lemma from *mor*</span>
+    <span class="sd">&quot;&quot;&quot;Extract lemma from ``mor``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mor : tuple(str, str, str)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">lemma</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">mor</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
     <span class="n">lemma</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">lemma</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">)</span>
@@ -355,13 +389,15 @@
 
 
 <div class="viewcode-block" id="remove_extra_spaces"><a class="viewcode-back" href="../../util.html#pylangacq.util.remove_extra_spaces">[docs]</a><span class="k">def</span> <span class="nf">remove_extra_spaces</span><span class="p">(</span><span class="n">inputstr</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Remove extra spaces in *inputstr* so that there are only single</span>
-<span class="sd">        (but not double, triple etc) spaces.</span>
+    <span class="sd">&quot;&quot;&quot;Remove extra spaces in *inputstr* so that there are only single spaces.</span>
 
-<span class="sd">    :param inputstr: input string</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    inputstr : str</span>
 
-<span class="sd">    :return: string with replacers replaced by corresponding replacees</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">while</span> <span class="s1">&#39;  &#39;</span> <span class="ow">in</span> <span class="n">inputstr</span><span class="p">:</span>
         <span class="n">inputstr</span> <span class="o">=</span> <span class="n">inputstr</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;  &#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span>
@@ -369,16 +405,17 @@
 
 
 <div class="viewcode-block" id="find_indices"><a class="viewcode-back" href="../../util.html#pylangacq.util.find_indices">[docs]</a><span class="k">def</span> <span class="nf">find_indices</span><span class="p">(</span><span class="n">longstr</span><span class="p">,</span> <span class="n">substring</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Find all indices of non-overlapping occurrences of substring in *longstr*</span>
+    <span class="sd">&quot;&quot;&quot;Find all indices of non-overlapping ``substring`` in ``longstr``.</span>
 
-<span class="sd">    :param longstr: the long string</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    longstr : str</span>
+<span class="sd">    substring : str</span>
 
-<span class="sd">    :param substring: the substring to find</span>
-
-<span class="sd">    :return: list of indices of the long string for where substring occurs</span>
-
-<span class="sd">    :rtype: list</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list of int</span>
+<span class="sd">        List of indices of the long string for where substring occurs</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">start</span><span class="p">()</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">substring</span><span class="p">,</span> <span class="n">longstr</span><span class="p">)]</span></div>
 </pre></div>

@@ -33,7 +33,7 @@ def read_chat(*filenames, **kwargs):
         ``?`` matches exactly one character.
         A filename can be either an absolute or relative path.
         If no *filenames* are provided, an empty Reader instance is created.
-    kwargs : dict, optional
+    kwargs
         Only the keyword ``encoding`` is recognized, which defaults
         to 'utf8'. (New in version 0.9)
 
@@ -93,7 +93,7 @@ class Reader(object):
         ``?`` matches exactly one character.
         A filename can be either an absolute or relative path.
         If no *filenames* are provided, an empty Reader instance is created.
-    kwargs : dict, optional
+    kwargs
         Only the keyword ``encoding`` is recognized, which defaults
         to 'utf8'. (New in version 0.9)
     """

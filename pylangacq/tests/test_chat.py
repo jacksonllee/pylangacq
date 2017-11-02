@@ -301,3 +301,32 @@ def test_headers(eve_one_file):
         'Time Duration': '11:30-12:00',
         'UTF8': ''
     }
+
+
+def test_sents(eve_one_file):
+    assert eve_one_file.sents()[:2] == [
+        ['more', 'cookie', '.'], ['you', '0v', 'more', 'cookies', '?']
+    ]
+
+
+def test_tagged_sents(eve_one_file):
+    assert eve_one_file.tagged_sents()[:2] == [
+        [('more', 'QN', 'more', (1, 2, 'QUANT')),
+         ('cookie', 'N', 'cookie', (2, 0, 'INCROOT')),
+         ('.', '.', '', (3, 2, 'PUNCT'))],
+        [('you', 'PRO:PER', 'you', (1, 2, 'SUBJ')),
+         ('0v', '0V', 'v', (2, 0, 'ROOT')),
+         ('more', 'QN', 'more', (3, 4, 'QUANT')),
+         ('cookies', 'N', 'cookie-PL', (4, 2, 'OBJ')),
+         ('?', '?', '', (5, 2, 'PUNCT'))]
+    ]
+
+
+def test_utterances(eve_one_file):
+    assert eve_one_file.utterances()[:5] == [
+        ('CHI', 'more cookie .'),
+        ('MOT', 'you 0v more cookies ?'),
+        ('MOT', 'how_about another graham+cracker ?'),
+        ('MOT', 'would that do just as_well ?'),
+        ('MOT', 'here .')
+    ]

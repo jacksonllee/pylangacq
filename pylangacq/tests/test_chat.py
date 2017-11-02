@@ -330,3 +330,8 @@ def test_utterances(eve_one_file):
         ('MOT', 'would that do just as_well ?'),
         ('MOT', 'here .')
     ]
+
+
+def test_part_of_speech_tags(eve_all_files):
+    assert almost_equal(len(eve_all_files.part_of_speech_tags()), 65,
+                        tolerance=2)

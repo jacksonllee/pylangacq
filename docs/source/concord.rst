@@ -15,7 +15,7 @@ concordance(*search_item*)  list of sents (rendered as str and aligned for *sear
 Both methods have the obligatory parameter *search_item*.
 They share the following optional parameters:
 
-* ``participant`` -- see :ref:`cds`
+* ``participant`` and ``exclude`` -- see :ref:`cds`
 * ``by_files`` -- see :ref:`reader_properties`
 * ``lemma`` -- default: False. If True, *search_item* refers to the lemma given
   by "mor" in the tagged words. Otherwise, *search_item* refers to the word

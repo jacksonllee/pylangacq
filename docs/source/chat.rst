@@ -41,14 +41,14 @@ Metadata methods
 .. autosummary::
 
    filenames
-   find_filename
+   abspath
    number_of_files
    number_of_utterances
    headers
    participants
    participant_codes
    languages
-   date
+   dates_of_recording
    age
 
 .. _data_methods:

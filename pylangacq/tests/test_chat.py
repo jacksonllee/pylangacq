@@ -180,3 +180,14 @@ def test_tagged_words(eve_one_file):
 def test_mlu_m(eve_one_file):
     mlu_m = eve_one_file.MLUm()
     assert almost_equal(mlu_m[BROWN_EVE_FILE_PATH_1], 2.27, tolerance=0.05)
+
+
+def test_word_frequency(eve_all_files):
+    word_freq = eve_all_files.word_frequency()
+    expected_words = [('.', 20130), ('?', 6358), ('you', 3695), ('the', 2524),
+                      ('it', 2365)]
+    for expected, actual in zip(expected_words, word_freq.most_common(5)):
+        expected_word, expected_freq = expected
+        actual_word, actual_freq = actual
+        assert expected_word == actual_word
+        assert almost_equal(expected_freq, actual_freq, tolerance=3)

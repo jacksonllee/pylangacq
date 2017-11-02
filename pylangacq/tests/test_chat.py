@@ -167,3 +167,11 @@ def test_words(eve_one_file):
     words = eve_one_file.words()
     assert almost_equal(len(words), 5843, tolerance=3)
     assert words[:5] == ['more', 'cookie', '.', 'you', '0v']
+
+
+def test_tagged_words(eve_one_file):
+    tagged_words = eve_one_file.tagged_words(participant='MOT')
+    assert tagged_words[:2] == [
+        ('you', 'PRO:PER', 'you', (1, 2, 'SUBJ')),
+        ('0v', '0V', 'v', (2, 0, 'ROOT')),
+    ]

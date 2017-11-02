@@ -1,0 +1,156 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Word search and concordance &#8212; PyLangAcq 0.10.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Lexicon and morphology" href="lex.html" />
+    <link rel="prev" title="Word frequency and ngrams" href="freq.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="word-search-and-concordance">
+<span id="concord"></span><h1>Word search and concordance<a class="headerlink" href="#word-search-and-concordance" title="Permalink to this headline">¶</a></h1>
+<p>Searching can be conveniently done by <code class="docutils literal"><span class="pre">search()</span></code> and <code class="docutils literal"><span class="pre">concordance()</span></code>:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="30%" />
+<col width="70%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Method</th>
+<th class="head">Return object</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>search(<em>search_item</em>)</td>
+<td>list of elements containing <em>search_item</em></td>
+</tr>
+<tr class="row-odd"><td>concordance(<em>search_item</em>)</td>
+<td>list of sents (rendered as str and aligned for <em>search_item</em>)</td>
+</tr>
+</tbody>
+</table>
+<p>Both methods have the obligatory parameter <em>search_item</em>.
+They share the following optional parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">participant</span></code> – see <a class="reference internal" href="transcriptions.html#cds"><span class="std std-ref">Child speech versus child directed speech</span></a></li>
+<li><code class="docutils literal"><span class="pre">by_files</span></code> – see <a class="reference internal" href="read.html#reader-properties"><span class="std std-ref">Reader methods</span></a></li>
+<li><code class="docutils literal"><span class="pre">lemma</span></code> – default: False. If True, <em>search_item</em> refers to the lemma given
+by “mor” in the tagged words. Otherwise, <em>search_item</em> refers to the word
+token string.</li>
+<li><code class="docutils literal"><span class="pre">match_entire_word</span></code> – default: True. If False, <em>search_item</em> can match
+as a substring.</li>
+</ul>
+<p>The <code class="docutils literal"><span class="pre">search(*search_item*)</span></code> method has two additional optional parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">output_tagged</span></code> – default: True. If False, “words” in the return object
+are plain word token strings; otherwise they are tagged words of
+(word, pos, mor, rel).</li>
+<li><code class="docutils literal"><span class="pre">output_sents</span></code> – default: True. If False, the return object is a list of
+words (tagged or untagged), rather than a list of sents.</li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="toc.html">PyLangAcq</a></h1>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">PyLangAcq: Language Acquisition Research in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Download and install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="read.html">Reading data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Accessing metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transcriptions.html">Transcriptions and annotations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="devmeasures.html">Developmental measures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="freq.html">Word frequency and ngrams</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Word search and concordance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lex.html">Lexicon and morphology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phono.html">Phonetics and phonology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synsem.html">Syntax and semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disca.html">Discourse and conversational analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Library reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="toc.html">Documentation overview</a><ul>
+      <li>Previous: <a href="freq.html" title="previous chapter">Word frequency and ngrams</a></li>
+      <li>Next: <a href="lex.html" title="next chapter">Lexicon and morphology</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015-2017, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on November 02, 2017.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

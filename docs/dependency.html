@@ -1,0 +1,186 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>dependency — Modeling syntax and semantics &#8212; PyLangAcq 0.10.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="util — General functions and constants" href="util.html" />
+    <link rel="prev" title="measures — Developmental measures" href="measures.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="dependency-modeling-syntax-and-semantics">
+<span id="grammar"></span><h1><code class="docutils literal"><span class="pre">dependency</span></code> — Modeling syntax and semantics<a class="headerlink" href="#dependency-modeling-syntax-and-semantics" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal"><span class="pre">dependency</span></code> module defines classes and functions for handling information
+regarding dependency and grammatical relations based on the <code class="docutils literal"><span class="pre">%gra</span></code> tiers in
+CHAT transcripts. See <a class="reference internal" href="synsem.html#synsem"><span class="std std-ref">Syntax and semantics</span></a> for usage.</p>
+<span class="target" id="module-pylangacq.dependency"></span><dl class="class">
+<dt id="pylangacq.dependency.DependencyGraph">
+<em class="property">class </em><code class="descclassname">pylangacq.dependency.</code><code class="descname">DependencyGraph</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>DependencyGraph is a class representing dependency graphs in dependency</dt>
+<dd>grammar.</dd>
+</dl>
+<dl class="method">
+<dt id="pylangacq.dependency.DependencyGraph.faulty">
+<code class="descname">faulty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph.faulty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.faulty" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Return True or False for whether the graph is faulty for dependency</dt>
+<dd>information.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True or False</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylangacq.dependency.DependencyGraph.to_conll">
+<code class="descname">to_conll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph.to_conll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.to_conll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the dependency graph in the CoNLL format.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The CoNLL format of the dependency graph</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylangacq.dependency.DependencyGraph.to_tikz">
+<code class="descname">to_tikz</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph.to_tikz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.to_tikz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the dependency graph as LaTeX tikz-dependency code.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The LaTeX tikz-dependency code for drawing the graph</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="toc.html">PyLangAcq</a></h1>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">PyLangAcq: Language Acquisition Research in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Download and install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="read.html">Reading data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Accessing metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transcriptions.html">Transcriptions and annotations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="devmeasures.html">Developmental measures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="freq.html">Word frequency and ngrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="concord.html">Word search and concordance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lex.html">Lexicon and morphology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phono.html">Phonetics and phonology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synsem.html">Syntax and semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disca.html">Discourse and conversational analysis</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference.html">Library reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="chat.html"><code class="docutils literal"><span class="pre">chat</span></code> — Reading and parsing CHAT transcripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="measures.html"><code class="docutils literal"><span class="pre">measures</span></code> — Developmental measures</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal"><span class="pre">dependency</span></code> — Modeling syntax and semantics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html"><code class="docutils literal"><span class="pre">util</span></code> — General functions and constants</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="toc.html">Documentation overview</a><ul>
+  <li><a href="reference.html">Library reference</a><ul>
+      <li>Previous: <a href="measures.html" title="previous chapter"><code class="docutils literal"><span class="pre">measures</span></code> — Developmental measures</a></li>
+      <li>Next: <a href="util.html" title="next chapter"><code class="docutils literal"><span class="pre">util</span></code> — General functions and constants</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015-2017, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on November 02, 2017.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

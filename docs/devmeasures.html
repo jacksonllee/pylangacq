@@ -1,0 +1,289 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Developmental measures &#8212; PyLangAcq 0.10.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Word frequency and ngrams" href="freq.html" />
+    <link rel="prev" title="Transcriptions and annotations" href="transcriptions.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="developmental-measures">
+<span id="devmeasures"></span><h1>Developmental measures<a class="headerlink" href="#developmental-measures" title="Permalink to this headline">¶</a></h1>
+<p>Several language developmental measures are implemented in PyLangAcq:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="32%" />
+<col width="68%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Method</th>
+<th class="head">Measure</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#ttr"><span class="std std-ref">TTR()</span></a></td>
+<td>Type-token Ratio</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#mlu"><span class="std std-ref">MLUm()</span></a></td>
+<td>Mean Length of Utterance in morphemes</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#mlu"><span class="std std-ref">MLUw()</span></a></td>
+<td>Mean Length of Utterance in words</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#mlu"><span class="std std-ref">MLU()</span></a></td>
+<td>(same as <code class="docutils literal"><span class="pre">MLUm()</span></code>; included for convenience)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#ipsyn"><span class="std std-ref">IPSyn()</span></a></td>
+<td>Index of Productive Syntax</td>
+</tr>
+</tbody>
+</table>
+<p>All these methods have the optional parameter <code class="docutils literal"><span class="pre">participant</span></code> which defaults
+to <code class="docutils literal"><span class="pre">'CHI'</span></code>.</p>
+<p>All these methods take a CHAT transcript file as a working unit and compute
+an output number for the relevant measure for that file. They can all be
+applied to a <code class="docutils literal"><span class="pre">Reader</span></code> instance, and
+the return object is dict(filename: measure for that file).</p>
+<p>In the following examples, we use Eve’s data from CHILDES Brown:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span> <span class="kn">as</span> <span class="nn">pla</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pla</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="s1">&#39;Brown/Eve/*.cha&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="type-token-ratio-ttr">
+<span id="ttr"></span><h2>Type-token Ratio (TTR)<a class="headerlink" href="#type-token-ratio-ttr" title="Permalink to this headline">¶</a></h2>
+<p>The type-token ratio is the total word type count divided by the total word
+token count in a given CHAT file:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">filename</span><span class="p">,</span> <span class="n">ttr</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">TTR</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">ttr</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">eve01.cha 0.18005540166204986</span>
+<span class="go">eve02.cha 0.24435590969455512</span>
+<span class="go">eve03.cha 0.29637526652452023</span>
+<span class="go">eve04.cha 0.2139917695473251</span>
+<span class="go">eve05.cha 0.22727272727272727</span>
+<span class="go">eve06.cha 0.22148209825145712</span>
+<span class="go">eve07.cha 0.2356115107913669</span>
+<span class="go">eve08.cha 0.16767241379310344</span>
+<span class="go">eve09.cha 0.18788713007570543</span>
+<span class="go">eve10.cha 0.18881578947368421</span>
+<span class="go">eve11.cha 0.20516962843295639</span>
+<span class="go">eve12.cha 0.16790490341753342</span>
+<span class="go">eve13.cha 0.2024623803009576</span>
+<span class="go">eve14.cha 0.22341184867951464</span>
+<span class="go">eve15.cha 0.1723430447271235</span>
+<span class="go">eve16.cha 0.17647058823529413</span>
+<span class="go">eve17.cha 0.17472240365774003</span>
+<span class="go">eve18.cha 0.17892253244199763</span>
+<span class="go">eve19.cha 0.18863530507685142</span>
+<span class="go">eve20.cha 0.24420529801324503</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="mean-length-of-utterance-mlu">
+<span id="mlu"></span><h2>Mean Length of Utterance (MLU)<a class="headerlink" href="#mean-length-of-utterance-mlu" title="Permalink to this headline">¶</a></h2>
+<p>The mean length of utterance (MLU) comes in two flavors: in morphemes and in
+words. Both <code class="docutils literal"><span class="pre">MLUm()</span></code> and <code class="docutils literal"><span class="pre">MLUw()</span></code> are available;
+for convenience, <code class="docutils literal"><span class="pre">MLU()</span></code> is also implemented and works exactly like
+<code class="docutils literal"><span class="pre">MLUm()</span></code>.</p>
+<p>For <code class="docutils literal"><span class="pre">MLUm()</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">filename</span><span class="p">,</span> <span class="n">mlum</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">MLUm</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">mlum</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">eve01.cha 2.267022696929239</span>
+<span class="go">eve02.cha 2.4487704918032787</span>
+<span class="go">eve03.cha 2.7628458498023716</span>
+<span class="go">eve04.cha 2.5762711864406778</span>
+<span class="go">eve05.cha 2.8585572842998586</span>
+<span class="go">eve06.cha 3.177121771217712</span>
+<span class="go">eve07.cha 3.1231060606060606</span>
+<span class="go">eve08.cha 3.3743482794577684</span>
+<span class="go">eve09.cha 3.817658349328215</span>
+<span class="go">eve10.cha 3.7915904936014626</span>
+<span class="go">eve11.cha 3.865771812080537</span>
+<span class="go">eve12.cha 4.157407407407407</span>
+<span class="go">eve13.cha 4.239130434782608</span>
+<span class="go">eve14.cha 3.9600840336134455</span>
+<span class="go">eve15.cha 4.4502762430939224</span>
+<span class="go">eve16.cha 4.4243369734789395</span>
+<span class="go">eve17.cha 4.46570796460177</span>
+<span class="go">eve18.cha 4.288242730720607</span>
+<span class="go">eve19.cha 4.347626339969372</span>
+<span class="go">eve20.cha 3.163265306122449</span>
+</pre></div>
+</div>
+<p>For <code class="docutils literal"><span class="pre">MLUw()</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">filename</span><span class="p">,</span> <span class="n">mluw</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">MLUw</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">mluw</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">eve01.cha 1.4459279038718291</span>
+<span class="go">eve02.cha 1.5430327868852458</span>
+<span class="go">eve03.cha 1.8537549407114624</span>
+<span class="go">eve04.cha 1.647457627118644</span>
+<span class="go">eve05.cha 1.8981612446958982</span>
+<span class="go">eve06.cha 2.215867158671587</span>
+<span class="go">eve07.cha 2.106060606060606</span>
+<span class="go">eve08.cha 2.4191866527632953</span>
+<span class="go">eve09.cha 2.7888675623800383</span>
+<span class="go">eve10.cha 2.7787934186471666</span>
+<span class="go">eve11.cha 2.7695749440715884</span>
+<span class="go">eve12.cha 3.115740740740741</span>
+<span class="go">eve13.cha 3.1782608695652175</span>
+<span class="go">eve14.cha 2.94327731092437</span>
+<span class="go">eve15.cha 3.366022099447514</span>
+<span class="go">eve16.cha 3.3681747269890794</span>
+<span class="go">eve17.cha 3.3871681415929205</span>
+<span class="go">eve18.cha 3.2149178255372948</span>
+<span class="go">eve19.cha 3.2879019908116387</span>
+<span class="go">eve20.cha 2.241187384044527</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="index-of-productive-syntax-ipsyn">
+<span id="ipsyn"></span><h2>Index of Productive Syntax (IPSyn)<a class="headerlink" href="#index-of-productive-syntax-ipsyn" title="Permalink to this headline">¶</a></h2>
+<p>The Index of Productive Syntax (IPSyn; Scarborough 1990) is a measure of
+language development encompassing 56 morphological and syntactic/semantic
+test items.
+Relying on <code class="docutils literal"><span class="pre">%mor</span></code> and <code class="docutils literal"><span class="pre">%gra</span></code> tiers,
+the IPSyn computation takes the first 100 child utterances in a
+given CHAT transcript and scores each of the 56 items for points of
+0 (for no occurrences),
+1 (for one occurrence), or 2 (for two or more occurrences). The overall IPSyn
+score sums all these 56 sub-scores, giving a number from 0 to 112 inclusive:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">filename</span><span class="p">,</span> <span class="n">ipsyn</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">IPSyn</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">ipsyn</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">eve01.cha 29</span>
+<span class="go">eve02.cha 44</span>
+<span class="go">eve03.cha 36</span>
+<span class="go">eve04.cha 39</span>
+<span class="go">eve05.cha 43</span>
+<span class="go">eve06.cha 42</span>
+<span class="go">eve07.cha 39</span>
+<span class="go">eve08.cha 45</span>
+<span class="go">eve09.cha 50</span>
+<span class="go">eve10.cha 62</span>
+<span class="go">eve11.cha 59</span>
+<span class="go">eve12.cha 69</span>
+<span class="go">eve13.cha 64</span>
+<span class="go">eve14.cha 76</span>
+<span class="go">eve15.cha 80</span>
+<span class="go">eve16.cha 77</span>
+<span class="go">eve17.cha 75</span>
+<span class="go">eve18.cha 71</span>
+<span class="go">eve19.cha 88</span>
+<span class="go">eve20.cha 65</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="toc.html">PyLangAcq</a></h1>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">PyLangAcq: Language Acquisition Research in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Download and install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="read.html">Reading data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Accessing metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transcriptions.html">Transcriptions and annotations</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Developmental measures</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#type-token-ratio-ttr">Type-token Ratio (TTR)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mean-length-of-utterance-mlu">Mean Length of Utterance (MLU)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#index-of-productive-syntax-ipsyn">Index of Productive Syntax (IPSyn)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="freq.html">Word frequency and ngrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="concord.html">Word search and concordance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lex.html">Lexicon and morphology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phono.html">Phonetics and phonology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synsem.html">Syntax and semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disca.html">Discourse and conversational analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Library reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="toc.html">Documentation overview</a><ul>
+      <li>Previous: <a href="transcriptions.html" title="previous chapter">Transcriptions and annotations</a></li>
+      <li>Next: <a href="freq.html" title="next chapter">Word frequency and ngrams</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015-2017, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on November 02, 2017.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

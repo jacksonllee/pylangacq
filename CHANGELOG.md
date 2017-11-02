@@ -1,6 +1,6 @@
 # Change log
 
-## v0.10.0 - [Unreleased]
+## v0.10.0 - 2017-11-02
 
 * Fixed unicode handling across Python 2 and 3
 * Renamed method `find_filename` of `Reader` as `abspath`.

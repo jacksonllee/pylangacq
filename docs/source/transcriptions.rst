@@ -138,30 +138,30 @@ Method                     Return type                                         R
     >>> from pprint import pprint
     >>> import pylangacq as pla
     >>> eve = pla.read_chat('Brown/Eve/*.cha')
-    >>> len(eve.words())
-    120133
-    >>> eve.words()[:5]
+    >>> len(eve.words())  # total number of words in Eve's data
+    120131
+    >>> eve.words()[:5]  # first five words
     ['more', 'cookie', '.', 'you', '0v']
-    >>> eve.tagged_words()[:2]
+    >>> eve.tagged_words()[:2]  # first two tagged words
     [('more', 'QN', 'more', (1, 2, 'QUANT')), ('cookie', 'N', 'cookie', (2, 0, 'INCROOT'))]
-    >>> eve.sents()[:2]
+    >>> eve.sents()[:2]  # first two sentences
     [['more', 'cookie', '.'], ['you', '0v', 'more', 'cookies', '?']]
-    >>> pprint(eve.tagged_sents()[:2])
+    >>> pprint(eve.tagged_sents()[:2])  # first two tagged sentences
     [[('more', 'QN', 'more', (1, 2, 'QUANT')),
       ('cookie', 'N', 'cookie', (2, 0, 'INCROOT')),
       ('.', '.', '', (3, 2, 'PUNCT'))],
-     [('you', 'PRO', 'you', (1, 2, 'SUBJ')),
+     [('you', 'PRO:PER', 'you', (1, 2, 'SUBJ')),
       ('0v', '0V', 'v', (2, 0, 'ROOT')),
       ('more', 'QN', 'more', (3, 4, 'QUANT')),
       ('cookies', 'N', 'cookie-PL', (4, 2, 'OBJ')),
       ('?', '?', '', (5, 2, 'PUNCT'))]]
-    >>> pprint(eve.utterances()[:5])
+    >>> pprint(eve.utterances()[:5])  # first five utterances (compare this output with "sents" above)
     [('CHI', 'more cookie .'),
      ('MOT', 'you 0v more cookies ?'),
      ('MOT', 'how_about another graham+cracker ?'),
      ('MOT', 'would that do just as_well ?'),
      ('MOT', 'here .')]
-    >>> len(eve.part_of_speech_tags())
+    >>> len(eve.part_of_speech_tags())  # total number of distinct part-of-speech tags
     65
 
 The terminology of "words" and "sents" (= sentences, equivalent to utterances

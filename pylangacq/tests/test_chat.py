@@ -32,7 +32,7 @@ def almost_equal(x, y, tolerance):
 @pytest.mark.skipif('TRAVIS' not in os.environ,
                     reason='assuming Brown/ available, speed up local dev '
                            'for running tests without download')
-def test_download_and_extract_brown_zip_file():
+def test_download_and_extract_brown_zip_file():  # pragma: no cover
     """pytest runs tests in the same order they are defined in the test
     module, and so this test for downloading and unzipping the Brown zip
     data file runs first. If download fails, abort all tests."""
@@ -40,7 +40,7 @@ def test_download_and_extract_brown_zip_file():
         with open(BROWN_ZIP_PATH, 'wb') as f:
             with requests.get(BROWN_URL) as r:
                 f.write(r.content)
-    except Exception as e:  # pragma: no cover
+    except Exception as e:
         msg = ('Error in downloading {}: '
                'network problems or invalid URL for Brown zip? '
                'If URL needs updating, tutorial.rst in docs '
@@ -205,3 +205,48 @@ def test_word_ngrams(eve_all_files):
         actual_bigram, actual_freq = actual
         assert expected_bigram == actual_bigram
         assert almost_equal(expected_freq, actual_freq, tolerance=3)
+
+
+def test_participants(eve_one_file):
+    assert eve_one_file.participants()[BROWN_EVE_FILE_PATH_1] == {
+        'CHI': {'SES': '',
+                'age': '1;6.0',
+                'corpus': 'Brown',
+                'custom': '',
+                'education': '',
+                'group': '',
+                'language': 'eng',
+                'participant_name': 'Eve',
+                'participant_role': 'Target_Child',
+                'sex': 'female'},
+        'COL': {'SES': '',
+                'age': '',
+                'corpus': 'Brown',
+                'custom': '',
+                'education': '',
+                'group': '',
+                'language': 'eng',
+                'participant_name': 'Colin',
+                'participant_role': 'Investigator',
+                'sex': ''},
+        'MOT': {'SES': '',
+                'age': '',
+                'corpus': 'Brown',
+                'custom': '',
+                'education': '',
+                'group': '',
+                'language': 'eng',
+                'participant_name': 'Sue',
+                'participant_role': 'Mother',
+                'sex': ''},
+        'RIC': {'SES': '',
+                'age': '',
+                'corpus': 'Brown',
+                'custom': '',
+                'education': '',
+                'group': '',
+                'language': 'eng',
+                'participant_name': 'Richard',
+                'participant_role': 'Investigator',
+                'sex': ''}
+    }

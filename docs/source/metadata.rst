@@ -56,7 +56,7 @@ Using the metadata access methods:
     {'COL', 'CHI', 'MOT', 'RIC'}
     >>> pprint(eve.participants()[eve01_filename])
     {'CHI': {'SES': '',
-             'age': '1;6.',
+             'age': '1;6.0',
              'corpus': 'Brown',
              'custom': '',
              'education': '',

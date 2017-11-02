@@ -16,8 +16,11 @@ from pylangacq.util import (ENCODING, CLITIC,
                             clean_utterance, clean_word, get_lemma_from_mor)
 
 
-if sys.version_info[0] == 2:
-    from io import open  # pragma: no coverage  (doesn't run in py >=3)
+if sys.version_info[0] == 2:  # pragma: no coverage
+    from io import open
+    unicode_ = unicode  # noqa F821 (undefined name 'unicode' in python >= 3)
+else:  # pragma: no coverage
+    unicode_ = str
 
 
 def read_chat(*filenames, **kwargs):
@@ -112,7 +115,7 @@ class Reader(object):
 
         filenames_set = set()
         for filename in filenames:
-            if not isinstance(filename, str):
+            if not isinstance(filename, (str, unicode_)):
                 raise ValueError('{} is not str'.format(repr(filename)))
 
             if windows:
@@ -749,7 +752,7 @@ class SingleReader(object):
 
         self.encoding = encoding
 
-        if not isinstance(filename, str):
+        if not isinstance(filename, (str, unicode_)):
             raise ValueError('filename must be str')
 
         self._filename = os.path.abspath(filename)
@@ -1186,7 +1189,7 @@ class SingleReader(object):
 
         if participant is None:
             include_participants = self.participant_codes()
-        elif isinstance(participant, str):
+        elif isinstance(participant, (str, unicode_)):
             include_participants = {participant}
         elif hasattr(participant, '__iter__'):
             include_participants = set(participant)
@@ -1197,7 +1200,7 @@ class SingleReader(object):
 
         if exclude is None:
             exclude_participants = set()
-        elif isinstance(exclude, str):
+        elif isinstance(exclude, (str, unicode_)):
             exclude_participants = {exclude}
         elif hasattr(exclude, '__iter__'):
             exclude_participants = set(exclude)

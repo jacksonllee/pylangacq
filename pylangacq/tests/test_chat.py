@@ -184,10 +184,22 @@ def test_mlu_m(eve_one_file):
 
 def test_word_frequency(eve_all_files):
     word_freq = eve_all_files.word_frequency()
-    expected_words = [('.', 20130), ('?', 6358), ('you', 3695), ('the', 2524),
-                      ('it', 2365)]
-    for expected, actual in zip(expected_words, word_freq.most_common(5)):
+    expected_top_five = [('.', 20130), ('?', 6358), ('you', 3695),
+                         ('the', 2524), ('it', 2365)]
+    for expected, actual in zip(expected_top_five, word_freq.most_common(5)):
         expected_word, expected_freq = expected
         actual_word, actual_freq = actual
         assert expected_word == actual_word
+        assert almost_equal(expected_freq, actual_freq, tolerance=3)
+
+
+def test_word_ngrams(eve_all_files):
+    bigrams = eve_all_files.word_ngrams(2)
+    expected_top_five = [(('it', '.'), 705), (('that', '?'), 619),
+                         (('what', '?'), 560), (('yeah', '.'), 510),
+                         (('there', '.'), 471)]
+    for expected, actual in zip(expected_top_five, bigrams.most_common(5)):
+        expected_bigram, expected_freq = expected
+        actual_bigram, actual_freq = actual
+        assert expected_bigram == actual_bigram
         assert almost_equal(expected_freq, actual_freq, tolerance=3)

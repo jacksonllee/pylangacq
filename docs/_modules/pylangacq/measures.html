@@ -470,7 +470,7 @@
             <span class="n">subject</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="n">predicate</span> <span class="o">=</span> <span class="kc">False</span>
 
-            <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">head</span> <span class="o">!=</span> <span class="n">i</span><span class="p">:</span>
                     <span class="k">continue</span>
 
@@ -802,7 +802,7 @@
         <span class="k">if</span> <span class="n">first_word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;what&#39;</span><span class="p">,</span> <span class="s1">&#39;why&#39;</span><span class="p">,</span> <span class="s1">&#39;how&#39;</span><span class="p">,</span> <span class="s1">&#39;which&#39;</span><span class="p">,</span> <span class="s1">&#39;where&#39;</span><span class="p">,</span> <span class="s1">&#39;when&#39;</span><span class="p">}:</span>
             <span class="k">return</span>
 
-        <span class="n">root</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">())[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">graph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">root</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;V&#39;</span><span class="p">:</span>
             <span class="n">scoring_board</span><span class="p">[</span><span class="s1">&#39;Q4&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -822,7 +822,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">graph</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
             <span class="k">return</span>
 
-        <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">dep</span> <span class="o">&gt;</span> <span class="n">head</span><span class="p">:</span>
                 <span class="k">continue</span>
 
@@ -863,7 +863,7 @@
             <span class="k">if</span> <span class="n">pos</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;COP&#39;</span><span class="p">,</span> <span class="s1">&#39;MOD&#39;</span><span class="p">,</span> <span class="s1">&#39;AUX&#39;</span><span class="p">}:</span>
                 <span class="k">continue</span>
 
-            <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">head</span> <span class="o">!=</span> <span class="n">i</span><span class="p">:</span>
                     <span class="k">continue</span>
 
@@ -894,7 +894,7 @@
             <span class="k">if</span> <span class="n">pos</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;MOD&#39;</span><span class="p">,</span> <span class="s1">&#39;COP&#39;</span><span class="p">,</span> <span class="s1">&#39;AUX&#39;</span><span class="p">}:</span>
                 <span class="k">continue</span>
 
-            <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">head</span> <span class="o">!=</span> <span class="n">i</span><span class="p">:</span>
                     <span class="k">continue</span>
 
@@ -1023,7 +1023,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">graph</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">return</span>
 
-        <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">dep</span> <span class="o">&gt;</span> <span class="n">head</span><span class="p">:</span>
                 <span class="k">continue</span>
 
@@ -1050,7 +1050,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">graph</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">return</span>
 
-        <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">dep</span> <span class="o">&lt;</span> <span class="n">head</span><span class="p">:</span>
                 <span class="k">continue</span>
 
@@ -1086,7 +1086,7 @@
             <span class="n">has_subject</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="n">has_object</span> <span class="o">=</span> <span class="kc">False</span>
 
-            <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">test_verb</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">test_verb</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">test_verb</span><span class="p">:</span>
                     <span class="k">continue</span>
 
@@ -1134,7 +1134,7 @@
         <span class="n">verbs</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">deps_of_verbs</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">all_edges</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">all_edges</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">head_pos</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">head</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span>
 
             <span class="k">if</span> <span class="n">head_pos</span> <span class="o">!=</span> <span class="s1">&#39;V&#39;</span><span class="p">:</span>
@@ -1143,7 +1143,7 @@
             <span class="n">verbs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">head</span><span class="p">)</span>
             <span class="n">deps_of_verbs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dep</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">verbs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">verbs</span><span class="p">)</span> <span class="ow">in</span> <span class="n">all_edges</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">verbs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">verbs</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">all_edges</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
             <span class="n">scoring_board</span><span class="p">[</span><span class="s1">&#39;S6&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="k">if</span> <span class="n">turn_off_scoring_board</span><span class="p">(</span><span class="s1">&#39;S6&#39;</span><span class="p">):</span>
@@ -1188,7 +1188,7 @@
         <span class="c1"># -- main verb (ROOT for rel)</span>
         <span class="c1"># -- infinitive &quot;to&quot; with a head *not* being the main verb</span>
 
-        <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">pos</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span>
 
             <span class="k">if</span> <span class="n">pos</span> <span class="o">!=</span> <span class="s1">&#39;INF&#39;</span><span class="p">:</span>
@@ -1196,7 +1196,7 @@
 
             <span class="n">inf_verb</span> <span class="o">=</span> <span class="n">head</span>
 
-            <span class="k">for</span> <span class="n">test_verb</span><span class="p">,</span> <span class="n">new_head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">test_verb</span><span class="p">,</span> <span class="n">new_head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">inf_verb</span> <span class="o">!=</span> <span class="n">test_verb</span><span class="p">:</span>
                     <span class="k">continue</span>
 
@@ -1217,7 +1217,7 @@
 <span class="sd">        (also needs a dependent verb, according to the examples)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">targets</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;let&#39;</span><span class="p">,</span> <span class="s1">&#39;make&#39;</span><span class="p">,</span> <span class="s1">&#39;help&#39;</span><span class="p">,</span> <span class="s1">&#39;watch&#39;</span><span class="p">}</span>
-        <span class="n">all_edges</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">())</span>
+        <span class="n">all_edges</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span>
 
         <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">all_edges</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">dep</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
@@ -1270,7 +1270,7 @@
 
         <span class="n">subject_count</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">subject_count_increment</span> <span class="o">=</span> <span class="kc">False</span>
 
             <span class="k">if</span> <span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="n">head</span><span class="p">][</span><span class="s1">&#39;rel&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;SUBJ&#39;</span> <span class="ow">and</span>
@@ -1295,7 +1295,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">graph</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
             <span class="k">return</span>
 
-        <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">dep_word</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="s1">&#39;word&#39;</span><span class="p">]</span>
 
             <span class="k">if</span> <span class="n">dep_word</span> <span class="o">!=</span> <span class="s1">&#39;and&#39;</span><span class="p">:</span>
@@ -1320,7 +1320,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">graph</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
             <span class="k">return</span>
 
-        <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">dep_pos</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">dep_pos</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;WH&#39;</span><span class="p">):</span>
                 <span class="k">continue</span>
@@ -1360,7 +1360,7 @@
 
         <span class="n">dep_head_pairs_for_obj</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">rel</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="n">head</span><span class="p">][</span><span class="s1">&#39;rel&#39;</span><span class="p">]</span>
 
             <span class="k">if</span> <span class="n">rel</span> <span class="o">!=</span> <span class="s1">&#39;OBJ&#39;</span><span class="p">:</span>
@@ -1409,7 +1409,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">graph</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
             <span class="k">return</span>
 
-        <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">dep</span> <span class="o">&lt;</span> <span class="n">head</span><span class="p">:</span>
                 <span class="k">continue</span>
 
@@ -1441,7 +1441,7 @@
         <span class="c1"># example of a hit case: &quot;he wants me to go&quot;</span>
         <span class="c1"># (&quot;me&quot; is the new subject for the infinitive clause)</span>
 
-        <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">word</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="s1">&#39;word&#39;</span><span class="p">]</span>
             <span class="n">pos</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span>
 
@@ -1449,10 +1449,10 @@
                 <span class="k">continue</span>
 
             <span class="n">inf_verb</span> <span class="o">=</span> <span class="n">head</span>   <span class="c1"># &quot;go&quot; in the example</span>
-            <span class="n">main_verb</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">())[</span><span class="n">inf_verb</span><span class="p">]</span>  <span class="c1"># &quot;wants&quot;</span>
+            <span class="n">main_verb</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">()[</span><span class="n">inf_verb</span><span class="p">]</span>  <span class="c1"># &quot;wants&quot;</span>
 
             <span class="c1"># check if there&#39;s an object of &quot;wants&quot;</span>
-            <span class="k">for</span> <span class="n">test_obj</span><span class="p">,</span> <span class="n">test_main_verb</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">test_obj</span><span class="p">,</span> <span class="n">test_main_verb</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">test_main_verb</span> <span class="o">!=</span> <span class="n">main_verb</span><span class="p">:</span>
                     <span class="k">continue</span>
 
@@ -1492,7 +1492,7 @@
         <span class="n">conj_position</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span>  <span class="c1"># decrement if CONJ is found</span>
         <span class="n">subj_position_list</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">pos</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="s1">&#39;pos&#39;</span><span class="p">]</span>
             <span class="n">rel</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="n">head</span><span class="p">][</span><span class="s1">&#39;rel&#39;</span><span class="p">]</span>
 

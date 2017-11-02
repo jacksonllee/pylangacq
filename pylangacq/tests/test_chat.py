@@ -179,11 +179,6 @@ def test_tagged_words(eve_one_file):
     ]
 
 
-def test_mlu_m(eve_one_file):
-    mlu_m = eve_one_file.MLUm()
-    assert almost_equal(mlu_m[BROWN_EVE_FILE_PATH_1], 2.27, tolerance=0.05)
-
-
 def test_word_frequency(eve_all_files):
     word_freq = eve_all_files.word_frequency()
     expected_top_five = [('.', 20130), ('?', 6358), ('you', 3695),
@@ -335,3 +330,23 @@ def test_utterances(eve_one_file):
 def test_part_of_speech_tags(eve_all_files):
     assert almost_equal(len(eve_all_files.part_of_speech_tags()), 65,
                         tolerance=2)
+
+
+def test_mlu_m(eve_one_file):
+    mlu_m = eve_one_file.MLUm()
+    assert almost_equal(mlu_m[BROWN_EVE_FILE_PATH_1], 2.27, tolerance=0.05)
+
+
+def test_mlu_w(eve_one_file):
+    mlu_w = eve_one_file.MLUw()
+    assert almost_equal(mlu_w[BROWN_EVE_FILE_PATH_1], 1.45, tolerance=0.05)
+
+
+def test_ttr(eve_one_file):
+    ttr = eve_one_file.TTR()
+    assert almost_equal(ttr[BROWN_EVE_FILE_PATH_1], 0.18, tolerance=0.05)
+
+
+def test_ipsyn(eve_one_file):
+    ipsyn = eve_one_file.IPSyn()
+    assert almost_equal(ipsyn[BROWN_EVE_FILE_PATH_1], 29, tolerance=2)

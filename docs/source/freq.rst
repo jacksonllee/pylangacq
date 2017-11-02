@@ -48,14 +48,14 @@ For ``word_frequency()``:
 .. code-block:: python
 
     >>> word_freq = eve.word_frequency()  # all participants
-    >>> word_freq_CDS = eve.word_frequency(participant='^(?!.*CHI).*$')  # child-directed speech
-    >>> word_freq_child = eve.word_frequency(participant='CHI')  # only the target child
+    >>> word_freq_CDS = eve.word_frequency(exclude='CHI')  # child-directed speech
+    >>> word_freq_child = eve.word_frequency(participant='CHI')  # child speech
     >>> word_freq.most_common(5)
-    [('.', 20130), ('?', 6359), ('you', 3695), ('the', 2524), ('it', 2363)]
+    [('.', 20130), ('?', 6358), ('you', 3695), ('the', 2524), ('it', 2365)]
     >>> word_freq_CDS.most_common(5)
-    [('.', 9687), ('?', 4910), ('you', 3061), ('the', 1966), ('it', 1563)]
+    [('.', 9687), ('?', 4909), ('you', 3061), ('the', 1966), ('it', 1563)]
     >>> word_freq_child.most_common(5)
-    [('.', 10443), ('?', 1449), ('I', 1198), ('that', 1050), ('a', 883)]
+    [('.', 10443), ('?', 1449), ('I', 1199), ('that', 1051), ('a', 968)]
 
 This tiny example already shows a key and expected difference ("you" versus "I")
 between child speech and
@@ -65,13 +65,28 @@ For ``word_ngrams(n)``:
 
 .. code-block:: python
 
-    >>> bigrams = eve.word_ngrams(2)  # all participants
-    >>> bigrams_CDS = eve.word_ngrams(2, participant='^(?!.*CHI).*$')  # exclude the target child
-    >>> bigrams_child = eve.word_ngrams(2, participant='CHI')  # only the target child
-    >>> bigrams.most_common(5)
-    [(('it', '.'), 703), (('that', '?'), 618), (('what', '?'), 560), (('yeah', '.'), 510), (('there', '.'), 471)]
-    >>> bigrams_CDS.most_common(5)
-    [(('what', '?'), 503), (('it', '.'), 346), (('on', 'the'), 327), (('are', 'you'), 308), (('in', 'the'), 301)]
-    >>> bigrams_child.most_common(5)
-    [(('it', '.'), 357), (('that', '?'), 326), (('yeah', '.'), 326), (('no', '.'), 296), (('there', '.'), 253)]
-
+    >>> from pprint import pprint
+    >>> trigrams_CDS = eve.word_ngrams(3, exclude='CHI')  # 3 for trigrams; for child-directed speech
+    >>> trigrams_child = eve.word_ngrams(3, participant='CHI')  # child speech
+    >>> pprint(trigrams_CDS.most_common(10))  # lots of questions in child-directed speech!
+    [(("that's", 'right', '.'), 178),
+     (('what', 'are', 'you'), 149),
+     (('is', 'that', '?'), 124),
+     (('do', 'you', 'want'), 122),
+     (('what', 'is', 'that'), 99),
+     (('are', 'you', 'doing'), 94),
+     (("what's", 'that', '?'), 92),
+     (('is', 'it', '?'), 89),
+     (('what', 'do', 'you'), 89),
+     (('would', 'you', 'like'), 89)]
+    >>> pprint(trigrams_child.most_common(10))  # was grape juice Eve's favorite?
+    [(('grape', 'juice', '.'), 74),
+     (('another', 'one', '.'), 55),
+     (('what', 'that', '?'), 50),
+     (('a', 'b', 'c'), 47),
+     (('right', 'there', '.'), 45),
+     (('in', 'there', '.'), 43),
+     (('b', 'c', '.'), 42),
+     (('hi', 'Fraser', '.'), 39),
+     (('I', 'want', 'some'), 39),
+     (('a', 'minute', '.'), 35)]

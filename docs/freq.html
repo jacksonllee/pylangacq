@@ -89,29 +89,45 @@ based on Eve’s data from CHILDES Brown:</p>
 <code class="docutils literal"><span class="pre">most_common()</span></code> method available for Counter dicts below.</p>
 <p>For <code class="docutils literal"><span class="pre">word_frequency()</span></code>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_frequency</span><span class="p">()</span>  <span class="c1"># all participants</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq_CDS</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_frequency</span><span class="p">(</span><span class="n">participant</span><span class="o">=</span><span class="s1">&#39;^(?!.*CHI).*$&#39;</span><span class="p">)</span>  <span class="c1"># child-directed speech</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq_child</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_frequency</span><span class="p">(</span><span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">)</span>  <span class="c1"># only the target child</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq_CDS</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_frequency</span><span class="p">(</span><span class="n">exclude</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">)</span>  <span class="c1"># child-directed speech</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq_child</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_frequency</span><span class="p">(</span><span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">)</span>  <span class="c1"># child speech</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<span class="go">[(&#39;.&#39;, 20130), (&#39;?&#39;, 6359), (&#39;you&#39;, 3695), (&#39;the&#39;, 2524), (&#39;it&#39;, 2363)]</span>
+<span class="go">[(&#39;.&#39;, 20130), (&#39;?&#39;, 6358), (&#39;you&#39;, 3695), (&#39;the&#39;, 2524), (&#39;it&#39;, 2365)]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq_CDS</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<span class="go">[(&#39;.&#39;, 9687), (&#39;?&#39;, 4910), (&#39;you&#39;, 3061), (&#39;the&#39;, 1966), (&#39;it&#39;, 1563)]</span>
+<span class="go">[(&#39;.&#39;, 9687), (&#39;?&#39;, 4909), (&#39;you&#39;, 3061), (&#39;the&#39;, 1966), (&#39;it&#39;, 1563)]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq_child</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<span class="go">[(&#39;.&#39;, 10443), (&#39;?&#39;, 1449), (&#39;I&#39;, 1198), (&#39;that&#39;, 1050), (&#39;a&#39;, 883)]</span>
+<span class="go">[(&#39;.&#39;, 10443), (&#39;?&#39;, 1449), (&#39;I&#39;, 1199), (&#39;that&#39;, 1051), (&#39;a&#39;, 968)]</span>
 </pre></div>
 </div>
 <p>This tiny example already shows a key and expected difference (“you” versus “I”)
 between child speech and
 child directed speech in terms of pronoun distribution.</p>
 <p>For <code class="docutils literal"><span class="pre">word_ngrams(n)</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bigrams</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_ngrams</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># all participants</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bigrams_CDS</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_ngrams</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s1">&#39;^(?!.*CHI).*$&#39;</span><span class="p">)</span>  <span class="c1"># exclude the target child</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bigrams_child</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_ngrams</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">)</span>  <span class="c1"># only the target child</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bigrams</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<span class="go">[((&#39;it&#39;, &#39;.&#39;), 703), ((&#39;that&#39;, &#39;?&#39;), 618), ((&#39;what&#39;, &#39;?&#39;), 560), ((&#39;yeah&#39;, &#39;.&#39;), 510), ((&#39;there&#39;, &#39;.&#39;), 471)]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bigrams_CDS</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<span class="go">[((&#39;what&#39;, &#39;?&#39;), 503), ((&#39;it&#39;, &#39;.&#39;), 346), ((&#39;on&#39;, &#39;the&#39;), 327), ((&#39;are&#39;, &#39;you&#39;), 308), ((&#39;in&#39;, &#39;the&#39;), 301)]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bigrams_child</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<span class="go">[((&#39;it&#39;, &#39;.&#39;), 357), ((&#39;that&#39;, &#39;?&#39;), 326), ((&#39;yeah&#39;, &#39;.&#39;), 326), ((&#39;no&#39;, &#39;.&#39;), 296), ((&#39;there&#39;, &#39;.&#39;), 253)]</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trigrams_CDS</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_ngrams</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">)</span>  <span class="c1"># 3 for trigrams; for child-directed speech</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trigrams_child</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_ngrams</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">)</span>  <span class="c1"># child speech</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">trigrams_CDS</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>  <span class="c1"># lots of questions in child-directed speech!</span>
+<span class="go">[((&quot;that&#39;s&quot;, &#39;right&#39;, &#39;.&#39;), 178),</span>
+<span class="go"> ((&#39;what&#39;, &#39;are&#39;, &#39;you&#39;), 149),</span>
+<span class="go"> ((&#39;is&#39;, &#39;that&#39;, &#39;?&#39;), 124),</span>
+<span class="go"> ((&#39;do&#39;, &#39;you&#39;, &#39;want&#39;), 122),</span>
+<span class="go"> ((&#39;what&#39;, &#39;is&#39;, &#39;that&#39;), 99),</span>
+<span class="go"> ((&#39;are&#39;, &#39;you&#39;, &#39;doing&#39;), 94),</span>
+<span class="go"> ((&quot;what&#39;s&quot;, &#39;that&#39;, &#39;?&#39;), 92),</span>
+<span class="go"> ((&#39;is&#39;, &#39;it&#39;, &#39;?&#39;), 89),</span>
+<span class="go"> ((&#39;what&#39;, &#39;do&#39;, &#39;you&#39;), 89),</span>
+<span class="go"> ((&#39;would&#39;, &#39;you&#39;, &#39;like&#39;), 89)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">trigrams_child</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>  <span class="c1"># was grape juice Eve&#39;s favorite?</span>
+<span class="go">[((&#39;grape&#39;, &#39;juice&#39;, &#39;.&#39;), 74),</span>
+<span class="go"> ((&#39;another&#39;, &#39;one&#39;, &#39;.&#39;), 55),</span>
+<span class="go"> ((&#39;what&#39;, &#39;that&#39;, &#39;?&#39;), 50),</span>
+<span class="go"> ((&#39;a&#39;, &#39;b&#39;, &#39;c&#39;), 47),</span>
+<span class="go"> ((&#39;right&#39;, &#39;there&#39;, &#39;.&#39;), 45),</span>
+<span class="go"> ((&#39;in&#39;, &#39;there&#39;, &#39;.&#39;), 43),</span>
+<span class="go"> ((&#39;b&#39;, &#39;c&#39;, &#39;.&#39;), 42),</span>
+<span class="go"> ((&#39;hi&#39;, &#39;Fraser&#39;, &#39;.&#39;), 39),</span>
+<span class="go"> ((&#39;I&#39;, &#39;want&#39;, &#39;some&#39;), 39),</span>
+<span class="go"> ((&#39;a&#39;, &#39;minute&#39;, &#39;.&#39;), 35)]</span>
 </pre></div>
 </div>
 </div>

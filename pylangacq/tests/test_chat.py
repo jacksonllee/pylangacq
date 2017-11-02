@@ -1,3 +1,10 @@
+"""Test the ``Reader`` class.
+
+The tests mimic what the documentation shows.
+If anything fails, we probably also have to update the documentation
+(and fix the bugs, if any).
+"""
+
 import os
 import zipfile
 import tempfile
@@ -14,6 +21,12 @@ BROWN_EVE_DIR = os.path.abspath(os.path.join('Brown', 'Eve'))
 BROWN_EVE_FILE_PATH_1 = os.path.join(BROWN_EVE_DIR, '010600a.cha')
 BROWN_EVE_FILE_PATH_2 = os.path.join(BROWN_EVE_DIR, '010600b.cha')
 BROWN_EVE_FILE_PATH_ALL_FILES = os.path.join(BROWN_EVE_DIR, '*.cha')
+
+
+def almost_equal(x, y, tolerance):
+    # Could have used numpy's assert_almost_equal or something,
+    # But it's not worth depending on numpy just for testing this...
+    return abs(x - y) <= tolerance
 
 
 @pytest.mark.skipif('TRAVIS' not in os.environ,
@@ -148,3 +161,9 @@ def test_dates_of_recording(eve_one_file):
 def test_age(eve_one_file):
     assert eve_one_file.age() == {BROWN_EVE_FILE_PATH_1: (1, 6, 0)}
     assert eve_one_file.age(months=True) == {BROWN_EVE_FILE_PATH_1: 18.0}
+
+
+def test_words(eve_one_file):
+    words = eve_one_file.words()
+    assert almost_equal(len(words), 5843, tolerance=3)
+    assert words[:5] == ['more', 'cookie', '.', 'you', '0v']

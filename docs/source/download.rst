@@ -6,7 +6,7 @@ Download and install
 PyLangAcq is compatible with both Python 2 and 3 (specifically, 2.7 and 3.4+).
 It is available via ``pip``::
 
-   $ pip install pylangacq
+   $ pip install -U pylangacq
 
 
 The source code for development is hosted `on GitHub <https://github.com/pylangacq/pylangacq>`_.

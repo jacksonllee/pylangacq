@@ -39,7 +39,7 @@ PyLangAcq is available via `pip`:
 
 .. code-block:: bash
 
-   $ pip install pylangacq
+   $ pip install -U pylangacq
 
 PyLangAcq works with Python 2.7 and 3.4+.
 

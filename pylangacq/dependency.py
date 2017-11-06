@@ -147,8 +147,8 @@ class DependencyGraph(object):
         str
             The CoNLL format of the dependency graph
         """
-        collector = list()
-        dep_to_head = dict(self.edges())
+        collector = []
+        dep_to_head = self.edges()
 
         for dep in range(1, self.number_of_nodes()):
             head = dep_to_head[dep]

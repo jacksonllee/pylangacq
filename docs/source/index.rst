@@ -70,5 +70,5 @@ If you have any questions, comments, bug reports etc, please open `issues
 at the GitHub repository <https://github.com/pylangacq/pylangacq/issues>`_, or
 contact `Jackson L. Lee <http://jacksonllee.com/>`_.
 
-`Changelog <https://github.com/pylangacq/pylangacq/blob/master/changelog.md>`_
+`Changelog <https://github.com/pylangacq/pylangacq/blob/master/CHANGELOG.md>`_
 on GitHub

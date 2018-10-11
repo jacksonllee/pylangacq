@@ -5,6 +5,7 @@ If anything fails, we probably also have to update the documentation
 (and fix the bugs, if any).
 """
 
+import sys
 import os
 import zipfile
 import tempfile
@@ -13,6 +14,10 @@ import pytest
 import requests
 
 from pylangacq import read_chat, Reader
+
+
+if sys.version_info[0] == 2:  # pragma: no coverage
+    from io import open
 
 
 BROWN_URL = 'https://childes.talkbank.org/data/Eng-NA/Brown.zip'

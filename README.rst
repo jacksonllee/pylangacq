@@ -77,3 +77,5 @@ License
 -------
 
 The MIT License. Please see `LICENSE.txt <LICENSE.txt>`_.
+The test data files included have a `CC BY-NC-SA 3.0 <https://creativecommons.org/licenses/by-nc-sa/3.0/>`_
+license instead -- please see ``pylangacq/tests/test_data/README.md``.

@@ -27,7 +27,7 @@ def main():
                   'language', 'CHILDES', 'CHAT', 'transcription',
                   'acquisition', 'development', 'learning'],
 
-        package_data={'pylangacq': ['VERSION']},
+        package_data={'pylangacq': ['VERSION', 'tests/test_data/*']},
 
         zip_safe=False,
 

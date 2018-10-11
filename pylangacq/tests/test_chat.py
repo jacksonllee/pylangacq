@@ -20,12 +20,15 @@ if sys.version_info[0] == 2:  # pragma: no coverage
     from io import open
 
 
-BROWN_URL = 'https://childes.talkbank.org/data/Eng-NA/Brown.zip'
-BROWN_ZIP_PATH = 'brown.zip'
-BROWN_EVE_DIR = os.path.abspath(os.path.join('Brown', 'Eve'))
-BROWN_EVE_FILE_PATH_1 = os.path.join(BROWN_EVE_DIR, '010600a.cha')
-BROWN_EVE_FILE_PATH_2 = os.path.join(BROWN_EVE_DIR, '010600b.cha')
-BROWN_EVE_FILE_PATH_ALL_FILES = os.path.join(BROWN_EVE_DIR, '*.cha')
+_THIS_DIR = os.path.dirname(__file__)
+
+REMOTE_BROWN_URL = 'https://childes.talkbank.org/data/Eng-NA/Brown.zip'
+REMOTE_BROWN_ZIP_PATH = 'brown.zip'
+REMOTE_EVE_DIR = os.path.abspath(os.path.join('Brown', 'Eve'))
+REMOTE_EVE_FILE_PATH_1 = os.path.join(REMOTE_EVE_DIR, '010600a.cha')
+REMOTE_EVE_FILE_PATH_2 = os.path.join(REMOTE_EVE_DIR, '010600b.cha')
+REMOTE_EVE_FILE_PATH_ALL_FILES = os.path.join(REMOTE_EVE_DIR, '*.cha')
+LOCAL_EVE_PATH = os.path.join(_THIS_DIR, 'test_data', 'eve.cha')
 
 
 def almost_equal(x, y, tolerance):
@@ -42,46 +45,48 @@ def test_download_and_extract_brown_zip_file():  # pragma: no cover
     module, and so this test for downloading and unzipping the Brown zip
     data file runs first. If download fails, abort all tests."""
     try:
-        with open(BROWN_ZIP_PATH, 'wb') as f:
-            with requests.get(BROWN_URL) as r:
+        with open(REMOTE_BROWN_ZIP_PATH, 'wb') as f:
+            with requests.get(REMOTE_BROWN_URL) as r:
                 f.write(r.content)
     except Exception as e:
         msg = ('Error in downloading {}: '
                'network problems or invalid URL for Brown zip? '
                'If URL needs updating, tutorial.rst in docs '
-               'has to be updated as well.'.format(BROWN_URL))
+               'has to be updated as well.'.format(REMOTE_BROWN_URL))
         try:
             raise e
         finally:
             pytest.exit(msg)
     else:
         # If download succeeds, unzip the Brown zip file.
-        with zipfile.ZipFile(BROWN_ZIP_PATH) as zip_file:
+        with zipfile.ZipFile(REMOTE_BROWN_ZIP_PATH) as zip_file:
             zip_file.extractall()
+        # TODO compare the local eve.cha and CHILDES's 010600a.cha
+        # if there are differences, CHILDES has updated data and may break us
 
 
 @pytest.fixture
 def eve_one_file():
-    return read_chat(BROWN_EVE_FILE_PATH_1, encoding='utf-8')
+    return read_chat(LOCAL_EVE_PATH, encoding='utf-8')
 
 
 @pytest.fixture
 def eve_all_files():
-    return read_chat(BROWN_EVE_FILE_PATH_ALL_FILES, encoding='utf-8')
+    return read_chat(REMOTE_EVE_FILE_PATH_ALL_FILES, encoding='utf-8')
 
 
 @pytest.mark.parametrize('classmethod,arg', [
     pytest.param(Reader.from_chat_str,
-                 open(BROWN_EVE_FILE_PATH_1, encoding='utf-8').read(),
+                 open(LOCAL_EVE_PATH, encoding='utf-8').read(),
                  id='from_chat_str'),
     pytest.param(Reader.from_chat_files,
-                 BROWN_EVE_FILE_PATH_1,
+                 LOCAL_EVE_PATH,
                  id='from_chat_files')
 ])
 def test_instantiate_reader(classmethod, arg):
     """`read_chat` and the from_x classmethods works the same."""
     reader_from_classmethod = classmethod(arg, encoding='utf-8')
-    reader_from_read_chat = read_chat(BROWN_EVE_FILE_PATH_1, encoding='utf-8')
+    reader_from_read_chat = read_chat(REMOTE_EVE_FILE_PATH_1, encoding='utf-8')
 
     # "header" and "index_to_tiers" combined cover the entire data file
     header_from_classmethod = list(reader_from_classmethod.headers().values())[0]  # noqa
@@ -104,7 +109,7 @@ def test_number_of_files(eve_one_file):
 
 
 def test_update(eve_one_file):
-    new_eve = read_chat(BROWN_EVE_FILE_PATH_2)
+    new_eve = read_chat(REMOTE_EVE_FILE_PATH_2)
     eve_one_file.update(new_eve)
     assert len(eve_one_file) == 2
 
@@ -117,12 +122,12 @@ def test_update_wrong_reader_type(eve_one_file):
 def test_add(eve_one_file):
     # Add an already-existing filename => no change in filename count
     assert len(eve_one_file) == 1
-    eve_one_file.add(BROWN_EVE_FILE_PATH_1)
+    eve_one_file.add(LOCAL_EVE_PATH)
     assert len(eve_one_file) == 1
 
     # Add a new filename => filename count increments by 1
     len_eve = len(eve_one_file)
-    eve_one_file.add(BROWN_EVE_FILE_PATH_2)
+    eve_one_file.add(REMOTE_EVE_FILE_PATH_2)
     assert len(eve_one_file) == len_eve + 1
 
     # Add a non-existing file => should throw an error
@@ -143,7 +148,7 @@ def test_remove(eve_one_file):
 
     # Remove an existing filename in reader => filename count decrement by 1
     len_eve = len(eve_one_file)
-    eve_one_file.remove(BROWN_EVE_FILE_PATH_1)
+    eve_one_file.remove(LOCAL_EVE_PATH)
     assert len(eve_one_file) == len_eve - 1
 
 
@@ -155,8 +160,8 @@ def test_clear(eve_one_file):
 
 
 def test_filenames(eve_all_files):
-    expected_filenames = [os.path.abspath(os.path.join(BROWN_EVE_DIR, x))
-                          for x in sorted(os.listdir(BROWN_EVE_DIR))]
+    expected_filenames = [os.path.abspath(os.path.join(REMOTE_EVE_DIR, x))
+                          for x in sorted(os.listdir(REMOTE_EVE_DIR))]
     assert eve_all_files.filenames() == set(expected_filenames)
     assert eve_all_files.filenames(sorted_by_age=True) == expected_filenames
 
@@ -165,8 +170,7 @@ def test_number_of_utterances(eve_one_file):
     assert almost_equal(eve_one_file.number_of_utterances(), 1601,
                         tolerance=3)
     assert almost_equal(
-        (eve_one_file
-         .number_of_utterances(by_files=True)[BROWN_EVE_FILE_PATH_1]),
+        eve_one_file.number_of_utterances(by_files=True)[LOCAL_EVE_PATH],
         1601,
         tolerance=3
     )
@@ -176,22 +180,22 @@ def test_participant_codes(eve_one_file):
     expected_codes = {'CHI', 'MOT', 'COL', 'RIC'}
     assert eve_one_file.participant_codes() == expected_codes
     assert eve_one_file.participant_codes(by_files=True) == {
-        BROWN_EVE_FILE_PATH_1: expected_codes
+        LOCAL_EVE_PATH: expected_codes
     }
 
 
 def test_languages(eve_one_file):
-    assert eve_one_file.languages() == {BROWN_EVE_FILE_PATH_1: ['eng']}
+    assert eve_one_file.languages() == {LOCAL_EVE_PATH: ['eng']}
 
 
 def test_dates_of_recording(eve_one_file):
     assert eve_one_file.dates_of_recording() == {
-        BROWN_EVE_FILE_PATH_1: [(1962, 10, 15), (1962, 10, 17)]}
+        LOCAL_EVE_PATH: [(1962, 10, 15), (1962, 10, 17)]}
 
 
 def test_age(eve_one_file):
-    assert eve_one_file.age() == {BROWN_EVE_FILE_PATH_1: (1, 6, 0)}
-    assert eve_one_file.age(months=True) == {BROWN_EVE_FILE_PATH_1: 18.0}
+    assert eve_one_file.age() == {LOCAL_EVE_PATH: (1, 6, 0)}
+    assert eve_one_file.age(months=True) == {LOCAL_EVE_PATH: 18.0}
 
 
 def test_words(eve_one_file):
@@ -232,7 +236,7 @@ def test_word_ngrams(eve_all_files):
 
 
 def test_participants(eve_one_file):
-    assert eve_one_file.participants()[BROWN_EVE_FILE_PATH_1] == {
+    assert eve_one_file.participants()[LOCAL_EVE_PATH] == {
         'CHI': {'SES': '',
                 'age': '1;06.00',
                 'corpus': 'Brown',
@@ -277,7 +281,7 @@ def test_participants(eve_one_file):
 
 
 def test_headers(eve_one_file):
-    assert eve_one_file.headers()[BROWN_EVE_FILE_PATH_1] == {
+    assert eve_one_file.headers()[LOCAL_EVE_PATH] == {
         'Date': ['15-OCT-1962', '17-OCT-1962'],
         'Languages': 'eng',
         'PID': '11312/c-00034743-1',
@@ -363,19 +367,19 @@ def test_part_of_speech_tags(eve_all_files):
 
 def test_mlu_m(eve_one_file):
     mlu_m = eve_one_file.MLUm()
-    assert almost_equal(mlu_m[BROWN_EVE_FILE_PATH_1], 2.27, tolerance=0.05)
+    assert almost_equal(mlu_m[LOCAL_EVE_PATH], 2.27, tolerance=0.05)
 
 
 def test_mlu_w(eve_one_file):
     mlu_w = eve_one_file.MLUw()
-    assert almost_equal(mlu_w[BROWN_EVE_FILE_PATH_1], 1.45, tolerance=0.05)
+    assert almost_equal(mlu_w[LOCAL_EVE_PATH], 1.45, tolerance=0.05)
 
 
 def test_ttr(eve_one_file):
     ttr = eve_one_file.TTR()
-    assert almost_equal(ttr[BROWN_EVE_FILE_PATH_1], 0.18, tolerance=0.05)
+    assert almost_equal(ttr[LOCAL_EVE_PATH], 0.18, tolerance=0.05)
 
 
 def test_ipsyn(eve_one_file):
     ipsyn = eve_one_file.IPSyn()
-    assert almost_equal(ipsyn[BROWN_EVE_FILE_PATH_1], 29, tolerance=2)
+    assert almost_equal(ipsyn[LOCAL_EVE_PATH], 29, tolerance=2)

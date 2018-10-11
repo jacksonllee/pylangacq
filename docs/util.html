@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>util — General functions and constants &#8212; PyLangAcq 0.10.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.10.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="search" title="Search" href="search.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -28,39 +21,43 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head>
-  <body>
+  </head><body>
   
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="util-general-functions-and-constants">
-<span id="util"></span><h1><code class="docutils literal"><span class="pre">util</span></code> — General functions and constants<a class="headerlink" href="#util-general-functions-and-constants" title="Permalink to this headline">¶</a></h1>
-<p>The <code class="docutils literal"><span class="pre">util</span></code> module defines general functions and constants used throughout
+<span id="util"></span><h1><code class="docutils literal notranslate"><span class="pre">util</span></code> — General functions and constants<a class="headerlink" href="#util-general-functions-and-constants" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">util</span></code> module defines general functions and constants used throughout
 the library.</p>
 <span class="target" id="module-pylangacq.util"></span><dl class="function">
 <dt id="pylangacq.util.clean_utterance">
 <code class="descclassname">pylangacq.util.</code><code class="descname">clean_utterance</code><span class="sig-paren">(</span><em>utterance</em>, <em>phon=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/util.html#clean_utterance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.util.clean_utterance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Filter away the CHAT-style annotations in <code class="docutils literal"><span class="pre">utterance</span></code>.</p>
+<dd><p>Filter away the CHAT-style annotations in <code class="docutils literal notranslate"><span class="pre">utterance</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>utterance</strong> : str</p>
-<blockquote>
-<div><p>The utterance as a str</p>
-</div></blockquote>
-<p><strong>phon</strong> : bool, optional</p>
-<blockquote>
-<div><p>whether we are handling PhonBank data; defaults to False.
-If <code class="docutils literal"><span class="pre">True</span></code>, words like “xxx” and “yyy” won’t be removed.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>utterance</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">The utterance as a str</p>
+</dd>
+<dt><strong>phon</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span></dt>
+<dd><p class="first last">whether we are handling PhonBank data; defaults to False.
+If <code class="docutils literal notranslate"><span class="pre">True</span></code>, words like “xxx” and “yyy” won’t be removed.</p>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">str</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>str</strong></dt>
+<dd></dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -75,9 +72,17 @@ If <code class="docutils literal"><span class="pre">True</span></code>, words li
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>word</strong> : str</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>word</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd></dd>
+</dl>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">str</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>str</strong></dt>
+<dd></dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
@@ -86,19 +91,27 @@ If <code class="docutils literal"><span class="pre">True</span></code>, words li
 <dl class="function">
 <dt id="pylangacq.util.convert_date_to_tuple">
 <code class="descclassname">pylangacq.util.</code><code class="descname">convert_date_to_tuple</code><span class="sig-paren">(</span><em>date_str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/util.html#convert_date_to_tuple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.util.convert_date_to_tuple" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert <code class="docutils literal"><span class="pre">date_str</span></code> to (year, month, day).</p>
+<dd><p>Convert <code class="docutils literal notranslate"><span class="pre">date_str</span></code> to (year, month, day).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>date_str</strong> : str</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>date_str</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd></dd>
+</dl>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(int, int, int)</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>(int, int, int)</strong></dt>
+<dd></dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">convert_date_to_tuple</span><span class="p">(</span><span class="s1">&#39;01-FEB-2016&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">convert_date_to_tuple</span><span class="p">(</span><span class="s1">&#39;01-FEB-2016&#39;</span><span class="p">)</span>
 <span class="go">(2016, 2, 1)</span>
 </pre></div>
 </div>
@@ -107,19 +120,24 @@ If <code class="docutils literal"><span class="pre">True</span></code>, words li
 <dl class="function">
 <dt id="pylangacq.util.find_indices">
 <code class="descclassname">pylangacq.util.</code><code class="descname">find_indices</code><span class="sig-paren">(</span><em>longstr</em>, <em>substring</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/util.html#find_indices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.util.find_indices" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find all indices of non-overlapping <code class="docutils literal"><span class="pre">substring</span></code> in <code class="docutils literal"><span class="pre">longstr</span></code>.</p>
+<dd><p>Find all indices of non-overlapping <code class="docutils literal notranslate"><span class="pre">substring</span></code> in <code class="docutils literal notranslate"><span class="pre">longstr</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>longstr</strong> : str</p>
-<p><strong>substring</strong> : str</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>longstr</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd></dd>
+<dt><strong>substring</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd></dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list of int</p>
-<blockquote class="last">
-<div><p>List of indices of the long string for where substring occurs</p>
-</div></blockquote>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>list of int</strong></dt>
+<dd><p class="first last">List of indices of the long string for where substring occurs</p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -129,14 +147,22 @@ If <code class="docutils literal"><span class="pre">True</span></code>, words li
 <dl class="function">
 <dt id="pylangacq.util.get_lemma_from_mor">
 <code class="descclassname">pylangacq.util.</code><code class="descname">get_lemma_from_mor</code><span class="sig-paren">(</span><em>mor</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/util.html#get_lemma_from_mor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.util.get_lemma_from_mor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extract lemma from <code class="docutils literal"><span class="pre">mor</span></code>.</p>
+<dd><p>Extract lemma from <code class="docutils literal notranslate"><span class="pre">mor</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mor</strong> : tuple(str, str, str)</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>mor</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple(str, str, str)</span></dt>
+<dd></dd>
+</dl>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">str</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>str</strong></dt>
+<dd></dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
@@ -150,17 +176,19 @@ If <code class="docutils literal"><span class="pre">True</span></code>, words li
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tier_marker_seq</strong> : iterable of str</p>
-<blockquote>
-<div><p>A sequence of tier markers like <code class="docutils literal"><span class="pre">{'CHI',</span> <span class="pre">'%mor',</span> <span class="pre">'%gra'}</span></code></p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>tier_marker_seq</strong> <span class="classifier-delimiter">:</span> <span class="classifier">iterable of str</span></dt>
+<dd><p class="first last">A sequence of tier markers like <code class="docutils literal notranslate"><span class="pre">{'CHI',</span> <span class="pre">'%mor',</span> <span class="pre">'%gra'}</span></code></p>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">str</p>
-<blockquote class="last">
-<div><p>A participant code, e.g., <code class="docutils literal"><span class="pre">'CHI'</span></code>.
-Return <code class="docutils literal"><span class="pre">None</span></code> if no participant code is found.</p>
-</div></blockquote>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>str</strong></dt>
+<dd><p class="first last">A participant code, e.g., <code class="docutils literal notranslate"><span class="pre">'CHI'</span></code>.
+Return <code class="docutils literal notranslate"><span class="pre">None</span></code> if no participant code is found.</p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -175,9 +203,17 @@ Return <code class="docutils literal"><span class="pre">None</span></code> if no
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inputstr</strong> : str</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>inputstr</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd></dd>
+</dl>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">str</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>str</strong></dt>
+<dd></dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
@@ -187,6 +223,7 @@ Return <code class="docutils literal"><span class="pre">None</span></code> if no
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -218,10 +255,10 @@ Return <code class="docutils literal"><span class="pre">None</span></code> if no
 <li class="toctree-l1"><a class="reference internal" href="synsem.html">Syntax and semantics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="disca.html">Discourse and conversational analysis</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="reference.html">Library reference</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="chat.html"><code class="docutils literal"><span class="pre">chat</span></code> — Reading and parsing CHAT transcripts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="measures.html"><code class="docutils literal"><span class="pre">measures</span></code> — Developmental measures</a></li>
-<li class="toctree-l2"><a class="reference internal" href="dependency.html"><code class="docutils literal"><span class="pre">dependency</span></code> — Modeling syntax and semantics</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal"><span class="pre">util</span></code> — General functions and constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chat.html"><code class="docutils literal notranslate"><span class="pre">chat</span></code> — Reading and parsing CHAT transcripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="measures.html"><code class="docutils literal notranslate"><span class="pre">measures</span></code> — Developmental measures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dependency.html"><code class="docutils literal notranslate"><span class="pre">dependency</span></code> — Modeling syntax and semantics</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">util</span></code> — General functions and constants</a></li>
 </ul>
 </li>
 </ul>
@@ -237,24 +274,34 @@ Return <code class="docutils literal"><span class="pre">None</span></code> if no
 </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2017, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on November 05, 2017.
+      &copy;2015-2018, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on October 10, 2018.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
 

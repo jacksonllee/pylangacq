@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Developmental measures &#8212; PyLangAcq 0.10.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.10.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Word frequency and ngrams" href="freq.html" />
     <link rel="prev" title="Transcriptions and annotations" href="transcriptions.html" />
@@ -30,13 +23,14 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head>
-  <body>
+  </head><body>
   
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="developmental-measures">
@@ -63,21 +57,21 @@
 <td>Mean Length of Utterance in words</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#mlu"><span class="std std-ref">MLU()</span></a></td>
-<td>(same as <code class="docutils literal"><span class="pre">MLUm()</span></code>; included for convenience)</td>
+<td>(same as <code class="docutils literal notranslate"><span class="pre">MLUm()</span></code>; included for convenience)</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#ipsyn"><span class="std std-ref">IPSyn()</span></a></td>
 <td>Index of Productive Syntax</td>
 </tr>
 </tbody>
 </table>
-<p>All these methods have the optional parameter <code class="docutils literal"><span class="pre">participant</span></code> which defaults
-to <code class="docutils literal"><span class="pre">'CHI'</span></code>.</p>
+<p>All these methods have the optional parameter <code class="docutils literal notranslate"><span class="pre">participant</span></code> which defaults
+to <code class="docutils literal notranslate"><span class="pre">'CHI'</span></code>.</p>
 <p>All these methods take a CHAT transcript file as a working unit and compute
 an output number for the relevant measure for that file. They can all be
-applied to a <code class="docutils literal"><span class="pre">Reader</span></code> instance, and
+applied to a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> instance, and
 the return object is dict(filename: measure for that file).</p>
 <p>In the following examples, we use Eve’s data from CHILDES Brown:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span> <span class="kn">as</span> <span class="nn">pla</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pla</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="s1">&#39;Brown/Eve/*.cha&#39;</span><span class="p">)</span>
 </pre></div>
@@ -86,7 +80,7 @@ the return object is dict(filename: measure for that file).</p>
 <span id="ttr"></span><h2>Type-token Ratio (TTR)<a class="headerlink" href="#type-token-ratio-ttr" title="Permalink to this headline">¶</a></h2>
 <p>The type-token ratio is the total word type count divided by the total word
 token count in a given CHAT file:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">filename</span><span class="p">,</span> <span class="n">ttr</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">TTR</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">filename</span><span class="p">,</span> <span class="n">ttr</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">TTR</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
 <span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">ttr</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="go">010600a.cha 0.17543859649122806</span>
@@ -115,11 +109,11 @@ token count in a given CHAT file:</p>
 <div class="section" id="mean-length-of-utterance-mlu">
 <span id="mlu"></span><h2>Mean Length of Utterance (MLU)<a class="headerlink" href="#mean-length-of-utterance-mlu" title="Permalink to this headline">¶</a></h2>
 <p>The mean length of utterance (MLU) comes in two flavors: in morphemes and in
-words. Both <code class="docutils literal"><span class="pre">MLUm()</span></code> and <code class="docutils literal"><span class="pre">MLUw()</span></code> are available;
-for convenience, <code class="docutils literal"><span class="pre">MLU()</span></code> is also implemented and works exactly like
-<code class="docutils literal"><span class="pre">MLUm()</span></code>.</p>
-<p>For <code class="docutils literal"><span class="pre">MLUm()</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">filename</span><span class="p">,</span> <span class="n">mlum</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">MLUm</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+words. Both <code class="docutils literal notranslate"><span class="pre">MLUm()</span></code> and <code class="docutils literal notranslate"><span class="pre">MLUw()</span></code> are available;
+for convenience, <code class="docutils literal notranslate"><span class="pre">MLU()</span></code> is also implemented and works exactly like
+<code class="docutils literal notranslate"><span class="pre">MLUm()</span></code>.</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">MLUm()</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">filename</span><span class="p">,</span> <span class="n">mlum</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">MLUm</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
 <span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">mlum</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="go">010600a.cha 2.265687583444593</span>
@@ -144,8 +138,8 @@ for convenience, <code class="docutils literal"><span class="pre">MLU()</span></
 <span class="go">020300b.cha 3.1521335807050095</span>
 </pre></div>
 </div>
-<p>For <code class="docutils literal"><span class="pre">MLUw()</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">filename</span><span class="p">,</span> <span class="n">mluw</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">MLUw</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+<p>For <code class="docutils literal notranslate"><span class="pre">MLUw()</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">filename</span><span class="p">,</span> <span class="n">mluw</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">MLUw</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
 <span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">mluw</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="go">010600a.cha 1.4459279038718291</span>
@@ -176,13 +170,13 @@ for convenience, <code class="docutils literal"><span class="pre">MLU()</span></
 <p>The Index of Productive Syntax (IPSyn; Scarborough 1990) is a measure of
 language development encompassing 56 morphological and syntactic/semantic
 test items.
-Relying on <code class="docutils literal"><span class="pre">%mor</span></code> and <code class="docutils literal"><span class="pre">%gra</span></code> tiers,
+Relying on <code class="docutils literal notranslate"><span class="pre">%mor</span></code> and <code class="docutils literal notranslate"><span class="pre">%gra</span></code> tiers,
 the IPSyn computation takes the first 100 child utterances in a
 given CHAT transcript and scores each of the 56 items for points of
 0 (for no occurrences),
 1 (for one occurrence), or 2 (for two or more occurrences). The overall IPSyn
 score sums all these 56 sub-scores, giving a number from 0 to 112 inclusive:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">filename</span><span class="p">,</span> <span class="n">ipsyn</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">IPSyn</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">filename</span><span class="p">,</span> <span class="n">ipsyn</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">IPSyn</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
 <span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">ipsyn</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="go">010600a.cha 29</span>
@@ -212,6 +206,7 @@ score sums all these 56 sub-scores, giving a number from 0 to 112 inclusive:</p>
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -261,24 +256,34 @@ score sums all these 56 sub-scores, giving a number from 0 to 112 inclusive:</p>
 </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2017, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on November 05, 2017.
+      &copy;2015-2018, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on October 10, 2018.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
 

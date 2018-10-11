@@ -9,6 +9,7 @@ import re
 from pprint import pformat
 from collections import Counter
 from itertools import chain
+from functools import wraps
 
 from pylangacq.measures import get_MLUm, get_MLUw, get_TTR, get_IPSyn
 from pylangacq.util import (ENCODING, CLITIC,
@@ -51,33 +52,34 @@ def read_chat(*filenames, **kwargs):
 def params_in_docstring(*params):
     docstring = ''
     if 'participant' in params:
-        docstring += """    participant : str or iterable of str, optional
-    Participants of interest. If unspecified or ``None``, all participants
-    are included.
-"""
+        docstring += """
+        participant : str or iterable of str, optional
+            Participants of interest.
+            If unspecified or ``None``, all participants are included."""
     if 'exclude' in params:
-        docstring += """    exclude : str or iterable of str, optional
-    Participants to exclude. If unspecified or ``None``, no participants
-    are excluded.
-"""
+        docstring += """
+        exclude : str or iterable of str, optional
+            Participants to exclude.
+            If unspecified or ``None``, no participants are excluded."""
     if 'by_files' in params:
-        docstring += """    by_files : bool, optional
-    If ``True``, return dict(absolute-path
-    filename: X for that file) instead of X for all files altogether.
-"""
+        docstring += """
+        by_files : bool, optional
+            If ``True``, return dict(absolute-path filename: X for that file)
+            instead of X for all files altogether."""
     if 'keep_case' in params:
-        docstring += """    keep_case : bool, optional
-    If ``True`` (the default), case distinctions are kept, e.g.,
-    word tokens like "the" and "The" are treated as distinct.
-    If ``False``, all word tokens are forced to be in lowercase.
-"""
+        docstring += """
+        keep_case : bool, optional
+            If ``True`` (the default), case distinctions are kept, e.g.,
+            word tokens like "the" and "The" are treated as distinct.
+            If ``False``, all word tokens are forced to be in lowercase."""
 
     def real_decorator(func):
-        def wrapper(*args, **kwargs):
-            param_header = 'Parameters\n        ----------\n'
+        returns_header = '\n\n        Returns\n        -------'
+        func.__doc__ = func.__doc__.replace(returns_header,
+                                            docstring + returns_header)
 
-            func.__doc__ = func.__doc__.replace(param_header,
-                                                param_header + docstring)
+        @wraps(func)
+        def wrapper(*args, **kwargs):
             return func(*args, **kwargs)
         return wrapper
     return real_decorator
@@ -791,7 +793,7 @@ class SingleReader(object):
         """
         previous_line = ''
 
-        for line in open(self._filename, mode='rU', encoding=self.encoding):
+        for line in open(self._filename, mode='r', encoding=self.encoding):
             previous_line = previous_line.strip()
             current_line = line.rstrip()  # don't remove leading \t
 

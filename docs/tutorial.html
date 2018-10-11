@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Tutorial &#8212; PyLangAcq 0.10.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.10.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Reading data" href="read.html" />
     <link rel="prev" title="Download and install" href="download.html" />
@@ -30,13 +23,14 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head>
-  <body>
+  </head><body>
   
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="tutorial">
@@ -56,11 +50,11 @@ relevant pages of the library documentation for more advanced usage.</p>
 <p class="first admonition-title">Note</p>
 <p>Python 3 syntax is used throughout this tutorial and other pages.
 If you are using Python 2, the “print” statements such as:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;something&#39;</span><span class="p">,</span> <span class="s1">&#39;something else&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;something&#39;</span><span class="p">,</span> <span class="s1">&#39;something else&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>should be converted to the following:</p>
-<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="nb">print</span> <span class="s1">&#39;something&#39;</span><span class="p">,</span> <span class="s1">&#39;something else&#39;</span>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span> <span class="s1">&#39;something&#39;</span><span class="p">,</span> <span class="s1">&#39;something else&#39;</span>
 </pre></div>
 </div>
 </div>
@@ -68,7 +62,7 @@ If you are using Python 2, the “print” statements such as:</p>
 <span id="test-install"></span><h2>Testing the library installation<a class="headerlink" href="#testing-the-library-installation" title="Permalink to this headline">¶</a></h2>
 <p>To test that PyLangAcq is installed on your system (see <a class="reference internal" href="download.html#download"><span class="std std-ref">Download and install</span></a>), open your terminal with
 your Python interpretor of choice (= the one for installing PyLangAcq):</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span>
 </pre></div>
 </div>
 <p>If all goes well, there should be no import errors.</p>
@@ -79,12 +73,12 @@ your Python interpretor of choice (= the one for installing PyLangAcq):</p>
 (<a class="reference external" href="https://childes.talkbank.org/data/Eng-NA/Brown.zip">zipped here</a>)
 are available at the current directory,
 we can read the Eve data using PyLangAcq:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span> <span class="kn">as</span> <span class="nn">pla</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span> <span class="kn">as</span> <span class="nn">pla</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pla</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="s1">&#39;Brown/Eve/*.cha&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><code class="docutils literal"><span class="pre">'Brown/Eve/*.cha'</span></code> matches all the 20 <code class="docutils literal"><span class="pre">'.cha'</span></code> files for Eve:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">number_of_files</span><span class="p">()</span>
+<p><code class="docutils literal notranslate"><span class="pre">'Brown/Eve/*.cha'</span></code> matches all the 20 <code class="docutils literal notranslate"><span class="pre">'.cha'</span></code> files for Eve:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">number_of_files</span><span class="p">()</span>
 <span class="go">20</span>
 </pre></div>
 </div>
@@ -93,9 +87,9 @@ we can read the Eve data using PyLangAcq:</p>
 <div class="section" id="metadata">
 <span id="get-metadata"></span><h2>Metadata<a class="headerlink" href="#metadata" title="Permalink to this headline">¶</a></h2>
 <p>CHAT transcripts store metadata as headers with lines beginning with
-<code class="docutils literal"><span class="pre">&#64;</span></code>. For instance, we can retrieve the age information of the target child
-in <code class="docutils literal"><span class="pre">eve</span></code> created above:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<code class="docutils literal notranslate"><span class="pre">&#64;</span></code>. For instance, we can retrieve the age information of the target child
+in <code class="docutils literal notranslate"><span class="pre">eve</span></code> created above:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">age</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
 <span class="go">[(1, 6, 0),</span>
 <span class="go"> (1, 6, 0),</span>
@@ -119,26 +113,26 @@ in <code class="docutils literal"><span class="pre">eve</span></code> created ab
 <span class="go"> (2, 3, 0)]</span>
 </pre></div>
 </div>
-<p><code class="docutils literal"><span class="pre">eve.age()</span></code> returns a dict that maps a filename to the respective
-file’s age information (as a 3-tuple, e.g., <code class="docutils literal"><span class="pre">(1,</span> <span class="pre">6,</span> <span class="pre">0)</span></code> for 1 year and
+<p><code class="docutils literal notranslate"><span class="pre">eve.age()</span></code> returns a dict that maps a filename to the respective
+file’s age information (as a 3-tuple, e.g., <code class="docutils literal notranslate"><span class="pre">(1,</span> <span class="pre">6,</span> <span class="pre">0)</span></code> for 1 year and
 6 months).</p>
 <p>More on <a class="reference internal" href="metadata.html#metadata"><span class="std std-ref">Accessing metadata</span></a>.</p>
 </div>
 <div class="section" id="transcriptions-and-annotations">
 <span id="transcripts"></span><h2>Transcriptions and annotations<a class="headerlink" href="#transcriptions-and-annotations" title="Permalink to this headline">¶</a></h2>
-<p>Transcriptions and annotations from the <code class="docutils literal"><span class="pre">%mor</span></code> and <code class="docutils literal"><span class="pre">%gra</span></code> tiers
+<p>Transcriptions and annotations from the <code class="docutils literal notranslate"><span class="pre">%mor</span></code> and <code class="docutils literal notranslate"><span class="pre">%gra</span></code> tiers
 (for morphology, part-of-speech tags, and grammatical relations)
 are accessible via NLTK-like
-corpus access methods such as <code class="docutils literal"><span class="pre">words()</span></code>, <code class="docutils literal"><span class="pre">tagged_words()</span></code>, <code class="docutils literal"><span class="pre">sents()</span></code>,
-and <code class="docutils literal"><span class="pre">tagged_sents()</span></code>. By default, these methods
+corpus access methods such as <code class="docutils literal notranslate"><span class="pre">words()</span></code>, <code class="docutils literal notranslate"><span class="pre">tagged_words()</span></code>, <code class="docutils literal notranslate"><span class="pre">sents()</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">tagged_sents()</span></code>. By default, these methods
 return an object “X” lumping together results from all the files.
 If we are interested in return objects for individual files and therefore need
-the file structure, these methods take the optional parameter <code class="docutils literal"><span class="pre">by_files</span></code>: if
-<code class="docutils literal"><span class="pre">True</span></code>, the return object is “dict(filename: X for that file)”
+the file structure, these methods take the optional parameter <code class="docutils literal notranslate"><span class="pre">by_files</span></code>: if
+<code class="docutils literal notranslate"><span class="pre">True</span></code>, the return object is “dict(filename: X for that file)”
 a dict mapping an absolute-path filename to the method’s return
-object for that file (similar to <code class="docutils literal"><span class="pre">age()</span></code> introduced above). For example,
-to check out the word counts in <code class="docutils literal"><span class="pre">eve</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">filenames</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">filenames</span><span class="p">()</span>  <span class="c1"># the set of 20 absolute-path filenames</span>
+object for that file (similar to <code class="docutils literal notranslate"><span class="pre">age()</span></code> introduced above). For example,
+to check out the word counts in <code class="docutils literal notranslate"><span class="pre">eve</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">filenames</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">filenames</span><span class="p">()</span>  <span class="c1"># the set of 20 absolute-path filenames</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">words</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">words</span><span class="p">()</span>  <span class="c1"># all words across as a list across all 20 files</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>  <span class="c1"># total word count</span>
 <span class="go">120133</span>
@@ -171,8 +165,8 @@ to check out the word counts in <code class="docutils literal"><span class="pre"
 <span class="go">020300b.cha 5625</span>
 </pre></div>
 </div>
-<p><code class="docutils literal"><span class="pre">words()</span></code> and other methods can optionally take the argument <em>participant</em>.
-For instance, <code class="docutils literal"><span class="pre">eve.words(participant='CHI')</span></code> gets words by the target
+<p><code class="docutils literal notranslate"><span class="pre">words()</span></code> and other methods can optionally take the argument <em>participant</em>.
+For instance, <code class="docutils literal notranslate"><span class="pre">eve.words(participant='CHI')</span></code> gets words by the target
 child instead of all participants in the data.
 (For more on the <em>participant</em> parameter, see <a class="reference internal" href="transcriptions.html#cds"><span class="std std-ref">Child speech versus child directed speech</span></a>.)</p>
 <p>The “tagged” methods represent a word as a tuple of
@@ -180,7 +174,7 @@ child instead of all participants in the data.
 where <em>pos</em> is the part-of-speech tag, <em>mor</em> is the
 morphological information (for the lemma and inflectional affix, for instance),
 and <em>rel</em> is the dependency and grammatical relation:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mother_tagged_words</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">tagged_words</span><span class="p">(</span><span class="n">participant</span><span class="o">=</span><span class="s1">&#39;MOT&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mother_tagged_words</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">tagged_words</span><span class="p">(</span><span class="n">participant</span><span class="o">=</span><span class="s1">&#39;MOT&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">tagged_word</span> <span class="ow">in</span> <span class="n">mother_tagged_words</span><span class="p">[:</span><span class="mi">20</span><span class="p">]:</span>
 <span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">tagged_word</span><span class="p">)</span>
 <span class="gp">...</span>
@@ -210,8 +204,8 @@ and <em>rel</em> is the dependency and grammatical relation:</p>
 </div>
 <div class="section" id="developmental-measures">
 <span id="use-dev-measures"></span><h2>Developmental measures<a class="headerlink" href="#developmental-measures" title="Permalink to this headline">¶</a></h2>
-<p>To get the mean length of utterance (MLU) in morphemes, use <code class="docutils literal"><span class="pre">MLUm()</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">filename</span><span class="p">,</span> <span class="n">mlum</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">MLUm</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+<p>To get the mean length of utterance (MLU) in morphemes, use <code class="docutils literal notranslate"><span class="pre">MLUm()</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">filename</span><span class="p">,</span> <span class="n">mlum</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">MLUm</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
 <span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">mlum</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="go">010600a.cha 2.265687583444593</span>
@@ -242,8 +236,8 @@ More on <a class="reference internal" href="devmeasures.html#devmeasures"><span 
 </div>
 <div class="section" id="word-frequency-info-ngrams-search-and-concordance">
 <span id="use-word-freq"></span><h2>Word frequency info, ngrams, search, and concordance<a class="headerlink" href="#word-frequency-info-ngrams-search-and-concordance" title="Permalink to this headline">¶</a></h2>
-<p>For word combinatorics, use <code class="docutils literal"><span class="pre">word_frequency()</span></code> and <code class="docutils literal"><span class="pre">word_ngrams()</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_frequency</span><span class="p">()</span>
+<p>For word combinatorics, use <code class="docutils literal notranslate"><span class="pre">word_frequency()</span></code> and <code class="docutils literal notranslate"><span class="pre">word_ngrams()</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_frequency</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 <span class="go">[(&#39;.&#39;, 20130), (&#39;?&#39;, 6358), (&#39;you&#39;, 3695), (&#39;the&#39;, 2524), (&#39;it&#39;, 2365)]</span>
 
@@ -253,7 +247,7 @@ More on <a class="reference internal" href="devmeasures.html#devmeasures"><span 
 </pre></div>
 </div>
 <p>More on <a class="reference internal" href="freq.html#freq"><span class="std std-ref">Word frequency and ngrams</span></a>.</p>
-<p>See also <code class="docutils literal"><span class="pre">search()</span></code> and <code class="docutils literal"><span class="pre">concordance()</span></code> in <a class="reference internal" href="concord.html#concord"><span class="std std-ref">Word search and concordance</span></a>.</p>
+<p>See also <code class="docutils literal notranslate"><span class="pre">search()</span></code> and <code class="docutils literal notranslate"><span class="pre">concordance()</span></code> in <a class="reference internal" href="concord.html#concord"><span class="std std-ref">Word search and concordance</span></a>.</p>
 </div>
 <div class="section" id="acquisition-by-linguistic-areas">
 <span id="by-lx-areas"></span><h2>Acquisition by linguistic areas<a class="headerlink" href="#acquisition-by-linguistic-areas" title="Permalink to this headline">¶</a></h2>
@@ -274,6 +268,7 @@ contact <a class="reference external" href="http://jacksonllee.com/">Jackson L. 
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -328,24 +323,34 @@ contact <a class="reference external" href="http://jacksonllee.com/">Jackson L. 
 </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2017, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on November 05, 2017.
+      &copy;2015-2018, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on October 10, 2018.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
 

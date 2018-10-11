@@ -39,7 +39,7 @@ _TEMP_DIR = tempfile.mkdtemp()
 
 
 def read_chat(*filenames, **kwargs):
-    """Create a ``Reader`` object based on *filenames*.
+    """Create a ``Reader`` object with CHAT data files.
 
     Parameters
     ----------
@@ -60,7 +60,7 @@ def read_chat(*filenames, **kwargs):
     Reader
     """
     # TODO: Should error if any of "filenames" give no actual filenames?
-    return Reader(*filenames, **kwargs)
+    return Reader.from_chat_files(*filenames, **kwargs)
 
 
 def params_in_docstring(*params):
@@ -141,6 +141,36 @@ class Reader(object):
         with open(file_path, mode='w', encoding=encoding) as f:
             f.write(chat_str)
         return cls(file_path, encoding=encoding)
+
+    @classmethod
+    def from_chat_files(cls, *filenames, **kwargs):
+        """Create a ``Reader`` object with CHAT data files.
+
+        Parameters
+        ----------
+        filenames : str or iterable or str, optional
+            One or more filenames. A filename may match exactly a CHAT file
+            (e.g., ``'eve01.cha'``) or matches multiple files by glob patterns
+            (e.g., ``'eve*.cha'``, for ``'eve01.cha'``, ``'eve02.cha'``, etc.).
+            ``*`` matches any number (including zero) of characters, while
+            ``?`` matches exactly one character.
+            A filename can be either an absolute or relative path. If
+            no *filenames* are provided, an empty Reader instance is created.
+        kwargs
+            Only the keyword ``encoding`` is recognized, which defaults
+            to 'utf8'. (New in version 0.9)
+
+        Returns
+        -------
+        Reader
+
+        Notes
+        -----
+        Because CHAT data most likely comes as files on disk,
+        an equivalent library top-level function ``pylangacq.read_chat``
+        is defined for convenience.
+        """
+        return cls(*filenames, **kwargs)
 
     @staticmethod
     def _get_abs_filenames(*filenames):

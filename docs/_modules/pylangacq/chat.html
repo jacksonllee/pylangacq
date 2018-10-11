@@ -73,7 +73,7 @@
 
 
 <div class="viewcode-block" id="read_chat"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.read_chat">[docs]</a><span class="k">def</span> <span class="nf">read_chat</span><span class="p">(</span><span class="o">*</span><span class="n">filenames</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Create a ``Reader`` object based on *filenames*.</span>
+    <span class="sd">&quot;&quot;&quot;Create a ``Reader`` object with CHAT data files.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -94,7 +94,7 @@
 <span class="sd">    Reader</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># TODO: Should error if any of &quot;filenames&quot; give no actual filenames?</span>
-    <span class="k">return</span> <span class="n">Reader</span><span class="p">(</span><span class="o">*</span><span class="n">filenames</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">Reader</span><span class="o">.</span><span class="n">from_chat_files</span><span class="p">(</span><span class="o">*</span><span class="n">filenames</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">params_in_docstring</span><span class="p">(</span><span class="o">*</span><span class="n">params</span><span class="p">):</span>
@@ -175,6 +175,36 @@
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chat_str</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Reader.from_chat_files"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.from_chat_files">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_chat_files</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">filenames</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a ``Reader`` object with CHAT data files.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filenames : str or iterable or str, optional</span>
+<span class="sd">            One or more filenames. A filename may match exactly a CHAT file</span>
+<span class="sd">            (e.g., ``&#39;eve01.cha&#39;``) or matches multiple files by glob patterns</span>
+<span class="sd">            (e.g., ``&#39;eve*.cha&#39;``, for ``&#39;eve01.cha&#39;``, ``&#39;eve02.cha&#39;``, etc.).</span>
+<span class="sd">            ``*`` matches any number (including zero) of characters, while</span>
+<span class="sd">            ``?`` matches exactly one character.</span>
+<span class="sd">            A filename can be either an absolute or relative path. If</span>
+<span class="sd">            no *filenames* are provided, an empty Reader instance is created.</span>
+<span class="sd">        kwargs</span>
+<span class="sd">            Only the keyword ``encoding`` is recognized, which defaults</span>
+<span class="sd">            to &#39;utf8&#39;. (New in version 0.9)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Reader</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Because CHAT data most likely comes as files on disk,</span>
+<span class="sd">        an equivalent library top-level function ``pylangacq.read_chat``</span>
+<span class="sd">        is defined for convenience.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">*</span><span class="n">filenames</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_get_abs_filenames</span><span class="p">(</span><span class="o">*</span><span class="n">filenames</span><span class="p">):</span>

@@ -40,6 +40,8 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">fnmatch</span>
 <span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
 <span class="kn">from</span> <span class="nn">pprint</span> <span class="k">import</span> <span class="n">pformat</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Counter</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">chain</span>
@@ -58,7 +60,19 @@
     <span class="n">unicode_</span> <span class="o">=</span> <span class="nb">str</span>
 
 
-<span class="k">def</span> <span class="nf">read_chat</span><span class="p">(</span><span class="o">*</span><span class="n">filenames</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="c1"># NOTE remove this if statement when dropping python 2.7 support</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
+    <span class="c1"># &#39;U&#39; deprecated since python 3.4, to removed in python 4.0</span>
+    <span class="c1"># https://docs.python.org/3/library/functions.html#open</span>
+    <span class="n">_OPEN_MODE</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">_OPEN_MODE</span> <span class="o">=</span> <span class="s1">&#39;rU&#39;</span>
+
+
+<span class="n">_TEMP_DIR</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="read_chat"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.read_chat">[docs]</a><span class="k">def</span> <span class="nf">read_chat</span><span class="p">(</span><span class="o">*</span><span class="n">filenames</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Create a ``Reader`` object based on *filenames*.</span>
 
 <span class="sd">    Parameters</span>
@@ -80,7 +94,7 @@
 <span class="sd">    Reader</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># TODO: Should error if any of &quot;filenames&quot; give no actual filenames?</span>
-    <span class="k">return</span> <span class="n">Reader</span><span class="p">(</span><span class="o">*</span><span class="n">filenames</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Reader</span><span class="p">(</span><span class="o">*</span><span class="n">filenames</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">params_in_docstring</span><span class="p">(</span><span class="o">*</span><span class="n">params</span><span class="p">):</span>
@@ -119,7 +133,7 @@
     <span class="k">return</span> <span class="n">real_decorator</span>
 
 
-<div class="viewcode-block" id="Reader"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader">[docs]</a><span class="k">class</span> <span class="nc">Reader</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader">[docs]</a><span class="k">class</span> <span class="nc">Reader</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A class for reading multiple CHAT files.</span>
 
 <span class="sd">    Parameters</span>
@@ -140,6 +154,27 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;encoding&#39;</span><span class="p">,</span> <span class="n">ENCODING</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_input_filenames</span> <span class="o">=</span> <span class="n">filenames</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_reset_reader</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_filenames</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Reader.from_chat_str"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.from_chat_str">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_chat_str</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">chat_str</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">ENCODING</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a ``Reader`` object with CHAT data as a string.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        chat_str : str</span>
+<span class="sd">            CHAT data as an in-memory string. It would be what a single</span>
+<span class="sd">            CHAT data file contains.</span>
+<span class="sd">        encoding</span>
+<span class="sd">            Encoding of the CHAT data</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Reader</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_TEMP_DIR</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()))</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chat_str</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span></div>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_get_abs_filenames</span><span class="p">(</span><span class="o">*</span><span class="n">filenames</span><span class="p">):</span>
@@ -204,7 +239,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Reader.filenames"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.filenames">[docs]</a>    <span class="k">def</span> <span class="nf">filenames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sorted_by_age</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.filenames"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.filenames">[docs]</a>    <span class="k">def</span> <span class="nf">filenames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sorted_by_age</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the set of absolute-path filenames.</span>
 
 <span class="sd">        Parameters</span>
@@ -224,7 +259,7 @@
             <span class="k">return</span> <span class="p">[</span><span class="n">fn</span> <span class="k">for</span> <span class="n">fn</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span>
                     <span class="nb">sorted</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span></div>
 
-<div class="viewcode-block" id="Reader.number_of_files"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.number_of_files">[docs]</a>    <span class="k">def</span> <span class="nf">number_of_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.number_of_files"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.number_of_files">[docs]</a>    <span class="k">def</span> <span class="nf">number_of_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the number of files.</span>
 
 <span class="sd">        Returns</span>
@@ -233,7 +268,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.number_of_utterances"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.number_of_utterances">[docs]</a>    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="Reader.number_of_utterances"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.number_of_utterances">[docs]</a>    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">number_of_utterances</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                              <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the number of utterances for *participant* in all files.</span>
@@ -254,7 +289,7 @@
                 <span class="n">participant</span><span class="o">=</span><span class="n">participant</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="n">exclude</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.headers"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.headers">[docs]</a>    <span class="k">def</span> <span class="nf">headers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.headers"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.headers">[docs]</a>    <span class="k">def</span> <span class="nf">headers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a dict mapping a file path to the headers of that file.</span>
 
 <span class="sd">        Returns</span>
@@ -264,7 +299,7 @@
         <span class="k">return</span> <span class="p">{</span><span class="n">fn</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">headers</span><span class="p">()</span>
                 <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">}</span></div>
 
-<div class="viewcode-block" id="Reader.index_to_tiers"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.index_to_tiers">[docs]</a>    <span class="k">def</span> <span class="nf">index_to_tiers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.index_to_tiers"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.index_to_tiers">[docs]</a>    <span class="k">def</span> <span class="nf">index_to_tiers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a dict mapping a file path to the file&#39;s index_to_tiers dict.</span>
 
 <span class="sd">        Returns</span>
@@ -274,7 +309,7 @@
         <span class="k">return</span> <span class="p">{</span><span class="n">fn</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">index_to_tiers</span><span class="p">()</span>
                 <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">}</span></div>
 
-<div class="viewcode-block" id="Reader.participants"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.participants">[docs]</a>    <span class="k">def</span> <span class="nf">participants</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.participants"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.participants">[docs]</a>    <span class="k">def</span> <span class="nf">participants</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a dict mapping a file path to the file&#39;s participant info.</span>
 
 <span class="sd">        Returns</span>
@@ -284,7 +319,7 @@
         <span class="k">return</span> <span class="p">{</span><span class="n">fn</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">participants</span><span class="p">()</span>
                 <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">}</span></div>
 
-<div class="viewcode-block" id="Reader.participant_codes"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.participant_codes">[docs]</a>    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="Reader.participant_codes"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.participant_codes">[docs]</a>    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">participant_codes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the participant codes (e.g., ``{&#39;CHI&#39;, &#39;MOT&#39;}``).</span>
 
@@ -305,7 +340,7 @@
                     <span class="n">output_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">output_set</span></div>
 
-<div class="viewcode-block" id="Reader.languages"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.languages">[docs]</a>    <span class="k">def</span> <span class="nf">languages</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.languages"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.languages">[docs]</a>    <span class="k">def</span> <span class="nf">languages</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a map from a file path to the languages used.</span>
 
 <span class="sd">        Returns</span>
@@ -315,7 +350,7 @@
         <span class="k">return</span> <span class="p">{</span><span class="n">fn</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">languages</span><span class="p">()</span>
                 <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">}</span></div>
 
-<div class="viewcode-block" id="Reader.dates_of_recording"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.dates_of_recording">[docs]</a>    <span class="k">def</span> <span class="nf">dates_of_recording</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.dates_of_recording"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.dates_of_recording">[docs]</a>    <span class="k">def</span> <span class="nf">dates_of_recording</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a map from a file path to the date of recording.</span>
 
 <span class="sd">        The date of recording is in the form of (year, month, day).</span>
@@ -327,7 +362,7 @@
         <span class="k">return</span> <span class="p">{</span><span class="n">fn</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">dates_of_recording</span><span class="p">()</span>
                 <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">}</span></div>
 
-<div class="viewcode-block" id="Reader.date_of_birth"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.date_of_birth">[docs]</a>    <span class="k">def</span> <span class="nf">date_of_birth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.date_of_birth"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.date_of_birth">[docs]</a>    <span class="k">def</span> <span class="nf">date_of_birth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a map from a file path to the date of birth.</span>
 
 <span class="sd">        Returns</span>
@@ -337,7 +372,7 @@
         <span class="k">return</span> <span class="p">{</span><span class="n">fn</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">date_of_birth</span><span class="p">()</span>
                 <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">}</span></div>
 
-<div class="viewcode-block" id="Reader.age"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.age">[docs]</a>    <span class="k">def</span> <span class="nf">age</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">,</span> <span class="n">months</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.age"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.age">[docs]</a>    <span class="k">def</span> <span class="nf">age</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">,</span> <span class="n">months</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a map from a file path to the *participant*&#39;s age.</span>
 
 <span class="sd">        The age is in the form of (years, months, days).</span>
@@ -356,7 +391,7 @@
         <span class="k">return</span> <span class="p">{</span><span class="n">fn</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">age</span><span class="p">(</span>
             <span class="n">participant</span><span class="o">=</span><span class="n">participant</span><span class="p">,</span> <span class="n">months</span><span class="o">=</span><span class="n">months</span><span class="p">)</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">}</span></div>
 
-<div class="viewcode-block" id="Reader.abspath"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.abspath">[docs]</a>    <span class="k">def</span> <span class="nf">abspath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">basename</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.abspath"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.abspath">[docs]</a>    <span class="k">def</span> <span class="nf">abspath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">basename</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the absolute path of ``basename``.</span>
 
 <span class="sd">        Parameters</span>
@@ -375,7 +410,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No such file.&#39;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.utterances"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.utterances">[docs]</a>    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="Reader.utterances"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.utterances">[docs]</a>    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">utterances</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                    <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a list of (*participant*, utterance) pairs from all files.</span>
@@ -401,7 +436,7 @@
                     <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">))</span>
             <span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.word_frequency"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.word_frequency">[docs]</a>    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;keep_case&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="Reader.word_frequency"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.word_frequency">[docs]</a>    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;keep_case&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">word_frequency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">keep_case</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                        <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a word frequency counter for *participant* in all files.</span>
@@ -426,7 +461,7 @@
                         <span class="n">keep_case</span><span class="o">=</span><span class="n">keep_case</span><span class="p">))</span>
             <span class="k">return</span> <span class="n">output_counter</span></div>
 
-<div class="viewcode-block" id="Reader.words"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.words">[docs]</a>    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="Reader.words"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.words">[docs]</a>    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">words</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a list of words by *participant* in all files.</span>
 
@@ -449,7 +484,7 @@
                     <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">))</span>
             <span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.tagged_words"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.tagged_words">[docs]</a>    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="Reader.tagged_words"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.tagged_words">[docs]</a>    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">tagged_words</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a list of tagged words by *participant* in all files.</span>
 
@@ -472,7 +507,7 @@
                     <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">))</span>
             <span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.sents"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.sents">[docs]</a>    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="Reader.sents"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.sents">[docs]</a>    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">sents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a list of sents by *participant* in all files.</span>
 
@@ -495,7 +530,7 @@
                     <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">))</span>
             <span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.tagged_sents"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.tagged_sents">[docs]</a>    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="Reader.tagged_sents"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.tagged_sents">[docs]</a>    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">tagged_sents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a list of tagged sents by *participant* in all files.</span>
 
@@ -518,7 +553,7 @@
                     <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">))</span>
             <span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.part_of_speech_tags"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.part_of_speech_tags">[docs]</a>    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="Reader.part_of_speech_tags"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.part_of_speech_tags">[docs]</a>    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">part_of_speech_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                             <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the part-of-speech tags in the data for *participant*.</span>
@@ -540,7 +575,7 @@
                     <span class="n">participant</span><span class="o">=</span><span class="n">participant</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="n">exclude</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Reader.update"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reader</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.update"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reader</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Combine the current CHAT Reader instance with ``reader``.</span>
 
 <span class="sd">        Parameters</span>
@@ -555,7 +590,7 @@
         <span class="n">new_filenames</span> <span class="o">=</span> <span class="n">add_filenames</span> <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_reset_reader</span><span class="p">(</span><span class="o">*</span><span class="nb">tuple</span><span class="p">(</span><span class="n">new_filenames</span><span class="p">),</span> <span class="n">check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.add"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">filenames</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.add"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">filenames</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add one or more CHAT ``filenames`` to the current reader.</span>
 
 <span class="sd">        Parameters</span>
@@ -569,7 +604,7 @@
         <span class="n">new_filenames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="p">()</span> <span class="o">|</span> <span class="n">add_filenames</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_reset_reader</span><span class="p">(</span><span class="o">*</span><span class="nb">tuple</span><span class="p">(</span><span class="n">new_filenames</span><span class="p">),</span> <span class="n">check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.remove"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">filenames</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.remove"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">filenames</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Remove one or more CHAT ``filenames`` from the current reader.</span>
 
 <span class="sd">        Parameters</span>
@@ -590,11 +625,11 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_reset_reader</span><span class="p">(</span><span class="o">*</span><span class="nb">tuple</span><span class="p">(</span><span class="n">new_filenames</span><span class="p">),</span> <span class="n">check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.clear"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.clear"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Clear everything and reset as an empty Reader instance.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_reset_reader</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Reader.word_ngrams"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.word_ngrams">[docs]</a>    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;keep_case&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="Reader.word_ngrams"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.word_ngrams">[docs]</a>    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;keep_case&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">word_ngrams</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">keep_case</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                     <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a word ``n``-gram counter by ``participant`` in all files.</span>
@@ -617,7 +652,7 @@
                         <span class="n">keep_case</span><span class="o">=</span><span class="n">keep_case</span><span class="p">))</span>
             <span class="k">return</span> <span class="n">output_counter</span></div>
 
-<div class="viewcode-block" id="Reader.MLU"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.MLU">[docs]</a>    <span class="k">def</span> <span class="nf">MLU</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.MLU"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.MLU">[docs]</a>    <span class="k">def</span> <span class="nf">MLU</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a map from a file path to the file&#39;s MLU by morphemes.</span>
 
 <span class="sd">        MLU = mean length of utterance. This method is identical to ``MLUm``.</span>
@@ -634,7 +669,7 @@
         <span class="k">return</span> <span class="p">{</span><span class="n">fn</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">MLU</span><span class="p">(</span>
             <span class="n">participant</span><span class="o">=</span><span class="n">participant</span><span class="p">)</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">}</span></div>
 
-<div class="viewcode-block" id="Reader.MLUm"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.MLUm">[docs]</a>    <span class="k">def</span> <span class="nf">MLUm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.MLUm"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.MLUm">[docs]</a>    <span class="k">def</span> <span class="nf">MLUm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a map from a file path to the file&#39;s MLU by morphemes.</span>
 
 <span class="sd">        MLU = mean length of utterance. This method is identical to ``MLUm``.</span>
@@ -651,7 +686,7 @@
         <span class="k">return</span> <span class="p">{</span><span class="n">fn</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">MLUm</span><span class="p">(</span>
             <span class="n">participant</span><span class="o">=</span><span class="n">participant</span><span class="p">)</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">}</span></div>
 
-<div class="viewcode-block" id="Reader.MLUw"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.MLUw">[docs]</a>    <span class="k">def</span> <span class="nf">MLUw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.MLUw"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.MLUw">[docs]</a>    <span class="k">def</span> <span class="nf">MLUw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a map from a file path to the file&#39;s MLU by words.</span>
 
 <span class="sd">        MLU = mean length of utterance.</span>
@@ -668,7 +703,7 @@
         <span class="k">return</span> <span class="p">{</span><span class="n">fn</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">MLUw</span><span class="p">(</span>
             <span class="n">participant</span><span class="o">=</span><span class="n">participant</span><span class="p">)</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">}</span></div>
 
-<div class="viewcode-block" id="Reader.TTR"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.TTR">[docs]</a>    <span class="k">def</span> <span class="nf">TTR</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.TTR"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.TTR">[docs]</a>    <span class="k">def</span> <span class="nf">TTR</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a map from a file path to the file&#39;s TTR.</span>
 
 <span class="sd">        TTR = type-token ratio</span>
@@ -685,7 +720,7 @@
         <span class="k">return</span> <span class="p">{</span><span class="n">fn</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">TTR</span><span class="p">(</span>
             <span class="n">participant</span><span class="o">=</span><span class="n">participant</span><span class="p">)</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">}</span></div>
 
-<div class="viewcode-block" id="Reader.IPSyn"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.IPSyn">[docs]</a>    <span class="k">def</span> <span class="nf">IPSyn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.IPSyn"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.IPSyn">[docs]</a>    <span class="k">def</span> <span class="nf">IPSyn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a map from a file path to the file&#39;s IPSyn.</span>
 
 <span class="sd">        IPSyn = index of productive syntax</span>
@@ -702,7 +737,7 @@
         <span class="k">return</span> <span class="p">{</span><span class="n">fn</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span><span class="o">.</span><span class="n">IPSyn</span><span class="p">(</span>
             <span class="n">participant</span><span class="o">=</span><span class="n">participant</span><span class="p">)</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">}</span></div>
 
-<div class="viewcode-block" id="Reader.search"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.search">[docs]</a>    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="Reader.search"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.search">[docs]</a>    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_item</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                <span class="n">match_entire_word</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lemma</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                <span class="n">output_tagged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_sents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -745,7 +780,7 @@
                     <span class="n">output_tagged</span><span class="o">=</span><span class="n">output_tagged</span><span class="p">,</span> <span class="n">output_sents</span><span class="o">=</span><span class="n">output_sents</span><span class="p">))</span>
             <span class="k">return</span> <span class="n">output_list</span></div>
 
-<div class="viewcode-block" id="Reader.concordance"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.concordance">[docs]</a>    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="Reader.concordance"><a class="viewcode-back" href="../../reference.html#pylangacq.chat.Reader.concordance">[docs]</a>    <span class="nd">@params_in_docstring</span><span class="p">(</span><span class="s1">&#39;participant&#39;</span><span class="p">,</span> <span class="s1">&#39;exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;by_files&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">concordance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_item</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                     <span class="n">match_entire_word</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lemma</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a list of utterances with *search_item* for *participant*.</span>
@@ -827,7 +862,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">previous_line</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 
-        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;rU&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">encoding</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">_OPEN_MODE</span><span class="p">,</span>
+                         <span class="n">encoding</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">encoding</span><span class="p">):</span>
             <span class="n">previous_line</span> <span class="o">=</span> <span class="n">previous_line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
             <span class="n">current_line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>  <span class="c1"># don&#39;t remove leading \t</span>
 

@@ -137,6 +137,17 @@ or simply ``Reader`` instance for short.
 Most of the functionality of PyLangAcq is accessed via methods of ``Reader``
 instances, in the form of ``reader_instance.method_name()``.
 
+
+If your CHAT data comes as an in-memory string (a string of what a single
+CHAT data file would look like), a ``Reader`` instance can be created by
+the ``from_chat_str`` class method:
+
+.. code-block:: python
+
+    >>> import pylangacq as pla
+    >>> reader = pla.Reader.from_chat_str(your_chat_data_str, encoding='utf-8')
+
+
 .. _reader_properties:
 
 Reader methods

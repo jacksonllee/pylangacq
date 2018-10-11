@@ -65,8 +65,8 @@ def eve_all_files():
     return read_chat(BROWN_EVE_FILE_PATH_ALL_FILES, encoding='utf-8')
 
 
-def test_reader_from_str():
-    """`Reader.from_str` and `read_chat` should be functionally the same."""
+def test_reader_from_chat_str():
+    """`Reader.from_chat_str` and `read_chat` are essentially the same."""
     eve_chat_str = open(BROWN_EVE_FILE_PATH_1, encoding='utf-8').read()
     reader_from_str = Reader.from_chat_str(eve_chat_str, encoding='utf-8')
     reader_from_path = read_chat(BROWN_EVE_FILE_PATH_1, encoding='utf-8')

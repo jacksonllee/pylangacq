@@ -70,21 +70,28 @@ def eve_all_files():
     return read_chat(BROWN_EVE_FILE_PATH_ALL_FILES, encoding='utf-8')
 
 
-def test_reader_from_chat_str():
-    """`Reader.from_chat_str` and `read_chat` are essentially the same."""
-    eve_chat_str = open(BROWN_EVE_FILE_PATH_1, encoding='utf-8').read()
-    reader_from_str = Reader.from_chat_str(eve_chat_str, encoding='utf-8')
-    reader_from_path = read_chat(BROWN_EVE_FILE_PATH_1, encoding='utf-8')
+@pytest.mark.parametrize('classmethod,arg', [
+    pytest.param(Reader.from_chat_str,
+                 open(BROWN_EVE_FILE_PATH_1, encoding='utf-8').read(),
+                 id='from_chat_str'),
+    pytest.param(Reader.from_chat_files,
+                 BROWN_EVE_FILE_PATH_1,
+                 id='from_chat_files')
+])
+def test_instantiate_reader(classmethod, arg):
+    """`read_chat` and the from_x classmethods works the same."""
+    reader_from_classmethod = classmethod(arg, encoding='utf-8')
+    reader_from_read_chat = read_chat(BROWN_EVE_FILE_PATH_1, encoding='utf-8')
 
     # "header" and "index_to_tiers" combined cover the entire data file
-    header_from_str = list(reader_from_str.headers().values())[0]
-    header_from_path = list(reader_from_path.headers().values())[0]
+    header_from_classmethod = list(reader_from_classmethod.headers().values())[0]  # noqa
+    header_from_read_chat = list(reader_from_read_chat.headers().values())[0]
 
-    index_to_tiers_from_str = list(reader_from_str.index_to_tiers().values())[0]  # noqa
-    index_to_tiers_from_path = list(reader_from_path.index_to_tiers().values())[0]  # noqa
+    index_to_tiers_from_classmethod = list(reader_from_classmethod.index_to_tiers().values())[0]  # noqa
+    index_to_tiers_from_read_chat = list(reader_from_read_chat.index_to_tiers().values())[0]  # noqa
 
-    assert header_from_str == header_from_path
-    assert index_to_tiers_from_str == index_to_tiers_from_path
+    assert header_from_classmethod == header_from_read_chat
+    assert index_to_tiers_from_classmethod == index_to_tiers_from_read_chat
 
 
 def test_read_chat_wrong_filename_type():

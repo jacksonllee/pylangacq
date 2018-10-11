@@ -6,6 +6,8 @@ import sys
 import os
 import fnmatch
 import re
+import tempfile
+import uuid
 from pprint import pformat
 from collections import Counter
 from itertools import chain
@@ -31,6 +33,9 @@ if sys.version_info[:2] >= (3, 4):
     _OPEN_MODE = 'r'
 else:
     _OPEN_MODE = 'rU'
+
+
+_TEMP_DIR = tempfile.mkdtemp()
 
 
 def read_chat(*filenames, **kwargs):
@@ -115,6 +120,27 @@ class Reader(object):
         self.encoding = kwargs.get('encoding', ENCODING)
         self._input_filenames = filenames
         self._reset_reader(*self._input_filenames)
+
+    @classmethod
+    def from_chat_str(cls, chat_str, encoding=ENCODING):
+        """Create a ``Reader`` object with CHAT data as a string.
+
+        Parameters
+        ----------
+        chat_str : str
+            CHAT data as an in-memory string. It would be what a single
+            CHAT data file contains.
+        encoding
+            Encoding of the CHAT data
+
+        Returns
+        -------
+        Reader
+        """
+        file_path = os.path.join(_TEMP_DIR, str(uuid.uuid4()))
+        with open(file_path, mode='w', encoding=encoding) as f:
+            f.write(chat_str)
+        return cls(file_path, encoding=encoding)
 
     @staticmethod
     def _get_abs_filenames(*filenames):

@@ -12,7 +12,7 @@ import tempfile
 import pytest
 import requests
 
-from pylangacq import read_chat
+from pylangacq import read_chat, Reader
 
 
 BROWN_URL = 'https://childes.talkbank.org/data/Eng-NA/Brown.zip'
@@ -63,6 +63,23 @@ def eve_one_file():
 @pytest.fixture
 def eve_all_files():
     return read_chat(BROWN_EVE_FILE_PATH_ALL_FILES, encoding='utf-8')
+
+
+def test_reader_from_str():
+    """`Reader.from_str` and `read_chat` should be functionally the same."""
+    eve_chat_str = open(BROWN_EVE_FILE_PATH_1, encoding='utf-8').read()
+    reader_from_str = Reader.from_chat_str(eve_chat_str, encoding='utf-8')
+    reader_from_path = read_chat(BROWN_EVE_FILE_PATH_1, encoding='utf-8')
+
+    # "header" and "index_to_tiers" combined cover the entire data file
+    header_from_str = list(reader_from_str.headers().values())[0]
+    header_from_path = list(reader_from_path.headers().values())[0]
+
+    index_to_tiers_from_str = list(reader_from_str.index_to_tiers().values())[0]  # noqa
+    index_to_tiers_from_path = list(reader_from_path.index_to_tiers().values())[0]  # noqa
+
+    assert header_from_str == header_from_path
+    assert index_to_tiers_from_str == index_to_tiers_from_path
 
 
 def test_read_chat_wrong_filename_type():

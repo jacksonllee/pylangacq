@@ -24,6 +24,15 @@ else:  # pragma: no coverage
     unicode_ = str
 
 
+# NOTE remove this if statement when dropping python 2.7 support
+if sys.version_info[:2] >= (3, 4):
+    # 'U' deprecated since python 3.4, to removed in python 4.0
+    # https://docs.python.org/3/library/functions.html#open
+    _OPEN_MODE = 'r'
+else:
+    _OPEN_MODE = 'rU'
+
+
 def read_chat(*filenames, **kwargs):
     """Create a ``Reader`` object based on *filenames*.
 
@@ -793,7 +802,8 @@ class SingleReader(object):
         """
         previous_line = ''
 
-        for line in open(self._filename, mode='r', encoding=self.encoding):
+        for line in open(self._filename, mode=_OPEN_MODE,
+                         encoding=self.encoding):
             previous_line = previous_line.strip()
             current_line = line.rstrip()  # don't remove leading \t
 

@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Accessing metadata &#8212; PyLangAcq 0.10.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.10.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Transcriptions and annotations" href="transcriptions.html" />
     <link rel="prev" title="Reading data" href="read.html" />
@@ -30,24 +23,25 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head>
-  <body>
+  </head><body>
   
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="accessing-metadata">
 <span id="metadata"></span><h1>Accessing metadata<a class="headerlink" href="#accessing-metadata" title="Permalink to this headline">¶</a></h1>
-<p>A <code class="docutils literal"><span class="pre">Reader</span></code> object has an array of methods for accessing metadata
-(based on headers given by the <code class="docutils literal"><span class="pre">&#64;</span></code> lines) and data
-(the transcriptions with <code class="docutils literal"><span class="pre">*</span></code> and dependent tiers with <code class="docutils literal"><span class="pre">%</span></code>).
+<p>A <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object has an array of methods for accessing metadata
+(based on headers given by the <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> lines) and data
+(the transcriptions with <code class="docutils literal notranslate"><span class="pre">*</span></code> and dependent tiers with <code class="docutils literal notranslate"><span class="pre">%</span></code>).
 This page introduces the metadata methods.
 For data methods, see <a class="reference internal" href="transcriptions.html#transcriptions"><span class="std std-ref">Transcriptions and annotations</span></a>.
-For details of the <code class="docutils literal"><span class="pre">Reader</span></code> class, see <a class="reference internal" href="chat.html#reader-api"><span class="std std-ref">The Reader class API</span></a>.</p>
-<p>Metadata methods for handling information from the <code class="docutils literal"><span class="pre">&#64;</span></code> headers:</p>
+For details of the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> class, see <a class="reference internal" href="chat.html#reader-api"><span class="std std-ref">The Reader class API</span></a>.</p>
+<p>Metadata methods for handling information from the <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> headers:</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="16%" />
@@ -59,32 +53,32 @@ For details of the <code class="docutils literal"><span class="pre">Reader</span
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">participant_codes()</span></code></td>
-<td>set of participant codes across all files; if <code class="docutils literal"><span class="pre">by_file</span></code> is <code class="docutils literal"><span class="pre">True</span></code>, then dict(filename: set of participant codes) instead</td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">participant_codes()</span></code></td>
+<td>set of participant codes across all files; if <code class="docutils literal notranslate"><span class="pre">by_file</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then dict(filename: set of participant codes) instead</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">participants()</span></code></td>
-<td>dict(filename: dict(participant code: dict of the <code class="docutils literal"><span class="pre">&#64;ID</span></code> information for that participant))</td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">participants()</span></code></td>
+<td>dict(filename: dict(participant code: dict of the <code class="docutils literal notranslate"><span class="pre">&#64;ID</span></code> information for that participant))</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">age()</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">age()</span></code></td>
 <td>dict(filename: tuple of (<em>years</em>, <em>months</em>, <em>days</em>))</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">languages()</span></code></td>
-<td>dict(filename: list of languages based on the <code class="docutils literal"><span class="pre">&#64;Languages</span></code> header)</td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">languages()</span></code></td>
+<td>dict(filename: list of languages based on the <code class="docutils literal notranslate"><span class="pre">&#64;Languages</span></code> header)</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">dates_of_recording()</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dates_of_recording()</span></code></td>
 <td>dict(filename: list(tuple of (<em>year</em>, <em>month</em>, <em>day</em>)))</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">headers()</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">headers()</span></code></td>
 <td>dict(filename: dict(header name: the content of that header))</td>
 </tr>
 </tbody>
 </table>
-<p>Among these methods, only <code class="docutils literal"><span class="pre">participant_codes()</span></code> has the optional parameter
-<code class="docutils literal"><span class="pre">by_files</span></code>.</p>
+<p>Among these methods, only <code class="docutils literal notranslate"><span class="pre">participant_codes()</span></code> has the optional parameter
+<code class="docutils literal notranslate"><span class="pre">by_files</span></code>.</p>
 <p>To illustrate metadata access methods, it is helpful to be familiar with what
-the headers (= the lines beginning with <code class="docutils literal"><span class="pre">&#64;</span></code>) look like in a CHAT transcript
-such as <code class="docutils literal"><span class="pre">eve01.cha</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@UTF8</span>
+the headers (= the lines beginning with <code class="docutils literal notranslate"><span class="pre">&#64;</span></code>) look like in a CHAT transcript
+such as <code class="docutils literal notranslate"><span class="pre">eve01.cha</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@UTF8</span>
 <span class="nd">@PID</span><span class="p">:</span>       <span class="mi">11312</span><span class="o">/</span><span class="n">c</span><span class="o">-</span><span class="mi">00034743</span><span class="o">-</span><span class="mi">1</span>
 <span class="nd">@Begin</span>
 <span class="nd">@Languages</span><span class="p">:</span> <span class="n">eng</span>
@@ -98,7 +92,7 @@ such as <code class="docutils literal"><span class="pre">eve01.cha</span></code>
 </pre></div>
 </div>
 <p>Using the metadata access methods:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span> <span class="kn">as</span> <span class="nn">pla</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pla</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="s1">&#39;Brown/Eve/*.cha&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve01_filename</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;010600a.cha&#39;</span><span class="p">)</span>  <span class="c1"># get the absolute path of Eve&#39;s first data file</span>
@@ -160,8 +154,8 @@ such as <code class="docutils literal"><span class="pre">eve01.cha</span></code>
 </pre></div>
 </div>
 <p>If the CHAT file has headers that are not covered by specific built-in
-methods illustrated above, they are always accessible with <code class="docutils literal"><span class="pre">headers()</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">headers</span><span class="p">()[</span><span class="n">eve01_filename</span><span class="p">])</span>
+methods illustrated above, they are always accessible with <code class="docutils literal notranslate"><span class="pre">headers()</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">headers</span><span class="p">()[</span><span class="n">eve01_filename</span><span class="p">])</span>
 <span class="go">{&#39;Date&#39;: [&#39;15-OCT-1962&#39;, &#39;17-OCT-1962&#39;],</span>
 <span class="go"> &#39;Languages&#39;: &#39;eng&#39;,</span>
 <span class="go"> &#39;PID&#39;: &#39;11312/c-00034743-1&#39;,</span>
@@ -214,6 +208,7 @@ methods illustrated above, they are always accessible with <code class="docutils
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -258,24 +253,34 @@ methods illustrated above, they are always accessible with <code class="docutils
 </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2017, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on November 05, 2017.
+      &copy;2015-2018, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on October 10, 2018.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
 

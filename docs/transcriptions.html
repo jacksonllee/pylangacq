@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Transcriptions and annotations &#8212; PyLangAcq 0.10.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.10.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Developmental measures" href="devmeasures.html" />
     <link rel="prev" title="Accessing metadata" href="metadata.html" />
@@ -30,21 +23,22 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head>
-  <body>
+  </head><body>
   
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="transcriptions-and-annotations">
 <span id="transcriptions"></span><h1>Transcriptions and annotations<a class="headerlink" href="#transcriptions-and-annotations" title="Permalink to this headline">¶</a></h1>
-<p>This page introduces the data methods of <code class="docutils literal"><span class="pre">Reader</span></code> objects for transcriptions
+<p>This page introduces the data methods of <code class="docutils literal notranslate"><span class="pre">Reader</span></code> objects for transcriptions
 and annotations.
 For metadata access, see <a class="reference internal" href="metadata.html#metadata"><span class="std std-ref">Accessing metadata</span></a>.
-For details of the <code class="docutils literal"><span class="pre">Reader</span></code> class, see <a class="reference internal" href="chat.html#reader-api"><span class="std std-ref">The Reader class API</span></a>.</p>
+For details of the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> class, see <a class="reference internal" href="chat.html#reader-api"><span class="std std-ref">The Reader class API</span></a>.</p>
 <ul class="simple">
 <li><a class="reference internal" href="#cds"><span class="std std-ref">Child speech versus child directed speech</span></a></li>
 <li><a class="reference internal" href="#word"><span class="std std-ref">The representation of “words”</span></a></li>
@@ -58,15 +52,15 @@ language acquisition research. Many data and metadata access methods in
 PyLangAcq make this distinction possible by two optional arguments:
 <em>participant</em> and <em>exclude</em>.
 The <em>participant</em> parameter accepts a string
-of a participant code (e.g., <code class="docutils literal"><span class="pre">'CHI'</span></code>, <code class="docutils literal"><span class="pre">'MOT'</span></code>) or a sequence of
-participant codes (e.g., the set <code class="docutils literal"><span class="pre">{'CHI',</span> <span class="pre">'MOT'}</span></code> to include both
+of a participant code (e.g., <code class="docutils literal notranslate"><span class="pre">'CHI'</span></code>, <code class="docutils literal notranslate"><span class="pre">'MOT'</span></code>) or a sequence of
+participant codes (e.g., the set <code class="docutils literal notranslate"><span class="pre">{'CHI',</span> <span class="pre">'MOT'}</span></code> to include both
 participants).
 Similarly, the <em>exclude</em> parameter can be either a string or a sequence of
 strings, for excluding the specified participant codes.</p>
-<p>To get child speech, set <em>participant</em> as <code class="docutils literal"><span class="pre">'CHI'</span></code>.
-To get child directed speech, set <em>exclude</em> as <code class="docutils literal"><span class="pre">'CHI'</span></code> to
-exclude all participant codes except <code class="docutils literal"><span class="pre">'CHI'</span></code>. Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span> <span class="kn">as</span> <span class="nn">pla</span>
+<p>To get child speech, set <em>participant</em> as <code class="docutils literal notranslate"><span class="pre">'CHI'</span></code>.
+To get child directed speech, set <em>exclude</em> as <code class="docutils literal notranslate"><span class="pre">'CHI'</span></code> to
+exclude all participant codes except <code class="docutils literal notranslate"><span class="pre">'CHI'</span></code>. Examples:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span> <span class="kn">as</span> <span class="nn">pla</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pla</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="s1">&#39;Brown/Eve/*.cha&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">number_of_utterances</span><span class="p">()</span>  <span class="c1"># default: include all participants</span>
 <span class="go">26979</span>
@@ -77,15 +71,15 @@ exclude all participant codes except <code class="docutils literal"><span class=
 </pre></div>
 </div>
 <p>Most methods default <em>participant</em> to be all participants, like
-<code class="docutils literal"><span class="pre">number_of_utterances()</span></code> just illustrated above
+<code class="docutils literal notranslate"><span class="pre">number_of_utterances()</span></code> just illustrated above
 (as well as all methods in <a class="reference internal" href="#utterances"><span class="std std-ref">Utterances</span></a> below).
 Certain methods, such as
-<code class="docutils literal"><span class="pre">age()</span></code> and developmental measures,
+<code class="docutils literal notranslate"><span class="pre">age()</span></code> and developmental measures,
 are most often concerned with the target child only, and therefore
-have <em>participant</em> set to be <code class="docutils literal"><span class="pre">'CHI'</span></code> instead by default.</p>
+have <em>participant</em> set to be <code class="docutils literal notranslate"><span class="pre">'CHI'</span></code> instead by default.</p>
 <p>To check if a method has the optional argument <em>participant</em>,
 please see the complete
-list of methods for the <code class="docutils literal"><span class="pre">Reader</span></code> class in <a class="reference internal" href="chat.html"><span class="doc">chat — Reading and parsing CHAT transcripts</span></a>.</p>
+list of methods for the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> class in <a class="reference internal" href="chat.html"><span class="doc">chat — Reading and parsing CHAT transcripts</span></a>.</p>
 </div>
 <div class="section" id="the-representation-of-words">
 <span id="word"></span><h2>The representation of “words”<a class="headerlink" href="#the-representation-of-words" title="Permalink to this headline">¶</a></h2>
@@ -94,30 +88,30 @@ list of methods for the <code class="docutils literal"><span class="pre">Reader<
 <ol class="arabic">
 <li><p class="first">The “simple” representation as a <strong>string</strong>,
 which is what appears as a word token in a transcription line
-starting with <code class="docutils literal"><span class="pre">*</span></code> in the CHAT transcript.</p>
+starting with <code class="docutils literal notranslate"><span class="pre">*</span></code> in the CHAT transcript.</p>
 </li>
 <li><p class="first">The “tagged” representation as a <strong>tuple</strong> of (<em>word</em>, <em>pos</em>, <em>mor</em>, <em>rel</em>),
-which contains information from the transcription line and its <code class="docutils literal"><span class="pre">%</span></code>-tiers:</p>
+which contains information from the transcription line and its <code class="docutils literal notranslate"><span class="pre">%</span></code>-tiers:</p>
 <p><em>word</em> (str) – word token string</p>
 <p><em>pos</em> (str) – part-of-speech tag</p>
 <p><em>mor</em> (str) – morphology for lemma and inflectional information, if any</p>
 <p><em>rel</em> (tuple(int, int, str)) – dependency and grammatical relation</p>
 </li>
 </ol>
-<p>To illustrate, let us consider the following CHAT utterance with its <code class="docutils literal"><span class="pre">%mor</span></code>
-and <code class="docutils literal"><span class="pre">%gra</span></code> tiers (extracted from <code class="docutils literal"><span class="pre">eve01.cha</span></code>):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">MOT</span><span class="p">:</span> <span class="n">but</span> <span class="n">I</span> <span class="n">thought</span> <span class="n">you</span> <span class="n">wanted</span> <span class="n">me</span> <span class="n">to</span> <span class="n">turn</span> <span class="n">it</span> <span class="o">.</span>
+<p>To illustrate, let us consider the following CHAT utterance with its <code class="docutils literal notranslate"><span class="pre">%mor</span></code>
+and <code class="docutils literal notranslate"><span class="pre">%gra</span></code> tiers (extracted from <code class="docutils literal notranslate"><span class="pre">eve01.cha</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">MOT</span><span class="p">:</span> <span class="n">but</span> <span class="n">I</span> <span class="n">thought</span> <span class="n">you</span> <span class="n">wanted</span> <span class="n">me</span> <span class="n">to</span> <span class="n">turn</span> <span class="n">it</span> <span class="o">.</span>
 <span class="o">%</span><span class="n">mor</span><span class="p">:</span> <span class="n">conj</span><span class="o">|</span><span class="n">but</span> <span class="n">pro</span><span class="p">:</span><span class="n">sub</span><span class="o">|</span><span class="n">I</span> <span class="n">v</span><span class="o">|</span><span class="n">think</span><span class="o">&amp;</span><span class="n">PAST</span> <span class="n">pro</span><span class="o">|</span><span class="n">you</span> <span class="n">v</span><span class="o">|</span><span class="n">want</span><span class="o">-</span><span class="n">PAST</span> <span class="n">pro</span><span class="p">:</span><span class="n">obj</span><span class="o">|</span><span class="n">me</span> <span class="n">inf</span><span class="o">|</span><span class="n">to</span> <span class="n">v</span><span class="o">|</span><span class="n">turn</span> <span class="n">pro</span><span class="o">|</span><span class="n">it</span> <span class="o">.</span>
 <span class="o">%</span><span class="n">gra</span><span class="p">:</span> <span class="mi">1</span><span class="o">|</span><span class="mi">3</span><span class="o">|</span><span class="n">LINK</span> <span class="mi">2</span><span class="o">|</span><span class="mi">3</span><span class="o">|</span><span class="n">SUBJ</span> <span class="mi">3</span><span class="o">|</span><span class="mi">0</span><span class="o">|</span><span class="n">ROOT</span> <span class="mi">4</span><span class="o">|</span><span class="mi">3</span><span class="o">|</span><span class="n">OBJ</span> <span class="mi">5</span><span class="o">|</span><span class="mi">3</span><span class="o">|</span><span class="n">JCT</span> <span class="mi">6</span><span class="o">|</span><span class="mi">5</span><span class="o">|</span><span class="n">POBJ</span> <span class="mi">7</span><span class="o">|</span><span class="mi">8</span><span class="o">|</span><span class="n">INF</span> <span class="mi">8</span><span class="o">|</span><span class="mi">3</span><span class="o">|</span><span class="n">XCOMP</span> <span class="mi">9</span><span class="o">|</span><span class="mi">8</span><span class="o">|</span><span class="n">OBJ</span> <span class="mi">10</span><span class="o">|</span><span class="mi">3</span><span class="o">|</span><span class="n">PUNCT</span>
 </pre></div>
 </div>
 <p>The list of “simple” words from this utterance are the list of word token
 strings:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;but&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;thought&#39;</span><span class="p">,</span> <span class="s1">&#39;you&#39;</span><span class="p">,</span> <span class="s1">&#39;wanted&#39;</span><span class="p">,</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="s1">&#39;to&#39;</span><span class="p">,</span> <span class="s1">&#39;turn&#39;</span><span class="p">,</span> <span class="s1">&#39;it&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;but&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;thought&#39;</span><span class="p">,</span> <span class="s1">&#39;you&#39;</span><span class="p">,</span> <span class="s1">&#39;wanted&#39;</span><span class="p">,</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="s1">&#39;to&#39;</span><span class="p">,</span> <span class="s1">&#39;turn&#39;</span><span class="p">,</span> <span class="s1">&#39;it&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>The list of “tagged” words from this utterance are a list of 4-tuples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">[(</span><span class="s1">&#39;but&#39;</span><span class="p">,</span> <span class="s1">&#39;CONJ&#39;</span><span class="p">,</span> <span class="s1">&#39;but&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;LINK&#39;</span><span class="p">)),</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[(</span><span class="s1">&#39;but&#39;</span><span class="p">,</span> <span class="s1">&#39;CONJ&#39;</span><span class="p">,</span> <span class="s1">&#39;but&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;LINK&#39;</span><span class="p">)),</span>
  <span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;PRO:SUB&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;SUBJ&#39;</span><span class="p">)),</span>
  <span class="p">(</span><span class="s1">&#39;thought&#39;</span><span class="p">,</span> <span class="s1">&#39;V&#39;</span><span class="p">,</span> <span class="s1">&#39;think&amp;PAST&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;CJCT&#39;</span><span class="p">)),</span>
  <span class="p">(</span><span class="s1">&#39;you&#39;</span><span class="p">,</span> <span class="s1">&#39;PRO:PER&#39;</span><span class="p">,</span> <span class="s1">&#39;you&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;SUBJ&#39;</span><span class="p">)),</span>
@@ -135,7 +129,7 @@ access methods introduced in <a class="reference internal" href="#utterances"><s
 </div>
 <div class="section" id="utterances">
 <span id="id1"></span><h2>Utterances<a class="headerlink" href="#utterances" title="Permalink to this headline">¶</a></h2>
-<p>To access the utterances in a <code class="docutils literal"><span class="pre">Reader</span></code> object, various methods are available:</p>
+<p>To access the utterances in a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object, various methods are available:</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="19%" />
@@ -149,33 +143,33 @@ access methods introduced in <a class="reference internal" href="#utterances"><s
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">words()</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">words()</span></code></td>
 <td>list of str</td>
 <td>list of word strings</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">tagged_words()</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tagged_words()</span></code></td>
 <td>list of (str, str, str, (int, int, str))</td>
 <td>list of (<em>word</em>, <em>pos</em>, <em>mor</em>, <em>rel</em>)</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">sents()</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">sents()</span></code></td>
 <td>list of [list of str]</td>
 <td>list of utterances as lists of word strings</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">tagged_sents()</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tagged_sents()</span></code></td>
 <td>list of [list of (str, str, str, (int, int, str))]</td>
 <td>list of utterances as lists of (<em>word</em>, <em>pos</em>, <em>mor</em>, <em>rel</em>)</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">utterances()</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">utterances()</span></code></td>
 <td>list of (str, str)</td>
 <td>list of (participant code, utterance)</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">part_of_speech_tags()</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">part_of_speech_tags()</span></code></td>
 <td>set of str</td>
 <td>set of part-of-speech tags</td>
 </tr>
 </tbody>
 </table>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span> <span class="kn">as</span> <span class="nn">pla</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pla</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="s1">&#39;Brown/Eve/*.cha&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">words</span><span class="p">())</span>  <span class="c1"># total number of words in Eve&#39;s data</span>
@@ -210,7 +204,7 @@ here) follows NLTK, and so does “tagged” as explained in <a class="reference
 <p>All the “words” and “sents” methods respect the order by which the elements
 appear in the individual CHAT transcripts, which in turn are ordered
 alphabetically by filenames.</p>
-<p>All of these data access methods have the optional parameter <code class="docutils literal"><span class="pre">by_files</span></code> for
+<p>All of these data access methods have the optional parameter <code class="docutils literal notranslate"><span class="pre">by_files</span></code> for
 whether a return object X or dict(filename: X) is desired;
 see <a class="reference internal" href="read.html#reader-properties"><span class="std std-ref">Reader methods</span></a>.</p>
 </div>
@@ -236,6 +230,7 @@ documentation:</p>
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -286,24 +281,34 @@ documentation:</p>
 </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2017, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on November 05, 2017.
+      &copy;2015-2018, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on October 10, 2018.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
 

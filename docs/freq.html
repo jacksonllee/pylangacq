@@ -4,23 +4,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Word frequency and ngrams &#8212; PyLangAcq 0.10.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.10.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Word search and concordance" href="concord.html" />
     <link rel="prev" title="Developmental measures" href="devmeasures.html" />
@@ -30,13 +23,14 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head>
-  <body>
+  </head><body>
   
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="word-frequency-and-ngrams">
@@ -56,10 +50,10 @@ PyLangAcq provides several handy functionality for word combinatorics.</p>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">word_frequency()</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">word_frequency()</span></code></td>
 <td>Counter dict(word: word token count)</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">word_ngrams(n)</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">word_ngrams(n)</span></code></td>
 <td>Counter dict(ngram as a tuple: ngram token count)</td>
 </tr>
 </tbody>
@@ -69,26 +63,26 @@ PyLangAcq provides several handy functionality for word combinatorics.</p>
 in the Python standard
 library. As a result (and as an advantage!), all Counter methods apply to
 the return objects of these methods.</p>
-<p><code class="docutils literal"><span class="pre">word_frequency()</span></code> and <code class="docutils literal"><span class="pre">word_ngrams(n)</span></code> (with the obligatory parameter
+<p><code class="docutils literal notranslate"><span class="pre">word_frequency()</span></code> and <code class="docutils literal notranslate"><span class="pre">word_ngrams(n)</span></code> (with the obligatory parameter
 <em>n</em>) share the following optional parameters:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">participant</span></code>: see <a class="reference internal" href="transcriptions.html#cds"><span class="std std-ref">Child speech versus child directed speech</span></a></li>
-<li><code class="docutils literal"><span class="pre">by_files</span></code>: see <a class="reference internal" href="read.html#reader-properties"><span class="std std-ref">Reader methods</span></a></li>
-<li><code class="docutils literal"><span class="pre">keep_case</span></code>: whether case distinction such as “Rocky” and “rocky” is kept;
-defaults to <code class="docutils literal"><span class="pre">True</span></code>. If “Rocky” and “rocky” are treated as distinct, then
+<li><code class="docutils literal notranslate"><span class="pre">participant</span></code>: see <a class="reference internal" href="transcriptions.html#cds"><span class="std std-ref">Child speech versus child directed speech</span></a></li>
+<li><code class="docutils literal notranslate"><span class="pre">by_files</span></code>: see <a class="reference internal" href="read.html#reader-properties"><span class="std std-ref">Reader methods</span></a></li>
+<li><code class="docutils literal notranslate"><span class="pre">keep_case</span></code>: whether case distinction such as “Rocky” and “rocky” is kept;
+defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>. If “Rocky” and “rocky” are treated as distinct, then
 they are two distinct word types and have separate key:value entries in the
 return object.</li>
 </ul>
-<p>To illustrate, we set up a <code class="docutils literal"><span class="pre">Reader</span></code> instance <code class="docutils literal"><span class="pre">eve</span></code>
+<p>To illustrate, we set up a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> instance <code class="docutils literal notranslate"><span class="pre">eve</span></code>
 based on Eve’s data from CHILDES Brown:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span> <span class="kn">as</span> <span class="nn">pla</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span> <span class="kn">as</span> <span class="nn">pla</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pla</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="s1">&#39;Brown/Eve/*.cha&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>We use the <code class="docutils literal"><span class="pre">participant</span></code> parameter and the
-<code class="docutils literal"><span class="pre">most_common()</span></code> method available for Counter dicts below.</p>
-<p>For <code class="docutils literal"><span class="pre">word_frequency()</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_frequency</span><span class="p">()</span>  <span class="c1"># all participants</span>
+<p>We use the <code class="docutils literal notranslate"><span class="pre">participant</span></code> parameter and the
+<code class="docutils literal notranslate"><span class="pre">most_common()</span></code> method available for Counter dicts below.</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">word_frequency()</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_frequency</span><span class="p">()</span>  <span class="c1"># all participants</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq_CDS</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_frequency</span><span class="p">(</span><span class="n">exclude</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">)</span>  <span class="c1"># child-directed speech</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq_child</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_frequency</span><span class="p">(</span><span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">)</span>  <span class="c1"># child speech</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
@@ -102,8 +96,8 @@ based on Eve’s data from CHILDES Brown:</p>
 <p>This tiny example already shows a key and expected difference (“you” versus “I”)
 between child speech and
 child directed speech in terms of pronoun distribution.</p>
-<p>For <code class="docutils literal"><span class="pre">word_ngrams(n)</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<p>For <code class="docutils literal notranslate"><span class="pre">word_ngrams(n)</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">trigrams_CDS</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_ngrams</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">)</span>  <span class="c1"># 3 for trigrams; for child-directed speech</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">trigrams_child</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_ngrams</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">)</span>  <span class="c1"># child speech</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">trigrams_CDS</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>  <span class="c1"># lots of questions in child-directed speech!</span>
@@ -134,6 +128,7 @@ child directed speech in terms of pronoun distribution.</p>
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -178,24 +173,34 @@ child directed speech in terms of pronoun distribution.</p>
 </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2017, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on November 05, 2017.
+      &copy;2015-2018, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on October 10, 2018.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
 

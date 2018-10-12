@@ -17,22 +17,7 @@ from pylangacq.measures import get_MLUm, get_MLUw, get_TTR, get_IPSyn
 from pylangacq.util import (ENCODING, CLITIC,
                             get_participant_code, convert_date_to_tuple,
                             clean_utterance, clean_word, get_lemma_from_mor)
-
-
-if sys.version_info[0] == 2:  # pragma: no coverage
-    from io import open
-    unicode_ = unicode  # noqa F821 (undefined name 'unicode' in python >= 3)
-else:  # pragma: no coverage
-    unicode_ = str
-
-
-# NOTE remove this if statement when dropping python 2.7 support
-if sys.version_info[:2] >= (3, 4):
-    # 'U' deprecated since python 3.4, to removed in python 4.0
-    # https://docs.python.org/3/library/functions.html#open
-    _OPEN_MODE = 'r'
-else:
-    _OPEN_MODE = 'rU'
+from pylangacq.compat import open, unicode_, OPEN_MODE, FileNotFoundError
 
 
 _TEMP_DIR = tempfile.mkdtemp()
@@ -825,7 +810,7 @@ class _SingleReader(object):
         self._filename = os.path.abspath(filename)
 
         if not os.path.isfile(self._filename):
-            raise FileNotFoundError(self._filename)  # noqa F821 (py2 compat)
+            raise FileNotFoundError(self._filename)
 
         self._headers = self._get_headers()
         self._index_to_tiers = self._get_index_to_tiers()
@@ -858,7 +843,7 @@ class _SingleReader(object):
         """
         previous_line = ''
 
-        for line in open(self._filename, mode=_OPEN_MODE,
+        for line in open(self._filename, mode=OPEN_MODE,
                          encoding=self.encoding):
             previous_line = previous_line.strip()
             current_line = line.rstrip()  # don't remove leading \t

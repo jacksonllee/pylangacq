@@ -223,8 +223,8 @@ class Reader(object):
 
         self._fname_to_reader = {}
         for fn in self._filenames:
-            self._fname_to_reader[fn] = SingleReader(fn,
-                                                     encoding=self.encoding)
+            self._fname_to_reader[fn] = _SingleReader(fn,
+                                                      encoding=self.encoding)
 
     def __len__(self):
         """Return the number of files.
@@ -812,7 +812,7 @@ class Reader(object):
             return output_list
 
 
-class SingleReader(object):
+class _SingleReader(object):
     """A class for reading a single CHAT file."""
 
     def __init__(self, filename, encoding=ENCODING):

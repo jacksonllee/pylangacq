@@ -16,7 +16,8 @@ from functools import wraps
 from pylangacq.measures import get_MLUm, get_MLUw, get_TTR, get_IPSyn
 from pylangacq.util import (ENCODING, CLITIC,
                             get_participant_code, convert_date_to_tuple,
-                            clean_utterance, clean_word, get_lemma_from_mor)
+                            clean_utterance, clean_word, get_lemma_from_mor,
+                            get_time_marker)
 
 
 if sys.version_info[0] == 2:  # pragma: no coverage
@@ -1200,7 +1201,7 @@ class SingleReader(object):
         except (KeyError, IndexError, ValueError):
             return None
 
-    def utterances(self, participant=None, exclude=None, clean=True):
+    def utterances(self, participant=None, exclude=None, clean=True, time_marker=False):
         """
         Return a list of the utterances by *participant*
         as (*participant*, *utterance*) pairs.
@@ -1219,6 +1220,12 @@ class SingleReader(object):
 
         :param clean: Whether to filter away the CHAT annotations in the
             utterance; default to ``True``.
+
+        :param time_marker: Whether to include the timer marker in the
+            utterance; default to ``False``. If ``True``, the list returned
+            will be (*participant*, *utterance*, *timermarker*) pairs.
+            timermarker is a tuple which have two integer numbers providing
+            the begin and end time in milliseconds for this utterance.
         """
         output = []
         participants = self._determine_participants(participant, exclude)
@@ -1230,7 +1237,14 @@ class SingleReader(object):
                 if tier_marker in participants:
                     line = tiermarker_to_line[tier_marker]
                     if clean:
-                        output.append((tier_marker, clean_utterance(line)))
+                        if time_marker:
+                            try:
+                                time_marker = get_time_marker(line)
+                            except ValueError as e:
+                                raise ValueError("At line %d in file %s:"%(i, self.filename())+str(e))
+                            output.append((tier_marker, clean_utterance(line), time_marker))
+                        else:
+                            output.append((tier_marker, clean_utterance(line)))
                     else:
                         output.append((tier_marker, line))
                     break

@@ -240,6 +240,40 @@ def clean_utterance(utterance, phon=False):
 
     return remove_extra_spaces(' '.join(new_words))
 
+TIMER_MARKER_REG = re.compile(r'\x15-?(\d+)_(\d+)-?\x15')
+def get_time_marker(utterance):
+    """ Get timer marker in this utterance
+    Time marker provides the begin and end time in milliseconds for a segment
+    in a digitized video file or audio file.
+    For example:
+        ·0_1073·
+    '·' is ASCII CODE 21(0x15) NAK(Negative Acknowledgement)
+
+    TODO: The CHAT Transcription Format ( https://talkbank.org/manuals/CHAT.pdf )
+    says that if the option “multiple” is selected in the @Options field, then
+    bullets may also occur within utterances. However, this function only return
+    one timer marker.
+
+    Parameters
+    ----------
+    utterance : str
+        The raw utterance as a str
+
+    Returns
+    -------
+    (start stop): tuple
+        two integer numbers providing the begin and end time in milliseconds
+        for this utterance
+    """
+    match = TIMER_MARKER_REG.search(utterance)
+    if match:
+        time_marker = match.groups()
+        start = int(time_marker[0])
+        stop = int(time_marker[1])
+        return (start, stop)
+    else:
+        raise ValueError("This utterance doesn't have a standard timer marker!"
+                         + "\nUtterance:"+utterance)
 
 def get_participant_code(tier_marker_seq):
     """Return the participant code from a tier marker set.

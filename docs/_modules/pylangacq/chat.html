@@ -13,7 +13,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <link rel="search" title="Search" href="../../search.html" />
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
@@ -51,22 +51,7 @@
 <span class="kn">from</span> <span class="nn">pylangacq.util</span> <span class="k">import</span> <span class="p">(</span><span class="n">ENCODING</span><span class="p">,</span> <span class="n">CLITIC</span><span class="p">,</span>
                             <span class="n">get_participant_code</span><span class="p">,</span> <span class="n">convert_date_to_tuple</span><span class="p">,</span>
                             <span class="n">clean_utterance</span><span class="p">,</span> <span class="n">clean_word</span><span class="p">,</span> <span class="n">get_lemma_from_mor</span><span class="p">)</span>
-
-
-<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># pragma: no coverage</span>
-    <span class="kn">from</span> <span class="nn">io</span> <span class="k">import</span> <span class="nb">open</span>
-    <span class="n">unicode_</span> <span class="o">=</span> <span class="n">unicode</span>  <span class="c1"># noqa F821 (undefined name &#39;unicode&#39; in python &gt;= 3)</span>
-<span class="k">else</span><span class="p">:</span>  <span class="c1"># pragma: no coverage</span>
-    <span class="n">unicode_</span> <span class="o">=</span> <span class="nb">str</span>
-
-
-<span class="c1"># NOTE remove this if statement when dropping python 2.7 support</span>
-<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
-    <span class="c1"># &#39;U&#39; deprecated since python 3.4, to removed in python 4.0</span>
-    <span class="c1"># https://docs.python.org/3/library/functions.html#open</span>
-    <span class="n">_OPEN_MODE</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">_OPEN_MODE</span> <span class="o">=</span> <span class="s1">&#39;rU&#39;</span>
+<span class="kn">from</span> <span class="nn">pylangacq.compat</span> <span class="k">import</span> <span class="nb">open</span><span class="p">,</span> <span class="n">unicode_</span><span class="p">,</span> <span class="n">OPEN_MODE</span><span class="p">,</span> <span class="ne">FileNotFoundError</span>
 
 
 <span class="n">_TEMP_DIR</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
@@ -257,8 +242,8 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filenames</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span> <span class="o">=</span> <span class="n">SingleReader</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span>
-                                                     <span class="n">encoding</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fname_to_reader</span><span class="p">[</span><span class="n">fn</span><span class="p">]</span> <span class="o">=</span> <span class="n">_SingleReader</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span>
+                                                      <span class="n">encoding</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the number of files.</span>
@@ -846,7 +831,7 @@
             <span class="k">return</span> <span class="n">output_list</span></div></div>
 
 
-<span class="k">class</span> <span class="nc">SingleReader</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">_SingleReader</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A class for reading a single CHAT file.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">ENCODING</span><span class="p">):</span>
@@ -859,7 +844,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filename</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filename</span><span class="p">)</span>  <span class="c1"># noqa F821 (py2 compat)</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filename</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_headers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_headers</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_index_to_tiers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_index_to_tiers</span><span class="p">()</span>
@@ -892,7 +877,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">previous_line</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 
-        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">_OPEN_MODE</span><span class="p">,</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">OPEN_MODE</span><span class="p">,</span>
                          <span class="n">encoding</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">encoding</span><span class="p">):</span>
             <span class="n">previous_line</span> <span class="o">=</span> <span class="n">previous_line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
             <span class="n">current_line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>  <span class="c1"># don&#39;t remove leading \t</span>
@@ -1886,10 +1871,10 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2018, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on October 10, 2018.
+      &copy;2015-2019, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on May 22, 2019.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

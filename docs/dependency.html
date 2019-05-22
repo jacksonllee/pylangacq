@@ -13,7 +13,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="measures — Developmental measures" href="measures.html" />
    
@@ -62,29 +62,29 @@ CHAT transcripts. See <a class="reference internal" href="synsem.html#synsem"><s
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pylangacq.dependency.DependencyGraph.add_edge" title="pylangacq.dependency.DependencyGraph.add_edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_edge</span></code></a>(node1,&nbsp;node2,&nbsp;**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylangacq.dependency.DependencyGraph.add_edge" title="pylangacq.dependency.DependencyGraph.add_edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_edge</span></code></a>(self,&nbsp;node1,&nbsp;node2,&nbsp;\*\*kwargs)</td>
 <td>Add an edge between <code class="docutils literal notranslate"><span class="pre">node1</span></code> and <code class="docutils literal notranslate"><span class="pre">node2</span></code>.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylangacq.dependency.DependencyGraph.edges" title="pylangacq.dependency.DependencyGraph.edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edges</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylangacq.dependency.DependencyGraph.edges" title="pylangacq.dependency.DependencyGraph.edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edges</span></code></a>(self)</td>
 <td>Return the edges.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylangacq.dependency.DependencyGraph.faulty" title="pylangacq.dependency.DependencyGraph.faulty"><code class="xref py py-obj docutils literal notranslate"><span class="pre">faulty</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylangacq.dependency.DependencyGraph.faulty" title="pylangacq.dependency.DependencyGraph.faulty"><code class="xref py py-obj docutils literal notranslate"><span class="pre">faulty</span></code></a>(self)</td>
 <td>Determine whether the graph is faulty for dependency information.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylangacq.dependency.DependencyGraph.number_of_nodes" title="pylangacq.dependency.DependencyGraph.number_of_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">number_of_nodes</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylangacq.dependency.DependencyGraph.number_of_nodes" title="pylangacq.dependency.DependencyGraph.number_of_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">number_of_nodes</span></code></a>(self)</td>
 <td>Return the number of nodes.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylangacq.dependency.DependencyGraph.to_conll" title="pylangacq.dependency.DependencyGraph.to_conll"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_conll</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylangacq.dependency.DependencyGraph.to_conll" title="pylangacq.dependency.DependencyGraph.to_conll"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_conll</span></code></a>(self)</td>
 <td>Return the dependency graph in the CoNLL format.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylangacq.dependency.DependencyGraph.to_tikz" title="pylangacq.dependency.DependencyGraph.to_tikz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_tikz</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylangacq.dependency.DependencyGraph.to_tikz" title="pylangacq.dependency.DependencyGraph.to_tikz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_tikz</span></code></a>(self)</td>
 <td>Return the dependency graph as LaTeX tikz-dependency code.</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="pylangacq.dependency.DependencyGraph.add_edge">
-<code class="descname">add_edge</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph.add_edge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.add_edge" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_edge</code><span class="sig-paren">(</span><em>self</em>, <em>node1</em>, <em>node2</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph.add_edge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.add_edge" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add an edge between <code class="docutils literal notranslate"><span class="pre">node1</span></code> and <code class="docutils literal notranslate"><span class="pre">node2</span></code>.</p>
 <p>If a node doesn’t yet exist, it is added to the graph.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -108,14 +108,14 @@ CHAT transcripts. See <a class="reference internal" href="synsem.html#synsem"><s
 
 <dl class="method">
 <dt id="pylangacq.dependency.DependencyGraph.edges">
-<code class="descname">edges</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph.edges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.edges" title="Permalink to this definition">¶</a></dt>
+<code class="descname">edges</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph.edges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.edges" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the edges.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>dict(int: int)</strong></dt>
+<dt>dict(int: int)</dt>
 <dd></dd>
 </dl>
 </td>
@@ -126,14 +126,14 @@ CHAT transcripts. See <a class="reference internal" href="synsem.html#synsem"><s
 
 <dl class="method">
 <dt id="pylangacq.dependency.DependencyGraph.faulty">
-<code class="descname">faulty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph.faulty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.faulty" title="Permalink to this definition">¶</a></dt>
+<code class="descname">faulty</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph.faulty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.faulty" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determine whether the graph is faulty for dependency information.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>bool</strong></dt>
+<dt>bool</dt>
 <dd></dd>
 </dl>
 </td>
@@ -144,14 +144,14 @@ CHAT transcripts. See <a class="reference internal" href="synsem.html#synsem"><s
 
 <dl class="method">
 <dt id="pylangacq.dependency.DependencyGraph.number_of_nodes">
-<code class="descname">number_of_nodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph.number_of_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.number_of_nodes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">number_of_nodes</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph.number_of_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.number_of_nodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the number of nodes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>int</strong></dt>
+<dt>int</dt>
 <dd></dd>
 </dl>
 </td>
@@ -162,14 +162,14 @@ CHAT transcripts. See <a class="reference internal" href="synsem.html#synsem"><s
 
 <dl class="method">
 <dt id="pylangacq.dependency.DependencyGraph.to_conll">
-<code class="descname">to_conll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph.to_conll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.to_conll" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_conll</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph.to_conll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.to_conll" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the dependency graph in the CoNLL format.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>str</strong></dt>
+<dt>str</dt>
 <dd><p class="first last">The CoNLL format of the dependency graph</p>
 </dd>
 </dl>
@@ -181,14 +181,14 @@ CHAT transcripts. See <a class="reference internal" href="synsem.html#synsem"><s
 
 <dl class="method">
 <dt id="pylangacq.dependency.DependencyGraph.to_tikz">
-<code class="descname">to_tikz</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph.to_tikz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.to_tikz" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_tikz</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph.to_tikz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.to_tikz" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the dependency graph as LaTeX tikz-dependency code.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>str</strong></dt>
+<dt>str</dt>
 <dd><p class="first last">The LaTeX tikz-dependency code for drawing the graph</p>
 </dd>
 </dl>
@@ -281,10 +281,10 @@ CHAT transcripts. See <a class="reference internal" href="synsem.html#synsem"><s
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2018, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on October 10, 2018.
+      &copy;2015-2019, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on May 22, 2019.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

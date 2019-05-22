@@ -3,7 +3,10 @@
 Download and install
 ====================
 
-PyLangAcq is compatible with both Python 2 and 3 (specifically, 2.7 and 3.4+).
+PyLangAcq works on Python 3.5+.
+(Python 2.7 and 3.4 should still work, but are deprecated
+since PyLangAcq v0.11.0)
+
 It is available via ``pip``::
 
    $ pip install -U pylangacq
@@ -18,4 +21,4 @@ To test your installation:
     >>> import pylangacq
     >>> pylangacq.__version__  # show version number
 
-The :ref:`tutorial` page introduces the basic functionalities of PyLangAcq.
+The :ref:`tutorial` page introduces the basic functionality of PyLangAcq.

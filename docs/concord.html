@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Word search and concordance &#8212; PyLangAcq 0.10.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -36,43 +34,43 @@
   <div class="section" id="word-search-and-concordance">
 <span id="concord"></span><h1>Word search and concordance<a class="headerlink" href="#word-search-and-concordance" title="Permalink to this headline">¶</a></h1>
 <p>Searching can be conveniently done by <code class="docutils literal notranslate"><span class="pre">search()</span></code> and <code class="docutils literal notranslate"><span class="pre">concordance()</span></code>:</p>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="30%" />
-<col width="70%" />
+<col style="width: 30%" />
+<col style="width: 70%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Method</th>
-<th class="head">Return object</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Return object</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>search(<em>search_item</em>)</td>
-<td>list of elements containing <em>search_item</em></td>
+<tbody>
+<tr class="row-even"><td><p>search(<em>search_item</em>)</p></td>
+<td><p>list of elements containing <em>search_item</em></p></td>
 </tr>
-<tr class="row-odd"><td>concordance(<em>search_item</em>)</td>
-<td>list of sents (rendered as str and aligned for <em>search_item</em>)</td>
+<tr class="row-odd"><td><p>concordance(<em>search_item</em>)</p></td>
+<td><p>list of sents (rendered as str and aligned for <em>search_item</em>)</p></td>
 </tr>
 </tbody>
 </table>
 <p>Both methods have the obligatory parameter <em>search_item</em>.
 They share the following optional parameters:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">participant</span></code> and <code class="docutils literal notranslate"><span class="pre">exclude</span></code> – see <a class="reference internal" href="transcriptions.html#cds"><span class="std std-ref">Child speech versus child directed speech</span></a></li>
-<li><code class="docutils literal notranslate"><span class="pre">by_files</span></code> – see <a class="reference internal" href="read.html#reader-properties"><span class="std std-ref">Reader methods</span></a></li>
-<li><code class="docutils literal notranslate"><span class="pre">lemma</span></code> – default: False. If True, <em>search_item</em> refers to the lemma given
+<li><p><code class="docutils literal notranslate"><span class="pre">participant</span></code> and <code class="docutils literal notranslate"><span class="pre">exclude</span></code> – see <a class="reference internal" href="transcriptions.html#cds"><span class="std std-ref">Child speech versus child directed speech</span></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">by_files</span></code> – see <a class="reference internal" href="read.html#reader-properties"><span class="std std-ref">Reader methods</span></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lemma</span></code> – default: False. If True, <em>search_item</em> refers to the lemma given
 by “mor” in the tagged words. Otherwise, <em>search_item</em> refers to the word
-token string.</li>
-<li><code class="docutils literal notranslate"><span class="pre">match_entire_word</span></code> – default: True. If False, <em>search_item</em> can match
-as a substring.</li>
+token string.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">match_entire_word</span></code> – default: True. If False, <em>search_item</em> can match
+as a substring.</p></li>
 </ul>
 <p>The <code class="docutils literal notranslate"><span class="pre">search(search_item)</span></code> method has two additional optional parameters:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">output_tagged</span></code> – default: True. If False, “words” in the return object
+<li><p><code class="docutils literal notranslate"><span class="pre">output_tagged</span></code> – default: True. If False, “words” in the return object
 are plain word token strings; otherwise they are tagged words of
-(word, pos, mor, rel).</li>
-<li><code class="docutils literal notranslate"><span class="pre">output_sents</span></code> – default: True. If False, the return object is a list of
-words (tagged or untagged), rather than a list of sents.</li>
+(word, pos, mor, rel).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">output_sents</span></code> – default: True. If False, the return object is a list of
+words (tagged or untagged), rather than a list of sents.</p></li>
 </ul>
 </div>
 
@@ -127,8 +125,6 @@ words (tagged or untagged), rather than a list of sents.</li>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -149,7 +145,7 @@ words (tagged or untagged), rather than a list of sents.</li>
       &copy;2015-2019, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on May 22, 2019.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

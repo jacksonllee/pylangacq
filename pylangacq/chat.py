@@ -8,6 +8,7 @@ import fnmatch
 import re
 import tempfile
 import uuid
+import io
 from pprint import pformat
 from collections import Counter
 from itertools import chain
@@ -208,6 +209,7 @@ class Reader(object):
 
         self._fname_to_reader = {}
         for fn in self._filenames:
+            # TODO rewrite what _SingleReader takes as args
             self._fname_to_reader[fn] = _SingleReader(fn,
                                                       encoding=self.encoding)
 
@@ -800,14 +802,17 @@ class Reader(object):
 class _SingleReader(object):
     """A class for reading a single CHAT file."""
 
-    def __init__(self, filename, encoding=ENCODING):
+    def __init__(self, filename=None, str_=None, encoding=ENCODING):
 
         self.encoding = encoding
 
-        if not isinstance(filename, (str, unicode_)):
-            raise ValueError('filename must be str')
+        if (filename and str_) or (filename is None and str_ is None):
+            msg = ('_SingleReader is initialized by either one CHAT file or '
+                   'one CHAT str (but not both)')
+            raise ValueError(msg)
 
-        self._filename = os.path.abspath(filename)
+        self._filename = os.path.abspath(filename) if filename else None
+        self._str = str_
 
         if not os.path.isfile(self._filename):
             raise FileNotFoundError(self._filename)
@@ -837,14 +842,20 @@ class _SingleReader(object):
     def filename(self):
         return self._filename
 
+    def _get_file_object(self):
+        if self._filename:
+            return open(self._filename, mode=OPEN_MODE, encoding=self.encoding)
+        else:
+            return io.TextIOWrapper(io.BytesIO(self._str.encode()),
+                                    encoding=self.encoding)
+
     def cha_lines(self):
         """A generator of lines in the CHAT file,
         with the tab-character line continuations undone.
         """
         previous_line = ''
 
-        for line in open(self._filename, mode=OPEN_MODE,
-                         encoding=self.encoding):
+        for line in self._get_file_object():
             previous_line = previous_line.strip()
             current_line = line.rstrip()  # don't remove leading \t
 

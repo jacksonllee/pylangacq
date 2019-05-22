@@ -2,4 +2,3 @@ include README.rst
 include CHANGELOG.md
 include LICENSE.txt
 include dev-requirements.txt
-include pylangacq/VERSION

@@ -1,18 +1,20 @@
+import os
 import sys
 import warnings
-from os import path
 
 from setuptools import setup, find_packages
 
 
+_PACKAGE_NAME = 'pylangacq'
 _PYTHON_VERSION = sys.version_info[:3]
-_THIS_DIR = path.dirname(__file__)
+_THIS_DIR = os.path.dirname(os.path.realpath(__file__))
 
-with open(path.join(_THIS_DIR, 'pylangacq', 'VERSION')) as f:
-    package_version = f.read().strip()
+with open(os.path.join(_THIS_DIR, _PACKAGE_NAME, '_version.py')) as f:
+    # get __version__
+    exec(f.read())
 
-with open(path.join(_THIS_DIR, 'README.rst')) as f:
-    long_description = f.read()
+with open(os.path.join(_THIS_DIR, 'README.rst')) as f:
+    _LONG_DESCRIPTION = f.read().strip()
 
 
 def main():
@@ -27,10 +29,10 @@ def main():
         )
 
     setup(
-        name='pylangacq',
-        version=package_version,
+        name=_PACKAGE_NAME,
+        version=__version__,  # noqa: F821
         description='PyLangAcq: Language Acquisition Research in Python',
-        long_description=long_description,
+        long_description=_LONG_DESCRIPTION,
         url='http://pylangacq.org/',
         author='Jackson Lee',
         author_email='jacksonlunlee@gmail.com',
@@ -41,7 +43,7 @@ def main():
                   'language', 'CHILDES', 'CHAT', 'transcription',
                   'acquisition', 'development', 'learning'],
 
-        package_data={'pylangacq': ['VERSION', 'tests/test_data/*']},
+        package_data={'pylangacq': ['tests/test_data/*']},
 
         zip_safe=False,
 

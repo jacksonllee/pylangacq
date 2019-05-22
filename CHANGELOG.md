@@ -1,6 +1,23 @@
-# Change log
+# Changelog
 
-## v0.10.0 - 2017-11-02
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
+and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+
+## [0.11.0] - Unreleased
+
+### Added
+### Changed
+### Deprecated
+* Python < 3.5. If used, `DeprecationWarning` is raised during
+  installation. (#7)
+
+### Removed
+### Fixed
+### Security
+
+## [0.10.0] - 2017-11-02
 
 * Fixed unicode handling across Python 2 and 3
 * Renamed method `find_filename` of `Reader` as `abspath`.
@@ -12,7 +29,7 @@
   excluding specific participants.
 * Fixed bug in IPSyn.
 
-## v0.9.0 - 2017-10-25
+## [0.9.0] - 2017-10-25
 
 * Python 2 and 3 cross compatibility
 * Renamed the `grammar.py` module as `dependency.py`
@@ -33,7 +50,7 @@
 * Restricted `get_IPSyn()` to only the first 100 utterances
 * Added tests
 
-## v0.8 - 2016-01-30
+## [0.8] - 2016-01-30
 
 * Library now compatible only with Python 3.4 or above
 * For class `Reader`:
@@ -56,13 +73,13 @@
   * Undid collapses in transcriptions such as `[x 4]`
   * Various bug fixes
 
-## v0.7 - 2016-01-06
+## [0.7] - 2016-01-06
 
 * Added `part_of_speech_tags()` in `SingleReader`
 * Added "all X" methods in `Reader`
 * Bug fixes: `clean_utterance()`, `DependencyGraph`
 
-## v0.6 - 2015-12-27
+## [0.6] - 2015-12-27
 
 * `cha_lines` optimized
 * Methods added: `tagged_words()`, `words()`, `tagged_sents()`, `sents()`
@@ -74,7 +91,7 @@
 * Module `grammar` added, with class `DependencyGraph` being set up
 * Static methods in classes pulled out
 
-## v0.5 - 2015-12-16
+## [0.5] - 2015-12-16
 
 * New `utterances()` method for extracting utterances from transcripts
 * `_clean_utterance` method developed
@@ -82,13 +99,13 @@
 * Standardizing terminology:
   use "participant(s)" consistently instead of "speaker(s)"
 
-## v0.4 - 2015-12-13
+## [0.4] - 2015-12-13
 
 * New `number_of_utterances()` method for both `Reader` and `SingleReader`
 * To avoid confusion, `metadata()` method is removed.
 * Extraction of utterances and tiers with dict `index_to_tiers`
 
-## v0.3 - 2015-12-09
+## [0.3] - 2015-12-09
 
 * Class `Reader` can read multiple `.cha` files.
   The methods associated with `Reader` are mostly a dict mapping
@@ -99,12 +116,12 @@
   (though a "new" `metadata()` method is defined and points to
   `headers()` for convenience).
 
-## v0.2 - 2015-12-05
+## [0.2] - 2015-12-05
 
 * new methods for class `Reader`:
   `languages()`, `date()`, `participants()`, `participant_codes()`
 
-## v0.1 - 2015-12-04
+## [0.1] - 2015-12-04
 
 * first commit; set up the `chat` submodule
 * class `Reader` defined for reading CHAT files,

@@ -1,26 +1,40 @@
+import sys
+import warnings
 from os import path
-from setuptools import (setup, find_packages)
+
+from setuptools import setup, find_packages
 
 
-THIS_DIR = path.dirname(__file__)
+_PYTHON_VERSION = sys.version_info[:3]
+_THIS_DIR = path.dirname(__file__)
 
-with open(path.join(THIS_DIR, 'pylangacq', 'VERSION')) as f:
+with open(path.join(_THIS_DIR, 'pylangacq', 'VERSION')) as f:
     package_version = f.read().strip()
 
-with open(path.join(THIS_DIR, 'README.rst')) as f:
+with open(path.join(_THIS_DIR, 'README.rst')) as f:
     long_description = f.read()
 
 
 def main():
+    if _PYTHON_VERSION < (3, 5):
+        warnings.warn(
+            'You are currently on Python {py_version}. '
+            'Python < 3.5 is deprecated and not supported '
+            'since pylangacq v0.11.0. '.format(
+                py_version='.'.join(_PYTHON_VERSION)
+            ),
+            DeprecationWarning
+        )
+
     setup(
-        name="pylangacq",
+        name='pylangacq',
         version=package_version,
-        description="PyLangAcq: Language Acquisition Research in Python",
+        description='PyLangAcq: Language Acquisition Research in Python',
         long_description=long_description,
-        url="http://pylangacq.org/",
-        author="Jackson Lee",
-        author_email="jacksonlunlee@gmail.com",
-        license="MIT License",
+        url='http://pylangacq.org/',
+        author='Jackson Lee',
+        author_email='jacksonlunlee@gmail.com',
+        license='MIT License',
         packages=find_packages(),
         keywords=['computational linguistics', 'natural language processing',
                   'NLP', 'linguistics', 'corpora', 'speech',
@@ -58,5 +72,5 @@ def main():
     )
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

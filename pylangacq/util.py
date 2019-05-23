@@ -56,23 +56,23 @@ def clean_utterance(utterance, phon=False):
 
     # print('utterance:', utterance, type(utterance))
 
-    utterance = re.sub('\[= [^\[]+?\]', '', utterance)
-    utterance = re.sub('\[x \d+?\]', '', utterance)
-    utterance = re.sub('\[\+ [^\[]+?\]', '', utterance)
-    utterance = re.sub('\[\* [^\[]+?\]', '', utterance)
-    utterance = re.sub('\[=\? [^\[]+?\]', '', utterance)
-    utterance = re.sub('\[=! [^\[]+?\]', '', utterance)
-    utterance = re.sub('\[% [^\[]+?\]', '', utterance)
-    utterance = re.sub('\[- [^\[]+?\]', '', utterance)
-    utterance = re.sub('\[\^ [^\[]+?\]', '', utterance)
-    utterance = re.sub('[^]+?', '', utterance)  # TODO: Why need this?!
-    utterance = re.sub('\[<\d?\]', '', utterance)
-    utterance = re.sub('\[>\d?\]', '', utterance)
-    utterance = re.sub('\(\d+?\.?\d*?\)', '', utterance)
-    utterance = re.sub('\[%act: [^\[]+?\]', '', utterance)
+    utterance = re.sub(r'\[= [^\[]+?\]', '', utterance)
+    utterance = re.sub(r'\[x \d+?\]', '', utterance)
+    utterance = re.sub(r'\[\+ [^\[]+?\]', '', utterance)
+    utterance = re.sub(r'\[\* [^\[]+?\]', '', utterance)
+    utterance = re.sub(r'\[=\? [^\[]+?\]', '', utterance)
+    utterance = re.sub(r'\[=! [^\[]+?\]', '', utterance)
+    utterance = re.sub(r'\[% [^\[]+?\]', '', utterance)
+    utterance = re.sub(r'\[- [^\[]+?\]', '', utterance)
+    utterance = re.sub(r'\[\^ [^\[]+?\]', '', utterance)
+    utterance = re.sub(r'[^]+?', '', utterance)  # TODO: Why need this?!
+    utterance = re.sub(r'\[<\d?\]', '', utterance)
+    utterance = re.sub(r'\[>\d?\]', '', utterance)
+    utterance = re.sub(r'\(\d+?\.?\d*?\)', '', utterance)
+    utterance = re.sub(r'\[%act: [^\[]+?\]', '', utterance)
 
-    utterance = re.sub('\[\?\]', '', utterance)
-    utterance = re.sub('\[\!\]', '', utterance)
+    utterance = re.sub(r'\[\?\]', '', utterance)
+    utterance = re.sub(r'\[\!\]', '', utterance)
     utterance = re.sub(r'‹', '', utterance)
     utterance = re.sub(r'›', '', utterance)
 
@@ -106,7 +106,7 @@ def clean_utterance(utterance, phon=False):
     utterance = re.sub(r'”', ' ” ', utterance)
     utterance = re.sub(r',', ' , ', utterance)  # works together with next line
     utterance = re.sub(r'\+ ,', '+,', utterance)
-    utterance = re.sub('[^\[\./!]\?', ' ? ', utterance)
+    utterance = re.sub(r'[^\[\./!]\?', ' ? ', utterance)
     # utterance = re.sub('[^\(\[\.\+]\.', ' . ', utterance)
     utterance = re.sub(r'\(\.\)', ' (.) ', utterance)
     utterance = remove_extra_spaces(utterance)
@@ -143,42 +143,42 @@ def clean_utterance(utterance, phon=False):
     index_pairs = []  # characters bounded by index pairs to be removed
 
     # remove ' [///]'
-    triple_slash_right_indices = find_indices(utterance, '> \[///\]')
+    triple_slash_right_indices = find_indices(utterance, r'> \[///\]')
     index_pairs += [(begin + 1, begin + 6)
                     for begin in triple_slash_right_indices]
 
     # remove ' [//]'
-    double_overlap_right_indices = find_indices(utterance, '> \[//\]')
+    double_overlap_right_indices = find_indices(utterance, r'> \[//\]')
     index_pairs += [(begin + 1, begin + 5)
                     for begin in double_overlap_right_indices]
 
     # remove ' [/]'
-    single_overlap_right_indices = find_indices(utterance, '> \[/\]')
+    single_overlap_right_indices = find_indices(utterance, r'> \[/\]')
     index_pairs += [(begin + 1, begin + 4)
                     for begin in single_overlap_right_indices]
 
     # remove ' [/?]'
-    slash_question_indices = find_indices(utterance, '> \[/\?\]')
+    slash_question_indices = find_indices(utterance, r'> \[/\?\]')
     index_pairs += [(begin + 1, begin + 4)
                     for begin in slash_question_indices]
 
     # remove ' [::'
-    double_error_right_indices = find_indices(utterance, '> \[::')
+    double_error_right_indices = find_indices(utterance, r'> \[::')
     index_pairs += [(begin + 1, begin + 4)
                     for begin in double_error_right_indices]
 
     # remove ' [:'
-    single_error_right_indices = find_indices(utterance, '> \[: ')
+    single_error_right_indices = find_indices(utterance, r'> \[: ')
     index_pairs += [(begin + 1, begin + 3)
                     for begin in single_error_right_indices]
 
     right_indices = (
-        double_overlap_right_indices +
-        single_overlap_right_indices +
-        double_error_right_indices +
-        single_error_right_indices +
-        triple_slash_right_indices +
-        slash_question_indices
+        double_overlap_right_indices
+        + single_overlap_right_indices
+        + double_error_right_indices
+        + single_error_right_indices
+        + triple_slash_right_indices
+        + slash_question_indices
     )
 
     index_pairs = index_pairs + [(angle_brackets_r2l_pairs[right], right)
@@ -194,13 +194,13 @@ def clean_utterance(utterance, phon=False):
             new_utterance += utterance[i]
     utterance = new_utterance
 
-    utterance = re.sub('\S+? \[/\]', '', utterance)
-    utterance = re.sub('\S+? \[//\]', '', utterance)
-    utterance = re.sub('\S+? \[///\]', '', utterance)
-    utterance = re.sub('\S+? \[/\?\]', '', utterance)
+    utterance = re.sub(r'\S+? \[/\]', '', utterance)
+    utterance = re.sub(r'\S+? \[//\]', '', utterance)
+    utterance = re.sub(r'\S+? \[///\]', '', utterance)
+    utterance = re.sub(r'\S+? \[/\?\]', '', utterance)
 
-    utterance = re.sub('\S+? \[::', '', utterance)
-    utterance = re.sub('\S+? \[:', '', utterance)
+    utterance = re.sub(r'\S+? \[::', '', utterance)
+    utterance = re.sub(r'\S+? \[:', '', utterance)
 
     utterance = remove_extra_spaces(utterance)
     # print('step 3:', utterance)
@@ -225,9 +225,9 @@ def clean_utterance(utterance, phon=False):
     new_words = []
 
     for word in words:
-        word = re.sub('\A<', '', word)   # remove beginning <
-        word = re.sub('>\Z', '', word)   # remove final >
-        word = re.sub('\]\Z', '', word)  # remove final ]
+        word = re.sub(r'\A<', '', word)   # remove beginning <
+        word = re.sub(r'>\Z', '', word)   # remove final >
+        word = re.sub(r'\]\Z', '', word)  # remove final ]
 
         not_an_escape_word = word not in escape_words
         no_escape_prefix = not any(word.startswith(e) for e in escape_prefixes)

@@ -9,8 +9,8 @@ python:
 install:
   - pip install --upgrade pip setuptools
   - pip install -r dev-requirements.txt
-  - python setup.py install
+  - pip install --no-deps -e .
 
 script:
-  - py.test -rxXs -vv --cov pylangacq pylangacq
   - flake8 pylangacq
+  - py.test -rxXs -vv --cov pylangacq pylangacq

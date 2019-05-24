@@ -205,7 +205,13 @@ def clean_utterance(utterance, phon=False):
     utterance = remove_extra_spaces(utterance)
     # print('step 3:', utterance)
 
-    # Step 4: Split utterance by spaces and determine whether to keep items.
+    # Step 4: Remove unwanted symbols
+    utterance = re.sub(r'“', '', utterance)
+    utterance = re.sub(r'”', '', utterance)
+
+    utterance = remove_extra_spaces(utterance)
+
+    # Step 5: Split utterance by spaces and determine whether to keep items.
 
     escape_prefixes = {'[?', '[/', '[<', '[>', '[:', '[!', '[*',
                        '+"', '+,', '<&'}
@@ -236,7 +242,7 @@ def clean_utterance(utterance, phon=False):
         if (not_an_escape_word and no_escape_prefix) or has_keep_prefix:
             new_words.append(word)
 
-    # print('step 4:', remove_extra_spaces(' '.join(new_words)))
+    # print('step 5:', remove_extra_spaces(' '.join(new_words)))
 
     return remove_extra_spaces(' '.join(new_words))
 

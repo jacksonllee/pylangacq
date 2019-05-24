@@ -2,55 +2,68 @@
 
 from __future__ import unicode_literals
 
+import pytest
+
 from pylangacq.util import (clean_utterance, get_participant_code, clean_word,
                             convert_date_to_tuple, get_lemma_from_mor,
                             remove_extra_spaces, find_indices)
 
 
-def test_clean_utterance():
-    # TODO: Steps 3 and 4 in the function not tested
-    assert clean_utterance('[= foo ] bar') == 'bar'
-    assert clean_utterance('[x 2] bar') == 'bar'
-    assert clean_utterance('[+ foo ] bar') == 'bar'
-    assert clean_utterance('[* foo ] bar') == 'bar'
-    assert clean_utterance('[=? foo ] bar') == 'bar'
-    assert clean_utterance('[=! foo ] bar') == 'bar'
-    assert clean_utterance('[% foo ] bar') == 'bar'
-    assert clean_utterance('[- foo ] bar') == 'bar'
-    assert clean_utterance('[^ foo ] bar') == 'bar'
-    assert clean_utterance('[<1] bar') == 'bar'
-    assert clean_utterance('[<] bar') == 'bar'
-    assert clean_utterance('[>1] bar') == 'bar'
-    assert clean_utterance('[>] bar') == 'bar'
-    assert clean_utterance('[<1] bar') == 'bar'
-    assert clean_utterance('(1) bar') == 'bar'
-    assert clean_utterance('(1.) bar') == 'bar'
-    assert clean_utterance('(1.3) bar') == 'bar'
-    assert clean_utterance('(1.34) bar') == 'bar'
-    assert clean_utterance('(12.34) bar') == 'bar'
-    assert clean_utterance('[%act: foo] bar') == 'bar'
-    assert clean_utterance('[?] bar') == 'bar'
-    assert clean_utterance('[!] bar') == 'bar'
-    assert clean_utterance('‹ bar') == 'bar'
-    assert clean_utterance('› bar') == 'bar'
-    assert clean_utterance('[*] bar') == 'bar'
-    assert clean_utterance('bar [*]') == 'bar'
+@pytest.mark.parametrize('original, expected', [
+    ('[= foo ] bar', 'bar'),
+    ('[x 2] bar', 'bar'),
+    ('[+ foo ] bar', 'bar'),
+    ('[* foo ] bar', 'bar'),
+    ('[=? foo ] bar', 'bar'),
+    ('[=! foo ] bar', 'bar'),
+    ('[% foo ] bar', 'bar'),
+    ('[- foo ] bar', 'bar'),
+    ('[^ foo ] bar', 'bar'),
+    ('[<1] bar', 'bar'),
+    ('[<] bar', 'bar'),
+    ('[>1] bar', 'bar'),
+    ('[>] bar', 'bar'),
+    ('[<1] bar', 'bar'),
+    ('(1) bar', 'bar'),
+    ('(1.) bar', 'bar'),
+    ('(1.3) bar', 'bar'),
+    ('(1.34) bar', 'bar'),
+    ('(12.34) bar', 'bar'),
+    ('[%act: foo] bar', 'bar'),
+    ('[?] bar', 'bar'),
+    ('[!] bar', 'bar'),
+    ('‹ bar', 'bar'),
+    ('› bar', 'bar'),
+    ('bar', 'bar'),
+    ('[*] bar', 'bar'),
+    ('bar [*]', 'bar'),
+    ('“bar”', 'bar'),
+])
+def test_clean_utterance(original, expected):
+    # TODO: Steps 3 and 5 in the function not tested
+    assert clean_utterance(original) == expected
 
 
-def test_get_participant_code():
-    assert get_participant_code({'CHI', '%mor', '%gra'}) == 'CHI'
-    assert get_participant_code({'MOT', '%mor', '%gra'}) == 'MOT'
+@pytest.mark.parametrize('keys, expected', [
+    ({'CHI', '%mor', '%gra'}, 'CHI'),
+    ({'MOT', '%mor', '%gra'}, 'MOT'),
+])
+def test_get_participant_code(keys, expected):
+    assert get_participant_code(keys) == expected
 
 
-def test_clean_word():
-    assert clean_word('foo') == 'foo'
-    assert clean_word('&foo') == 'foo'
-    assert clean_word('foo@bar') == 'foo'
-    assert clean_word('foo(') == 'foo'
-    assert clean_word('foo)') == 'foo'
-    assert clean_word('foo:') == 'foo'
-    assert clean_word('foo;') == 'foo'
-    assert clean_word('foo+') == 'foo'
+@pytest.mark.parametrize('original, expected', [
+    ('foo', 'foo'),
+    ('&foo', 'foo'),
+    ('foo@bar', 'foo'),
+    ('foo(', 'foo'),
+    ('foo)', 'foo'),
+    ('foo:', 'foo'),
+    ('foo;', 'foo'),
+    ('foo+', 'foo'),
+])
+def test_clean_word(original, expected):
+    assert clean_word(original) == expected
 
 
 def test_convert_date_to_tuple():
@@ -61,13 +74,19 @@ def test_get_lemma_from_mor():
     assert get_lemma_from_mor('foo&bar-baz') == 'foo'
 
 
-def test_remove_extra_spaces():
-    assert remove_extra_spaces('foo  bar') == 'foo bar'
-    assert remove_extra_spaces('foo bar  baz') == 'foo bar baz'
+@pytest.mark.parametrize('original, expected', [
+    ('foo  bar', 'foo bar'),
+    ('foo bar  baz', 'foo bar baz'),
+])
+def test_remove_extra_spaces(original, expected):
+    assert remove_extra_spaces(original) == expected
 
 
-def test_find_indices():
-    assert find_indices('foo bar', 'foo') == [0]
-    assert find_indices('foo foo bar', 'foo') == [0, 4]
-    assert find_indices('foo bar foo', 'foo') == [0, 8]
-    assert find_indices('foo bar baz', 'bar') == [4]
+@pytest.mark.parametrize('original, target, expected', [
+    ('foo bar', 'foo', [0]),
+    ('foo foo bar', 'foo', [0, 4]),
+    ('foo bar foo', 'foo', [0, 8]),
+    ('foo bar baz', 'bar', [4]),
+])
+def test_find_indices(original, target, expected):
+    assert find_indices(original, target) == expected

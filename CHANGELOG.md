@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Added
+* Support Python 3.7; turn on Travis CI builds for this Python version. (#7)
+
 ### Changed
 ### Deprecated
 * Python < 3.5. If used, `DeprecationWarning` is raised during

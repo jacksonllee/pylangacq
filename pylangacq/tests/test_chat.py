@@ -5,6 +5,8 @@ If anything fails, we probably also have to update the documentation
 (and fix the bugs, if any).
 """
 
+from __future__ import print_function
+
 import sys
 import os
 import zipfile
@@ -102,7 +104,11 @@ def test_instantiate_reader(classmethod, arg):
             sorted(index_to_tiers_from_classmethod.items()),
             sorted(index_to_tiers_from_read_chat.items())
     ):
-        assert tier_c == tier_r
+        try:
+            assert tier_c == tier_r
+        except AssertionError:
+            print('i_c:', i_c, 'i_r:', i_r)
+            raise
 
 
 def test_read_chat_wrong_filename_type():

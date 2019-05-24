@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 * Remove conversational quotes in utterance processing; updated test CHAT file
-  to match the latest CHILDES data files. (#7)
+  to match the latest CHILDES data. (#7)
 
 ### Deprecated
 * Python < 3.5. If used, `DeprecationWarning` is raised during

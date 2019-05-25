@@ -8,6 +8,7 @@ import fnmatch
 import re
 import tempfile
 import uuid
+import io
 from pprint import pformat
 from collections import Counter
 from itertools import chain
@@ -18,22 +19,7 @@ from pylangacq.util import (ENCODING, CLITIC,
                             get_participant_code, convert_date_to_tuple,
                             clean_utterance, clean_word, get_lemma_from_mor,
                             get_time_marker)
-
-
-if sys.version_info[0] == 2:  # pragma: no coverage
-    from io import open
-    unicode_ = unicode  # noqa F821 (undefined name 'unicode' in python >= 3)
-else:  # pragma: no coverage
-    unicode_ = str
-
-
-# NOTE remove this if statement when dropping python 2.7 support
-if sys.version_info[:2] >= (3, 4):
-    # 'U' deprecated since python 3.4, to removed in python 4.0
-    # https://docs.python.org/3/library/functions.html#open
-    _OPEN_MODE = 'r'
-else:
-    _OPEN_MODE = 'rU'
+from pylangacq.compat import open, unicode_, OPEN_MODE, FileNotFoundError
 
 
 _TEMP_DIR = tempfile.mkdtemp()
@@ -193,7 +179,7 @@ class Reader(object):
 
             abs_fullpath = os.path.abspath(filename)
             abs_dir = os.path.dirname(abs_fullpath)
-            glob_match_pattern = re.compile('.*[\*\?\[\]].*')
+            glob_match_pattern = re.compile(r'.*[\*\?\[\]].*')
             while glob_match_pattern.search(abs_dir):  # pragma: no cover
                 abs_dir = os.path.dirname(abs_dir)
 
@@ -224,8 +210,9 @@ class Reader(object):
 
         self._fname_to_reader = {}
         for fn in self._filenames:
-            self._fname_to_reader[fn] = SingleReader(fn,
-                                                     encoding=self.encoding)
+            # TODO rewrite what _SingleReader takes as args
+            self._fname_to_reader[fn] = _SingleReader(fn,
+                                                      encoding=self.encoding)
 
     def __len__(self):
         """Return the number of files.
@@ -813,20 +800,23 @@ class Reader(object):
             return output_list
 
 
-class SingleReader(object):
+class _SingleReader(object):
     """A class for reading a single CHAT file."""
 
-    def __init__(self, filename, encoding=ENCODING):
+    def __init__(self, filename=None, str_=None, encoding=ENCODING):
 
         self.encoding = encoding
 
-        if not isinstance(filename, (str, unicode_)):
-            raise ValueError('filename must be str')
+        if (filename and str_) or (filename is None and str_ is None):
+            msg = ('_SingleReader is initialized by either one CHAT file or '
+                   'one CHAT str (but not both)')
+            raise ValueError(msg)
 
-        self._filename = os.path.abspath(filename)
+        self._filename = os.path.abspath(filename) if filename else None
+        self._str = str_
 
         if not os.path.isfile(self._filename):
-            raise FileNotFoundError(self._filename)  # noqa F821 (py2 compat)
+            raise FileNotFoundError(self._filename)
 
         self._headers = self._get_headers()
         self._index_to_tiers = self._get_index_to_tiers()
@@ -853,14 +843,20 @@ class SingleReader(object):
     def filename(self):
         return self._filename
 
+    def _get_file_object(self):
+        if self._filename:
+            return open(self._filename, mode=OPEN_MODE, encoding=self.encoding)
+        else:
+            return io.TextIOWrapper(io.BytesIO(self._str.encode()),
+                                    encoding=self.encoding)
+
     def cha_lines(self):
         """A generator of lines in the CHAT file,
         with the tab-character line continuations undone.
         """
         previous_line = ''
 
-        for line in open(self._filename, mode=_OPEN_MODE,
-                         encoding=self.encoding):
+        for line in self._get_file_object():
             previous_line = previous_line.strip()
             current_line = line.rstrip()  # don't remove leading \t
 
@@ -935,8 +931,8 @@ class SingleReader(object):
         # handle collapses such as [x 4]
         result_without_collapses = {}
         new_index = -1  # utterance index (1st utterance is index 0)
-        collapse_pattern = re.compile('\[x \d+?\]')  # e.g., "[x <number(s)>]"
-        number_regex = re.compile('\d+')
+        collapse_pattern = re.compile(r'\[x \d+?\]')  # e.g., "[x <number(s)>]"
+        number_regex = re.compile(r'\d+')
 
         for old_index in range(len(result_with_collapses)):
             tier_dict = result_with_collapses[old_index]
@@ -1201,7 +1197,8 @@ class SingleReader(object):
         except (KeyError, IndexError, ValueError):
             return None
 
-    def utterances(self, participant=None, exclude=None, clean=True, time_marker=False):
+    def utterances(self, participant=None, exclude=None, clean=True,
+                   time_marker=False):
         """
         Return a list of the utterances by *participant*
         as (*participant*, *utterance*) pairs.
@@ -1223,9 +1220,9 @@ class SingleReader(object):
 
         :param time_marker: Whether to include the timer marker in the
             utterance; default to ``False``. If ``True``, the list returned
-            will be (*participant*, *utterance*, *timermarker*) pairs.
-            timermarker is a tuple which have two integer numbers providing
-            the begin and end time in milliseconds for this utterance.
+            will be (*participant*, *utterance*, *timermarker*) pairs, where
+            *timermarker* is a tuple with two integers for
+            the start and end times (in milliseconds) for this utterance.
         """
         output = []
         participants = self._determine_participants(participant, exclude)
@@ -1241,8 +1238,16 @@ class SingleReader(object):
                             try:
                                 time_marker = get_time_marker(line)
                             except ValueError as e:
-                                raise ValueError("At line %d in file %s:"%(i, self.filename())+str(e))
-                            output.append((tier_marker, clean_utterance(line), time_marker))
+                                msg = (
+                                    'At line %d in file %s: ' %
+                                    (i, self.filename()) + str(e)
+                                )
+                                raise ValueError(msg)
+                            output.append(
+                                (tier_marker,
+                                 clean_utterance(line),
+                                 time_marker)
+                            )
                         else:
                             output.append((tier_marker, clean_utterance(line)))
                     else:
@@ -1756,8 +1761,8 @@ class SingleReader(object):
                     preceding_words = [tagged_sent[k][0] for k in range(i)]
                     preceding_words = [w for w in preceding_words
                                        if w != CLITIC]  # remove CLITIC
-                    char_number = (sum([len(w) for w in preceding_words]) +
-                                   len(preceding_words) - 1)  # plus spaces
+                    char_number = (sum(len(w) for w in preceding_words)
+                                   + len(preceding_words) - 1)  # plus spaces
                     taggedsent_charnumber_list.append((tagged_sent,
                                                        char_number))
 
@@ -1790,8 +1795,8 @@ class SingleReader(object):
             for tagged_sent, char_number in taggedsent_charnumber_list:
                 sent = [word_ for word_, _, _, _ in tagged_sent
                         if word_ != CLITIC]
-                sent_str = (' ' * (max_char_number - char_number) +
-                            ' '.join(sent))
+                sent_str = (' ' * (max_char_number - char_number)
+                            + ' '.join(sent))
                 result_list.append(sent_str)
 
             return result_list

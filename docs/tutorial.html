@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Tutorial &#8212; PyLangAcq 0.10.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -13,7 +11,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Reading data" href="read.html" />
     <link rel="prev" title="Download and install" href="download.html" />
@@ -38,23 +36,23 @@
 <p>This page introduces the basic functionalities of PyLangAcq and points to
 relevant pages of the library documentation for more advanced usage.</p>
 <ul class="simple">
-<li><a class="reference internal" href="#test-install"><span class="std std-ref">Testing the library installation</span></a></li>
-<li><a class="reference internal" href="#read-data"><span class="std std-ref">Reading CHAT data</span></a></li>
-<li><a class="reference internal" href="#get-metadata"><span class="std std-ref">Metadata</span></a></li>
-<li><a class="reference internal" href="#transcripts"><span class="std std-ref">Transcriptions and annotations</span></a></li>
-<li><a class="reference internal" href="#use-dev-measures"><span class="std std-ref">Developmental measures</span></a></li>
-<li><a class="reference internal" href="#use-word-freq"><span class="std std-ref">Word frequency info, ngrams, search, and concordance</span></a></li>
-<li><a class="reference internal" href="#by-lx-areas"><span class="std std-ref">Acquisition by linguistic areas</span></a></li>
+<li><p><a class="reference internal" href="#test-install"><span class="std std-ref">Testing the library installation</span></a></p></li>
+<li><p><a class="reference internal" href="#read-data"><span class="std std-ref">Reading CHAT data</span></a></p></li>
+<li><p><a class="reference internal" href="#get-metadata"><span class="std std-ref">Metadata</span></a></p></li>
+<li><p><a class="reference internal" href="#transcripts"><span class="std std-ref">Transcriptions and annotations</span></a></p></li>
+<li><p><a class="reference internal" href="#use-dev-measures"><span class="std std-ref">Developmental measures</span></a></p></li>
+<li><p><a class="reference internal" href="#use-word-freq"><span class="std std-ref">Word frequency info, ngrams, search, and concordance</span></a></p></li>
+<li><p><a class="reference internal" href="#by-lx-areas"><span class="std std-ref">Acquisition by linguistic areas</span></a></p></li>
 </ul>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>Python 3 syntax is used throughout this tutorial and other pages.
 If you are using Python 2, the “print” statements such as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;something&#39;</span><span class="p">,</span> <span class="s1">&#39;something else&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>should be converted to the following:</p>
-<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span> <span class="s1">&#39;something&#39;</span><span class="p">,</span> <span class="s1">&#39;something else&#39;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span> <span class="s1">&#39;something&#39;</span><span class="p">,</span> <span class="s1">&#39;something else&#39;</span>
 </pre></div>
 </div>
 </div>
@@ -252,10 +250,10 @@ More on <a class="reference internal" href="devmeasures.html#devmeasures"><span 
 <div class="section" id="acquisition-by-linguistic-areas">
 <span id="by-lx-areas"></span><h2>Acquisition by linguistic areas<a class="headerlink" href="#acquisition-by-linguistic-areas" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><a class="reference internal" href="lex.html#lex"><span class="std std-ref">Lexicon and morphology</span></a></li>
-<li><a class="reference internal" href="phono.html#phono"><span class="std std-ref">Phonetics and phonology</span></a></li>
-<li><a class="reference internal" href="synsem.html#synsem"><span class="std std-ref">Syntax and semantics</span></a></li>
-<li><a class="reference internal" href="disca.html#disca"><span class="std std-ref">Discourse and conversational analysis</span></a></li>
+<li><p><a class="reference internal" href="lex.html#lex"><span class="std std-ref">Lexicon and morphology</span></a></p></li>
+<li><p><a class="reference internal" href="phono.html#phono"><span class="std std-ref">Phonetics and phonology</span></a></p></li>
+<li><p><a class="reference internal" href="synsem.html#synsem"><span class="std std-ref">Syntax and semantics</span></a></p></li>
+<li><p><a class="reference internal" href="disca.html#disca"><span class="std std-ref">Discourse and conversational analysis</span></a></p></li>
 </ul>
 </div>
 <div class="section" id="questions-issues">
@@ -327,8 +325,6 @@ contact <a class="reference external" href="http://jacksonllee.com/">Jackson L. 
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -346,10 +342,10 @@ contact <a class="reference external" href="http://jacksonllee.com/">Jackson L. 
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2018, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on October 10, 2018.
+      &copy;2015-2019, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on May 22, 2019.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

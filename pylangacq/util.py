@@ -7,6 +7,7 @@ import re
 
 CLITIC = 'CLITIC'
 ENCODING = 'utf8'
+TIMER_MARKER_REG = re.compile(r'\x15-?(\d+)_(\d+)-?\x15')
 
 
 def clean_utterance(utterance, phon=False):
@@ -245,6 +246,41 @@ def clean_utterance(utterance, phon=False):
     # print('step 5:', remove_extra_spaces(' '.join(new_words)))
 
     return remove_extra_spaces(' '.join(new_words))
+
+
+def get_time_marker(utterance):  # TODO write tests this function
+    """Get the timer marker in this utterance.
+
+    Time marker provides the start and end times (in milliseconds)
+    for a segment in a digitized video or audio file. For example:
+        ·0_1073·
+    '·' is ASCII CODE 21 (0x15), for NAK (Negative Acknowledgement)
+
+    Parameters
+    ----------
+    utterance : str
+        The raw utterance
+
+    Returns
+    -------
+    tuple of (int, int)
+        The start and end times (in milliseconds) for this utterance
+
+    Notes
+    -----
+    If the option “multiple” is selected in the @Options field, then these '·'
+    bullets may also occur within utterances. However, this function only
+    returns one timer marker. (See https://talkbank.org/manuals/CHAT.pdf)
+    """
+    match = TIMER_MARKER_REG.search(utterance)
+    if match:
+        time_marker = match.groups()
+        start = int(time_marker[0])
+        stop = int(time_marker[1])
+        return start, stop
+    else:
+        msg = 'Utterance does not have a standard time marker: %s' % utterance
+        raise ValueError(msg)
 
 
 def get_participant_code(tier_marker_seq):

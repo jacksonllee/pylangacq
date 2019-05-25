@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 * Support Python 3.7; turn on Travis CI builds for this Python version. (#7)
+* Add time marker support (available at `_SingleReader`),
+  originally contributed at #3 by @hellolzc. (#8)
 
 ### Changed
 * Remove conversational quotes in utterance processing; updated test CHAT file

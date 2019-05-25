@@ -5,6 +5,8 @@ If anything fails, we probably also have to update the documentation
 (and fix the bugs, if any).
 """
 
+from __future__ import print_function
+
 import sys
 import os
 import zipfile
@@ -96,7 +98,17 @@ def test_instantiate_reader(classmethod, arg):
     index_to_tiers_from_read_chat = list(reader_from_read_chat.index_to_tiers().values())[0]  # noqa
 
     assert header_from_classmethod == header_from_read_chat
-    assert index_to_tiers_from_classmethod == index_to_tiers_from_read_chat
+    assert len(index_to_tiers_from_classmethod) == len(index_to_tiers_from_read_chat)  # noqa
+
+    for (i_c, tier_c), (i_r, tier_r) in zip(
+            sorted(index_to_tiers_from_classmethod.items()),
+            sorted(index_to_tiers_from_read_chat.items())
+    ):
+        try:
+            assert tier_c == tier_r
+        except AssertionError:
+            print('i_c:', i_c, 'i_r:', i_r)
+            raise
 
 
 def test_read_chat_wrong_filename_type():
@@ -361,7 +373,7 @@ def test_utterances(eve_one_file):
 
 
 def test_part_of_speech_tags(eve_all_files):
-    assert almost_equal(len(eve_all_files.part_of_speech_tags()), 65,
+    assert almost_equal(len(eve_all_files.part_of_speech_tags()), 62,
                         tolerance=2)
 
 

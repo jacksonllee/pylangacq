@@ -738,8 +738,8 @@ def get_IPSyn(tagged_sents):
             word1 = graph.node[i]['word']
             mor2 = graph.node[i + 1]['mor']
 
-            if (word1 in {'no', 'not', 'can\'t', 'don\'t'} and
-                    mor2 not in {'', 'beg', 'end'}):
+            if (word1 in {'no', 'not', 'can\'t', 'don\'t'}
+                    and mor2 not in {'', 'beg', 'end'}):
                 scoring_board['Q3'] += 1
 
             if turn_off_scoring_board('Q3'):
@@ -1050,12 +1050,12 @@ def get_IPSyn(tagged_sents):
                 if i != test_verb:
                     continue
 
-                if (dep < test_verb and
-                        graph.edge[dep][test_verb]['rel'] == 'SUBJ'):
+                if (dep < test_verb
+                        and graph.edge[dep][test_verb]['rel'] == 'SUBJ'):
                     has_subject = True
 
-                if (dep > test_verb and
-                        graph.edge[dep][test_verb]['rel'] == 'OBJ'):
+                if (dep > test_verb
+                        and graph.edge[dep][test_verb]['rel'] == 'OBJ'):
                     has_object = True
 
             if has_subject and has_object:
@@ -1126,8 +1126,9 @@ def get_IPSyn(tagged_sents):
             mor3 = graph.node[i + 2]['mor']
 
             punctuations = {'', 'beg', 'end'}
-            if (pos2 == 'CONJ' and
-                    mor1 not in punctuations and mor3 not in punctuations):
+            if (pos2 == 'CONJ'
+                    and mor1 not in punctuations
+                    and mor3 not in punctuations):
                 scoring_board['S7'] += 1
                 add_one_point_if_needed('S5')
 
@@ -1233,8 +1234,8 @@ def get_IPSyn(tagged_sents):
         for dep, head in graph.edges().items():
             subject_count_increment = False
 
-            if (graph.edge[dep][head]['rel'] == 'SUBJ' and
-                    graph.node[dep]['word'] != CLITIC):
+            if (graph.edge[dep][head]['rel'] == 'SUBJ'
+                    and graph.node[dep]['word'] != CLITIC):
                 subject_count += 1
                 subject_count_increment = True
 
@@ -1286,8 +1287,8 @@ def get_IPSyn(tagged_sents):
                 continue
 
             inf = False
-            if (dep + 1 in graph.nodes() and
-                    graph.node[dep + 1]['word'] == 'INF'):
+            if (dep + 1 in graph.nodes()
+                    and graph.node[dep + 1]['word'] == 'INF'):
                 inf = True
 
             # we want the head of wh-word to NOT have ROOT as rel

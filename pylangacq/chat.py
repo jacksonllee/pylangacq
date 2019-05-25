@@ -8,6 +8,7 @@ import fnmatch
 import re
 import tempfile
 import uuid
+import io
 from pprint import pformat
 from collections import Counter
 from itertools import chain
@@ -177,7 +178,7 @@ class Reader(object):
 
             abs_fullpath = os.path.abspath(filename)
             abs_dir = os.path.dirname(abs_fullpath)
-            glob_match_pattern = re.compile('.*[\*\?\[\]].*')
+            glob_match_pattern = re.compile(r'.*[\*\?\[\]].*')
             while glob_match_pattern.search(abs_dir):  # pragma: no cover
                 abs_dir = os.path.dirname(abs_dir)
 
@@ -208,6 +209,7 @@ class Reader(object):
 
         self._fname_to_reader = {}
         for fn in self._filenames:
+            # TODO rewrite what _SingleReader takes as args
             self._fname_to_reader[fn] = _SingleReader(fn,
                                                       encoding=self.encoding)
 
@@ -800,14 +802,17 @@ class Reader(object):
 class _SingleReader(object):
     """A class for reading a single CHAT file."""
 
-    def __init__(self, filename, encoding=ENCODING):
+    def __init__(self, filename=None, str_=None, encoding=ENCODING):
 
         self.encoding = encoding
 
-        if not isinstance(filename, (str, unicode_)):
-            raise ValueError('filename must be str')
+        if (filename and str_) or (filename is None and str_ is None):
+            msg = ('_SingleReader is initialized by either one CHAT file or '
+                   'one CHAT str (but not both)')
+            raise ValueError(msg)
 
-        self._filename = os.path.abspath(filename)
+        self._filename = os.path.abspath(filename) if filename else None
+        self._str = str_
 
         if not os.path.isfile(self._filename):
             raise FileNotFoundError(self._filename)
@@ -837,14 +842,20 @@ class _SingleReader(object):
     def filename(self):
         return self._filename
 
+    def _get_file_object(self):
+        if self._filename:
+            return open(self._filename, mode=OPEN_MODE, encoding=self.encoding)
+        else:
+            return io.TextIOWrapper(io.BytesIO(self._str.encode()),
+                                    encoding=self.encoding)
+
     def cha_lines(self):
         """A generator of lines in the CHAT file,
         with the tab-character line continuations undone.
         """
         previous_line = ''
 
-        for line in open(self._filename, mode=OPEN_MODE,
-                         encoding=self.encoding):
+        for line in self._get_file_object():
             previous_line = previous_line.strip()
             current_line = line.rstrip()  # don't remove leading \t
 
@@ -919,8 +930,8 @@ class _SingleReader(object):
         # handle collapses such as [x 4]
         result_without_collapses = {}
         new_index = -1  # utterance index (1st utterance is index 0)
-        collapse_pattern = re.compile('\[x \d+?\]')  # e.g., "[x <number(s)>]"
-        number_regex = re.compile('\d+')
+        collapse_pattern = re.compile(r'\[x \d+?\]')  # e.g., "[x <number(s)>]"
+        number_regex = re.compile(r'\d+')
 
         for old_index in range(len(result_with_collapses)):
             tier_dict = result_with_collapses[old_index]
@@ -1727,8 +1738,8 @@ class _SingleReader(object):
                     preceding_words = [tagged_sent[k][0] for k in range(i)]
                     preceding_words = [w for w in preceding_words
                                        if w != CLITIC]  # remove CLITIC
-                    char_number = (sum([len(w) for w in preceding_words]) +
-                                   len(preceding_words) - 1)  # plus spaces
+                    char_number = (sum(len(w) for w in preceding_words)
+                                   + len(preceding_words) - 1)  # plus spaces
                     taggedsent_charnumber_list.append((tagged_sent,
                                                        char_number))
 
@@ -1761,8 +1772,8 @@ class _SingleReader(object):
             for tagged_sent, char_number in taggedsent_charnumber_list:
                 sent = [word_ for word_, _, _, _ in tagged_sent
                         if word_ != CLITIC]
-                sent_str = (' ' * (max_char_number - char_number) +
-                            ' '.join(sent))
+                sent_str = (' ' * (max_char_number - char_number)
+                            + ' '.join(sent))
                 result_list.append(sent_str)
 
             return result_list

@@ -1,33 +1,49 @@
-from os import path
-from setuptools import (setup, find_packages)
+import os
+import sys
+import warnings
+
+from setuptools import setup, find_packages
 
 
-THIS_DIR = path.dirname(__file__)
+_PACKAGE_NAME = 'pylangacq'
+_PYTHON_VERSION = sys.version_info[:3]
+_THIS_DIR = os.path.dirname(os.path.realpath(__file__))
 
-with open(path.join(THIS_DIR, 'pylangacq', 'VERSION')) as f:
-    package_version = f.read().strip()
+with open(os.path.join(_THIS_DIR, _PACKAGE_NAME, '_version.py')) as f:
+    # get __version__
+    exec(f.read())
 
-with open(path.join(THIS_DIR, 'README.rst')) as f:
-    long_description = f.read()
+with open(os.path.join(_THIS_DIR, 'README.rst')) as f:
+    _LONG_DESCRIPTION = f.read().strip()
 
 
 def main():
+    if _PYTHON_VERSION < (3, 5):
+        warnings.warn(
+            'You are currently on Python {py_version}. '
+            'Python < 3.5 is deprecated and not supported '
+            'since pylangacq v0.11.0. '.format(
+                py_version='.'.join(_PYTHON_VERSION)
+            ),
+            DeprecationWarning
+        )
+
     setup(
-        name="pylangacq",
-        version=package_version,
-        description="PyLangAcq: Language Acquisition Research in Python",
-        long_description=long_description,
-        url="http://pylangacq.org/",
-        author="Jackson Lee",
-        author_email="jacksonlunlee@gmail.com",
-        license="MIT License",
+        name=_PACKAGE_NAME,
+        version=__version__,  # noqa: F821
+        description='PyLangAcq: Language Acquisition Research in Python',
+        long_description=_LONG_DESCRIPTION,
+        url='http://pylangacq.org/',
+        author='Jackson Lee',
+        author_email='jacksonlunlee@gmail.com',
+        license='MIT License',
         packages=find_packages(),
         keywords=['computational linguistics', 'natural language processing',
                   'NLP', 'linguistics', 'corpora', 'speech',
                   'language', 'CHILDES', 'CHAT', 'transcription',
                   'acquisition', 'development', 'learning'],
 
-        package_data={'pylangacq': ['VERSION', 'tests/test_data/*']},
+        package_data={'pylangacq': ['tests/test_data/*']},
 
         zip_safe=False,
 
@@ -45,6 +61,7 @@ def main():
             'Programming Language :: Python :: 3.4',
             'Programming Language :: Python :: 3.5',
             'Programming Language :: Python :: 3.6',
+            'Programming Language :: Python :: 3.7',
             'Topic :: Scientific/Engineering',
             'Topic :: Scientific/Engineering :: Artificial Intelligence',
             'Topic :: Scientific/Engineering :: Human Machine Interfaces',
@@ -58,5 +75,5 @@ def main():
     )
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

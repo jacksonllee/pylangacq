@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Transcriptions and annotations &#8212; PyLangAcq 0.10.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -13,7 +11,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Developmental measures" href="devmeasures.html" />
     <link rel="prev" title="Accessing metadata" href="metadata.html" />
@@ -40,10 +38,10 @@ and annotations.
 For metadata access, see <a class="reference internal" href="metadata.html#metadata"><span class="std std-ref">Accessing metadata</span></a>.
 For details of the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> class, see <a class="reference internal" href="chat.html#reader-api"><span class="std std-ref">The Reader class API</span></a>.</p>
 <ul class="simple">
-<li><a class="reference internal" href="#cds"><span class="std std-ref">Child speech versus child directed speech</span></a></li>
-<li><a class="reference internal" href="#word"><span class="std std-ref">The representation of “words”</span></a></li>
-<li><a class="reference internal" href="#utterances"><span class="std std-ref">Utterances</span></a></li>
-<li><a class="reference internal" href="#transcriptions-advanced"><span class="std std-ref">Advanced usage</span></a></li>
+<li><p><a class="reference internal" href="#cds"><span class="std std-ref">Child speech versus child directed speech</span></a></p></li>
+<li><p><a class="reference internal" href="#word"><span class="std std-ref">The representation of “words”</span></a></p></li>
+<li><p><a class="reference internal" href="#utterances"><span class="std std-ref">Utterances</span></a></p></li>
+<li><p><a class="reference internal" href="#transcriptions-advanced"><span class="std std-ref">Advanced usage</span></a></p></li>
 </ul>
 <div class="section" id="child-speech-versus-child-directed-speech">
 <span id="cds"></span><h2>Child speech versus child directed speech<a class="headerlink" href="#child-speech-versus-child-directed-speech" title="Permalink to this headline">¶</a></h2>
@@ -86,11 +84,10 @@ list of methods for the <code class="docutils literal notranslate"><span class="
 <p>The representation of “words” in PyLangAcq comes in two flavors
 (similar to NLTK):</p>
 <ol class="arabic">
-<li><p class="first">The “simple” representation as a <strong>string</strong>,
+<li><p>The “simple” representation as a <strong>string</strong>,
 which is what appears as a word token in a transcription line
-starting with <code class="docutils literal notranslate"><span class="pre">*</span></code> in the CHAT transcript.</p>
-</li>
-<li><p class="first">The “tagged” representation as a <strong>tuple</strong> of (<em>word</em>, <em>pos</em>, <em>mor</em>, <em>rel</em>),
+starting with <code class="docutils literal notranslate"><span class="pre">*</span></code> in the CHAT transcript.</p></li>
+<li><p>The “tagged” representation as a <strong>tuple</strong> of (<em>word</em>, <em>pos</em>, <em>mor</em>, <em>rel</em>),
 which contains information from the transcription line and its <code class="docutils literal notranslate"><span class="pre">%</span></code>-tiers:</p>
 <p><em>word</em> (str) – word token string</p>
 <p><em>pos</em> (str) – part-of-speech tag</p>
@@ -130,42 +127,42 @@ access methods introduced in <a class="reference internal" href="#utterances"><s
 <div class="section" id="utterances">
 <span id="id1"></span><h2>Utterances<a class="headerlink" href="#utterances" title="Permalink to this headline">¶</a></h2>
 <p>To access the utterances in a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object, various methods are available:</p>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="19%" />
-<col width="37%" />
-<col width="44%" />
+<col style="width: 19%" />
+<col style="width: 37%" />
+<col style="width: 44%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Method</th>
-<th class="head">Return type</th>
-<th class="head">Return object</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Return type</p></th>
+<th class="head"><p>Return object</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">words()</span></code></td>
-<td>list of str</td>
-<td>list of word strings</td>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">words()</span></code></p></td>
+<td><p>list of str</p></td>
+<td><p>list of word strings</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tagged_words()</span></code></td>
-<td>list of (str, str, str, (int, int, str))</td>
-<td>list of (<em>word</em>, <em>pos</em>, <em>mor</em>, <em>rel</em>)</td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tagged_words()</span></code></p></td>
+<td><p>list of (str, str, str, (int, int, str))</p></td>
+<td><p>list of (<em>word</em>, <em>pos</em>, <em>mor</em>, <em>rel</em>)</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">sents()</span></code></td>
-<td>list of [list of str]</td>
-<td>list of utterances as lists of word strings</td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sents()</span></code></p></td>
+<td><p>list of [list of str]</p></td>
+<td><p>list of utterances as lists of word strings</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tagged_sents()</span></code></td>
-<td>list of [list of (str, str, str, (int, int, str))]</td>
-<td>list of utterances as lists of (<em>word</em>, <em>pos</em>, <em>mor</em>, <em>rel</em>)</td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tagged_sents()</span></code></p></td>
+<td><p>list of [list of (str, str, str, (int, int, str))]</p></td>
+<td><p>list of utterances as lists of (<em>word</em>, <em>pos</em>, <em>mor</em>, <em>rel</em>)</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">utterances()</span></code></td>
-<td>list of (str, str)</td>
-<td>list of (participant code, utterance)</td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">utterances()</span></code></p></td>
+<td><p>list of (str, str)</p></td>
+<td><p>list of (participant code, utterance)</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">part_of_speech_tags()</span></code></td>
-<td>set of str</td>
-<td>set of part-of-speech tags</td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">part_of_speech_tags()</span></code></p></td>
+<td><p>set of str</p></td>
+<td><p>set of part-of-speech tags</p></td>
 </tr>
 </tbody>
 </table>
@@ -217,13 +214,13 @@ PyLangAcq also provides additional functionalities built on top of these
 methods, and they are described in other parts of the
 documentation:</p>
 <ul class="simple">
-<li><a class="reference internal" href="devmeasures.html#devmeasures"><span class="std std-ref">Developmental measures</span></a></li>
-<li><a class="reference internal" href="freq.html#freq"><span class="std std-ref">Word frequency and ngrams</span></a></li>
-<li><a class="reference internal" href="concord.html#concord"><span class="std std-ref">Word search and concordance</span></a></li>
-<li><a class="reference internal" href="lex.html#lex"><span class="std std-ref">Lexicon and morphology</span></a></li>
-<li><a class="reference internal" href="phono.html#phono"><span class="std std-ref">Phonetics and phonology</span></a></li>
-<li><a class="reference internal" href="synsem.html#synsem"><span class="std std-ref">Syntax and semantics</span></a></li>
-<li><a class="reference internal" href="disca.html#disca"><span class="std std-ref">Discourse and conversational analysis</span></a></li>
+<li><p><a class="reference internal" href="devmeasures.html#devmeasures"><span class="std std-ref">Developmental measures</span></a></p></li>
+<li><p><a class="reference internal" href="freq.html#freq"><span class="std std-ref">Word frequency and ngrams</span></a></p></li>
+<li><p><a class="reference internal" href="concord.html#concord"><span class="std std-ref">Word search and concordance</span></a></p></li>
+<li><p><a class="reference internal" href="lex.html#lex"><span class="std std-ref">Lexicon and morphology</span></a></p></li>
+<li><p><a class="reference internal" href="phono.html#phono"><span class="std std-ref">Phonetics and phonology</span></a></p></li>
+<li><p><a class="reference internal" href="synsem.html#synsem"><span class="std std-ref">Syntax and semantics</span></a></p></li>
+<li><p><a class="reference internal" href="disca.html#disca"><span class="std std-ref">Discourse and conversational analysis</span></a></p></li>
 </ul>
 </div>
 </div>
@@ -285,8 +282,6 @@ documentation:</p>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -304,10 +299,10 @@ documentation:</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2018, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on October 10, 2018.
+      &copy;2015-2019, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on May 22, 2019.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

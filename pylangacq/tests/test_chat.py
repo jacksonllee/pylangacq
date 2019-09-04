@@ -39,7 +39,7 @@ def almost_equal(x, y, tolerance):
     return abs(x - y) <= tolerance
 
 
-@pytest.mark.skipif('TRAVIS' not in os.environ,
+@pytest.mark.skipif('CI' not in os.environ,
                     reason='assuming Brown/ available, speed up local dev '
                            'for running tests without download')
 def test_download_and_extract_brown_zip_file():  # pragma: no cover

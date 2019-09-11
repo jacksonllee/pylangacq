@@ -9,6 +9,7 @@ class DependencyGraph(object):
     tagged_sent : list of tuple(str, str, str, str)
         A tagged sentence as a list of (word, pos, mor, rel).
     """
+
     def __init__(self, tagged_sent):
         self.node = {}  # from node to dict (node's properties)
         self.edge = {}  # from node to node to dict (edge's properties)
@@ -69,19 +70,13 @@ class DependencyGraph(object):
             except ValueError:
                 node1 = -1
                 node2 = -1
-                relation = '**ERROR**'
+                relation = "**ERROR**"
                 self._faulty = True
 
             self.add_edge(node1, node2, rel=relation)
-            self.node[node1] = {'word': word,
-                                'pos': pos,
-                                'mor': mor,
-                                }
+            self.node[node1] = {"word": word, "pos": pos, "mor": mor}
 
-        self.node[0] = {'word': 'ROOT',
-                        'pos': 'ROOT',
-                        'mor': 'ROOT',
-                        }
+        self.node[0] = {"word": "ROOT", "pos": "ROOT", "mor": "ROOT"}
 
     def faulty(self):
         """Determine whether the graph is faulty for dependency information.
@@ -100,43 +95,47 @@ class DependencyGraph(object):
         str
             The LaTeX tikz-dependency code for drawing the graph
         """
-        tikz_dep_code = ''
+        tikz_dep_code = ""
 
         # get graph info
         dep_to_head = dict(self.edges())
         number_of_nodes = self.number_of_nodes()
 
         # add \begin{deptext}...\end{deptext}
-        words = [self.node[n]['word']
-                 for n in range(1, number_of_nodes)]
-        deptext_template = (u'    \\begin{{deptext}}[column sep=1em]\n'
-                            '        {} \\\\ \n'
-                            '    \\end{{deptext}}\n')
-        tikz_dep_code += deptext_template.format(' \\& '.join(words))
+        words = [self.node[n]["word"] for n in range(1, number_of_nodes)]
+        deptext_template = (
+            u"    \\begin{{deptext}}[column sep=1em]\n"
+            "        {} \\\\ \n"
+            "    \\end{{deptext}}\n"
+        )
+        tikz_dep_code += deptext_template.format(" \\& ".join(words))
 
         # add the \deproot line
         dep_shooting_to_root = 0
-        root_rel = ''
+        root_rel = ""
         for dep in range(1, number_of_nodes):
             head = dep_to_head[dep]
             if head == 0:
                 dep_shooting_to_root = dep
-                root_rel = self.edge[dep_shooting_to_root][0]['rel']
+                root_rel = self.edge[dep_shooting_to_root][0]["rel"]
                 break
-        tikz_dep_code += u'    \\deproot{{{}}}{{{}}}\n'.format(
-            dep_shooting_to_root, root_rel)
+        tikz_dep_code += u"    \\deproot{{{}}}{{{}}}\n".format(
+            dep_shooting_to_root, root_rel
+        )
 
         # add the \depedge lines
         for dep in range(1, number_of_nodes):
             head = dep_to_head[dep]
-            rel = self.edge[dep][head]['rel']
-            tikz_dep_code += u'    \\depedge{{{}}}{{{}}}{{{}}}\n'.format(
-                dep, head, rel)
+            rel = self.edge[dep][head]["rel"]
+            tikz_dep_code += u"    \\depedge{{{}}}{{{}}}{{{}}}\n".format(
+                dep, head, rel
+            )
 
         # return tikz_dep_code
         # wrapped inside \begin{dependency}...\end{dependency}
-        dependency_template = (u'\\begin{{dependency}}[theme = simple]\n'
-                               '{}\\end{{dependency}}')
+        dependency_template = (
+            u"\\begin{{dependency}}[theme = simple]\n" "{}\\end{{dependency}}"
+        )
         return dependency_template.format(tikz_dep_code)
 
     def to_conll(self):
@@ -152,9 +151,9 @@ class DependencyGraph(object):
 
         for dep in range(1, self.number_of_nodes()):
             head = dep_to_head[dep]
-            word = self.node[dep]['word']
-            pos = self.node[dep]['pos']
-            rel = self.edge[dep][head]['rel']
-            collector.append(u'{} {} {} {}'.format(word, pos, head, rel))
+            word = self.node[dep]["word"]
+            pos = self.node[dep]["pos"]
+            rel = self.edge[dep][head]["rel"]
+            collector.append(u"{} {} {} {}".format(word, pos, head, rel))
 
-        return '\n'.join(collector)
+        return "\n".join(collector)

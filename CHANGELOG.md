@@ -8,19 +8,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Added
-* Support Python 3.7; turn on Travis CI builds for this Python version. (#7)
+* Started testing Python 3.7 and 3.8 on continuous integration. (#9)
 * Add time marker support (available at `_SingleReader`),
   originally contributed at #3 by @hellolzc. (#8)
 
 ### Changed
-* Remove conversational quotes in utterance processing; updated test CHAT file
+* Switched from Travis CI to CircleCI for autobuilds. (#9)
+* Switched README from reStructuredText to Markdown. (#9)
+* Removed conversational quotes in utterance processing; updated test CHAT file
   to match the latest CHILDES data. (#7)
 
-### Deprecated
-* Python < 3.5. If used, `DeprecationWarning` is raised during
-  installation. (#7)
-
 ### Removed
+* Dropped support for Python 2.7, 3.4, and 3.5.
+  All code related to Python 2+3 cross compatibility was removed. (#9)
+
 ### Fixed
 ### Security
 

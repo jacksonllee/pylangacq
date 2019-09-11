@@ -5,9 +5,6 @@ If anything fails, we probably also have to update the documentation
 (and fix the bugs, if any).
 """
 
-from __future__ import print_function
-
-import sys
 import os
 import zipfile
 import tempfile
@@ -18,19 +15,15 @@ import requests
 from pylangacq import read_chat, Reader
 
 
-if sys.version_info[0] == 2:  # pragma: no coverage
-    from io import open
-
-
 _THIS_DIR = os.path.dirname(__file__)
 
-REMOTE_BROWN_URL = 'https://childes.talkbank.org/data/Eng-NA/Brown.zip'
-REMOTE_BROWN_ZIP_PATH = 'brown.zip'
-REMOTE_EVE_DIR = os.path.abspath(os.path.join('Brown', 'Eve'))
-REMOTE_EVE_FILE_PATH_1 = os.path.join(REMOTE_EVE_DIR, '010600a.cha')
-REMOTE_EVE_FILE_PATH_2 = os.path.join(REMOTE_EVE_DIR, '010600b.cha')
-REMOTE_EVE_FILE_PATH_ALL_FILES = os.path.join(REMOTE_EVE_DIR, '*.cha')
-LOCAL_EVE_PATH = os.path.join(_THIS_DIR, 'test_data', 'eve.cha')
+REMOTE_BROWN_URL = "https://childes.talkbank.org/data/Eng-NA/Brown.zip"
+REMOTE_BROWN_ZIP_PATH = "brown.zip"
+REMOTE_EVE_DIR = os.path.abspath(os.path.join("Brown", "Eve"))
+REMOTE_EVE_FILE_PATH_1 = os.path.join(REMOTE_EVE_DIR, "010600a.cha")
+REMOTE_EVE_FILE_PATH_2 = os.path.join(REMOTE_EVE_DIR, "010600b.cha")
+REMOTE_EVE_FILE_PATH_ALL_FILES = os.path.join(REMOTE_EVE_DIR, "*.cha")
+LOCAL_EVE_PATH = os.path.join(_THIS_DIR, "test_data", "eve.cha")
 
 
 def almost_equal(x, y, tolerance):
@@ -39,22 +32,26 @@ def almost_equal(x, y, tolerance):
     return abs(x - y) <= tolerance
 
 
-@pytest.mark.skipif('TRAVIS' not in os.environ,
-                    reason='assuming Brown/ available, speed up local dev '
-                           'for running tests without download')
+@pytest.mark.skipif(
+    "CI" not in os.environ,
+    reason="assuming Brown/ available, speed up local dev "
+    "for running tests without download",
+)
 def test_download_and_extract_brown_zip_file():  # pragma: no cover
     """pytest runs tests in the same order they are defined in the test
     module, and so this test for downloading and unzipping the Brown zip
     data file runs first. If download fails, abort all tests."""
     try:
-        with open(REMOTE_BROWN_ZIP_PATH, 'wb') as f:
+        with open(REMOTE_BROWN_ZIP_PATH, "wb") as f:
             with requests.get(REMOTE_BROWN_URL) as r:
                 f.write(r.content)
     except Exception as e:
-        msg = ('Error in downloading {}: '
-               'network problems or invalid URL for Brown zip? '
-               'If URL needs updating, tutorial.rst in docs '
-               'has to be updated as well.'.format(REMOTE_BROWN_URL))
+        msg = (
+            "Error in downloading {}: "
+            "network problems or invalid URL for Brown zip? "
+            "If URL needs updating, tutorial.rst in docs "
+            "has to be updated as well.".format(REMOTE_BROWN_URL)
+        )
         try:
             raise e
         finally:
@@ -69,45 +66,56 @@ def test_download_and_extract_brown_zip_file():  # pragma: no cover
 
 @pytest.fixture
 def eve_one_file():
-    return read_chat(LOCAL_EVE_PATH, encoding='utf-8')
+    return read_chat(LOCAL_EVE_PATH, encoding="utf-8")
 
 
 @pytest.fixture
 def eve_all_files():
-    return read_chat(REMOTE_EVE_FILE_PATH_ALL_FILES, encoding='utf-8')
+    return read_chat(REMOTE_EVE_FILE_PATH_ALL_FILES, encoding="utf-8")
 
 
-@pytest.mark.parametrize('classmethod,arg', [
-    pytest.param(Reader.from_chat_str,
-                 open(LOCAL_EVE_PATH, encoding='utf-8').read(),
-                 id='from_chat_str'),
-    pytest.param(Reader.from_chat_files,
-                 LOCAL_EVE_PATH,
-                 id='from_chat_files')
-])
+@pytest.mark.parametrize(
+    "classmethod,arg",
+    [
+        pytest.param(
+            Reader.from_chat_str,
+            open(LOCAL_EVE_PATH, encoding="utf-8").read(),
+            id="from_chat_str",
+        ),
+        pytest.param(
+            Reader.from_chat_files, LOCAL_EVE_PATH, id="from_chat_files"
+        ),
+    ],
+)
 def test_instantiate_reader(classmethod, arg):
     """`read_chat` and the from_x classmethods works the same."""
-    reader_from_classmethod = classmethod(arg, encoding='utf-8')
-    reader_from_read_chat = read_chat(REMOTE_EVE_FILE_PATH_1, encoding='utf-8')
+    from_classmethod = classmethod(arg, encoding="utf-8")
+    from_read_chat = read_chat(REMOTE_EVE_FILE_PATH_1, encoding="utf-8")
 
     # "header" and "index_to_tiers" combined cover the entire data file
-    header_from_classmethod = list(reader_from_classmethod.headers().values())[0]  # noqa
-    header_from_read_chat = list(reader_from_read_chat.headers().values())[0]
+    header_from_classmethod = list(from_classmethod.headers().values())[0]
+    header_from_read_chat = list(from_read_chat.headers().values())[0]
 
-    index_to_tiers_from_classmethod = list(reader_from_classmethod.index_to_tiers().values())[0]  # noqa
-    index_to_tiers_from_read_chat = list(reader_from_read_chat.index_to_tiers().values())[0]  # noqa
+    index_to_tiers_from_classmethod = list(
+        from_classmethod.index_to_tiers().values()
+    )[0]
+    index_to_tiers_from_read_chat = list(
+        from_read_chat.index_to_tiers().values()
+    )[0]
 
     assert header_from_classmethod == header_from_read_chat
-    assert len(index_to_tiers_from_classmethod) == len(index_to_tiers_from_read_chat)  # noqa
+    assert len(index_to_tiers_from_classmethod) == len(
+        index_to_tiers_from_read_chat
+    )
 
     for (i_c, tier_c), (i_r, tier_r) in zip(
-            sorted(index_to_tiers_from_classmethod.items()),
-            sorted(index_to_tiers_from_read_chat.items())
+        sorted(index_to_tiers_from_classmethod.items()),
+        sorted(index_to_tiers_from_read_chat.items()),
     ):
         try:
             assert tier_c == tier_r
         except AssertionError:
-            print('i_c:', i_c, 'i_r:', i_r)
+            print("i_c:", i_c, "i_r:", i_r)
             raise
 
 
@@ -144,13 +152,13 @@ def test_add(eve_one_file):
 
     # Add a non-existing file => should throw an error
     with pytest.raises(ValueError):
-        eve_one_file.add('foo')
+        eve_one_file.add("foo")
 
 
 def test_remove(eve_one_file):
     # Remove a non-existing file => should throw an error
     with pytest.raises(ValueError):
-        eve_one_file.remove('foo')
+        eve_one_file.remove("foo")
 
     # Remove an existing file NOT in reader => should throw an error
     with tempfile.NamedTemporaryFile() as dummy_file:
@@ -172,24 +180,25 @@ def test_clear(eve_one_file):
 
 
 def test_filenames(eve_all_files):
-    expected_filenames = [os.path.abspath(os.path.join(REMOTE_EVE_DIR, x))
-                          for x in sorted(os.listdir(REMOTE_EVE_DIR))]
+    expected_filenames = [
+        os.path.abspath(os.path.join(REMOTE_EVE_DIR, x))
+        for x in sorted(os.listdir(REMOTE_EVE_DIR))
+    ]
     assert eve_all_files.filenames() == set(expected_filenames)
     assert eve_all_files.filenames(sorted_by_age=True) == expected_filenames
 
 
 def test_number_of_utterances(eve_one_file):
-    assert almost_equal(eve_one_file.number_of_utterances(), 1601,
-                        tolerance=3)
+    assert almost_equal(eve_one_file.number_of_utterances(), 1601, tolerance=3)
     assert almost_equal(
         eve_one_file.number_of_utterances(by_files=True)[LOCAL_EVE_PATH],
         1601,
-        tolerance=3
+        tolerance=3,
     )
 
 
 def test_participant_codes(eve_one_file):
-    expected_codes = {'CHI', 'MOT', 'COL', 'RIC'}
+    expected_codes = {"CHI", "MOT", "COL", "RIC"}
     assert eve_one_file.participant_codes() == expected_codes
     assert eve_one_file.participant_codes(by_files=True) == {
         LOCAL_EVE_PATH: expected_codes
@@ -197,12 +206,13 @@ def test_participant_codes(eve_one_file):
 
 
 def test_languages(eve_one_file):
-    assert eve_one_file.languages() == {LOCAL_EVE_PATH: ['eng']}
+    assert eve_one_file.languages() == {LOCAL_EVE_PATH: ["eng"]}
 
 
 def test_dates_of_recording(eve_one_file):
     assert eve_one_file.dates_of_recording() == {
-        LOCAL_EVE_PATH: [(1962, 10, 15), (1962, 10, 17)]}
+        LOCAL_EVE_PATH: [(1962, 10, 15), (1962, 10, 17)]
+    }
 
 
 def test_age(eve_one_file):
@@ -213,21 +223,26 @@ def test_age(eve_one_file):
 def test_words(eve_one_file):
     words = eve_one_file.words()
     assert almost_equal(len(words), 5843, tolerance=3)
-    assert words[:5] == ['more', 'cookie', '.', 'you', '0v']
+    assert words[:5] == ["more", "cookie", ".", "you", "0v"]
 
 
 def test_tagged_words(eve_one_file):
-    tagged_words = eve_one_file.tagged_words(participant='MOT')
+    tagged_words = eve_one_file.tagged_words(participant="MOT")
     assert tagged_words[:2] == [
-        ('you', 'PRO:PER', 'you', (1, 2, 'SUBJ')),
-        ('0v', '0V', 'v', (2, 0, 'ROOT')),
+        ("you", "PRO:PER", "you", (1, 2, "SUBJ")),
+        ("0v", "0V", "v", (2, 0, "ROOT")),
     ]
 
 
 def test_word_frequency(eve_all_files):
     word_freq = eve_all_files.word_frequency()
-    expected_top_five = [('.', 20130), ('?', 6358), ('you', 3695),
-                         ('the', 2524), ('it', 2365)]
+    expected_top_five = [
+        (".", 20130),
+        ("?", 6358),
+        ("you", 3695),
+        ("the", 2524),
+        ("it", 2365),
+    ]
     for expected, actual in zip(expected_top_five, word_freq.most_common(5)):
         expected_word, expected_freq = expected
         actual_word, actual_freq = actual
@@ -237,9 +252,13 @@ def test_word_frequency(eve_all_files):
 
 def test_word_ngrams(eve_all_files):
     bigrams = eve_all_files.word_ngrams(2)
-    expected_top_five = [(('it', '.'), 705), (('that', '?'), 619),
-                         (('what', '?'), 560), (('yeah', '.'), 510),
-                         (('there', '.'), 471)]
+    expected_top_five = [
+        (("it", "."), 705),
+        (("that", "?"), 619),
+        (("what", "?"), 560),
+        (("yeah", "."), 510),
+        (("there", "."), 471),
+    ]
     for expected, actual in zip(expected_top_five, bigrams.most_common(5)):
         expected_bigram, expected_freq = expected
         actual_bigram, actual_freq = actual
@@ -249,132 +268,156 @@ def test_word_ngrams(eve_all_files):
 
 def test_participants(eve_one_file):
     assert eve_one_file.participants()[LOCAL_EVE_PATH] == {
-        'CHI': {'SES': '',
-                'age': '1;06.00',
-                'corpus': 'Brown',
-                'custom': '',
-                'education': '',
-                'group': '',
-                'language': 'eng',
-                'participant_name': 'Eve',
-                'participant_role': 'Target_Child',
-                'sex': 'female'},
-        'COL': {'SES': '',
-                'age': '',
-                'corpus': 'Brown',
-                'custom': '',
-                'education': '',
-                'group': '',
-                'language': 'eng',
-                'participant_name': 'Colin',
-                'participant_role': 'Investigator',
-                'sex': ''},
-        'MOT': {'SES': '',
-                'age': '',
-                'corpus': 'Brown',
-                'custom': '',
-                'education': '',
-                'group': '',
-                'language': 'eng',
-                'participant_name': 'Sue',
-                'participant_role': 'Mother',
-                'sex': 'female'},
-        'RIC': {'SES': '',
-                'age': '',
-                'corpus': 'Brown',
-                'custom': '',
-                'education': '',
-                'group': '',
-                'language': 'eng',
-                'participant_name': 'Richard',
-                'participant_role': 'Investigator',
-                'sex': ''}
+        "CHI": {
+            "SES": "",
+            "age": "1;06.00",
+            "corpus": "Brown",
+            "custom": "",
+            "education": "",
+            "group": "",
+            "language": "eng",
+            "participant_name": "Eve",
+            "participant_role": "Target_Child",
+            "sex": "female",
+        },
+        "COL": {
+            "SES": "",
+            "age": "",
+            "corpus": "Brown",
+            "custom": "",
+            "education": "",
+            "group": "",
+            "language": "eng",
+            "participant_name": "Colin",
+            "participant_role": "Investigator",
+            "sex": "",
+        },
+        "MOT": {
+            "SES": "",
+            "age": "",
+            "corpus": "Brown",
+            "custom": "",
+            "education": "",
+            "group": "",
+            "language": "eng",
+            "participant_name": "Sue",
+            "participant_role": "Mother",
+            "sex": "female",
+        },
+        "RIC": {
+            "SES": "",
+            "age": "",
+            "corpus": "Brown",
+            "custom": "",
+            "education": "",
+            "group": "",
+            "language": "eng",
+            "participant_name": "Richard",
+            "participant_role": "Investigator",
+            "sex": "",
+        },
     }
 
 
 def test_headers(eve_one_file):
     assert eve_one_file.headers()[LOCAL_EVE_PATH] == {
-        'Date': ['15-OCT-1962', '17-OCT-1962'],
-        'Languages': 'eng',
-        'PID': '11312/c-00034743-1',
-        'Participants': {'CHI': {'SES': '',
-                                 'age': '1;06.00',
-                                 'corpus': 'Brown',
-                                 'custom': '',
-                                 'education': '',
-                                 'group': '',
-                                 'language': 'eng',
-                                 'participant_name': 'Eve',
-                                 'participant_role': 'Target_Child',
-                                 'sex': 'female'},
-                         'COL': {'SES': '',
-                                 'age': '',
-                                 'corpus': 'Brown',
-                                 'custom': '',
-                                 'education': '',
-                                 'group': '',
-                                 'language': 'eng',
-                                 'participant_name': 'Colin',
-                                 'participant_role': 'Investigator',
-                                 'sex': ''},
-                         'MOT': {'SES': '',
-                                 'age': '',
-                                 'corpus': 'Brown',
-                                 'custom': '',
-                                 'education': '',
-                                 'group': '',
-                                 'language': 'eng',
-                                 'participant_name': 'Sue',
-                                 'participant_role': 'Mother',
-                                 'sex': 'female'},
-                         'RIC': {'SES': '',
-                                 'age': '',
-                                 'corpus': 'Brown',
-                                 'custom': '',
-                                 'education': '',
-                                 'group': '',
-                                 'language': 'eng',
-                                 'participant_name': 'Richard',
-                                 'participant_role': 'Investigator',
-                                 'sex': ''}},
-        'Tape Location': '850',
-        'Time Duration': '11:30-12:00',
-        'UTF8': ''
+        "Date": ["15-OCT-1962", "17-OCT-1962"],
+        "Languages": "eng",
+        "PID": "11312/c-00034743-1",
+        "Participants": {
+            "CHI": {
+                "SES": "",
+                "age": "1;06.00",
+                "corpus": "Brown",
+                "custom": "",
+                "education": "",
+                "group": "",
+                "language": "eng",
+                "participant_name": "Eve",
+                "participant_role": "Target_Child",
+                "sex": "female",
+            },
+            "COL": {
+                "SES": "",
+                "age": "",
+                "corpus": "Brown",
+                "custom": "",
+                "education": "",
+                "group": "",
+                "language": "eng",
+                "participant_name": "Colin",
+                "participant_role": "Investigator",
+                "sex": "",
+            },
+            "MOT": {
+                "SES": "",
+                "age": "",
+                "corpus": "Brown",
+                "custom": "",
+                "education": "",
+                "group": "",
+                "language": "eng",
+                "participant_name": "Sue",
+                "participant_role": "Mother",
+                "sex": "female",
+            },
+            "RIC": {
+                "SES": "",
+                "age": "",
+                "corpus": "Brown",
+                "custom": "",
+                "education": "",
+                "group": "",
+                "language": "eng",
+                "participant_name": "Richard",
+                "participant_role": "Investigator",
+                "sex": "",
+            },
+        },
+        "Tape Location": "850",
+        "Time Duration": "11:30-12:00",
+        "UTF8": "",
     }
 
 
 def test_sents(eve_one_file):
     assert eve_one_file.sents()[:2] == [
-        ['more', 'cookie', '.'], ['you', '0v', 'more', 'cookies', '?']
+        ["more", "cookie", "."],
+        ["you", "0v", "more", "cookies", "?"],
     ]
 
 
 def test_tagged_sents(eve_one_file):
     assert eve_one_file.tagged_sents()[:2] == [
-        [('more', 'QN', 'more', (1, 2, 'QUANT')),
-         ('cookie', 'N', 'cookie', (2, 0, 'INCROOT')),
-         ('.', '.', '', (3, 2, 'PUNCT'))],
-        [('you', 'PRO:PER', 'you', (1, 2, 'SUBJ')),
-         ('0v', '0V', 'v', (2, 0, 'ROOT')),
-         ('more', 'QN', 'more', (3, 4, 'QUANT')),
-         ('cookies', 'N', 'cookie-PL', (4, 2, 'OBJ')),
-         ('?', '?', '', (5, 2, 'PUNCT'))]
+        [
+            ("more", "QN", "more", (1, 2, "QUANT")),
+            ("cookie", "N", "cookie", (2, 0, "INCROOT")),
+            (".", ".", "", (3, 2, "PUNCT")),
+        ],
+        [
+            ("you", "PRO:PER", "you", (1, 2, "SUBJ")),
+            ("0v", "0V", "v", (2, 0, "ROOT")),
+            ("more", "QN", "more", (3, 4, "QUANT")),
+            ("cookies", "N", "cookie-PL", (4, 2, "OBJ")),
+            ("?", "?", "", (5, 2, "PUNCT")),
+        ],
     ]
 
 
 def test_utterances(eve_one_file):
     assert eve_one_file.utterances()[:5] == [
-        ('CHI', 'more cookie .'),
-        ('MOT', 'you 0v more cookies ?'),
-        ('MOT', 'how_about another graham+cracker ?'),
-        ('MOT', 'would that do just as_well ?'),
-        ('MOT', 'here .')
+        ("CHI", "more cookie ."),
+        ("MOT", "you 0v more cookies ?"),
+        ("MOT", "how_about another graham+cracker ?"),
+        ("MOT", "would that do just as_well ?"),
+        ("MOT", "here ."),
     ]
 
 
 def test_part_of_speech_tags(eve_all_files):
-    assert almost_equal(len(eve_all_files.part_of_speech_tags()), 62,
-                        tolerance=2)
+    assert almost_equal(
+        len(eve_all_files.part_of_speech_tags()), 62, tolerance=2
+    )
 
 
 def test_mlu_m(eve_one_file):

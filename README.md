@@ -28,7 +28,42 @@ pip install -U pylangacq
 
 PyLangAcq works with Python 3.6 or above.
 
-## How to cite
+## Development
+
+The source code of PyLangAcq is hosted on GitHub at
+https://github.com/jacksonllee/pylangacq,
+where development also happens.
+
+For the latest changes not yet released through `pip` or working on the codebase
+yourself, you may obtain the latest source code through GitHub and `git`:
+
+1. Create a fork of the `pylangacq` repo under your GitHub account.
+2. Locally, make sure you are in some sort of a virtual environment
+   (venv, virtualenv, conda, etc).
+3. Download and install the library in the "editable" mode
+   together with the core and dev dependencies within the virtual environment:
+
+    ```bash
+    git clone https://github.com/<your-github-username>/pylangacq.git
+    cd pylangacq
+    pip install --upgrade pip setuptools
+    pip install -r requirements.txt
+    pip install -e .
+    ```
+
+We keep track of notable changes in
+[CHANGELOG.md](https://github.com/jacksonllee/pylangacq/blob/master/CHANGELOG.md).
+
+## Contribution
+
+For questions, bug reports, and feature requests,
+please [file an issue](https://github.com/jacksonllee/pylangacq/issues).
+
+If you would like to contribute to the `pylangacq` codebase,
+please see
+[CONTRIBUTING.md](https://github.com/jacksonllee/pylangacq/blob/master/CONTRIBUTING.md).
+
+## How to Cite
 
 PyLangAcq is maintained by [Jackson Lee](http://jacksonllee.com/).
 If you use PyLangAcq in your research, please cite the following:
@@ -47,10 +82,6 @@ Department of Computer Science, University of Chicago.
    Number      = {TR-2016-02},
 }
 ```
-
-## Change log
-
-See [CHANGELOG.md](https://github.com/jacksonllee/pylangacq/blob/master/CHANGELOG.md).
 
 ## License
 

@@ -36,7 +36,7 @@ jobs:
           working_directory: ~/
           # Avoid being able to do relative imports.
           # Test code by importing the *installed* library in site-packages.
-          command: flake8 project/pylangacq
+          command: flake8 project/setup.py project/pylangacq
       - run:
           name: Run python tests
           working_directory: ~/

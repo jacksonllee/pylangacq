@@ -1,9 +1,9 @@
 import re
 
 
-CLITIC = 'CLITIC'
-ENCODING = 'utf8'
-TIMER_MARKER_REG = re.compile(r'\x15-?(\d+)_(\d+)-?\x15')
+CLITIC = "CLITIC"
+ENCODING = "utf8"
+TIMER_MARKER_REG = re.compile(r"\x15-?(\d+)_(\d+)-?\x15")
 
 
 def clean_utterance(utterance, phon=False):
@@ -53,28 +53,28 @@ def clean_utterance(utterance, phon=False):
 
     # print('utterance:', utterance, type(utterance))
 
-    utterance = re.sub(r'\[= [^\[]+?\]', '', utterance)
-    utterance = re.sub(r'\[x \d+?\]', '', utterance)
-    utterance = re.sub(r'\[\+ [^\[]+?\]', '', utterance)
-    utterance = re.sub(r'\[\* [^\[]+?\]', '', utterance)
-    utterance = re.sub(r'\[=\? [^\[]+?\]', '', utterance)
-    utterance = re.sub(r'\[=! [^\[]+?\]', '', utterance)
-    utterance = re.sub(r'\[% [^\[]+?\]', '', utterance)
-    utterance = re.sub(r'\[- [^\[]+?\]', '', utterance)
-    utterance = re.sub(r'\[\^ [^\[]+?\]', '', utterance)
-    utterance = re.sub(r'[^]+?', '', utterance)  # TODO: Why need this?!
-    utterance = re.sub(r'\[<\d?\]', '', utterance)
-    utterance = re.sub(r'\[>\d?\]', '', utterance)
-    utterance = re.sub(r'\(\d+?\.?\d*?\)', '', utterance)
-    utterance = re.sub(r'\[%act: [^\[]+?\]', '', utterance)
+    utterance = re.sub(r"\[= [^\[]+?\]", "", utterance)
+    utterance = re.sub(r"\[x \d+?\]", "", utterance)
+    utterance = re.sub(r"\[\+ [^\[]+?\]", "", utterance)
+    utterance = re.sub(r"\[\* [^\[]+?\]", "", utterance)
+    utterance = re.sub(r"\[=\? [^\[]+?\]", "", utterance)
+    utterance = re.sub(r"\[=! [^\[]+?\]", "", utterance)
+    utterance = re.sub(r"\[% [^\[]+?\]", "", utterance)
+    utterance = re.sub(r"\[- [^\[]+?\]", "", utterance)
+    utterance = re.sub(r"\[\^ [^\[]+?\]", "", utterance)
+    utterance = re.sub(r"[^]+?", "", utterance)  # TODO: Why need this?!
+    utterance = re.sub(r"\[<\d?\]", "", utterance)
+    utterance = re.sub(r"\[>\d?\]", "", utterance)
+    utterance = re.sub(r"\(\d+?\.?\d*?\)", "", utterance)
+    utterance = re.sub(r"\[%act: [^\[]+?\]", "", utterance)
 
-    utterance = re.sub(r'\[\?\]', '', utterance)
-    utterance = re.sub(r'\[\!\]', '', utterance)
-    utterance = re.sub(r'‹', '', utterance)
-    utterance = re.sub(r'›', '', utterance)
+    utterance = re.sub(r"\[\?\]", "", utterance)
+    utterance = re.sub(r"\[\!\]", "", utterance)
+    utterance = re.sub(r"‹", "", utterance)
+    utterance = re.sub(r"›", "", utterance)
 
-    utterance = re.sub(r'\[\*\] \[/', '[/', utterance)
-    utterance = re.sub(r'\] \[\*\]', ']', utterance)
+    utterance = re.sub(r"\[\*\] \[/", "[/", utterance)
+    utterance = re.sub(r"\] \[\*\]", "]", utterance)
 
     utterance = remove_extra_spaces(utterance)
     # print('step 1:', utterance)
@@ -94,18 +94,18 @@ def clean_utterance(utterance, phon=False):
     #     (.) (short pause)
     # then pad them with extra spaces.
 
-    utterance = re.sub(r'<', ' <', utterance)
-    utterance = re.sub(r'\+ <', '+<', utterance)
-    utterance = re.sub(r'>', '> ', utterance)
-    utterance = re.sub(r'\[', ' [', utterance)
-    utterance = re.sub(r'\]', '] ', utterance)
-    utterance = re.sub(r'“', ' “ ', utterance)
-    utterance = re.sub(r'”', ' ” ', utterance)
-    utterance = re.sub(r',', ' , ', utterance)  # works together with next line
-    utterance = re.sub(r'\+ ,', '+,', utterance)
-    utterance = re.sub(r'[^\[\./!]\?', ' ? ', utterance)
+    utterance = re.sub(r"<", " <", utterance)
+    utterance = re.sub(r"\+ <", "+<", utterance)
+    utterance = re.sub(r">", "> ", utterance)
+    utterance = re.sub(r"\[", " [", utterance)
+    utterance = re.sub(r"\]", "] ", utterance)
+    utterance = re.sub(r"“", " “ ", utterance)
+    utterance = re.sub(r"”", " ” ", utterance)
+    utterance = re.sub(r",", " , ", utterance)  # works together with next line
+    utterance = re.sub(r"\+ ,", "+,", utterance)
+    utterance = re.sub(r"[^\[\./!]\?", " ? ", utterance)
     # utterance = re.sub('[^\(\[\.\+]\.', ' . ', utterance)
-    utterance = re.sub(r'\(\.\)', ' (.) ', utterance)
+    utterance = re.sub(r"\(\.\)", " (.) ", utterance)
     utterance = remove_extra_spaces(utterance)
     # print('step 2:', utterance)
 
@@ -123,51 +123,56 @@ def clean_utterance(utterance, phon=False):
     # 3. Delete the unwanted words on the left of the signaling annotations.
 
     angle_brackets_l2r_pairs = {}  # left-to-right
-    for index_ in find_indices(utterance, '<'):
+    for index_ in find_indices(utterance, "<"):
         counter = 1
         for i in range(index_ + 1, len(utterance)):
-            if utterance[i] == '<':
+            if utterance[i] == "<":
                 counter += 1
-            elif utterance[i] == '>':
+            elif utterance[i] == ">":
                 counter -= 1
 
             if counter == 0:
                 angle_brackets_l2r_pairs[index_] = i
                 break
-    angle_brackets_r2l_pairs = {v: k
-                                for k, v in angle_brackets_l2r_pairs.items()}
+    angle_brackets_r2l_pairs = {
+        v: k for k, v in angle_brackets_l2r_pairs.items()
+    }
 
     index_pairs = []  # characters bounded by index pairs to be removed
 
     # remove ' [///]'
-    triple_slash_right_indices = find_indices(utterance, r'> \[///\]')
-    index_pairs += [(begin + 1, begin + 6)
-                    for begin in triple_slash_right_indices]
+    triple_slash_right_indices = find_indices(utterance, r"> \[///\]")
+    index_pairs += [
+        (begin + 1, begin + 6) for begin in triple_slash_right_indices
+    ]
 
     # remove ' [//]'
-    double_overlap_right_indices = find_indices(utterance, r'> \[//\]')
-    index_pairs += [(begin + 1, begin + 5)
-                    for begin in double_overlap_right_indices]
+    double_overlap_right_indices = find_indices(utterance, r"> \[//\]")
+    index_pairs += [
+        (begin + 1, begin + 5) for begin in double_overlap_right_indices
+    ]
 
     # remove ' [/]'
-    single_overlap_right_indices = find_indices(utterance, r'> \[/\]')
-    index_pairs += [(begin + 1, begin + 4)
-                    for begin in single_overlap_right_indices]
+    single_overlap_right_indices = find_indices(utterance, r"> \[/\]")
+    index_pairs += [
+        (begin + 1, begin + 4) for begin in single_overlap_right_indices
+    ]
 
     # remove ' [/?]'
-    slash_question_indices = find_indices(utterance, r'> \[/\?\]')
-    index_pairs += [(begin + 1, begin + 4)
-                    for begin in slash_question_indices]
+    slash_question_indices = find_indices(utterance, r"> \[/\?\]")
+    index_pairs += [(begin + 1, begin + 4) for begin in slash_question_indices]
 
     # remove ' [::'
-    double_error_right_indices = find_indices(utterance, r'> \[::')
-    index_pairs += [(begin + 1, begin + 4)
-                    for begin in double_error_right_indices]
+    double_error_right_indices = find_indices(utterance, r"> \[::")
+    index_pairs += [
+        (begin + 1, begin + 4) for begin in double_error_right_indices
+    ]
 
     # remove ' [:'
-    single_error_right_indices = find_indices(utterance, r'> \[: ')
-    index_pairs += [(begin + 1, begin + 3)
-                    for begin in single_error_right_indices]
+    single_error_right_indices = find_indices(utterance, r"> \[: ")
+    index_pairs += [
+        (begin + 1, begin + 3) for begin in single_error_right_indices
+    ]
 
     right_indices = (
         double_overlap_right_indices
@@ -178,59 +183,69 @@ def clean_utterance(utterance, phon=False):
         + slash_question_indices
     )
 
-    index_pairs = index_pairs + [(angle_brackets_r2l_pairs[right], right)
-                                 for right in sorted(right_indices)]
+    index_pairs = index_pairs + [
+        (angle_brackets_r2l_pairs[right], right)
+        for right in sorted(right_indices)
+    ]
     indices_to_ignore = set()
     for left, right in index_pairs:
         for i in range(left, right + 1):
             indices_to_ignore.add(i)
 
-    new_utterance = ''
+    new_utterance = ""
     for i in range(len(utterance)):
         if i not in indices_to_ignore:
             new_utterance += utterance[i]
     utterance = new_utterance
 
-    utterance = re.sub(r'\S+? \[/\]', '', utterance)
-    utterance = re.sub(r'\S+? \[//\]', '', utterance)
-    utterance = re.sub(r'\S+? \[///\]', '', utterance)
-    utterance = re.sub(r'\S+? \[/\?\]', '', utterance)
+    utterance = re.sub(r"\S+? \[/\]", "", utterance)
+    utterance = re.sub(r"\S+? \[//\]", "", utterance)
+    utterance = re.sub(r"\S+? \[///\]", "", utterance)
+    utterance = re.sub(r"\S+? \[/\?\]", "", utterance)
 
-    utterance = re.sub(r'\S+? \[::', '', utterance)
-    utterance = re.sub(r'\S+? \[:', '', utterance)
+    utterance = re.sub(r"\S+? \[::", "", utterance)
+    utterance = re.sub(r"\S+? \[:", "", utterance)
 
     utterance = remove_extra_spaces(utterance)
     # print('step 3:', utterance)
 
     # Step 4: Remove unwanted symbols
-    utterance = re.sub(r'“', '', utterance)
-    utterance = re.sub(r'”', '', utterance)
+    utterance = re.sub(r"“", "", utterance)
+    utterance = re.sub(r"”", "", utterance)
 
     utterance = remove_extra_spaces(utterance)
 
     # Step 5: Split utterance by spaces and determine whether to keep items.
 
-    escape_prefixes = {'[?', '[/', '[<', '[>', '[:', '[!', '[*',
-                       '+"', '+,', '<&'}
-    escape_words = {'0', '++', '+<', '+^',
-                    '(.)', '(..)', '(...)',
-                    ':', ';'}
-    keep_prefixes = {'+"/', '+,/', '+".'}
+    escape_prefixes = {
+        "[?",
+        "[/",
+        "[<",
+        "[>",
+        "[:",
+        "[!",
+        "[*",
+        '+"',
+        "+,",
+        "<&",
+    }
+    escape_words = {"0", "++", "+<", "+^", "(.)", "(..)", "(...)", ":", ";"}
+    keep_prefixes = {'+"/', "+,/", '+".'}
 
     if not phon:
-        escape_words.update({'xxx', 'yyy', 'www', 'xxx:', 'yyy:'})
-        escape_prefixes.update({'&'})
+        escape_words.update({"xxx", "yyy", "www", "xxx:", "yyy:"})
+        escape_prefixes.update({"&"})
     else:
-        escape_words.update({','})
-        escape_prefixes.update({'0'})
+        escape_words.update({","})
+        escape_prefixes.update({"0"})
 
     words = utterance.split()
     new_words = []
 
     for word in words:
-        word = re.sub(r'\A<', '', word)   # remove beginning <
-        word = re.sub(r'>\Z', '', word)   # remove final >
-        word = re.sub(r'\]\Z', '', word)  # remove final ]
+        word = re.sub(r"\A<", "", word)  # remove beginning <
+        word = re.sub(r">\Z", "", word)  # remove final >
+        word = re.sub(r"\]\Z", "", word)  # remove final ]
 
         not_an_escape_word = word not in escape_words
         no_escape_prefix = not any(word.startswith(e) for e in escape_prefixes)
@@ -241,7 +256,7 @@ def clean_utterance(utterance, phon=False):
 
     # print('step 5:', remove_extra_spaces(' '.join(new_words)))
 
-    return remove_extra_spaces(' '.join(new_words))
+    return remove_extra_spaces(" ".join(new_words))
 
 
 def get_time_marker(utterance):  # TODO write tests this function
@@ -275,7 +290,7 @@ def get_time_marker(utterance):  # TODO write tests this function
         stop = int(time_marker[1])
         return start, stop
     else:
-        msg = 'Utterance does not have a standard time marker: %s' % utterance
+        msg = "Utterance does not have a standard time marker: %s" % utterance
         raise ValueError(msg)
 
 
@@ -294,7 +309,7 @@ def get_participant_code(tier_marker_seq):
         Return ``None`` if no participant code is found.
     """
     for tier_marker in tier_marker_seq:
-        if not tier_marker.startswith('%'):
+        if not tier_marker.startswith("%"):
             return tier_marker
     return None
 
@@ -310,18 +325,18 @@ def clean_word(word):
     -------
     str
     """
-    new_word = (word
-                .replace('(', '')
-                .replace(')', '')
-                .replace(':', '')
-                .replace(';', '')
-                .replace('+', '')
-                )
+    new_word = (
+        word.replace("(", "")
+        .replace(")", "")
+        .replace(":", "")
+        .replace(";", "")
+        .replace("+", "")
+    )
 
-    if '@' in new_word:
-        new_word = new_word[: new_word.index('@')]
+    if "@" in new_word:
+        new_word = new_word[: new_word.index("@")]
 
-    if new_word.startswith('&'):
+    if new_word.startswith("&"):
         new_word = new_word[1:]
 
     return new_word
@@ -345,23 +360,23 @@ def convert_date_to_tuple(date_str):
     (2016, 2, 1)
     """
     try:
-        day_str, month_str, year_str = date_str.split('-')
+        day_str, month_str, year_str = date_str.split("-")
         day = int(day_str)
         year = int(year_str)
 
         month_to_int = {
-            'JAN': 1,
-            'FEB': 2,
-            'MAR': 3,
-            'APR': 4,
-            'MAY': 5,
-            'JUN': 6,
-            'JUL': 7,
-            'AUG': 8,
-            'SEP': 9,
-            'OCT': 10,
-            'NOV': 11,
-            'DEC': 12,
+            "JAN": 1,
+            "FEB": 2,
+            "MAR": 3,
+            "APR": 4,
+            "MAY": 5,
+            "JUN": 6,
+            "JUL": 7,
+            "AUG": 8,
+            "SEP": 9,
+            "OCT": 10,
+            "NOV": 11,
+            "DEC": 12,
         }
 
         month = month_to_int[month_str]
@@ -381,8 +396,8 @@ def get_lemma_from_mor(mor):
     -------
     str
     """
-    lemma, _, _ = mor.partition('-')
-    lemma, _, _ = lemma.partition('&')
+    lemma, _, _ = mor.partition("-")
+    lemma, _, _ = lemma.partition("&")
     return lemma
 
 
@@ -397,8 +412,8 @@ def remove_extra_spaces(inputstr):
     -------
     str
     """
-    while '  ' in inputstr:
-        inputstr = inputstr.replace('  ', ' ')
+    while "  " in inputstr:
+        inputstr = inputstr.replace("  ", " ")
     return inputstr.strip()
 
 

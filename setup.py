@@ -74,9 +74,7 @@ def main():
             "Topic :: Text Processing :: Indexing",
             "Topic :: Text Processing :: Linguistic",
         ],
-        data_files=[
-            (".", ["LICENSE.txt", "CHANGELOG.md"]),
-        ],
+        data_files=[(".", ["LICENSE.txt", "CHANGELOG.md"])],
     )
 
 

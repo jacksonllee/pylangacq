@@ -13,10 +13,16 @@ from itertools import chain
 from functools import wraps
 
 from pylangacq.measures import get_MLUm, get_MLUw, get_TTR, get_IPSyn
-from pylangacq.util import (ENCODING, CLITIC,
-                            get_participant_code, convert_date_to_tuple,
-                            clean_utterance, clean_word, get_lemma_from_mor,
-                            get_time_marker)
+from pylangacq.util import (
+    ENCODING,
+    CLITIC,
+    get_participant_code,
+    convert_date_to_tuple,
+    clean_utterance,
+    clean_word,
+    get_lemma_from_mor,
+    get_time_marker,
+)
 
 
 _TEMP_DIR = tempfile.mkdtemp()
@@ -48,23 +54,23 @@ def read_chat(*filenames, **kwargs):
 
 
 def params_in_docstring(*params):
-    docstring = ''
-    if 'participant' in params:
+    docstring = ""
+    if "participant" in params:
         docstring += """
         participant : str or iterable of str, optional
             Participants of interest.
             If unspecified or ``None``, all participants are included."""
-    if 'exclude' in params:
+    if "exclude" in params:
         docstring += """
         exclude : str or iterable of str, optional
             Participants to exclude.
             If unspecified or ``None``, no participants are excluded."""
-    if 'by_files' in params:
+    if "by_files" in params:
         docstring += """
         by_files : bool, optional
             If ``True``, return dict(absolute-path filename: X for that file)
             instead of X for all files altogether."""
-    if 'keep_case' in params:
+    if "keep_case" in params:
         docstring += """
         keep_case : bool, optional
             If ``True`` (the default), case distinctions are kept, e.g.,
@@ -72,14 +78,17 @@ def params_in_docstring(*params):
             If ``False``, all word tokens are forced to be in lowercase."""
 
     def real_decorator(func):
-        returns_header = '\n\n        Returns\n        -------'
-        func.__doc__ = func.__doc__.replace(returns_header,
-                                            docstring + returns_header)
+        returns_header = "\n\n        Returns\n        -------"
+        func.__doc__ = func.__doc__.replace(
+            returns_header, docstring + returns_header
+        )
 
         @wraps(func)
         def wrapper(*args, **kwargs):
             return func(*args, **kwargs)
+
         return wrapper
+
     return real_decorator
 
 
@@ -100,8 +109,9 @@ class Reader(object):
         Only the keyword ``encoding`` is recognized, which defaults
         to 'utf8'. (New in version 0.9)
     """
+
     def __init__(self, *filenames, **kwargs):
-        self.encoding = kwargs.get('encoding', ENCODING)
+        self.encoding = kwargs.get("encoding", ENCODING)
         self._input_filenames = filenames
         self._reset_reader(*self._input_filenames)
 
@@ -122,7 +132,7 @@ class Reader(object):
         Reader
         """
         file_path = os.path.join(_TEMP_DIR, str(uuid.uuid4()))
-        with open(file_path, mode='w', encoding=encoding) as f:
+        with open(file_path, mode="w", encoding=encoding) as f:
             f.write(chat_str)
         return cls(file_path, encoding=encoding)
 
@@ -159,7 +169,7 @@ class Reader(object):
     @staticmethod
     def _get_abs_filenames(*filenames):
         """Return the set of absolute-path filenames based on filenames."""
-        if sys.platform.startswith('win'):
+        if sys.platform.startswith("win"):
             windows = True  # pragma: no cover
         else:
             windows = False
@@ -167,34 +177,39 @@ class Reader(object):
         filenames_set = set()
         for filename in filenames:
             if not isinstance(filename, str):
-                raise ValueError('{} is not str'.format(repr(filename)))
+                raise ValueError("{} is not str".format(repr(filename)))
 
             if windows:
-                filename = filename.replace('/', os.sep)  # pragma: no cover
+                filename = filename.replace("/", os.sep)  # pragma: no cover
             else:
-                filename = filename.replace('\\', os.sep)
+                filename = filename.replace("\\", os.sep)
 
             abs_fullpath = os.path.abspath(filename)
             abs_dir = os.path.dirname(abs_fullpath)
-            glob_match_pattern = re.compile(r'.*[\*\?\[\]].*')
+            glob_match_pattern = re.compile(r".*[\*\?\[\]].*")
             while glob_match_pattern.search(abs_dir):  # pragma: no cover
                 abs_dir = os.path.dirname(abs_dir)
 
             if not os.path.isdir(abs_dir):  # pragma: no cover
-                msg = (u'{} is not a directory. Filename {} is likely invalid.'
-                       .format(abs_dir, filename))
+                msg = (
+                    f"{abs_dir} is not a directory. "
+                    f"Filename {filename} is likely invalid."
+                )
                 raise ValueError(msg)
 
-            candidate_filenames = [os.path.join(dir_, fn)
-                                   for dir_, _, fns in os.walk(abs_dir)
-                                   for fn in fns]
+            candidate_filenames = [
+                os.path.join(dir_, fn)
+                for dir_, _, fns in os.walk(abs_dir)
+                for fn in fns
+            ]
 
-            filenames_set.update(fnmatch.filter(candidate_filenames,
-                                                abs_fullpath))
+            filenames_set.update(
+                fnmatch.filter(candidate_filenames, abs_fullpath)
+            )
         return filenames_set
 
     def _reset_reader(self, *filenames, **kwargs):
-        check = kwargs.get('check', True)
+        check = kwargs.get("check", True)
         filenames_set = set()
 
         if not check:
@@ -208,8 +223,9 @@ class Reader(object):
         self._fname_to_reader = {}
         for fn in self._filenames:
             # TODO rewrite what _SingleReader takes as args
-            self._fname_to_reader[fn] = _SingleReader(fn,
-                                                      encoding=self.encoding)
+            self._fname_to_reader[fn] = _SingleReader(
+                fn, encoding=self.encoding
+            )
 
     def __len__(self):
         """Return the number of files.
@@ -237,8 +253,12 @@ class Reader(object):
             return self._filenames
         else:
             # sort by filename first (so filenames with same age are sorted)
-            return [fn for fn, _ in
-                    sorted(sorted(self.age().items()), key=lambda x: x[1])]
+            return [
+                fn
+                for fn, _ in sorted(
+                    sorted(self.age().items()), key=lambda x: x[1]
+                )
+            ]
 
     def number_of_files(self):
         """Return the number of files.
@@ -249,9 +269,10 @@ class Reader(object):
         """
         return len(self)
 
-    @params_in_docstring('participant', 'exclude', 'by_files')
-    def number_of_utterances(self, participant=None, exclude=None,
-                             by_files=False):
+    @params_in_docstring("participant", "exclude", "by_files")
+    def number_of_utterances(
+        self, participant=None, exclude=None, by_files=False
+    ):
         """Return the number of utterances for *participant* in all files.
 
         Parameters
@@ -262,13 +283,19 @@ class Reader(object):
         int or dict(str: int)
         """
         if by_files:
-            return {fn: self._fname_to_reader[fn].number_of_utterances(
-                participant=participant, exclude=exclude)
-                for fn in self._filenames}
+            return {
+                fn: self._fname_to_reader[fn].number_of_utterances(
+                    participant=participant, exclude=exclude
+                )
+                for fn in self._filenames
+            }
         else:
-            return sum(self._fname_to_reader[fn].number_of_utterances(
-                participant=participant, exclude=exclude)
-                for fn in self._filenames)
+            return sum(
+                self._fname_to_reader[fn].number_of_utterances(
+                    participant=participant, exclude=exclude
+                )
+                for fn in self._filenames
+            )
 
     def headers(self):
         """Return a dict mapping a file path to the headers of that file.
@@ -277,8 +304,9 @@ class Reader(object):
         -------
         dict(str: dict)
         """
-        return {fn: self._fname_to_reader[fn].headers()
-                for fn in self._filenames}
+        return {
+            fn: self._fname_to_reader[fn].headers() for fn in self._filenames
+        }
 
     def index_to_tiers(self):
         """Return a dict mapping a file path to the file's index_to_tiers dict.
@@ -287,8 +315,10 @@ class Reader(object):
         -------
         dict(str: dict)
         """
-        return {fn: self._fname_to_reader[fn].index_to_tiers()
-                for fn in self._filenames}
+        return {
+            fn: self._fname_to_reader[fn].index_to_tiers()
+            for fn in self._filenames
+        }
 
     def participants(self):
         """Return a dict mapping a file path to the file's participant info.
@@ -297,10 +327,12 @@ class Reader(object):
         -------
         dict(str: dict)
         """
-        return {fn: self._fname_to_reader[fn].participants()
-                for fn in self._filenames}
+        return {
+            fn: self._fname_to_reader[fn].participants()
+            for fn in self._filenames
+        }
 
-    @params_in_docstring('by_files')
+    @params_in_docstring("by_files")
     def participant_codes(self, by_files=False):
         """Return the participant codes (e.g., ``{'CHI', 'MOT'}``).
 
@@ -312,8 +344,10 @@ class Reader(object):
         set(str) or dict(str: set(str))
         """
         if by_files:
-            return {fn: self._fname_to_reader[fn].participant_codes()
-                    for fn in self._filenames}
+            return {
+                fn: self._fname_to_reader[fn].participant_codes()
+                for fn in self._filenames
+            }
         else:
             output_set = set()
             for fn in self._filenames:
@@ -328,8 +362,9 @@ class Reader(object):
         -------
         dict(str: list(str))
         """
-        return {fn: self._fname_to_reader[fn].languages()
-                for fn in self._filenames}
+        return {
+            fn: self._fname_to_reader[fn].languages() for fn in self._filenames
+        }
 
     def dates_of_recording(self):
         """Return a map from a file path to the date of recording.
@@ -340,8 +375,10 @@ class Reader(object):
         -------
         dict(str: list(tuple(int, int, int)))
         """
-        return {fn: self._fname_to_reader[fn].dates_of_recording()
-                for fn in self._filenames}
+        return {
+            fn: self._fname_to_reader[fn].dates_of_recording()
+            for fn in self._filenames
+        }
 
     def date_of_birth(self):
         """Return a map from a file path to the date of birth.
@@ -350,10 +387,12 @@ class Reader(object):
         -------
         dict(str: dict(str: tuple(int, int, int)))
         """
-        return {fn: self._fname_to_reader[fn].date_of_birth()
-                for fn in self._filenames}
+        return {
+            fn: self._fname_to_reader[fn].date_of_birth()
+            for fn in self._filenames
+        }
 
-    def age(self, participant='CHI', months=False):
+    def age(self, participant="CHI", months=False):
         """Return a map from a file path to the *participant*'s age.
 
         The age is in the form of (years, months, days).
@@ -369,8 +408,12 @@ class Reader(object):
         -------
         dict(str: tuple(int, int, int)) or dict(str: float)
         """
-        return {fn: self._fname_to_reader[fn].age(
-            participant=participant, months=months) for fn in self._filenames}
+        return {
+            fn: self._fname_to_reader[fn].age(
+                participant=participant, months=months
+            )
+            for fn in self._filenames
+        }
 
     def abspath(self, basename):
         """Return the absolute path of ``basename``.
@@ -389,11 +432,12 @@ class Reader(object):
             if os.path.basename(file_path) == basename:
                 return file_path
         else:
-            raise ValueError('No such file.')
+            raise ValueError("No such file.")
 
-    @params_in_docstring('participant', 'exclude', 'by_files')
-    def utterances(self, participant=None, exclude=None, clean=True,
-                   by_files=False):
+    @params_in_docstring("participant", "exclude", "by_files")
+    def utterances(
+        self, participant=None, exclude=None, clean=True, by_files=False
+    ):
         """Return a list of (*participant*, utterance) pairs from all files.
 
         Parameters
@@ -406,20 +450,26 @@ class Reader(object):
         list(str) or dict(str: list(str))
         """
         if by_files:
-            return {fn: self._fname_to_reader[fn].utterances(
-                participant=participant, exclude=exclude, clean=clean)
-                for fn in self._filenames}
+            return {
+                fn: self._fname_to_reader[fn].utterances(
+                    participant=participant, exclude=exclude, clean=clean
+                )
+                for fn in self._filenames
+            }
         else:
             return list(
                 chain.from_iterable(
                     self._fname_to_reader[fn].utterances(
-                        participant=participant, exclude=exclude, clean=clean)
-                    for fn in sorted(self._filenames))
+                        participant=participant, exclude=exclude, clean=clean
+                    )
+                    for fn in sorted(self._filenames)
+                )
             )
 
-    @params_in_docstring('participant', 'exclude', 'keep_case', 'by_files')
-    def word_frequency(self, participant=None, exclude=None, keep_case=True,
-                       by_files=False):
+    @params_in_docstring("participant", "exclude", "keep_case", "by_files")
+    def word_frequency(
+        self, participant=None, exclude=None, keep_case=True, by_files=False
+    ):
         """Return a word frequency counter for *participant* in all files.
 
         Parameters
@@ -430,19 +480,27 @@ class Reader(object):
         Counter, or dict(str: Counter)
         """
         if by_files:
-            return {fn: self._fname_to_reader[fn].word_frequency(
-                participant=participant, exclude=exclude, keep_case=keep_case)
-                for fn in self._filenames}
+            return {
+                fn: self._fname_to_reader[fn].word_frequency(
+                    participant=participant,
+                    exclude=exclude,
+                    keep_case=keep_case,
+                )
+                for fn in self._filenames
+            }
         else:
             output_counter = Counter()
             for fn in self._filenames:
                 output_counter.update(
                     self._fname_to_reader[fn].word_frequency(
-                        participant=participant, exclude=exclude,
-                        keep_case=keep_case))
+                        participant=participant,
+                        exclude=exclude,
+                        keep_case=keep_case,
+                    )
+                )
             return output_counter
 
-    @params_in_docstring('participant', 'exclude', 'by_files')
+    @params_in_docstring("participant", "exclude", "by_files")
     def words(self, participant=None, exclude=None, by_files=False):
         """Return a list of words by *participant* in all files.
 
@@ -454,18 +512,23 @@ class Reader(object):
         list(str) or dict(str: list(str))
         """
         if by_files:
-            return {fn: self._fname_to_reader[fn].words(
-                participant=participant, exclude=exclude)
-                for fn in self._filenames}
+            return {
+                fn: self._fname_to_reader[fn].words(
+                    participant=participant, exclude=exclude
+                )
+                for fn in self._filenames
+            }
         else:
             return list(
                 chain.from_iterable(
                     self._fname_to_reader[fn].words(
-                        participant=participant, exclude=exclude)
-                    for fn in sorted(self._filenames))
+                        participant=participant, exclude=exclude
+                    )
+                    for fn in sorted(self._filenames)
+                )
             )
 
-    @params_in_docstring('participant', 'exclude', 'by_files')
+    @params_in_docstring("participant", "exclude", "by_files")
     def tagged_words(self, participant=None, exclude=None, by_files=False):
         """Return a list of tagged words by *participant* in all files.
 
@@ -477,18 +540,23 @@ class Reader(object):
         list(tuple) or dict(str: list(tuple))
         """
         if by_files:
-            return {fn: self._fname_to_reader[fn].tagged_words(
-                participant=participant, exclude=exclude)
-                for fn in self._filenames}
+            return {
+                fn: self._fname_to_reader[fn].tagged_words(
+                    participant=participant, exclude=exclude
+                )
+                for fn in self._filenames
+            }
         else:
             return list(
                 chain.from_iterable(
                     self._fname_to_reader[fn].tagged_words(
-                        participant=participant, exclude=exclude)
-                    for fn in sorted(self._filenames))
+                        participant=participant, exclude=exclude
+                    )
+                    for fn in sorted(self._filenames)
+                )
             )
 
-    @params_in_docstring('participant', 'exclude', 'by_files')
+    @params_in_docstring("participant", "exclude", "by_files")
     def sents(self, participant=None, exclude=None, by_files=False):
         """Return a list of sents by *participant* in all files.
 
@@ -500,18 +568,23 @@ class Reader(object):
         list(list(str)) or dict(str: list(list(str)))
         """
         if by_files:
-            return {fn: self._fname_to_reader[fn].sents(
-                participant=participant, exclude=exclude)
-                for fn in self._filenames}
+            return {
+                fn: self._fname_to_reader[fn].sents(
+                    participant=participant, exclude=exclude
+                )
+                for fn in self._filenames
+            }
         else:
             return list(
                 chain.from_iterable(
                     self._fname_to_reader[fn].sents(
-                        participant=participant, exclude=exclude)
-                    for fn in sorted(self._filenames))
+                        participant=participant, exclude=exclude
+                    )
+                    for fn in sorted(self._filenames)
+                )
             )
 
-    @params_in_docstring('participant', 'exclude', 'by_files')
+    @params_in_docstring("participant", "exclude", "by_files")
     def tagged_sents(self, participant=None, exclude=None, by_files=False):
         """Return a list of tagged sents by *participant* in all files.
 
@@ -523,20 +596,26 @@ class Reader(object):
         list(list(tuple)) or dict(str: list(list(tuple)))
         """
         if by_files:
-            return {fn: self._fname_to_reader[fn].tagged_sents(
-                participant=participant, exclude=exclude)
-                for fn in self._filenames}
+            return {
+                fn: self._fname_to_reader[fn].tagged_sents(
+                    participant=participant, exclude=exclude
+                )
+                for fn in self._filenames
+            }
         else:
             return list(
                 chain.from_iterable(
                     self._fname_to_reader[fn].tagged_sents(
-                        participant=participant, exclude=exclude)
-                    for fn in sorted(self._filenames))
+                        participant=participant, exclude=exclude
+                    )
+                    for fn in sorted(self._filenames)
+                )
             )
 
-    @params_in_docstring('participant', 'exclude', 'by_files')
-    def part_of_speech_tags(self, participant=None, exclude=None,
-                            by_files=False):
+    @params_in_docstring("participant", "exclude", "by_files")
+    def part_of_speech_tags(
+        self, participant=None, exclude=None, by_files=False
+    ):
         """Return the part-of-speech tags in the data for *participant*.
 
         Parameters
@@ -547,14 +626,21 @@ class Reader(object):
         set or dict(str: set)
         """
         if by_files:
-            return {fn: self._fname_to_reader[fn].part_of_speech_tags(
-                participant=participant, exclude=exclude)
-                for fn in self._filenames}
+            return {
+                fn: self._fname_to_reader[fn].part_of_speech_tags(
+                    participant=participant, exclude=exclude
+                )
+                for fn in self._filenames
+            }
         else:
-            return set().union(*(
-                self._fname_to_reader[fn].part_of_speech_tags(
-                    participant=participant, exclude=exclude)
-                for fn in self._filenames))
+            return set().union(
+                *(
+                    self._fname_to_reader[fn].part_of_speech_tags(
+                        participant=participant, exclude=exclude
+                    )
+                    for fn in self._filenames
+                )
+            )
 
     def update(self, reader):
         """Combine the current CHAT Reader instance with ``reader``.
@@ -566,7 +652,7 @@ class Reader(object):
         if type(reader) is Reader:
             add_filenames = reader.filenames()
         else:
-            raise ValueError('invalid reader')
+            raise ValueError("invalid reader")
 
         new_filenames = add_filenames | self.filenames()
         self._reset_reader(*tuple(new_filenames), check=False)
@@ -581,7 +667,7 @@ class Reader(object):
         """
         add_filenames = self._get_abs_filenames(*filenames)
         if not add_filenames:
-            raise ValueError('No files to add!')
+            raise ValueError("No files to add!")
         new_filenames = self.filenames() | add_filenames
         self._reset_reader(*tuple(new_filenames), check=False)
 
@@ -595,12 +681,12 @@ class Reader(object):
         """
         remove_filenames = self._get_abs_filenames(*filenames)
         if not remove_filenames:
-            raise ValueError('No files to remove!')
+            raise ValueError("No files to remove!")
         new_filenames = set(self.filenames())
 
         for remove_filename in remove_filenames:
             if remove_filename not in self.filenames():
-                raise ValueError('filename not found')
+                raise ValueError("filename not found")
             else:
                 new_filenames.remove(remove_filename)
 
@@ -610,9 +696,10 @@ class Reader(object):
         """Clear everything and reset as an empty Reader instance."""
         self._reset_reader()
 
-    @params_in_docstring('participant', 'exclude', 'keep_case', 'by_files')
-    def word_ngrams(self, n, participant=None, exclude=None, keep_case=True,
-                    by_files=False):
+    @params_in_docstring("participant", "exclude", "keep_case", "by_files")
+    def word_ngrams(
+        self, n, participant=None, exclude=None, keep_case=True, by_files=False
+    ):
         """Return a word ``n``-gram counter by ``participant`` in all files.
 
         Returns
@@ -620,20 +707,29 @@ class Reader(object):
         Counter, or dict(str: Counter)
         """
         if by_files:
-            return {fn: self._fname_to_reader[fn].word_ngrams(
-                n, participant=participant, exclude=exclude,
-                keep_case=keep_case)
-                for fn in self._filenames}
+            return {
+                fn: self._fname_to_reader[fn].word_ngrams(
+                    n,
+                    participant=participant,
+                    exclude=exclude,
+                    keep_case=keep_case,
+                )
+                for fn in self._filenames
+            }
         else:
             output_counter = Counter()
             for fn in self._filenames:
                 output_counter.update(
                     self._fname_to_reader[fn].word_ngrams(
-                        n, participant=participant, exclude=exclude,
-                        keep_case=keep_case))
+                        n,
+                        participant=participant,
+                        exclude=exclude,
+                        keep_case=keep_case,
+                    )
+                )
             return output_counter
 
-    def MLU(self, participant='CHI'):
+    def MLU(self, participant="CHI"):
         """Return a map from a file path to the file's MLU by morphemes.
 
         MLU = mean length of utterance. This method is identical to ``MLUm``.
@@ -647,10 +743,12 @@ class Reader(object):
         -------
         dict(str: float)
         """
-        return {fn: self._fname_to_reader[fn].MLU(
-            participant=participant) for fn in self._filenames}
+        return {
+            fn: self._fname_to_reader[fn].MLU(participant=participant)
+            for fn in self._filenames
+        }
 
-    def MLUm(self, participant='CHI'):
+    def MLUm(self, participant="CHI"):
         """Return a map from a file path to the file's MLU by morphemes.
 
         MLU = mean length of utterance. This method is identical to ``MLUm``.
@@ -664,10 +762,12 @@ class Reader(object):
         -------
         dict(str: float)
         """
-        return {fn: self._fname_to_reader[fn].MLUm(
-            participant=participant) for fn in self._filenames}
+        return {
+            fn: self._fname_to_reader[fn].MLUm(participant=participant)
+            for fn in self._filenames
+        }
 
-    def MLUw(self, participant='CHI'):
+    def MLUw(self, participant="CHI"):
         """Return a map from a file path to the file's MLU by words.
 
         MLU = mean length of utterance.
@@ -681,10 +781,12 @@ class Reader(object):
         -------
         dict(str: float)
         """
-        return {fn: self._fname_to_reader[fn].MLUw(
-            participant=participant) for fn in self._filenames}
+        return {
+            fn: self._fname_to_reader[fn].MLUw(participant=participant)
+            for fn in self._filenames
+        }
 
-    def TTR(self, participant='CHI'):
+    def TTR(self, participant="CHI"):
         """Return a map from a file path to the file's TTR.
 
         TTR = type-token ratio
@@ -698,10 +800,12 @@ class Reader(object):
         -------
         dict(str: float)
         """
-        return {fn: self._fname_to_reader[fn].TTR(
-            participant=participant) for fn in self._filenames}
+        return {
+            fn: self._fname_to_reader[fn].TTR(participant=participant)
+            for fn in self._filenames
+        }
 
-    def IPSyn(self, participant='CHI'):
+    def IPSyn(self, participant="CHI"):
         """Return a map from a file path to the file's IPSyn.
 
         IPSyn = index of productive syntax
@@ -715,14 +819,23 @@ class Reader(object):
         -------
         dict(str: int)
         """
-        return {fn: self._fname_to_reader[fn].IPSyn(
-            participant=participant) for fn in self._filenames}
+        return {
+            fn: self._fname_to_reader[fn].IPSyn(participant=participant)
+            for fn in self._filenames
+        }
 
-    @params_in_docstring('participant', 'exclude', 'by_files')
-    def search(self, search_item, participant=None, exclude=None,
-               match_entire_word=True, lemma=False,
-               output_tagged=True, output_sents=True,
-               by_files=False):
+    @params_in_docstring("participant", "exclude", "by_files")
+    def search(
+        self,
+        search_item,
+        participant=None,
+        exclude=None,
+        match_entire_word=True,
+        lemma=False,
+        output_tagged=True,
+        output_sents=True,
+        by_files=False,
+    ):
         """Return a list of elements containing *search_item* by *participant*.
 
         Parameters
@@ -747,23 +860,44 @@ class Reader(object):
         list or dict(str: list)
         """
         if by_files:
-            return {fn: self._fname_to_reader[fn].search(
-                search_item, participant=participant, exclude=exclude,
-                match_entire_word=match_entire_word, lemma=lemma,
-                output_tagged=output_tagged, output_sents=output_sents)
-                for fn in self._filenames}
+            return {
+                fn: self._fname_to_reader[fn].search(
+                    search_item,
+                    participant=participant,
+                    exclude=exclude,
+                    match_entire_word=match_entire_word,
+                    lemma=lemma,
+                    output_tagged=output_tagged,
+                    output_sents=output_sents,
+                )
+                for fn in self._filenames
+            }
         else:
             output_list = []
             for fn in self.filenames(sorted_by_age=True):
-                output_list.extend(self._fname_to_reader[fn].search(
-                    search_item, participant=participant, exclude=exclude,
-                    match_entire_word=match_entire_word, lemma=lemma,
-                    output_tagged=output_tagged, output_sents=output_sents))
+                output_list.extend(
+                    self._fname_to_reader[fn].search(
+                        search_item,
+                        participant=participant,
+                        exclude=exclude,
+                        match_entire_word=match_entire_word,
+                        lemma=lemma,
+                        output_tagged=output_tagged,
+                        output_sents=output_sents,
+                    )
+                )
             return output_list
 
-    @params_in_docstring('participant', 'exclude', 'by_files')
-    def concordance(self, search_item, participant=None, exclude=None,
-                    match_entire_word=True, lemma=False, by_files=False):
+    @params_in_docstring("participant", "exclude", "by_files")
+    def concordance(
+        self,
+        search_item,
+        participant=None,
+        exclude=None,
+        match_entire_word=True,
+        lemma=False,
+        by_files=False,
+    ):
         """Return a list of utterances with *search_item* for *participant*.
 
         All strings are aligned for *search_item* by space
@@ -784,16 +918,28 @@ class Reader(object):
         list, or dict(str: list)
         """
         if by_files:
-            return {fn: self._fname_to_reader[fn].concordance(
-                search_item, participant=participant, exclude=exclude,
-                match_entire_word=match_entire_word, lemma=lemma)
-                for fn in self._filenames}
+            return {
+                fn: self._fname_to_reader[fn].concordance(
+                    search_item,
+                    participant=participant,
+                    exclude=exclude,
+                    match_entire_word=match_entire_word,
+                    lemma=lemma,
+                )
+                for fn in self._filenames
+            }
         else:
             output_list = []
             for fn in self.filenames(sorted_by_age=True):
-                output_list.extend(self._fname_to_reader[fn].concordance(
-                    search_item, participant=participant, exclude=exclude,
-                    match_entire_word=match_entire_word, lemma=lemma))
+                output_list.extend(
+                    self._fname_to_reader[fn].concordance(
+                        search_item,
+                        participant=participant,
+                        exclude=exclude,
+                        match_entire_word=match_entire_word,
+                        lemma=lemma,
+                    )
+                )
             return output_list
 
 
@@ -805,8 +951,10 @@ class _SingleReader(object):
         self.encoding = encoding
 
         if (filename and str_) or (filename is None and str_ is None):
-            msg = ('_SingleReader is initialized by either one CHAT file or '
-                   'one CHAT str (but not both)')
+            msg = (
+                "_SingleReader is initialized by either one CHAT file or "
+                "one CHAT str (but not both)"
+            )
             raise ValueError(msg)
 
         self._filename = os.path.abspath(filename) if filename else None
@@ -825,11 +973,21 @@ class _SingleReader(object):
         self._all_tagged_sents = self._create_all_tagged_sents()
 
         # for MLUw() and TTR()
-        self.words_to_ignore = {'', '!', '+...', '.', ',', '?', '‡',
-                                '„', '0', CLITIC}
+        self.words_to_ignore = {
+            "",
+            "!",
+            "+...",
+            ".",
+            ",",
+            "?",
+            "‡",
+            "„",
+            "0",
+            CLITIC,
+        }
 
         # for MLUm()
-        self.pos_to_ignore = {'', '!', '+...', '0', '?', 'BEG'}
+        self.pos_to_ignore = {"", "!", "+...", "0", "?", "BEG"}
 
     def __len__(self):
         return len(self._index_to_tiers)
@@ -844,14 +1002,15 @@ class _SingleReader(object):
         if self._filename:
             return open(self._filename, mode="r", encoding=self.encoding)
         else:
-            return io.TextIOWrapper(io.BytesIO(self._str.encode()),
-                                    encoding=self.encoding)
+            return io.TextIOWrapper(
+                io.BytesIO(self._str.encode()), encoding=self.encoding
+            )
 
     def cha_lines(self):
         """A generator of lines in the CHAT file,
         with the tab-character line continuations undone.
         """
-        previous_line = ''
+        previous_line = ""
 
         for line in self._get_file_object():
             previous_line = previous_line.strip()
@@ -860,13 +1019,15 @@ class _SingleReader(object):
             if not current_line:
                 continue
 
-            if current_line.startswith('%xpho:') or \
-                    current_line.startswith('%xmod:'):
-                current_line = current_line.replace('%x', '%', 1)
+            if current_line.startswith("%xpho:") or current_line.startswith(
+                "%xmod:"
+            ):
+                current_line = current_line.replace("%x", "%", 1)
 
-            if previous_line and current_line.startswith('\t'):
-                previous_line = u'{} {}'.format(
-                    previous_line, current_line.strip())  # strip \t
+            if previous_line and current_line.startswith("\t"):
+                previous_line = u"{} {}".format(
+                    previous_line, current_line.strip()
+                )  # strip \t
             elif previous_line:
                 yield previous_line
                 previous_line = current_line
@@ -879,7 +1040,7 @@ class _SingleReader(object):
         result = set()
         for tiermarkers_to_tiers in self._index_to_tiers.values():
             for tier_marker in tiermarkers_to_tiers.keys():
-                if tier_marker.startswith('%'):
+                if tier_marker.startswith("%"):
                     result.add(tier_marker)
         return result
 
@@ -909,27 +1070,28 @@ class _SingleReader(object):
         utterance = None
 
         for line in self.cha_lines():
-            if line.startswith('@'):
+            if line.startswith("@"):
                 continue
 
             line_split = line.split()
 
-            if line.startswith('*'):
+            if line.startswith("*"):
                 index_ += 1
-                participant_code = line_split[0].lstrip('*').rstrip(':')
-                utterance = ' '.join(line_split[1:])
+                participant_code = line_split[0].lstrip("*").rstrip(":")
+                utterance = " ".join(line_split[1:])
                 result_with_collapses[index_] = {participant_code: utterance}
 
-            elif utterance and line.startswith('%'):
-                tier_marker = line_split[0].rstrip(':')
-                result_with_collapses[index_][tier_marker] = \
-                    ' '.join(line_split[1:])
+            elif utterance and line.startswith("%"):
+                tier_marker = line_split[0].rstrip(":")
+                result_with_collapses[index_][tier_marker] = " ".join(
+                    line_split[1:]
+                )
 
         # handle collapses such as [x 4]
         result_without_collapses = {}
         new_index = -1  # utterance index (1st utterance is index 0)
-        collapse_pattern = re.compile(r'\[x \d+?\]')  # e.g., "[x <number(s)>]"
-        number_regex = re.compile(r'\d+')
+        collapse_pattern = re.compile(r"\[x \d+?\]")  # e.g., "[x <number(s)>]"
+        number_regex = re.compile(r"\d+")
 
         for old_index in range(len(result_with_collapses)):
             tier_dict = result_with_collapses[old_index]
@@ -984,34 +1146,36 @@ class _SingleReader(object):
 
         for line in self.cha_lines():
 
-            if line.startswith('@Begin') or line.startswith('@End'):
+            if line.startswith("@Begin") or line.startswith("@End"):
                 continue
 
-            if not line.startswith('@'):
+            if not line.startswith("@"):
                 continue
 
             # find head, e.g., "Languages", "Participants", "ID" etc
-            head, _, line = line.partition('\t')
+            head, _, line = line.partition("\t")
             line = line.strip()
-            head = head.lstrip('@')  # remove beginning "@"
-            head = head.rstrip(':')  # remove ending ":", if any
+            head = head.lstrip("@")  # remove beginning "@"
+            head = head.rstrip(":")  # remove ending ":", if any
 
-            if head == 'Participants':
-                headname_to_entry['Participants'] = {}
+            if head == "Participants":
+                headname_to_entry["Participants"] = {}
 
-                participants = line.split(',')
+                participants = line.split(",")
 
                 for participant in participants:
                     participant = participant.strip()
-                    code, _, participant_label = participant.partition(' ')
-                    participant_name, _, participant_role = \
-                        participant_label.partition(' ')
+                    code, _, participant_label = participant.partition(" ")
+                    participant_name, _, participant_role = (
+                        participant_label.partition(" ")
+                    )
                     # code = participant code, e.g. CHI, MOT
-                    headname_to_entry['Participants'][code] = \
-                        {'participant_name': participant_name}
+                    headname_to_entry["Participants"][code] = {
+                        "participant_name": participant_name
+                    }
 
-            elif head == 'ID':
-                participant_info = line.split('|')[: -1]
+            elif head == "ID":
+                participant_info = line.split("|")[:-1]
                 # final empty str removed
 
                 code = participant_info[2]
@@ -1020,18 +1184,27 @@ class _SingleReader(object):
                 #   education, custom
 
                 del participant_info[2]  # remove code info (3rd in list)
-                participant_info_heads = ['language', 'corpus', 'age', 'sex',
-                                          'group', 'SES', 'participant_role',
-                                          'education', 'custom']
-                head_to_info = dict(zip(participant_info_heads,
-                                        participant_info))
+                participant_info_heads = [
+                    "language",
+                    "corpus",
+                    "age",
+                    "sex",
+                    "group",
+                    "SES",
+                    "participant_role",
+                    "education",
+                    "custom",
+                ]
+                head_to_info = dict(
+                    zip(participant_info_heads, participant_info)
+                )
 
-                headname_to_entry['Participants'][code].update(head_to_info)
+                headname_to_entry["Participants"][code].update(head_to_info)
 
-            elif head == 'Date':
-                if 'Date' not in headname_to_entry:
-                    headname_to_entry['Date'] = []
-                headname_to_entry['Date'].append(line)
+            elif head == "Date":
+                if "Date" not in headname_to_entry:
+                    headname_to_entry["Date"] = []
+                headname_to_entry["Date"].append(line)
 
             else:
                 headname_to_entry[head] = line
@@ -1088,7 +1261,7 @@ class _SingleReader(object):
                          'sex': ''}}
         """
         try:
-            return self._headers['Participants']
+            return self._headers["Participants"]
         except KeyError:
             return {}
 
@@ -1097,7 +1270,7 @@ class _SingleReader(object):
         Return the set of participant codes (e.g., `{'CHI', 'MOT', 'FAT'}`).
         """
         try:
-            return set(self._headers['Participants'].keys())
+            return set(self._headers["Participants"].keys())
         except KeyError:
             return set()
 
@@ -1109,11 +1282,11 @@ class _SingleReader(object):
         languages_list = []
 
         try:
-            languages_line = self._headers['Languages']
+            languages_line = self._headers["Languages"]
         except KeyError:
             pass
         else:
-            for language in languages_line.split(','):
+            for language in languages_line.split(","):
                 language = language.strip()
                 if language:
                     languages_list.append(language)
@@ -1128,7 +1301,7 @@ class _SingleReader(object):
         :rtype: list(tuple(int, int, int))
         """
         try:
-            dates = self._headers['Date']
+            dates = self._headers["Date"]
         except KeyError:
             return None
 
@@ -1147,7 +1320,7 @@ class _SingleReader(object):
         participant_to_date = {}
 
         for header in header_keys:
-            if not header.startswith('Birth of'):
+            if not header.startswith("Birth of"):
                 continue
 
             # e.g., header is 'Birth of CHI', participant is 'CHI'
@@ -1162,7 +1335,7 @@ class _SingleReader(object):
 
         return participant_to_date
 
-    def age(self, participant='CHI', months=False):
+    def age(self, participant="CHI", months=False):
         """
         Return the age of *participant* as a tuple or a float.
 
@@ -1178,10 +1351,10 @@ class _SingleReader(object):
         :rtype: tuple or float
         """
         try:
-            age_ = self._headers['Participants'][participant]['age']
+            age_ = self._headers["Participants"][participant]["age"]
 
-            year_str, _, month_day = age_.partition(';')
-            month_str, _, day_str = month_day.partition('.')
+            year_str, _, month_day = age_.partition(";")
+            month_str, _, day_str = month_day.partition(".")
 
             year_int = int(year_str) if year_str.isdigit() else 0
             month_int = int(month_str) if month_str.isdigit() else 0
@@ -1194,8 +1367,9 @@ class _SingleReader(object):
         except (KeyError, IndexError, ValueError):
             return None
 
-    def utterances(self, participant=None, exclude=None, clean=True,
-                   time_marker=False):
+    def utterances(
+        self, participant=None, exclude=None, clean=True, time_marker=False
+    ):
         """
         Return a list of the utterances by *participant*
         as (*participant*, *utterance*) pairs.
@@ -1235,15 +1409,17 @@ class _SingleReader(object):
                             try:
                                 time_marker = get_time_marker(line)
                             except ValueError as e:
-                                msg = (
-                                    'At line %d in file %s: ' %
-                                    (i, self.filename()) + str(e)
-                                )
+                                msg = "At line %d in file %s: " % (
+                                    i,
+                                    self.filename(),
+                                ) + str(e)
                                 raise ValueError(msg)
                             output.append(
-                                (tier_marker,
-                                 clean_utterance(line),
-                                 time_marker)
+                                (
+                                    tier_marker,
+                                    clean_utterance(line),
+                                    time_marker,
+                                )
                             )
                         else:
                             output.append((tier_marker, clean_utterance(line)))
@@ -1275,26 +1451,31 @@ class _SingleReader(object):
             include_participants = self.participant_codes()
         elif isinstance(participant, str):
             include_participants = {participant}
-        elif hasattr(participant, '__iter__'):
+        elif hasattr(participant, "__iter__"):
             include_participants = set(participant)
         else:
-            raise TypeError('"participant" should be either str or '
-                            'an iterable of str: {}'
-                            .format(repr(participant)))
+            raise TypeError(
+                '"participant" should be either str or '
+                "an iterable of str: {}".format(repr(participant))
+            )
 
         if exclude is None:
             exclude_participants = set()
         elif isinstance(exclude, str):
             exclude_participants = {exclude}
-        elif hasattr(exclude, '__iter__'):
+        elif hasattr(exclude, "__iter__"):
             exclude_participants = set(exclude)
         else:
-            raise TypeError('"exclude" should be either str or '
-                            'an iterable of str: {}'
-                            .format(repr(exclude)))
+            raise TypeError(
+                '"exclude" should be either str or '
+                "an iterable of str: {}".format(repr(exclude))
+            )
 
-        return {p for p in self.participant_codes()
-                if p in include_participants and p not in exclude_participants}
+        return {
+            p
+            for p in self.participant_codes()
+            if p in include_participants and p not in exclude_participants
+        }
 
     def words(self, participant=None, exclude=None):
         """
@@ -1312,8 +1493,9 @@ class _SingleReader(object):
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
         """
-        return self._get_words(participant=participant, exclude=exclude,
-                               tagged=False, sents=False)
+        return self._get_words(
+            participant=participant, exclude=exclude, tagged=False, sents=False
+        )
 
     def tagged_words(self, participant=None, exclude=None):
         """
@@ -1331,8 +1513,9 @@ class _SingleReader(object):
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
         """
-        return self._get_words(participant=participant, exclude=exclude,
-                               tagged=True, sents=False)
+        return self._get_words(
+            participant=participant, exclude=exclude, tagged=True, sents=False
+        )
 
     def sents(self, participant=None, exclude=None):
         """
@@ -1352,8 +1535,9 @@ class _SingleReader(object):
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
         """
-        return self._get_words(participant=participant, exclude=exclude,
-                               tagged=False, sents=True)
+        return self._get_words(
+            participant=participant, exclude=exclude, tagged=False, sents=True
+        )
 
     def tagged_sents(self, participant=None, exclude=None):
         """
@@ -1373,11 +1557,13 @@ class _SingleReader(object):
             For child-directed speech (i.e., targeting all participant
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
         """
-        return self._get_words(participant=participant, exclude=exclude,
-                               tagged=True, sents=True)
+        return self._get_words(
+            participant=participant, exclude=exclude, tagged=True, sents=True
+        )
 
-    def _get_words(self, participant=None, exclude=None, tagged=True,
-                   sents=True):
+    def _get_words(
+        self, participant=None, exclude=None, tagged=True, sents=True
+    ):
         """
         Extract words for the specified participant(s).
 
@@ -1460,8 +1646,7 @@ class _SingleReader(object):
             participant_code = get_participant_code(tiermarker_to_line.keys())
 
             # get the plain words from utterance tier
-            utterance = clean_utterance(
-                tiermarker_to_line[participant_code])
+            utterance = clean_utterance(tiermarker_to_line[participant_code])
             words = utterance.split()
 
             # %mor tier
@@ -1469,14 +1654,14 @@ class _SingleReader(object):
             clitic_count = 0
 
             mor_items = []
-            if '%mor' in tiermarker_to_line:
-                mor_split = tiermarker_to_line['%mor'].split()
+            if "%mor" in tiermarker_to_line:
+                mor_split = tiermarker_to_line["%mor"].split()
 
                 for j, item in enumerate(mor_split):
-                    tilde_count = item.count('~')
+                    tilde_count = item.count("~")
 
                     if tilde_count:
-                        item_split = item.split('~')
+                        item_split = item.split("~")
 
                         for k in range(tilde_count):
                             clitic_indices.append(clitic_count + j + k + 1)
@@ -1489,21 +1674,25 @@ class _SingleReader(object):
                         mor_items.append(item)
 
             if mor_items and ((len(words) + clitic_count) != len(mor_items)):
-                message = 'cannot align the utterance and %mor tiers:\n' + \
-                          'Filename: {}\nTiers --\n{}\n' + \
-                          'Cleaned-up utterance --\n{}'
-                raise ValueError(message.format(
-                    self.filename(),
-                    pformat(tiermarker_to_line), utterance))
+                message = (
+                    "cannot align the utterance and %mor tiers:\n"
+                    + "Filename: {}\nTiers --\n{}\n"
+                    + "Cleaned-up utterance --\n{}"
+                )
+                raise ValueError(
+                    message.format(
+                        self.filename(), pformat(tiermarker_to_line), utterance
+                    )
+                )
 
             # %gra tier
             gra_items = []
-            if '%gra' in tiermarker_to_line:
-                for item in tiermarker_to_line['%gra'].split():
+            if "%gra" in tiermarker_to_line:
+                for item in tiermarker_to_line["%gra"].split():
                     # an item is a string like '1|2|SUBJ'
 
                     item_list = []
-                    for element in item.split('|'):
+                    for element in item.split("|"):
                         try:
                             converted_element = int(element)
                         except ValueError:
@@ -1513,15 +1702,17 @@ class _SingleReader(object):
 
                     gra_items.append(tuple(item_list))
 
-            if mor_items and gra_items and \
-                    (len(mor_items) != len(gra_items)):
-                raise ValueError('cannot align the %mor and %gra tiers:\n{}'
-                                 .format(pformat(tiermarker_to_line)))
+            if mor_items and gra_items and (len(mor_items) != len(gra_items)):
+                raise ValueError(
+                    "cannot align the %mor and %gra tiers:\n{}".format(
+                        pformat(tiermarker_to_line)
+                    )
+                )
 
             # utterance tier
             if mor_items and clitic_count:
                 word_iterator = iter(words)
-                utterance_items = [''] * len(mor_items)
+                utterance_items = [""] * len(mor_items)
 
                 for j in range(len(mor_items)):
                     if j in clitic_indices:
@@ -1533,14 +1724,14 @@ class _SingleReader(object):
 
             # determine what to yield (and how) to create the generator
             if not mor_items:
-                mor_items = [''] * len(utterance_items)
+                mor_items = [""] * len(utterance_items)
             if not gra_items:
-                gra_items = [''] * len(utterance_items)
+                gra_items = [""] * len(utterance_items)
 
             sent = []
 
             for word, mor, gra in zip(utterance_items, mor_items, gra_items):
-                pos, _, mor = mor.partition('|')
+                pos, _, mor = mor.partition("|")
 
                 output_word = (clean_word(word), pos.upper(), mor, gra)
                 # pos in uppercase follows NLTK convention
@@ -1600,8 +1791,9 @@ class _SingleReader(object):
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
         """
         output_set = set()
-        tagged_words = self.tagged_words(participant=participant,
-                                         exclude=exclude)
+        tagged_words = self.tagged_words(
+            participant=participant, exclude=exclude
+        )
 
         for tagged_word in tagged_words:
             pos = tagged_word[1]
@@ -1633,12 +1825,12 @@ class _SingleReader(object):
             lowercase.
         """
         if (type(n) is not int) or (n < 1):
-            raise ValueError('n must be a positive integer: %r' % n)
+            raise ValueError("n must be a positive integer: %r" % n)
 
         if n == 1:
-            return self.word_frequency(participant=participant,
-                                       exclude=exclude,
-                                       keep_case=keep_case)
+            return self.word_frequency(
+                participant=participant, exclude=exclude, keep_case=keep_case
+            )
 
         sents = self.sents(participant=participant, exclude=exclude)
         output_counter = Counter()
@@ -1653,78 +1845,114 @@ class _SingleReader(object):
 
         return output_counter
 
-    def MLU(self, participant='CHI', exclude=None):
+    def MLU(self, participant="CHI", exclude=None):
         """
         Return the MLU in morphemes for *participant*
         (default to ``'CHI'``); same as ``MLUm()``.
 
         :param participant: The participant specified, default to ``'CHI'``
         """
-        return get_MLUm(self.tagged_sents(participant=participant,
-                                          exclude=exclude),
-                        pos_to_ignore=self.pos_to_ignore)
+        return get_MLUm(
+            self.tagged_sents(participant=participant, exclude=exclude),
+            pos_to_ignore=self.pos_to_ignore,
+        )
 
-    def MLUm(self, participant='CHI', exclude=None):
+    def MLUm(self, participant="CHI", exclude=None):
         """
         Return the MLU in morphemes for *participant*
         (default to ``'CHI'``); same as ``MLU()``.
 
         :param participant: The participant specified, default to ``'CHI'``
         """
-        return get_MLUm(self.tagged_sents(participant=participant,
-                                          exclude=exclude),
-                        pos_to_ignore=self.pos_to_ignore)
+        return get_MLUm(
+            self.tagged_sents(participant=participant, exclude=exclude),
+            pos_to_ignore=self.pos_to_ignore,
+        )
 
-    def MLUw(self, participant='CHI', exclude=None):
+    def MLUw(self, participant="CHI", exclude=None):
         """
         Return the mean length of utterance (MLU) in words for *participant*
         (default to ``'CHI'``).
 
         :param participant: The participant specified, default to ``'CHI'``
         """
-        return get_MLUw(self.sents(participant=participant, exclude=exclude),
-                        words_to_ignore=self.words_to_ignore)
+        return get_MLUw(
+            self.sents(participant=participant, exclude=exclude),
+            words_to_ignore=self.words_to_ignore,
+        )
 
-    def TTR(self, participant='CHI', exclude=None):
+    def TTR(self, participant="CHI", exclude=None):
         """
         Return the type-token ratio (TTR) for *participant*
         (default to ``'CHI'``).
 
         :param participant: The participant specified, default to ``'CHI'``
         """
-        return get_TTR(self.word_frequency(participant=participant,
-                                           exclude=exclude),
-                       words_to_ignore=self.words_to_ignore)
+        return get_TTR(
+            self.word_frequency(participant=participant, exclude=exclude),
+            words_to_ignore=self.words_to_ignore,
+        )
 
-    def IPSyn(self, participant='CHI', exclude=None):
+    def IPSyn(self, participant="CHI", exclude=None):
         """
         Return the index of productive syntax (IPSyn) for *participant*
         (default to ``'CHI'``).
 
         :param participant: The participant specified, default to ``'CHI'``
         """
-        return get_IPSyn(self.tagged_sents(participant=participant,
-                                           exclude=exclude))
+        return get_IPSyn(
+            self.tagged_sents(participant=participant, exclude=exclude)
+        )
 
-    def search(self, search_item, participant=None, exclude=None,
-               match_entire_word=True, lemma=False,
-               output_tagged=True, output_sents=True):
-        return self._search(search_item, participant=participant,
-                            exclude=exclude,
-                            match_entire_word=match_entire_word, lemma=lemma,
-                            concordance=False, output_tagged=output_tagged,
-                            output_sents=output_sents)
+    def search(
+        self,
+        search_item,
+        participant=None,
+        exclude=None,
+        match_entire_word=True,
+        lemma=False,
+        output_tagged=True,
+        output_sents=True,
+    ):
+        return self._search(
+            search_item,
+            participant=participant,
+            exclude=exclude,
+            match_entire_word=match_entire_word,
+            lemma=lemma,
+            concordance=False,
+            output_tagged=output_tagged,
+            output_sents=output_sents,
+        )
 
-    def concordance(self, search_item, participant=None, exclude=None,
-                    match_entire_word=True, lemma=False):
-        return self._search(search_item, participant=participant,
-                            exclude=exclude,
-                            match_entire_word=match_entire_word, lemma=lemma,
-                            concordance=True)
+    def concordance(
+        self,
+        search_item,
+        participant=None,
+        exclude=None,
+        match_entire_word=True,
+        lemma=False,
+    ):
+        return self._search(
+            search_item,
+            participant=participant,
+            exclude=exclude,
+            match_entire_word=match_entire_word,
+            lemma=lemma,
+            concordance=True,
+        )
 
-    def _search(self, search_item, participant=None, exclude=None,
-                match_entire_word=True, lemma=False, concordance=False,
-                output_tagged=True, output_sents=True):
+    def _search(
+        self,
+        search_item,
+        participant=None,
+        exclude=None,
+        match_entire_word=True,
+        lemma=False,
+        concordance=False,
+        output_tagged=True,
+        output_sents=True,
+    ):
         taggedsent_charnumber_list = []
         # = list of (tagged_sent, char_number)
 
@@ -1734,8 +1962,9 @@ class _SingleReader(object):
         else:
             match_function = lambda search_, test_: search_ in test_
 
-        tagged_sents = self.tagged_sents(participant=participant,
-                                         exclude=exclude)
+        tagged_sents = self.tagged_sents(
+            participant=participant, exclude=exclude
+        )
 
         for tagged_sent in tagged_sents:
             for i, tagged_word in enumerate(tagged_sent):
@@ -1756,12 +1985,17 @@ class _SingleReader(object):
                 if match_function(search_item, test_item):
 
                     preceding_words = [tagged_sent[k][0] for k in range(i)]
-                    preceding_words = [w for w in preceding_words
-                                       if w != CLITIC]  # remove CLITIC
-                    char_number = (sum(len(w) for w in preceding_words)
-                                   + len(preceding_words) - 1)  # plus spaces
-                    taggedsent_charnumber_list.append((tagged_sent,
-                                                       char_number))
+                    preceding_words = [
+                        w for w in preceding_words if w != CLITIC
+                    ]  # remove CLITIC
+                    char_number = (
+                        sum(len(w) for w in preceding_words)
+                        + len(preceding_words)
+                        - 1
+                    )  # plus spaces
+                    taggedsent_charnumber_list.append(
+                        (tagged_sent, char_number)
+                    )
 
         if not taggedsent_charnumber_list:  # if empty
             return taggedsent_charnumber_list
@@ -1776,8 +2010,9 @@ class _SingleReader(object):
             if output_tagged:
                 sent_to_add = lambda sent_: sent_
             else:
-                sent_to_add = lambda sent_: [x[0]
-                                             for x in sent_ if x[0] != CLITIC]
+                sent_to_add = lambda sent_: [
+                    x[0] for x in sent_ if x[0] != CLITIC
+                ]
 
             result_list = []
 
@@ -1790,10 +2025,12 @@ class _SingleReader(object):
             result_list = []
 
             for tagged_sent, char_number in taggedsent_charnumber_list:
-                sent = [word_ for word_, _, _, _ in tagged_sent
-                        if word_ != CLITIC]
-                sent_str = (' ' * (max_char_number - char_number)
-                            + ' '.join(sent))
+                sent = [
+                    word_ for word_, _, _, _ in tagged_sent if word_ != CLITIC
+                ]
+                sent_str = " " * (max_char_number - char_number) + " ".join(
+                    sent
+                )
                 result_list.append(sent_str)
 
             return result_list

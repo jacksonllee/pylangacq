@@ -20,8 +20,8 @@ def get_MLUm(tagged_sents, pos_to_ignore=None):
                 continue
 
             total_morpheme_count += 1
-            total_morpheme_count += morph.count('-')
-            total_morpheme_count += morph.count('~')
+            total_morpheme_count += morph.count("-")
+            total_morpheme_count += morph.count("~")
 
     if total_utterance_count:
         return total_morpheme_count / total_utterance_count
@@ -55,8 +55,11 @@ def get_TTR(word_freq_dict, words_to_ignore=None):
     """Type-token ratio (TTR)"""
     # *word_freq_dict* already filtered for the desired participant like 'CHI'
     if words_to_ignore:
-        word_freq_dict = {word: freq for word, freq in word_freq_dict.items()
-                          if word not in words_to_ignore}
+        word_freq_dict = {
+            word: freq
+            for word, freq in word_freq_dict.items()
+            if word not in words_to_ignore
+        }
     return len(word_freq_dict) / sum(word_freq_dict.values())
 
 
@@ -64,46 +67,124 @@ def get_TTR(word_freq_dict, words_to_ignore=None):
 def get_IPSyn(tagged_sents):
     """Index of Productive Syntax (IPSyn)"""
     if len(tagged_sents) > 100:
-        tagged_sents = tagged_sents[: 100]
+        tagged_sents = tagged_sents[:100]
 
     scoring_board = {
-        'N1': 0, 'N2': 0, 'N3': 0, 'N4': 0, 'N5': 0, 'N6': 0,
-        'N7': 0, 'N8': 0, 'N9': 0, 'N10': 0, 'N11': 0,
-
-        'V1': 0, 'V2': 0, 'V3': 0, 'V4': 0, 'V5': 0, 'V6': 0,
-        'V7': 0, 'V8': 0, 'V9': 0, 'V10': 0, 'V11': 0, 'V12': 0,
-        'V13': 0, 'V14': 0, 'V15': 0, 'V16': 0,
-
-        'Q1': 0, 'Q2': 0, 'Q3': 0, 'Q4': 0, 'Q5': 0, 'Q6': 0,
-        'Q7': 0, 'Q8': 0, 'Q9': 0, 'Q10': 0,
-
-        'S1': 0, 'S2': 0, 'S3': 0, 'S4': 0, 'S5': 0, 'S6': 0,
-        'S7': 0, 'S8': 0, 'S9': 0, 'S10': 0, 'S11': 0, 'S12': 0,
-        'S13': 0, 'S14': 0, 'S15': 0, 'S16': 0, 'S17': 0, 'S18': 0,
-        'S19': 0,
+        "N1": 0,
+        "N2": 0,
+        "N3": 0,
+        "N4": 0,
+        "N5": 0,
+        "N6": 0,
+        "N7": 0,
+        "N8": 0,
+        "N9": 0,
+        "N10": 0,
+        "N11": 0,
+        "V1": 0,
+        "V2": 0,
+        "V3": 0,
+        "V4": 0,
+        "V5": 0,
+        "V6": 0,
+        "V7": 0,
+        "V8": 0,
+        "V9": 0,
+        "V10": 0,
+        "V11": 0,
+        "V12": 0,
+        "V13": 0,
+        "V14": 0,
+        "V15": 0,
+        "V16": 0,
+        "Q1": 0,
+        "Q2": 0,
+        "Q3": 0,
+        "Q4": 0,
+        "Q5": 0,
+        "Q6": 0,
+        "Q7": 0,
+        "Q8": 0,
+        "Q9": 0,
+        "Q10": 0,
+        "S1": 0,
+        "S2": 0,
+        "S3": 0,
+        "S4": 0,
+        "S5": 0,
+        "S6": 0,
+        "S7": 0,
+        "S8": 0,
+        "S9": 0,
+        "S10": 0,
+        "S11": 0,
+        "S12": 0,
+        "S13": 0,
+        "S14": 0,
+        "S15": 0,
+        "S16": 0,
+        "S17": 0,
+        "S18": 0,
+        "S19": 0,
     }
 
     scoring_board_stop = {
-        'N1': False, 'N2': False, 'N3': False, 'N4': False,
-        'N5': False, 'N6': False, 'N7': False, 'N8': False,
-        'N9': False, 'N10': False, 'N11': False,
-
-        'V1': False, 'V2': False, 'V3': False, 'V4': False,
-        'V5': False, 'V6': False, 'V7': False, 'V8': False,
-        'V9': False, 'V10': False, 'V11': False, 'V12': False,
-        'V13': False, 'V14': False, 'V15': False,
-        'V16': False,
-
-        'Q1': False, 'Q2': False, 'Q3': False, 'Q4': False,
-        'Q5': False, 'Q6': False, 'Q7': False, 'Q8': False,
-        'Q9': False, 'Q10': False,
-
-        'S1': False, 'S2': False, 'S3': False, 'S4': False,
-        'S5': False, 'S6': False, 'S7': False, 'S8': False,
-        'S9': False, 'S10': False, 'S11': False, 'S12': False,
-        'S13': False, 'S14': False, 'S15': False,
-        'S16': False, 'S17': False, 'S18': False,
-        'S19': False,
+        "N1": False,
+        "N2": False,
+        "N3": False,
+        "N4": False,
+        "N5": False,
+        "N6": False,
+        "N7": False,
+        "N8": False,
+        "N9": False,
+        "N10": False,
+        "N11": False,
+        "V1": False,
+        "V2": False,
+        "V3": False,
+        "V4": False,
+        "V5": False,
+        "V6": False,
+        "V7": False,
+        "V8": False,
+        "V9": False,
+        "V10": False,
+        "V11": False,
+        "V12": False,
+        "V13": False,
+        "V14": False,
+        "V15": False,
+        "V16": False,
+        "Q1": False,
+        "Q2": False,
+        "Q3": False,
+        "Q4": False,
+        "Q5": False,
+        "Q6": False,
+        "Q7": False,
+        "Q8": False,
+        "Q9": False,
+        "Q10": False,
+        "S1": False,
+        "S2": False,
+        "S3": False,
+        "S4": False,
+        "S5": False,
+        "S6": False,
+        "S7": False,
+        "S8": False,
+        "S9": False,
+        "S10": False,
+        "S11": False,
+        "S12": False,
+        "S13": False,
+        "S14": False,
+        "S15": False,
+        "S16": False,
+        "S17": False,
+        "S18": False,
+        "S19": False,
     }
 
     def add_one_point_if_needed(item):
@@ -158,12 +239,12 @@ def get_IPSyn(tagged_sents):
         N1: Proper, mass, or count noun
         """
         for i in range(1, graph.number_of_nodes()):
-            pos = graph.node[i]['pos']
+            pos = graph.node[i]["pos"]
 
-            if pos.startswith('N:') or pos == 'N':
-                scoring_board['N1'] += 1
+            if pos.startswith("N:") or pos == "N":
+                scoring_board["N1"] += 1
 
-            if turn_off_scoring_board('N1'):
+            if turn_off_scoring_board("N1"):
                 break
 
     # noinspection PyPep8Naming
@@ -173,12 +254,12 @@ def get_IPSyn(tagged_sents):
         N2: Pronoun or prolocative, excluding modifiers
         """
         for i in range(1, graph.number_of_nodes()):
-            pos = graph.node[i]['pos']
+            pos = graph.node[i]["pos"]
 
-            if pos.startswith('PRO') and pos != 'PRO:POSS:DET':
-                scoring_board['N2'] += 1
+            if pos.startswith("PRO") and pos != "PRO:POSS:DET":
+                scoring_board["N2"] += 1
 
-            if turn_off_scoring_board('N2'):
+            if turn_off_scoring_board("N2"):
                 break
 
     # noinspection PyPep8Naming
@@ -188,12 +269,12 @@ def get_IPSyn(tagged_sents):
         N3: Modifier, including adjectives, possessives, and quantifiers
         """
         for i in range(1, graph.number_of_nodes()):
-            pos = graph.node[i]['pos']
+            pos = graph.node[i]["pos"]
 
-            if pos in {'PRO:POSS:DET', 'ADJ', 'QN'}:
-                scoring_board['N3'] += 1
+            if pos in {"PRO:POSS:DET", "ADJ", "QN"}:
+                scoring_board["N3"] += 1
 
-            if turn_off_scoring_board('N3'):
+            if turn_off_scoring_board("N3"):
                 break
 
     # noinspection PyPep8Naming
@@ -206,14 +287,15 @@ def get_IPSyn(tagged_sents):
             return
 
         for i in range(1, graph.number_of_nodes() - 1):
-            pos1 = graph.node[i]['pos']
-            pos2 = graph.node[i + 1]['pos']
+            pos1 = graph.node[i]["pos"]
+            pos2 = graph.node[i + 1]["pos"]
 
-            if pos1 in {'PRO:POSS:DET', 'ADJ', 'QN'} and \
-                    (pos2.startswith('N:') or pos2 == 'N'):
-                scoring_board['N4'] += 1
+            if pos1 in {"PRO:POSS:DET", "ADJ", "QN"} and (
+                pos2.startswith("N:") or pos2 == "N"
+            ):
+                scoring_board["N4"] += 1
 
-            if turn_off_scoring_board('N4'):
+            if turn_off_scoring_board("N4"):
                 break
 
     # noinspection PyPep8Naming
@@ -226,14 +308,14 @@ def get_IPSyn(tagged_sents):
             return
 
         for i in range(1, graph.number_of_nodes() - 1):
-            pos1 = graph.node[i]['pos']
-            pos2 = graph.node[i + 1]['pos']
+            pos1 = graph.node[i]["pos"]
+            pos2 = graph.node[i + 1]["pos"]
 
-            if pos1 == 'DET' and (pos2.startswith('N:') or pos2 == 'N'):
-                scoring_board['N5'] += 1
-                add_one_point_if_needed('N4')
+            if pos1 == "DET" and (pos2.startswith("N:") or pos2 == "N"):
+                scoring_board["N5"] += 1
+                add_one_point_if_needed("N4")
 
-            if turn_off_scoring_board('N5'):
+            if turn_off_scoring_board("N5"):
                 break
 
     # noinspection PyPep8Naming
@@ -246,17 +328,19 @@ def get_IPSyn(tagged_sents):
             return
 
         for i in range(1, graph.number_of_nodes() - 2):
-            pos1 = graph.node[i]['pos']
-            pos2 = graph.node[i + 1]['pos']
-            pos3 = graph.node[i + 2]['pos']
+            pos1 = graph.node[i]["pos"]
+            pos2 = graph.node[i + 1]["pos"]
+            pos3 = graph.node[i + 2]["pos"]
 
-            if pos2 in {'PRO:POSS:DET', 'ADJ', 'QN'} and \
-                    (pos3.startswith('N:') or pos3 == 'N') and \
-                    (pos1 in {'V', 'PREP'}):
-                scoring_board['N6'] += 1
-                add_one_point_if_needed('N4')
+            if (
+                pos2 in {"PRO:POSS:DET", "ADJ", "QN"}
+                and (pos3.startswith("N:") or pos3 == "N")
+                and (pos1 in {"V", "PREP"})
+            ):
+                scoring_board["N6"] += 1
+                add_one_point_if_needed("N4")
 
-            if turn_off_scoring_board('N6'):
+            if turn_off_scoring_board("N6"):
                 break
 
     # noinspection PyPep8Naming
@@ -266,12 +350,12 @@ def get_IPSyn(tagged_sents):
         N7: Plural suffix
         """
         for i in range(1, graph.number_of_nodes()):
-            mor = graph.node[i]['mor']
+            mor = graph.node[i]["mor"]
 
-            if '-PL' in mor:
-                scoring_board['N7'] += 1
+            if "-PL" in mor:
+                scoring_board["N7"] += 1
 
-            if turn_off_scoring_board('N7'):
+            if turn_off_scoring_board("N7"):
                 break
 
     # noinspection PyPep8Naming
@@ -284,17 +368,19 @@ def get_IPSyn(tagged_sents):
             return
 
         for i in range(1, graph.number_of_nodes() - 2):
-            pos1 = graph.node[i]['pos']
-            pos2 = graph.node[i + 1]['pos']
-            pos3 = graph.node[i + 2]['pos']
+            pos1 = graph.node[i]["pos"]
+            pos2 = graph.node[i + 1]["pos"]
+            pos3 = graph.node[i + 2]["pos"]
 
-            if pos1 in {'PRO:POSS:DET', 'ADJ', 'QN'} and \
-                    (pos2.startswith('N:') or pos2 == 'N') and \
-                    (pos3 == 'V'):
-                scoring_board['N8'] += 1
-                add_one_point_if_needed('N4')
+            if (
+                pos1 in {"PRO:POSS:DET", "ADJ", "QN"}
+                and (pos2.startswith("N:") or pos2 == "N")
+                and (pos3 == "V")
+            ):
+                scoring_board["N8"] += 1
+                add_one_point_if_needed("N4")
 
-            if turn_off_scoring_board('N8'):
+            if turn_off_scoring_board("N8"):
                 break
 
     # noinspection PyPep8Naming
@@ -307,17 +393,19 @@ def get_IPSyn(tagged_sents):
             return
 
         for i in range(1, graph.number_of_nodes() - 2):
-            pos1 = graph.node[i]['pos']
-            pos2 = graph.node[i + 1]['pos']
-            pos3 = graph.node[i + 2]['pos']
+            pos1 = graph.node[i]["pos"]
+            pos2 = graph.node[i + 1]["pos"]
+            pos3 = graph.node[i + 2]["pos"]
 
-            if (pos1 in {'PRO:POSS:DET', 'ADJ', 'QN'}) and \
-                    (pos2 in {'ADJ', 'QN'}) and \
-                    (pos3.startswith('N:') or pos3 == 'N'):
-                scoring_board['N9'] += 1
-                add_one_point_if_needed('N4')
+            if (
+                (pos1 in {"PRO:POSS:DET", "ADJ", "QN"})
+                and (pos2 in {"ADJ", "QN"})
+                and (pos3.startswith("N:") or pos3 == "N")
+            ):
+                scoring_board["N9"] += 1
+                add_one_point_if_needed("N4")
 
-            if turn_off_scoring_board('N9'):
+            if turn_off_scoring_board("N9"):
                 break
 
     # noinspection PyPep8Naming
@@ -330,18 +418,18 @@ def get_IPSyn(tagged_sents):
             return
 
         for i in range(1, graph.number_of_nodes()):
-            pos = graph.node[i]['pos']
+            pos = graph.node[i]["pos"]
 
-            if pos == 'ADV':
+            if pos == "ADV":
                 for j in graph.edge[i].keys():
-                    pos_of_head = graph.node[j]['pos']
+                    pos_of_head = graph.node[j]["pos"]
 
-                    if pos_of_head in {'ADJ', 'N'}:
-                        scoring_board['N10'] += 1
-                        add_one_point_if_needed('V8')
+                    if pos_of_head in {"ADJ", "N"}:
+                        scoring_board["N10"] += 1
+                        add_one_point_if_needed("V8")
                         break
 
-                if turn_off_scoring_board('N10'):
+                if turn_off_scoring_board("N10"):
                     break
 
     # noinspection PyPep8Naming
@@ -351,16 +439,16 @@ def get_IPSyn(tagged_sents):
         N11: Any other bound morpheme on N or adjective
         """
         for i in range(1, graph.number_of_nodes()):
-            pos = graph.node[i]['pos']
+            pos = graph.node[i]["pos"]
 
-            if pos in {'N', 'ADJ'} or pos.startswith('N:'):
-                mor = graph.node[i]['mor']
-                mor = mor.replace('-PL', '')
+            if pos in {"N", "ADJ"} or pos.startswith("N:"):
+                mor = graph.node[i]["mor"]
+                mor = mor.replace("-PL", "")
 
-                if '-' in mor:
-                    scoring_board['N11'] += 1
+                if "-" in mor:
+                    scoring_board["N11"] += 1
 
-                if turn_off_scoring_board('N11'):
+                if turn_off_scoring_board("N11"):
                     break
 
     # noinspection PyPep8Naming
@@ -370,12 +458,12 @@ def get_IPSyn(tagged_sents):
         V1: Verb
         """
         for i in range(1, graph.number_of_nodes()):
-            pos = graph.node[i]['pos']
+            pos = graph.node[i]["pos"]
 
-            if pos == 'V':
-                scoring_board['V1'] += 1
+            if pos == "V":
+                scoring_board["V1"] += 1
 
-            if turn_off_scoring_board('V1'):
+            if turn_off_scoring_board("V1"):
                 break
 
     # noinspection PyPep8Naming
@@ -385,12 +473,12 @@ def get_IPSyn(tagged_sents):
         V2: Particle or Preposition
         """
         for i in range(1, graph.number_of_nodes()):
-            pos = graph.node[i]['pos']
+            pos = graph.node[i]["pos"]
 
-            if pos == 'PREP':
-                scoring_board['V2'] += 1
+            if pos == "PREP":
+                scoring_board["V2"] += 1
 
-            if turn_off_scoring_board('V2'):
+            if turn_off_scoring_board("V2"):
                 break
 
     # noinspection PyPep8Naming
@@ -402,11 +490,11 @@ def get_IPSyn(tagged_sents):
         for i in range(1, graph.number_of_nodes()):
             for j in graph.edge[i].keys():
 
-                if graph.edge[i][j]['rel'] == 'POBJ':
-                    scoring_board['V3'] += 1
-                    add_one_point_if_needed('V2')
+                if graph.edge[i][j]["rel"] == "POBJ":
+                    scoring_board["V3"] += 1
+                    add_one_point_if_needed("V2")
 
-                if turn_off_scoring_board('V3'):
+                if turn_off_scoring_board("V3"):
                     break
 
     # noinspection PyPep8Naming
@@ -419,8 +507,8 @@ def get_IPSyn(tagged_sents):
             return
 
         for i in range(1, graph.number_of_nodes()):
-            pos = graph.node[i]['pos']
-            if pos != 'COP':
+            pos = graph.node[i]["pos"]
+            if pos != "COP":
                 continue
 
             subject = False
@@ -430,17 +518,18 @@ def get_IPSyn(tagged_sents):
                 if head != i:
                     continue
 
-                if graph.edge[dep][head]['rel'] == 'SUBJ' and \
-                        not graph.node[dep]['pos'].endswith('WH'):
+                if graph.edge[dep][head]["rel"] == "SUBJ" and not graph.node[
+                    dep
+                ]["pos"].endswith("WH"):
                     subject = True
-                elif graph.edge[dep][head]['rel'] == 'PRED':
+                elif graph.edge[dep][head]["rel"] == "PRED":
                     predicate = True
 
             if subject and predicate:
-                scoring_board['V4'] += 1
-                add_one_point_if_needed('V1')
+                scoring_board["V4"] += 1
+                add_one_point_if_needed("V1")
 
-            if turn_off_scoring_board('V4'):
+            if turn_off_scoring_board("V4"):
                 break
 
     # noinspection PyPep8Naming
@@ -452,24 +541,34 @@ def get_IPSyn(tagged_sents):
         if not graph.number_of_nodes() > 2:
             return
 
-        pseudo_aux = {'hafta', 'haf(ta)',
-                      's\'pose(da)', 's\'poseda',
-                      'gonna', 'gon(na)',
-                      'wanna', 'wanta', 'wan(t)(a)', 'want(a)', 'wan(na)',
-                      'gotta', 'got(ta)',
-                      'better'}
+        pseudo_aux = {
+            "hafta",
+            "haf(ta)",
+            "s'pose(da)",
+            "s'poseda",
+            "gonna",
+            "gon(na)",
+            "wanna",
+            "wanta",
+            "wan(t)(a)",
+            "want(a)",
+            "wan(na)",
+            "gotta",
+            "got(ta)",
+            "better",
+        }
 
         for i in range(1, graph.number_of_nodes() - 1):
-            pos2 = graph.node[i + 1]['pos']
-            if pos2 != 'V':
+            pos2 = graph.node[i + 1]["pos"]
+            if pos2 != "V":
                 continue
 
-            word1 = graph.node[i]['word']
+            word1 = graph.node[i]["word"]
 
             if word1 in pseudo_aux:
-                scoring_board['V5'] += 1
+                scoring_board["V5"] += 1
 
-            if turn_off_scoring_board('V5'):
+            if turn_off_scoring_board("V5"):
                 break
 
     # noinspection PyPep8Naming
@@ -479,16 +578,17 @@ def get_IPSyn(tagged_sents):
         V6: Auxiliary be, do, have in VP (Also credit: V5)
         """
         for i in range(1, graph.number_of_nodes()):
-            pos = graph.node[i]['pos']
-            mor = graph.node[i]['mor']
+            pos = graph.node[i]["pos"]
+            mor = graph.node[i]["mor"]
             lemma = get_lemma_from_mor(mor)
 
-            if (pos == 'AUX' and not mor.startswith('wi')) or \
-                    (lemma == 'do' and pos == 'MOD'):
-                scoring_board['V6'] += 1
-                add_one_point_if_needed('V5')
+            if (pos == "AUX" and not mor.startswith("wi")) or (
+                lemma == "do" and pos == "MOD"
+            ):
+                scoring_board["V6"] += 1
+                add_one_point_if_needed("V5")
 
-            if turn_off_scoring_board('V6'):
+            if turn_off_scoring_board("V6"):
                 break
 
     # noinspection PyPep8Naming
@@ -498,12 +598,12 @@ def get_IPSyn(tagged_sents):
         V7: Progressive suffix
         """
         for i in range(1, graph.number_of_nodes()):
-            mor = graph.node[i]['mor']
+            mor = graph.node[i]["mor"]
 
-            if mor.endswith('PRESP'):
-                scoring_board['V7'] += 1
+            if mor.endswith("PRESP"):
+                scoring_board["V7"] += 1
 
-            if turn_off_scoring_board('V7'):
+            if turn_off_scoring_board("V7"):
                 break
 
     # noinspection PyPep8Naming
@@ -513,12 +613,12 @@ def get_IPSyn(tagged_sents):
         V8: Adverbs
         """
         for i in range(1, graph.number_of_nodes()):
-            pos = graph.node[i]['pos']
+            pos = graph.node[i]["pos"]
 
-            if pos == 'ADV':
-                scoring_board['V8'] += 1
+            if pos == "ADV":
+                scoring_board["V8"] += 1
 
-            if turn_off_scoring_board('V8'):
+            if turn_off_scoring_board("V8"):
                 break
 
     # noinspection PyPep8Naming
@@ -531,15 +631,15 @@ def get_IPSyn(tagged_sents):
             return
 
         for i in range(1, graph.number_of_nodes() - 1):
-            pos = graph.node[i]['pos']
-            word = graph.node[i]['word']
-            pos2 = graph.node[i + 1]['pos']
+            pos = graph.node[i]["pos"]
+            word = graph.node[i]["word"]
+            pos2 = graph.node[i + 1]["pos"]
 
-            if pos.startswith('MOD') and pos2 == 'V' and word != CLITIC:
-                scoring_board['V9'] += 1
-                add_one_point_if_needed('V5')
+            if pos.startswith("MOD") and pos2 == "V" and word != CLITIC:
+                scoring_board["V9"] += 1
+                add_one_point_if_needed("V5")
 
-            if turn_off_scoring_board('V9'):
+            if turn_off_scoring_board("V9"):
                 break
 
     # noinspection PyPep8Naming
@@ -549,12 +649,12 @@ def get_IPSyn(tagged_sents):
         V10: Third person singular present tense suffix
         """
         for i in range(1, graph.number_of_nodes()):
-            mor = graph.node[i]['mor']
+            mor = graph.node[i]["mor"]
 
-            if '-3S' in mor:
-                scoring_board['V10'] += 1
+            if "-3S" in mor:
+                scoring_board["V10"] += 1
 
-            if turn_off_scoring_board('V10'):
+            if turn_off_scoring_board("V10"):
                 break
 
     # noinspection PyPep8Naming
@@ -563,19 +663,19 @@ def get_IPSyn(tagged_sents):
         """
         V11: Past tense modal (Also credit V9)
         """
-        past_tense_modals = {'could', 'did', 'might', 'would', 'woudn\'t'}
+        past_tense_modals = {"could", "did", "might", "would", "woudn't"}
 
         for i in range(1, graph.number_of_nodes()):
-            pos = graph.node[i]['pos']
+            pos = graph.node[i]["pos"]
 
-            if pos != 'MOD':
+            if pos != "MOD":
                 continue
 
-            if graph.node[i]['word'] in past_tense_modals:
-                scoring_board['V11'] += 1
-                add_one_point_if_needed('V9')
+            if graph.node[i]["word"] in past_tense_modals:
+                scoring_board["V11"] += 1
+                add_one_point_if_needed("V9")
 
-            if turn_off_scoring_board('V11'):
+            if turn_off_scoring_board("V11"):
                 break
 
     # noinspection PyPep8Naming
@@ -585,12 +685,12 @@ def get_IPSyn(tagged_sents):
         V12: Regular past tense suffix
         """
         for i in range(1, graph.number_of_nodes()):
-            mor = graph.node[i]['mor']
+            mor = graph.node[i]["mor"]
 
-            if '-PAST' in mor and '-PASTP' not in mor:
-                scoring_board['V12'] += 1
+            if "-PAST" in mor and "-PASTP" not in mor:
+                scoring_board["V12"] += 1
 
-            if turn_off_scoring_board('V12'):
+            if turn_off_scoring_board("V12"):
                 break
 
     # noinspection PyPep8Naming
@@ -599,17 +699,17 @@ def get_IPSyn(tagged_sents):
         """
         V13: Past tense auxiliary (Also credit V6)
         """
-        aux_pos = {'AUX', 'MOD'}
+        aux_pos = {"AUX", "MOD"}
 
         for i in range(1, graph.number_of_nodes()):
-            mor = graph.node[i]['mor']
-            pos = graph.node[i]['pos']
+            mor = graph.node[i]["mor"]
+            pos = graph.node[i]["pos"]
 
-            if '&PAST' in mor and pos in aux_pos:
-                scoring_board['V13'] += 1
-                add_one_point_if_needed('V6')
+            if "&PAST" in mor and pos in aux_pos:
+                scoring_board["V13"] += 1
+                add_one_point_if_needed("V6")
 
-            if turn_off_scoring_board('V13'):
+            if turn_off_scoring_board("V13"):
                 break
 
     # noinspection PyPep8Naming
@@ -621,12 +721,12 @@ def get_IPSyn(tagged_sents):
         for i in range(2, graph.number_of_nodes() - 1):
             # note the possible values of i for "medial" (not 1st or last word)
 
-            pos = graph.node[i]['pos']
-            if pos == 'ADV':
-                scoring_board['V14'] += 1
-                add_one_point_if_needed('V8')
+            pos = graph.node[i]["pos"]
+            if pos == "ADV":
+                scoring_board["V14"] += 1
+                add_one_point_if_needed("V8")
 
-            if turn_off_scoring_board('V14'):
+            if turn_off_scoring_board("V14"):
                 break
 
     # noinspection PyPep8Naming
@@ -640,23 +740,23 @@ def get_IPSyn(tagged_sents):
             return
 
         for i in range(1, graph.number_of_nodes() - 1):
-            pos1 = graph.node[i]['pos']
+            pos1 = graph.node[i]["pos"]
 
-            if pos1 not in {'COP', 'AUX', 'MOD'}:
+            if pos1 not in {"COP", "AUX", "MOD"}:
                 continue
 
-            mor2 = graph.node[i + 1]['mor']
+            mor2 = graph.node[i + 1]["mor"]
 
-            if mor2 in {'', 'beg', 'end'}:  # if mor2 is a punctuation
-                scoring_board['V15'] += 1
-                add_one_point_if_needed('V4')
-                add_one_point_if_needed('V6')
-                add_one_point_if_needed('V9')
-                add_one_point_if_needed('V11')
-                add_one_point_if_needed('V13')
-                add_one_point_if_needed('V16')
+            if mor2 in {"", "beg", "end"}:  # if mor2 is a punctuation
+                scoring_board["V15"] += 1
+                add_one_point_if_needed("V4")
+                add_one_point_if_needed("V6")
+                add_one_point_if_needed("V9")
+                add_one_point_if_needed("V11")
+                add_one_point_if_needed("V13")
+                add_one_point_if_needed("V16")
 
-            if turn_off_scoring_board('V15'):
+            if turn_off_scoring_board("V15"):
                 break
 
     # noinspection PyPep8Naming
@@ -666,14 +766,14 @@ def get_IPSyn(tagged_sents):
         V16: Past tense copula (Also credit V4)
         """
         for i in range(1, graph.number_of_nodes()):
-            pos = graph.node[i]['pos']
-            mor = graph.node[i]['mor']
+            pos = graph.node[i]["pos"]
+            mor = graph.node[i]["mor"]
 
-            if pos.startswith('COP') and 'PAST' in mor:
-                scoring_board['V16'] += 1
-                add_one_point_if_needed('V4')
+            if pos.startswith("COP") and "PAST" in mor:
+                scoring_board["V16"] += 1
+                add_one_point_if_needed("V4")
 
-            if turn_off_scoring_board('V16'):
+            if turn_off_scoring_board("V16"):
                 break
 
     # noinspection PyPep8Naming
@@ -683,17 +783,17 @@ def get_IPSyn(tagged_sents):
         Q1: Intonationally marked question
         Automatically score 2 points if child earns 2 points on Q4 and/or Q8
         """
-        final_word = graph.node[graph.number_of_nodes() - 1]['word']
-        if final_word != '?':
+        final_word = graph.node[graph.number_of_nodes() - 1]["word"]
+        if final_word != "?":
             return
 
-        first_word = graph.node[1]['word']
-        if first_word in {'what', 'why', 'how', 'which', 'where', 'when'}:
+        first_word = graph.node[1]["word"]
+        if first_word in {"what", "why", "how", "which", "where", "when"}:
             return
 
-        scoring_board['Q1'] += 1
+        scoring_board["Q1"] += 1
 
-        if turn_off_scoring_board('Q1'):
+        if turn_off_scoring_board("Q1"):
             pass
 
     # noinspection PyPep8Naming
@@ -705,18 +805,18 @@ def get_IPSyn(tagged_sents):
         """
         # needs work here
         # currently only testing for wh-pronoun alone
-        final_word = graph.node[graph.number_of_nodes() - 1]['word']
-        if final_word != '?':
+        final_word = graph.node[graph.number_of_nodes() - 1]["word"]
+        if final_word != "?":
             return
 
-        first_word = graph.node[1]['word']
-        if first_word not in {'what', 'why', 'how', 'which', 'where', 'when'}:
+        first_word = graph.node[1]["word"]
+        if first_word not in {"what", "why", "how", "which", "where", "when"}:
             return
 
         if graph.number_of_nodes() > 2:
-            scoring_board['Q2'] += 1
+            scoring_board["Q2"] += 1
 
-        if turn_off_scoring_board('Q2'):
+        if turn_off_scoring_board("Q2"):
             pass
 
     # noinspection PyPep8Naming
@@ -731,14 +831,17 @@ def get_IPSyn(tagged_sents):
             return
 
         for i in range(1, graph.number_of_nodes() - 1):
-            word1 = graph.node[i]['word']
-            mor2 = graph.node[i + 1]['mor']
+            word1 = graph.node[i]["word"]
+            mor2 = graph.node[i + 1]["mor"]
 
-            if (word1 in {'no', 'not', 'can\'t', 'don\'t'}
-                    and mor2 not in {'', 'beg', 'end'}):
-                scoring_board['Q3'] += 1
+            if word1 in {"no", "not", "can't", "don't"} and mor2 not in {
+                "",
+                "beg",
+                "end",
+            }:
+                scoring_board["Q3"] += 1
 
-            if turn_off_scoring_board('Q3'):
+            if turn_off_scoring_board("Q3"):
                 break
 
     # noinspection PyPep8Naming
@@ -750,24 +853,24 @@ def get_IPSyn(tagged_sents):
         """
         if not graph.number_of_nodes() > 2:
             return
-        final_word = graph.node[graph.number_of_nodes() - 1]['word']
-        if final_word != '?':
+        final_word = graph.node[graph.number_of_nodes() - 1]["word"]
+        if final_word != "?":
             return
 
-        first_word = graph.node[1]['word']
-        if first_word not in {'what', 'why', 'how', 'which', 'where', 'when'}:
+        first_word = graph.node[1]["word"]
+        if first_word not in {"what", "why", "how", "which", "where", "when"}:
             return
 
         root = graph.edges()[1]
 
-        if graph.node[root]['pos'] == 'V':
-            scoring_board['Q4'] += 1
+        if graph.node[root]["pos"] == "V":
+            scoring_board["Q4"] += 1
 
-        if turn_off_scoring_board('Q4'):
-            scoring_board['Q1'] = 2
-            scoring_board['Q2'] = 2
-            scoring_board_stop['Q1'] = True
-            scoring_board_stop['Q2'] = True
+        if turn_off_scoring_board("Q4"):
+            scoring_board["Q1"] = 2
+            scoring_board["Q2"] = 2
+            scoring_board_stop["Q1"] = True
+            scoring_board_stop["Q2"] = True
 
     # noinspection PyPep8Naming
     @test_item
@@ -782,23 +885,23 @@ def get_IPSyn(tagged_sents):
             if dep > head:
                 continue
 
-            rel = graph.edge[dep][head]['rel']
+            rel = graph.edge[dep][head]["rel"]
 
-            if rel != 'SUBJ':
+            if rel != "SUBJ":
                 continue
 
-            head_pos = graph.node[head]['pos']
+            head_pos = graph.node[head]["pos"]
 
-            if head_pos != 'V':
+            if head_pos != "V":
                 continue
 
             for i in range(dep + 1, head):  # head > dep
-                if graph.node[i]['pos'] == 'NEG':
-                    scoring_board['Q5'] += 1
-                    add_one_point_if_needed('Q3')
+                if graph.node[i]["pos"] == "NEG":
+                    scoring_board["Q5"] += 1
+                    add_one_point_if_needed("Q3")
                     break
 
-            if turn_off_scoring_board('Q5'):
+            if turn_off_scoring_board("Q5"):
                 break
 
     # noinspection PyPep8Naming
@@ -811,12 +914,12 @@ def get_IPSyn(tagged_sents):
             return
 
         for i in range(1, graph.number_of_nodes()):
-            if scoring_board_stop['Q6']:
+            if scoring_board_stop["Q6"]:
                 break
 
-            pos = graph.node[i]['pos']
+            pos = graph.node[i]["pos"]
 
-            if pos not in {'COP', 'MOD', 'AUX'}:
+            if pos not in {"COP", "MOD", "AUX"}:
                 continue
 
             for dep, head in graph.edges().items():
@@ -827,12 +930,12 @@ def get_IPSyn(tagged_sents):
                     continue
                     # we want "inversion" (= dep-wh comes before head-V)
 
-                pos_of_dep = graph.node[dep]['pos']
+                pos_of_dep = graph.node[dep]["pos"]
 
-                if pos_of_dep == 'ADV:WH':
-                    scoring_board['Q6'] += 1
+                if pos_of_dep == "ADV:WH":
+                    scoring_board["Q6"] += 1
 
-                if turn_off_scoring_board('Q6'):
+                if turn_off_scoring_board("Q6"):
                     break
 
     # noinspection PyPep8Naming
@@ -845,22 +948,22 @@ def get_IPSyn(tagged_sents):
             return
 
         for i in range(1, graph.number_of_nodes()):
-            pos = graph.node[i]['pos']
+            pos = graph.node[i]["pos"]
 
-            if pos not in {'MOD', 'COP', 'AUX'}:
+            if pos not in {"MOD", "COP", "AUX"}:
                 continue
 
             for dep, head in graph.edges().items():
                 if head != i:
                     continue
 
-                pos_of_dep = graph.node[dep]['pos']
+                pos_of_dep = graph.node[dep]["pos"]
 
-                if pos_of_dep == 'NEG':
-                    scoring_board['Q7'] += 1
-                    add_one_point_if_needed('Q5')
+                if pos_of_dep == "NEG":
+                    scoring_board["Q7"] += 1
+                    add_one_point_if_needed("Q5")
 
-                if turn_off_scoring_board('Q7'):
+                if turn_off_scoring_board("Q7"):
                     break
 
     # noinspection PyPep8Naming
@@ -874,34 +977,34 @@ def get_IPSyn(tagged_sents):
         if not graph.number_of_nodes() > 2:
             return
 
-        final_word = graph.node[graph.number_of_nodes() - 1]['word']
-        if final_word != '?':
+        final_word = graph.node[graph.number_of_nodes() - 1]["word"]
+        if final_word != "?":
             return
 
         for i in range(1, graph.number_of_nodes() - 1):
-            if scoring_board_stop['Q8']:
+            if scoring_board_stop["Q8"]:
                 break
 
-            pos1 = graph.node[i]['pos']
+            pos1 = graph.node[i]["pos"]
 
             if i != 1:
-                wh_test = graph.node[i - 1]['pos']
+                wh_test = graph.node[i - 1]["pos"]
             else:
-                wh_test = 'dummy'
+                wh_test = "dummy"
 
-            if pos1 in {'COP', 'MOD', 'AUX'} and not wh_test.endswith('WH'):
+            if pos1 in {"COP", "MOD", "AUX"} and not wh_test.endswith("WH"):
 
                 for j in graph.edge[i + 1].keys():
-                    rel2 = graph.edge[i + 1][j]['rel']
+                    rel2 = graph.edge[i + 1][j]["rel"]
 
-                    if rel2 == 'SUBJ':
-                        scoring_board['Q8'] += 1
+                    if rel2 == "SUBJ":
+                        scoring_board["Q8"] += 1
 
-                    if turn_off_scoring_board('Q8'):
-                        scoring_board['Q1'] = 2
-                        scoring_board['Q2'] = 2
-                        scoring_board_stop['Q1'] = True
-                        scoring_board_stop['Q2'] = True
+                    if turn_off_scoring_board("Q8"):
+                        scoring_board["Q1"] = 2
+                        scoring_board["Q2"] = 2
+                        scoring_board_stop["Q1"] = True
+                        scoring_board_stop["Q2"] = True
                         break
 
     # noinspection PyPep8Naming
@@ -910,13 +1013,13 @@ def get_IPSyn(tagged_sents):
         """
         Q9: Why, when, which, whose
         """
-        wh = {'why', 'when', 'which', 'whose'}
+        wh = {"why", "when", "which", "whose"}
         for i in range(1, graph.number_of_nodes()):
-            word = graph.node[i]['word']
+            word = graph.node[i]["word"]
             if word in wh:
-                scoring_board['Q9'] += 1
+                scoring_board["Q9"] += 1
 
-            if turn_off_scoring_board('Q9'):
+            if turn_off_scoring_board("Q9"):
                 break
 
     # noinspection PyPep8Naming
@@ -929,31 +1032,31 @@ def get_IPSyn(tagged_sents):
             return
 
         # Part 1: test for ending "okay ?", "ok ?", "right ?"
-        final_word = graph.node[graph.number_of_nodes() - 1]['word']
-        if final_word != '?':
+        final_word = graph.node[graph.number_of_nodes() - 1]["word"]
+        if final_word != "?":
             return
 
-        second_final_word = graph.node[graph.number_of_nodes() - 2]['word']
-        if second_final_word in {'okay', 'ok', 'right'}:
-            scoring_board['Q10'] += 1
+        second_final_word = graph.node[graph.number_of_nodes() - 2]["word"]
+        if second_final_word in {"okay", "ok", "right"}:
+            scoring_board["Q10"] += 1
 
-        if turn_off_scoring_board('Q10'):
+        if turn_off_scoring_board("Q10"):
             return
 
         # Part 2: test for "normal" tag questions
-        good_pos = {'COP NEG PRO ?', 'COP PRO ?'}
+        good_pos = {"COP NEG PRO ?", "COP PRO ?"}
         collate = []
 
         for i in range(1, graph.number_of_nodes()):
-            collate.append(graph.node[i]['pos'])
+            collate.append(graph.node[i]["pos"])
 
-        test = ' '.join(collate)
+        test = " ".join(collate)
 
         for tag in good_pos:
             if tag in test:
-                scoring_board['Q10'] += 1
+                scoring_board["Q10"] += 1
 
-            if turn_off_scoring_board('Q10'):
+            if turn_off_scoring_board("Q10"):
                 break
 
     # noinspection PyPep8Naming
@@ -965,9 +1068,9 @@ def get_IPSyn(tagged_sents):
         if not graph.number_of_nodes() > 2:
             return
 
-        scoring_board['S1'] += 1
+        scoring_board["S1"] += 1
 
-        if turn_off_scoring_board('S1'):
+        if turn_off_scoring_board("S1"):
             pass
 
     # noinspection PyPep8Naming
@@ -983,18 +1086,18 @@ def get_IPSyn(tagged_sents):
             if dep > head:
                 continue
 
-            rel = graph.edge[dep][head]['rel']
+            rel = graph.edge[dep][head]["rel"]
 
-            if rel != 'SUBJ':
+            if rel != "SUBJ":
                 continue
 
-            head_pos = graph.node[head]['pos']
+            head_pos = graph.node[head]["pos"]
 
-            if head_pos == 'V':
-                scoring_board['S2'] += 1
-                add_one_point_if_needed('S1')
+            if head_pos == "V":
+                scoring_board["S2"] += 1
+                add_one_point_if_needed("S1")
 
-            if turn_off_scoring_board('S2'):
+            if turn_off_scoring_board("S2"):
                 break
 
     # noinspection PyPep8Naming
@@ -1010,18 +1113,18 @@ def get_IPSyn(tagged_sents):
             if dep < head:
                 continue
 
-            rel = graph.edge[dep][head]['rel']
+            rel = graph.edge[dep][head]["rel"]
 
-            if rel != 'OBJ':
+            if rel != "OBJ":
                 continue
 
-            head_pos = graph.node[head]['pos']
+            head_pos = graph.node[head]["pos"]
 
-            if head_pos == 'V':
-                scoring_board['S3'] += 1
-                add_one_point_if_needed('S1')
+            if head_pos == "V":
+                scoring_board["S3"] += 1
+                add_one_point_if_needed("S1")
 
-            if turn_off_scoring_board('S3'):
+            if turn_off_scoring_board("S3"):
                 break
 
     # noinspection PyPep8Naming
@@ -1034,9 +1137,9 @@ def get_IPSyn(tagged_sents):
             return
 
         for i in range(1, graph.number_of_nodes()):
-            pos = graph.node[i]['pos']
+            pos = graph.node[i]["pos"]
 
-            if pos != 'V':
+            if pos != "V":
                 continue
 
             has_subject = False
@@ -1046,20 +1149,24 @@ def get_IPSyn(tagged_sents):
                 if i != test_verb:
                     continue
 
-                if (dep < test_verb
-                        and graph.edge[dep][test_verb]['rel'] == 'SUBJ'):
+                if (
+                    dep < test_verb
+                    and graph.edge[dep][test_verb]["rel"] == "SUBJ"
+                ):
                     has_subject = True
 
-                if (dep > test_verb
-                        and graph.edge[dep][test_verb]['rel'] == 'OBJ'):
+                if (
+                    dep > test_verb
+                    and graph.edge[dep][test_verb]["rel"] == "OBJ"
+                ):
                     has_object = True
 
             if has_subject and has_object:
-                scoring_board['S4'] += 1
-                add_one_point_if_needed('S2')
-                add_one_point_if_needed('S3')
+                scoring_board["S4"] += 1
+                add_one_point_if_needed("S2")
+                add_one_point_if_needed("S3")
 
-            if turn_off_scoring_board('S4'):
+            if turn_off_scoring_board("S4"):
                 break
 
     # noinspection PyPep8Naming
@@ -1069,12 +1176,12 @@ def get_IPSyn(tagged_sents):
         S5: Conjunction (any)
         """
         for i in range(1, graph.number_of_nodes()):
-            pos = graph.node[i]['pos']
+            pos = graph.node[i]["pos"]
 
-            if pos == 'CONJ':
-                scoring_board['S5'] += 1
+            if pos == "CONJ":
+                scoring_board["S5"] += 1
 
-            if turn_off_scoring_board('S5'):
+            if turn_off_scoring_board("S5"):
                 break
 
     # noinspection PyPep8Naming
@@ -1091,18 +1198,18 @@ def get_IPSyn(tagged_sents):
         deps_of_verbs = []
 
         for dep, head in all_edges.items():
-            head_pos = graph.node[head]['pos']
+            head_pos = graph.node[head]["pos"]
 
-            if head_pos != 'V':
+            if head_pos != "V":
                 continue
 
             verbs.append(head)
             deps_of_verbs.append(dep)
 
         if len(verbs) == 2 and tuple(verbs) not in list(all_edges.items()):
-            scoring_board['S6'] += 1
+            scoring_board["S6"] += 1
 
-        if turn_off_scoring_board('S6'):
+        if turn_off_scoring_board("S6"):
             pass
 
     # noinspection PyPep8Naming
@@ -1117,18 +1224,20 @@ def get_IPSyn(tagged_sents):
         # for all trios, we want the middle word to be CONJ (for pos)
         # and the first+final words are *not* punctuation (for mor)
         for i in range(1, graph.number_of_nodes() - 2):
-            mor1 = graph.node[i]['mor']
-            pos2 = graph.node[i + 1]['pos']
-            mor3 = graph.node[i + 2]['mor']
+            mor1 = graph.node[i]["mor"]
+            pos2 = graph.node[i + 1]["pos"]
+            mor3 = graph.node[i + 2]["mor"]
 
-            punctuations = {'', 'beg', 'end'}
-            if (pos2 == 'CONJ'
-                    and mor1 not in punctuations
-                    and mor3 not in punctuations):
-                scoring_board['S7'] += 1
-                add_one_point_if_needed('S5')
+            punctuations = {"", "beg", "end"}
+            if (
+                pos2 == "CONJ"
+                and mor1 not in punctuations
+                and mor3 not in punctuations
+            ):
+                scoring_board["S7"] += 1
+                add_one_point_if_needed("S5")
 
-            if turn_off_scoring_board('S7'):
+            if turn_off_scoring_board("S7"):
                 break
 
     # noinspection PyPep8Naming
@@ -1146,9 +1255,9 @@ def get_IPSyn(tagged_sents):
         # -- infinitive "to" with a head *not* being the main verb
 
         for dep, head in graph.edges().items():
-            pos = graph.node[dep]['pos']
+            pos = graph.node[dep]["pos"]
 
-            if pos != 'INF':
+            if pos != "INF":
                 continue
 
             inf_verb = head
@@ -1157,13 +1266,13 @@ def get_IPSyn(tagged_sents):
                 if inf_verb != test_verb:
                     continue
 
-                if not graph.edge[inf_verb][new_head]['rel'].endswith('ROOT'):
-                    scoring_board['S8'] += 1
-                    add_one_point_if_needed('S6')
-                    add_one_point_if_needed('V5')
+                if not graph.edge[inf_verb][new_head]["rel"].endswith("ROOT"):
+                    scoring_board["S8"] += 1
+                    add_one_point_if_needed("S6")
+                    add_one_point_if_needed("V5")
                     break
 
-            if turn_off_scoring_board('S8'):
+            if turn_off_scoring_board("S8"):
                 break
 
     # noinspection PyPep8Naming
@@ -1173,14 +1282,14 @@ def get_IPSyn(tagged_sents):
         S9: Let/Make/Help/Watch introducer
         (also needs a dependent verb, according to the examples)
         """
-        targets = {'let', 'make', 'help', 'watch'}
+        targets = {"let", "make", "help", "watch"}
         all_edges = graph.edges()
 
         for dep, head in all_edges.items():
             if dep != 1:
                 continue
 
-            if graph.node[dep]['word'] not in targets:
+            if graph.node[dep]["word"] not in targets:
                 continue
 
             target_head = dep
@@ -1189,11 +1298,11 @@ def get_IPSyn(tagged_sents):
                 if test_head != target_head:
                     continue
 
-                if graph.node[test_dep]['pos'] == 'V':
-                    scoring_board['S9'] += 1
+                if graph.node[test_dep]["pos"] == "V":
+                    scoring_board["S9"] += 1
                     break
 
-            if turn_off_scoring_board('S9'):
+            if turn_off_scoring_board("S9"):
                 break
 
     # noinspection PyPep8Naming
@@ -1203,17 +1312,17 @@ def get_IPSyn(tagged_sents):
         S10: Adverbial conjunction (Also credit: S5)
         (conjunction excluding "and", "or", "then" -- according to examples)
         """
-        exceptions = {'and', 'or', 'then'}
+        exceptions = {"and", "or", "then"}
 
         for i in range(1, graph.number_of_nodes()):
-            word = graph.node[i]['word']
-            pos = graph.node[i]['pos']
+            word = graph.node[i]["word"]
+            pos = graph.node[i]["pos"]
 
-            if pos == 'CONJ' and word not in exceptions:
-                scoring_board['S10'] += 1
-                add_one_point_if_needed('S5')
+            if pos == "CONJ" and word not in exceptions:
+                scoring_board["S10"] += 1
+                add_one_point_if_needed("S5")
 
-            if turn_off_scoring_board('S10'):
+            if turn_off_scoring_board("S10"):
                 break
 
     # noinspection PyPep8Naming
@@ -1230,16 +1339,18 @@ def get_IPSyn(tagged_sents):
         for dep, head in graph.edges().items():
             subject_count_increment = False
 
-            if (graph.edge[dep][head]['rel'] == 'SUBJ'
-                    and graph.node[dep]['word'] != CLITIC):
+            if (
+                graph.edge[dep][head]["rel"] == "SUBJ"
+                and graph.node[dep]["word"] != CLITIC
+            ):
                 subject_count += 1
                 subject_count_increment = True
 
             if subject_count_increment and subject_count > 1:
-                scoring_board['S11'] += 1
-                add_one_point_if_needed('S6')
+                scoring_board["S11"] += 1
+                add_one_point_if_needed("S6")
 
-            if turn_off_scoring_board('S11'):
+            if turn_off_scoring_board("S11"):
                 break
 
     # noinspection PyPep8Naming
@@ -1253,19 +1364,19 @@ def get_IPSyn(tagged_sents):
             return
 
         for dep, head in graph.edges().items():
-            dep_word = graph.node[dep]['word']
+            dep_word = graph.node[dep]["word"]
 
-            if dep_word != 'and':
+            if dep_word != "and":
                 continue
 
-            rel = graph.edge[dep][head]['rel']
+            rel = graph.edge[dep][head]["rel"]
 
-            if rel == 'CONJ' and graph.node[head]['pos'] == 'V':
-                scoring_board['S12'] += 1
-                add_one_point_if_needed('S6')
-                add_one_point_if_needed('S5')
+            if rel == "CONJ" and graph.node[head]["pos"] == "V":
+                scoring_board["S12"] += 1
+                add_one_point_if_needed("S6")
+                add_one_point_if_needed("S5")
 
-            if turn_off_scoring_board('S12'):
+            if turn_off_scoring_board("S12"):
                 break
 
     # noinspection PyPep8Naming
@@ -1278,32 +1389,34 @@ def get_IPSyn(tagged_sents):
             return
 
         for dep, head in graph.edges().items():
-            dep_pos = graph.node[dep]['pos']
-            if not dep_pos.endswith('WH'):
+            dep_pos = graph.node[dep]["pos"]
+            if not dep_pos.endswith("WH"):
                 continue
 
             inf = False
-            if (dep + 1 in graph.nodes()
-                    and graph.node[dep + 1]['word'] == 'INF'):
+            if (
+                dep + 1 in graph.nodes()
+                and graph.node[dep + 1]["word"] == "INF"
+            ):
                 inf = True
 
             # we want the head of wh-word to NOT have ROOT as rel
             # (= ban a wh question)
 
-            rel = ''
+            rel = ""
             for i in graph.edge[head].keys():
-                rel = graph.edge[head][i]['rel']
+                rel = graph.edge[head][i]["rel"]
                 break
 
-            if rel != 'ROOT':
-                scoring_board['S13'] += 1
-                add_one_point_if_needed('S6')
+            if rel != "ROOT":
+                scoring_board["S13"] += 1
+                add_one_point_if_needed("S6")
 
                 if inf:
-                    add_one_point_if_needed('S8')
-                    add_one_point_if_needed('S17')
+                    add_one_point_if_needed("S8")
+                    add_one_point_if_needed("S17")
 
-            if turn_off_scoring_board('S13'):
+            if turn_off_scoring_board("S13"):
                 break
 
     # noinspection PyPep8Naming
@@ -1318,9 +1431,9 @@ def get_IPSyn(tagged_sents):
         dep_head_pairs_for_obj = []
 
         for dep, head in graph.edges().items():
-            rel = graph.edge[dep][head]['rel']
+            rel = graph.edge[dep][head]["rel"]
 
-            if rel != 'OBJ':
+            if rel != "OBJ":
                 continue
 
             dep_head_pairs_for_obj.append((dep, head))
@@ -1328,10 +1441,10 @@ def get_IPSyn(tagged_sents):
         heads = [head for _, head in dep_head_pairs_for_obj]
 
         if len(set(heads)) < len(dep_head_pairs_for_obj):
-            scoring_board['S14'] += 1
-            add_one_point_if_needed('S3')
+            scoring_board["S14"] += 1
+            add_one_point_if_needed("S3")
 
-        if turn_off_scoring_board('S14'):
+        if turn_off_scoring_board("S14"):
             pass
 
     # noinspection PyPep8Naming
@@ -1343,14 +1456,19 @@ def get_IPSyn(tagged_sents):
         if not graph.number_of_nodes() > 3:
             return
 
-        number_of_verbs = sum([1 for i in range(1, graph.number_of_nodes())
-                               if graph.node[i]['pos'] == 'V'])
+        number_of_verbs = sum(
+            [
+                1
+                for i in range(1, graph.number_of_nodes())
+                if graph.node[i]["pos"] == "V"
+            ]
+        )
 
         if number_of_verbs > 2:
-            scoring_board['S15'] += 1
-            add_one_point_if_needed('S6')
+            scoring_board["S15"] += 1
+            add_one_point_if_needed("S6")
 
-        if turn_off_scoring_board('S15'):
+        if turn_off_scoring_board("S15"):
             pass
 
     # noinspection PyPep8Naming
@@ -1370,20 +1488,20 @@ def get_IPSyn(tagged_sents):
             if dep < head:
                 continue
 
-            if graph.edge[dep][head]['rel'] != 'CMOD':
+            if graph.edge[dep][head]["rel"] != "CMOD":
                 continue
 
             and_ = False
             for i in range(head + 1, dep):  # dep > head
-                if graph.node[i]['word'] == 'and':
+                if graph.node[i]["word"] == "and":
                     and_ = True
                     break
 
             if not and_:
-                scoring_board['S16'] += 1
-                add_one_point_if_needed('S6')
+                scoring_board["S16"] += 1
+                add_one_point_if_needed("S6")
 
-            if turn_off_scoring_board('S16'):
+            if turn_off_scoring_board("S16"):
                 break
 
     # noinspection PyPep8Naming
@@ -1399,13 +1517,13 @@ def get_IPSyn(tagged_sents):
         # ("me" is the new subject for the infinitive clause)
 
         for dep, head in graph.edges().items():
-            word = graph.node[dep]['word']
-            pos = graph.node[dep]['pos']
+            word = graph.node[dep]["word"]
+            pos = graph.node[dep]["pos"]
 
-            if word != 'to' or pos != 'INF':
+            if word != "to" or pos != "INF":
                 continue
 
-            inf_verb = head   # "go" in the example
+            inf_verb = head  # "go" in the example
             main_verb = graph.edges()[inf_verb]  # "wants"
 
             # check if there's an object of "wants"
@@ -1413,12 +1531,12 @@ def get_IPSyn(tagged_sents):
                 if test_main_verb != main_verb:
                     continue
 
-                if graph.edge[test_obj][test_main_verb]['rel'] == 'OBJ':
-                    scoring_board['S17'] += 1
-                    add_one_point_if_needed('S8')
+                if graph.edge[test_obj][test_main_verb]["rel"] == "OBJ":
+                    scoring_board["S17"] += 1
+                    add_one_point_if_needed("S8")
                     break
 
-            if turn_off_scoring_board('S17'):
+            if turn_off_scoring_board("S17"):
                 break
 
     # noinspection PyPep8Naming
@@ -1428,13 +1546,13 @@ def get_IPSyn(tagged_sents):
         S18: Gerund (Also credit: V7)
         """
         for i in range(1, graph.number_of_nodes()):
-            pos = graph.node[i]['pos']
+            pos = graph.node[i]["pos"]
 
-            if pos == 'N:GERUND':
-                scoring_board['S18'] += 1
-                add_one_point_if_needed('V7')
+            if pos == "N:GERUND":
+                scoring_board["S18"] += 1
+                add_one_point_if_needed("V7")
 
-            if turn_off_scoring_board('S18'):
+            if turn_off_scoring_board("S18"):
                 break
 
     # noinspection PyPep8Naming
@@ -1450,23 +1568,23 @@ def get_IPSyn(tagged_sents):
         subj_position_list = []
 
         for dep, head in graph.edges().items():
-            pos = graph.node[dep]['pos']
-            rel = graph.edge[dep][head]['rel']
+            pos = graph.node[dep]["pos"]
+            rel = graph.edge[dep][head]["rel"]
 
-            if pos == 'CONJ' and dep < conj_position:
+            if pos == "CONJ" and dep < conj_position:
                 conj_position = dep
 
-            if rel == 'SUBJ':
+            if rel == "SUBJ":
                 subj_position_list.append(dep)
 
         if len(subj_position_list) < 2:
             return
 
         if conj_position < min(subj_position_list):
-            scoring_board['S19'] += 1
-            add_one_point_if_needed('S6')
+            scoring_board["S19"] += 1
+            add_one_point_if_needed("S6")
 
-        if turn_off_scoring_board('S19'):
+        if turn_off_scoring_board("S19"):
             pass
 
     return sum(scoring_board.values())

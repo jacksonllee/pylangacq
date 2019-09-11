@@ -17,7 +17,7 @@ with open(os.path.join(_THIS_DIR, "pylangacq", "_version.py")) as f:
     # get __version__
     exec(f.read())
 
-with open(os.path.join(_THIS_DIR, "README.rst")) as f:
+with open(os.path.join(_THIS_DIR, "README.md")) as f:
     _LONG_DESCRIPTION = f.read().strip()
 
 
@@ -27,6 +27,7 @@ def main():
         version=__version__,  # noqa: F821
         description="PyLangAcq: Language Acquisition Research in Python",
         long_description=_LONG_DESCRIPTION,
+        long_description_content_type="text/markdown",
         url="http://pylangacq.org/",
         author="Jackson L. Lee",
         author_email="jacksonlunlee@gmail.com",

@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import division
-
 from pylangacq.util import CLITIC, get_lemma_from_mor
 from pylangacq.dependency import DependencyGraph
 

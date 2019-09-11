@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Interfacing with CHAT data files."""
 
 import sys
@@ -19,7 +17,6 @@ from pylangacq.util import (ENCODING, CLITIC,
                             get_participant_code, convert_date_to_tuple,
                             clean_utterance, clean_word, get_lemma_from_mor,
                             get_time_marker)
-from pylangacq.compat import open, unicode_, OPEN_MODE, FileNotFoundError
 
 
 _TEMP_DIR = tempfile.mkdtemp()
@@ -169,7 +166,7 @@ class Reader(object):
 
         filenames_set = set()
         for filename in filenames:
-            if not isinstance(filename, (str, unicode_)):
+            if not isinstance(filename, str):
                 raise ValueError('{} is not str'.format(repr(filename)))
 
             if windows:
@@ -845,7 +842,7 @@ class _SingleReader(object):
 
     def _get_file_object(self):
         if self._filename:
-            return open(self._filename, mode=OPEN_MODE, encoding=self.encoding)
+            return open(self._filename, mode="r", encoding=self.encoding)
         else:
             return io.TextIOWrapper(io.BytesIO(self._str.encode()),
                                     encoding=self.encoding)
@@ -1276,7 +1273,7 @@ class _SingleReader(object):
 
         if participant is None:
             include_participants = self.participant_codes()
-        elif isinstance(participant, (str, unicode_)):
+        elif isinstance(participant, str):
             include_participants = {participant}
         elif hasattr(participant, '__iter__'):
             include_participants = set(participant)
@@ -1287,7 +1284,7 @@ class _SingleReader(object):
 
         if exclude is None:
             exclude_participants = set()
-        elif isinstance(exclude, (str, unicode_)):
+        elif isinstance(exclude, str):
             exclude_participants = {exclude}
         elif hasattr(exclude, '__iter__'):
             exclude_participants = set(exclude)

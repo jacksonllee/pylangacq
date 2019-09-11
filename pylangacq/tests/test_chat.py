@@ -5,9 +5,6 @@ If anything fails, we probably also have to update the documentation
 (and fix the bugs, if any).
 """
 
-from __future__ import print_function
-
-import sys
 import os
 import zipfile
 import tempfile
@@ -16,10 +13,6 @@ import pytest
 import requests
 
 from pylangacq import read_chat, Reader
-
-
-if sys.version_info[0] == 2:  # pragma: no coverage
-    from io import open
 
 
 _THIS_DIR = os.path.dirname(__file__)

@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import unicode_literals
-
 import pytest
 
 from pylangacq.util import (clean_utterance, get_participant_code, clean_word,

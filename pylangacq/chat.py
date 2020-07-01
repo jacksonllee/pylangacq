@@ -1621,14 +1621,14 @@ class _SingleReader(object):
         participants = self._determine_participants(participant, exclude)
 
         if sents:
-            add_function = lambda result_, sent_: result_.append(sent_)
+            add_function = lambda result_, sent_: result_.append(sent_)  # noqa: E731, E501
         else:
-            add_function = lambda result_, sent_: result_.extend(sent_)
+            add_function = lambda result_, sent_: result_.extend(sent_)  # noqa: E731, E501
 
         if tagged:
-            sent_to_add = lambda sent_: sent_
+            sent_to_add = lambda sent_: sent_  # noqa: E731
         else:
-            sent_to_add = lambda sent_: [x[0] for x in sent_ if x[0] != CLITIC]
+            sent_to_add = lambda sent_: [x[0] for x in sent_ if x[0] != CLITIC]  # noqa: E731, E501
 
         for participant_code, tagged_sent in self._all_tagged_sents:
             if participant_code not in participants:
@@ -1958,9 +1958,9 @@ class _SingleReader(object):
 
         # set up the match function
         if match_entire_word or lemma:
-            match_function = lambda search_, test_: search_ == test_
+            match_function = lambda search_, test_: search_ == test_  # noqa: E731, E501
         else:
-            match_function = lambda search_, test_: search_ in test_
+            match_function = lambda search_, test_: search_ in test_  # noqa: E731, E501
 
         tagged_sents = self.tagged_sents(
             participant=participant, exclude=exclude
@@ -2003,14 +2003,14 @@ class _SingleReader(object):
         if not concordance:
 
             if output_sents:
-                add_function = lambda result_, sent_: result_.append(sent_)
+                add_function = lambda result_, sent_: result_.append(sent_)  # noqa: E731, E501
             else:
-                add_function = lambda result_, sent_: result_.extend(sent_)
+                add_function = lambda result_, sent_: result_.extend(sent_)  # noqa: E731, E501
 
             if output_tagged:
-                sent_to_add = lambda sent_: sent_
+                sent_to_add = lambda sent_: sent_  # noqa: E731
             else:
-                sent_to_add = lambda sent_: [
+                sent_to_add = lambda sent_: [  # noqa: E731
                     x[0] for x in sent_ if x[0] != CLITIC
                 ]
 

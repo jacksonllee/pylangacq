@@ -1,17 +1,18 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>pylangacq.util &#8212; PyLangAcq 0.10.0 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="search" title="Search" href="../../search.html" />
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
@@ -30,15 +31,12 @@
           <div class="body" role="main">
             
   <h1>Source code for pylangacq.util</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
-
-<span class="kn">import</span> <span class="nn">re</span>
+<span></span><span class="kn">import</span> <span class="nn">re</span>
 
 
-<span class="n">CLITIC</span> <span class="o">=</span> <span class="s1">&#39;CLITIC&#39;</span>
-<span class="n">ENCODING</span> <span class="o">=</span> <span class="s1">&#39;utf8&#39;</span>
+<span class="n">CLITIC</span> <span class="o">=</span> <span class="s2">&quot;CLITIC&quot;</span>
+<span class="n">ENCODING</span> <span class="o">=</span> <span class="s2">&quot;utf8&quot;</span>
+<span class="n">TIMER_MARKER_REG</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\x15-?(\d+)_(\d+)-?\x15&quot;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="clean_utterance"><a class="viewcode-back" href="../../util.html#pylangacq.util.clean_utterance">[docs]</a><span class="k">def</span> <span class="nf">clean_utterance</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="n">phon</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -88,28 +86,28 @@
 
     <span class="c1"># print(&#39;utterance:&#39;, utterance, type(utterance))</span>
 
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\[= [^\[]+?\]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\[x \d+?\]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\[\+ [^\[]+?\]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\[\* [^\[]+?\]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\[=\? [^\[]+?\]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\[=! [^\[]+?\]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\[% [^\[]+?\]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\[- [^\[]+?\]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\[\^ [^\[]+?\]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;[^]+?&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>  <span class="c1"># TODO: Why need this?!</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\[&lt;\d?\]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\[&gt;\d?\]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\(\d+?\.?\d*?\)&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\[</span><span class="si">%a</span><span class="s1">ct: [^\[]+?\]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[= [^\[]+?\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[x \d+?\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[\+ [^\[]+?\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[\* [^\[]+?\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[=\? [^\[]+?\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[=! [^\[]+?\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[% [^\[]+?\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[- [^\[]+?\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[\^ [^\[]+?\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^]+?&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>  <span class="c1"># TODO: Why need this?!</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[&lt;\d?\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[&gt;\d?\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\(\d+?\.?\d*?\)&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[</span><span class="si">%a</span><span class="s2">ct: [^\[]+?\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
 
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\[\?\]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\[\!\]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;‹&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;›&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[\?\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[\!\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;‹&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;›&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
 
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\[\*\] \[/&#39;</span><span class="p">,</span> <span class="s1">&#39;[/&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\] \[\*\]&#39;</span><span class="p">,</span> <span class="s1">&#39;]&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[\*\] \[/&quot;</span><span class="p">,</span> <span class="s2">&quot;[/&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\] \[\*\]&quot;</span><span class="p">,</span> <span class="s2">&quot;]&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
 
     <span class="n">utterance</span> <span class="o">=</span> <span class="n">remove_extra_spaces</span><span class="p">(</span><span class="n">utterance</span><span class="p">)</span>
     <span class="c1"># print(&#39;step 1:&#39;, utterance)</span>
@@ -129,18 +127,18 @@
     <span class="c1">#     (.) (short pause)</span>
     <span class="c1"># then pad them with extra spaces.</span>
 
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&lt;&#39;</span><span class="p">,</span> <span class="s1">&#39; &lt;&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\+ &lt;&#39;</span><span class="p">,</span> <span class="s1">&#39;+&lt;&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt; &#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\[&#39;</span><span class="p">,</span> <span class="s1">&#39; [&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\]&#39;</span><span class="p">,</span> <span class="s1">&#39;] &#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;“&#39;</span><span class="p">,</span> <span class="s1">&#39; “ &#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;”&#39;</span><span class="p">,</span> <span class="s1">&#39; ” &#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39; , &#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>  <span class="c1"># works together with next line</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\+ ,&#39;</span><span class="p">,</span> <span class="s1">&#39;+,&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;[^\[\./!]\?&#39;</span><span class="p">,</span> <span class="s1">&#39; ? &#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&lt;&quot;</span><span class="p">,</span> <span class="s2">&quot; &lt;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\+ &lt;&quot;</span><span class="p">,</span> <span class="s2">&quot;+&lt;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&gt; &quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[&quot;</span><span class="p">,</span> <span class="s2">&quot; [&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\]&quot;</span><span class="p">,</span> <span class="s2">&quot;] &quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;“&quot;</span><span class="p">,</span> <span class="s2">&quot; “ &quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;”&quot;</span><span class="p">,</span> <span class="s2">&quot; ” &quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot; , &quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>  <span class="c1"># works together with next line</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\+ ,&quot;</span><span class="p">,</span> <span class="s2">&quot;+,&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^\[\./!]\?&quot;</span><span class="p">,</span> <span class="s2">&quot; ? &quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
     <span class="c1"># utterance = re.sub(&#39;[^\(\[\.\+]\.&#39;, &#39; . &#39;, utterance)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\(\.\)&#39;</span><span class="p">,</span> <span class="s1">&#39; (.) &#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\(\.\)&quot;</span><span class="p">,</span> <span class="s2">&quot; (.) &quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
     <span class="n">utterance</span> <span class="o">=</span> <span class="n">remove_extra_spaces</span><span class="p">(</span><span class="n">utterance</span><span class="p">)</span>
     <span class="c1"># print(&#39;step 2:&#39;, utterance)</span>
 
@@ -158,108 +156,129 @@
     <span class="c1"># 3. Delete the unwanted words on the left of the signaling annotations.</span>
 
     <span class="n">angle_brackets_l2r_pairs</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># left-to-right</span>
-    <span class="k">for</span> <span class="n">index_</span> <span class="ow">in</span> <span class="n">find_indices</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="s1">&#39;&lt;&#39;</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">index_</span> <span class="ow">in</span> <span class="n">find_indices</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="s2">&quot;&lt;&quot;</span><span class="p">):</span>
         <span class="n">counter</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">index_</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">utterance</span><span class="p">)):</span>
-            <span class="k">if</span> <span class="n">utterance</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;&lt;&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">utterance</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&lt;&quot;</span><span class="p">:</span>
                 <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">elif</span> <span class="n">utterance</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">utterance</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">:</span>
                 <span class="n">counter</span> <span class="o">-=</span> <span class="mi">1</span>
 
             <span class="k">if</span> <span class="n">counter</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">angle_brackets_l2r_pairs</span><span class="p">[</span><span class="n">index_</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
                 <span class="k">break</span>
-    <span class="n">angle_brackets_r2l_pairs</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">k</span>
-                                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">angle_brackets_l2r_pairs</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+    <span class="n">angle_brackets_r2l_pairs</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">v</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">angle_brackets_l2r_pairs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="p">}</span>
 
     <span class="n">index_pairs</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># characters bounded by index pairs to be removed</span>
 
     <span class="c1"># remove &#39; [///]&#39;</span>
-    <span class="n">triple_slash_right_indices</span> <span class="o">=</span> <span class="n">find_indices</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="s1">&#39;&gt; \[///\]&#39;</span><span class="p">)</span>
-    <span class="n">index_pairs</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">begin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">begin</span> <span class="o">+</span> <span class="mi">6</span><span class="p">)</span>
-                    <span class="k">for</span> <span class="n">begin</span> <span class="ow">in</span> <span class="n">triple_slash_right_indices</span><span class="p">]</span>
+    <span class="n">triple_slash_right_indices</span> <span class="o">=</span> <span class="n">find_indices</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;&gt; \[///\]&quot;</span><span class="p">)</span>
+    <span class="n">index_pairs</span> <span class="o">+=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">begin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">begin</span> <span class="o">+</span> <span class="mi">6</span><span class="p">)</span> <span class="k">for</span> <span class="n">begin</span> <span class="ow">in</span> <span class="n">triple_slash_right_indices</span>
+    <span class="p">]</span>
 
     <span class="c1"># remove &#39; [//]&#39;</span>
-    <span class="n">double_overlap_right_indices</span> <span class="o">=</span> <span class="n">find_indices</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="s1">&#39;&gt; \[//\]&#39;</span><span class="p">)</span>
-    <span class="n">index_pairs</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">begin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">begin</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span>
-                    <span class="k">for</span> <span class="n">begin</span> <span class="ow">in</span> <span class="n">double_overlap_right_indices</span><span class="p">]</span>
+    <span class="n">double_overlap_right_indices</span> <span class="o">=</span> <span class="n">find_indices</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;&gt; \[//\]&quot;</span><span class="p">)</span>
+    <span class="n">index_pairs</span> <span class="o">+=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">begin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">begin</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span> <span class="k">for</span> <span class="n">begin</span> <span class="ow">in</span> <span class="n">double_overlap_right_indices</span>
+    <span class="p">]</span>
 
     <span class="c1"># remove &#39; [/]&#39;</span>
-    <span class="n">single_overlap_right_indices</span> <span class="o">=</span> <span class="n">find_indices</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="s1">&#39;&gt; \[/\]&#39;</span><span class="p">)</span>
-    <span class="n">index_pairs</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">begin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">begin</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span>
-                    <span class="k">for</span> <span class="n">begin</span> <span class="ow">in</span> <span class="n">single_overlap_right_indices</span><span class="p">]</span>
+    <span class="n">single_overlap_right_indices</span> <span class="o">=</span> <span class="n">find_indices</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;&gt; \[/\]&quot;</span><span class="p">)</span>
+    <span class="n">index_pairs</span> <span class="o">+=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">begin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">begin</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span> <span class="k">for</span> <span class="n">begin</span> <span class="ow">in</span> <span class="n">single_overlap_right_indices</span>
+    <span class="p">]</span>
 
     <span class="c1"># remove &#39; [/?]&#39;</span>
-    <span class="n">slash_question_indices</span> <span class="o">=</span> <span class="n">find_indices</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="s1">&#39;&gt; \[/\?\]&#39;</span><span class="p">)</span>
-    <span class="n">index_pairs</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">begin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">begin</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span>
-                    <span class="k">for</span> <span class="n">begin</span> <span class="ow">in</span> <span class="n">slash_question_indices</span><span class="p">]</span>
+    <span class="n">slash_question_indices</span> <span class="o">=</span> <span class="n">find_indices</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;&gt; \[/\?\]&quot;</span><span class="p">)</span>
+    <span class="n">index_pairs</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">begin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">begin</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span> <span class="k">for</span> <span class="n">begin</span> <span class="ow">in</span> <span class="n">slash_question_indices</span><span class="p">]</span>
 
     <span class="c1"># remove &#39; [::&#39;</span>
-    <span class="n">double_error_right_indices</span> <span class="o">=</span> <span class="n">find_indices</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="s1">&#39;&gt; \[::&#39;</span><span class="p">)</span>
-    <span class="n">index_pairs</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">begin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">begin</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span>
-                    <span class="k">for</span> <span class="n">begin</span> <span class="ow">in</span> <span class="n">double_error_right_indices</span><span class="p">]</span>
+    <span class="n">double_error_right_indices</span> <span class="o">=</span> <span class="n">find_indices</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;&gt; \[::&quot;</span><span class="p">)</span>
+    <span class="n">index_pairs</span> <span class="o">+=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">begin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">begin</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span> <span class="k">for</span> <span class="n">begin</span> <span class="ow">in</span> <span class="n">double_error_right_indices</span>
+    <span class="p">]</span>
 
     <span class="c1"># remove &#39; [:&#39;</span>
-    <span class="n">single_error_right_indices</span> <span class="o">=</span> <span class="n">find_indices</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="s1">&#39;&gt; \[: &#39;</span><span class="p">)</span>
-    <span class="n">index_pairs</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">begin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">begin</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span>
-                    <span class="k">for</span> <span class="n">begin</span> <span class="ow">in</span> <span class="n">single_error_right_indices</span><span class="p">]</span>
+    <span class="n">single_error_right_indices</span> <span class="o">=</span> <span class="n">find_indices</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;&gt; \[: &quot;</span><span class="p">)</span>
+    <span class="n">index_pairs</span> <span class="o">+=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">begin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">begin</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="k">for</span> <span class="n">begin</span> <span class="ow">in</span> <span class="n">single_error_right_indices</span>
+    <span class="p">]</span>
 
     <span class="n">right_indices</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">double_overlap_right_indices</span> <span class="o">+</span>
-        <span class="n">single_overlap_right_indices</span> <span class="o">+</span>
-        <span class="n">double_error_right_indices</span> <span class="o">+</span>
-        <span class="n">single_error_right_indices</span> <span class="o">+</span>
-        <span class="n">triple_slash_right_indices</span> <span class="o">+</span>
-        <span class="n">slash_question_indices</span>
+        <span class="n">double_overlap_right_indices</span>
+        <span class="o">+</span> <span class="n">single_overlap_right_indices</span>
+        <span class="o">+</span> <span class="n">double_error_right_indices</span>
+        <span class="o">+</span> <span class="n">single_error_right_indices</span>
+        <span class="o">+</span> <span class="n">triple_slash_right_indices</span>
+        <span class="o">+</span> <span class="n">slash_question_indices</span>
     <span class="p">)</span>
 
-    <span class="n">index_pairs</span> <span class="o">=</span> <span class="n">index_pairs</span> <span class="o">+</span> <span class="p">[(</span><span class="n">angle_brackets_r2l_pairs</span><span class="p">[</span><span class="n">right</span><span class="p">],</span> <span class="n">right</span><span class="p">)</span>
-                                 <span class="k">for</span> <span class="n">right</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">right_indices</span><span class="p">)]</span>
+    <span class="n">index_pairs</span> <span class="o">=</span> <span class="n">index_pairs</span> <span class="o">+</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">angle_brackets_r2l_pairs</span><span class="p">[</span><span class="n">right</span><span class="p">],</span> <span class="n">right</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">right</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">right_indices</span><span class="p">)</span>
+    <span class="p">]</span>
     <span class="n">indices_to_ignore</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="ow">in</span> <span class="n">index_pairs</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
             <span class="n">indices_to_ignore</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 
-    <span class="n">new_utterance</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">new_utterance</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">utterance</span><span class="p">)):</span>
         <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">indices_to_ignore</span><span class="p">:</span>
             <span class="n">new_utterance</span> <span class="o">+=</span> <span class="n">utterance</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
     <span class="n">utterance</span> <span class="o">=</span> <span class="n">new_utterance</span>
 
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\S+? \[/\]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\S+? \[//\]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\S+? \[///\]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\S+? \[/\?\]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\S+? \[/\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\S+? \[//\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\S+? \[///\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\S+? \[/\?\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
 
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\S+? \[::&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\S+? \[:&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\S+? \[::&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\S+? \[:&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
 
     <span class="n">utterance</span> <span class="o">=</span> <span class="n">remove_extra_spaces</span><span class="p">(</span><span class="n">utterance</span><span class="p">)</span>
     <span class="c1"># print(&#39;step 3:&#39;, utterance)</span>
 
-    <span class="c1"># Step 4: Split utterance by spaces and determine whether to keep items.</span>
+    <span class="c1"># Step 4: Remove unwanted symbols</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;“&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;”&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
 
-    <span class="n">escape_prefixes</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;[?&#39;</span><span class="p">,</span> <span class="s1">&#39;[/&#39;</span><span class="p">,</span> <span class="s1">&#39;[&lt;&#39;</span><span class="p">,</span> <span class="s1">&#39;[&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;[:&#39;</span><span class="p">,</span> <span class="s1">&#39;[!&#39;</span><span class="p">,</span> <span class="s1">&#39;[*&#39;</span><span class="p">,</span>
-                       <span class="s1">&#39;+&quot;&#39;</span><span class="p">,</span> <span class="s1">&#39;+,&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;&amp;&#39;</span><span class="p">}</span>
-    <span class="n">escape_words</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;++&#39;</span><span class="p">,</span> <span class="s1">&#39;+&lt;&#39;</span><span class="p">,</span> <span class="s1">&#39;+^&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;(.)&#39;</span><span class="p">,</span> <span class="s1">&#39;(..)&#39;</span><span class="p">,</span> <span class="s1">&#39;(...)&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="s1">&#39;;&#39;</span><span class="p">}</span>
-    <span class="n">keep_prefixes</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;+&quot;/&#39;</span><span class="p">,</span> <span class="s1">&#39;+,/&#39;</span><span class="p">,</span> <span class="s1">&#39;+&quot;.&#39;</span><span class="p">}</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">remove_extra_spaces</span><span class="p">(</span><span class="n">utterance</span><span class="p">)</span>
+
+    <span class="c1"># Step 5: Split utterance by spaces and determine whether to keep items.</span>
+
+    <span class="n">escape_prefixes</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;[?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;[/&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;[&lt;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;[&gt;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;[:&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;[!&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;[*&quot;</span><span class="p">,</span>
+        <span class="s1">&#39;+&quot;&#39;</span><span class="p">,</span>
+        <span class="s2">&quot;+,&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;&lt;&amp;&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">escape_words</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="s2">&quot;++&quot;</span><span class="p">,</span> <span class="s2">&quot;+&lt;&quot;</span><span class="p">,</span> <span class="s2">&quot;+^&quot;</span><span class="p">,</span> <span class="s2">&quot;(.)&quot;</span><span class="p">,</span> <span class="s2">&quot;(..)&quot;</span><span class="p">,</span> <span class="s2">&quot;(...)&quot;</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="s2">&quot;;&quot;</span><span class="p">}</span>
+    <span class="n">keep_prefixes</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;+&quot;/&#39;</span><span class="p">,</span> <span class="s2">&quot;+,/&quot;</span><span class="p">,</span> <span class="s1">&#39;+&quot;.&#39;</span><span class="p">}</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">phon</span><span class="p">:</span>
-        <span class="n">escape_words</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;xxx&#39;</span><span class="p">,</span> <span class="s1">&#39;yyy&#39;</span><span class="p">,</span> <span class="s1">&#39;www&#39;</span><span class="p">,</span> <span class="s1">&#39;xxx:&#39;</span><span class="p">,</span> <span class="s1">&#39;yyy:&#39;</span><span class="p">})</span>
-        <span class="n">escape_prefixes</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;&amp;&#39;</span><span class="p">})</span>
+        <span class="n">escape_words</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;xxx&quot;</span><span class="p">,</span> <span class="s2">&quot;yyy&quot;</span><span class="p">,</span> <span class="s2">&quot;www&quot;</span><span class="p">,</span> <span class="s2">&quot;xxx:&quot;</span><span class="p">,</span> <span class="s2">&quot;yyy:&quot;</span><span class="p">})</span>
+        <span class="n">escape_prefixes</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;&amp;&quot;</span><span class="p">})</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">escape_words</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;,&#39;</span><span class="p">})</span>
-        <span class="n">escape_prefixes</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;0&#39;</span><span class="p">})</span>
+        <span class="n">escape_words</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;,&quot;</span><span class="p">})</span>
+        <span class="n">escape_prefixes</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;0&quot;</span><span class="p">})</span>
 
     <span class="n">words</span> <span class="o">=</span> <span class="n">utterance</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
     <span class="n">new_words</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
-        <span class="n">word</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\A&lt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">word</span><span class="p">)</span>   <span class="c1"># remove beginning &lt;</span>
-        <span class="n">word</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;&gt;\Z&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">word</span><span class="p">)</span>   <span class="c1"># remove final &gt;</span>
-        <span class="n">word</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\]\Z&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">word</span><span class="p">)</span>  <span class="c1"># remove final ]</span>
+        <span class="n">word</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\A&lt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">word</span><span class="p">)</span>  <span class="c1"># remove beginning &lt;</span>
+        <span class="n">word</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&gt;\Z&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">word</span><span class="p">)</span>  <span class="c1"># remove final &gt;</span>
+        <span class="n">word</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\]\Z&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">word</span><span class="p">)</span>  <span class="c1"># remove final ]</span>
 
         <span class="n">not_an_escape_word</span> <span class="o">=</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">escape_words</span>
         <span class="n">no_escape_prefix</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">word</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">escape_prefixes</span><span class="p">)</span>
@@ -268,9 +287,44 @@
         <span class="k">if</span> <span class="p">(</span><span class="n">not_an_escape_word</span> <span class="ow">and</span> <span class="n">no_escape_prefix</span><span class="p">)</span> <span class="ow">or</span> <span class="n">has_keep_prefix</span><span class="p">:</span>
             <span class="n">new_words</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
 
-    <span class="c1"># print(&#39;step 4:&#39;, remove_extra_spaces(&#39; &#39;.join(new_words)))</span>
+    <span class="c1"># print(&#39;step 5:&#39;, remove_extra_spaces(&#39; &#39;.join(new_words)))</span>
 
-    <span class="k">return</span> <span class="n">remove_extra_spaces</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">new_words</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="n">remove_extra_spaces</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">new_words</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="get_time_marker"><a class="viewcode-back" href="../../util.html#pylangacq.util.get_time_marker">[docs]</a><span class="k">def</span> <span class="nf">get_time_marker</span><span class="p">(</span><span class="n">utterance</span><span class="p">):</span>  <span class="c1"># TODO write tests this function</span>
+    <span class="sd">&quot;&quot;&quot;Get the timer marker in this utterance.</span>
+
+<span class="sd">    Time marker provides the start and end times (in milliseconds)</span>
+<span class="sd">    for a segment in a digitized video or audio file. For example:</span>
+<span class="sd">        ·0_1073·</span>
+<span class="sd">    &#39;·&#39; is ASCII CODE 21 (0x15), for NAK (Negative Acknowledgement)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    utterance : str</span>
+<span class="sd">        The raw utterance</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple of (int, int)</span>
+<span class="sd">        The start and end times (in milliseconds) for this utterance</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    If the option “multiple” is selected in the @Options field, then these &#39;·&#39;</span>
+<span class="sd">    bullets may also occur within utterances. However, this function only</span>
+<span class="sd">    returns one timer marker. (See https://talkbank.org/manuals/CHAT.pdf)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">TIMER_MARKER_REG</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">utterance</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+        <span class="n">time_marker</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">groups</span><span class="p">()</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time_marker</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">stop</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time_marker</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Utterance does not have a standard time marker: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">utterance</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="get_participant_code"><a class="viewcode-back" href="../../util.html#pylangacq.util.get_participant_code">[docs]</a><span class="k">def</span> <span class="nf">get_participant_code</span><span class="p">(</span><span class="n">tier_marker_seq</span><span class="p">):</span>
@@ -288,7 +342,7 @@
 <span class="sd">        Return ``None`` if no participant code is found.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">tier_marker</span> <span class="ow">in</span> <span class="n">tier_marker_seq</span><span class="p">:</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">tier_marker</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;%&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">tier_marker</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;%&quot;</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">tier_marker</span>
     <span class="k">return</span> <span class="kc">None</span></div>
 
@@ -304,18 +358,18 @@
 <span class="sd">    -------</span>
 <span class="sd">    str</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">new_word</span> <span class="o">=</span> <span class="p">(</span><span class="n">word</span>
-                <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;(&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-                <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;)&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-                <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-                <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-                <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-                <span class="p">)</span>
+    <span class="n">new_word</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">word</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;)&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;+&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
 
-    <span class="k">if</span> <span class="s1">&#39;@&#39;</span> <span class="ow">in</span> <span class="n">new_word</span><span class="p">:</span>
-        <span class="n">new_word</span> <span class="o">=</span> <span class="n">new_word</span><span class="p">[:</span> <span class="n">new_word</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;@&#39;</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="s2">&quot;@&quot;</span> <span class="ow">in</span> <span class="n">new_word</span><span class="p">:</span>
+        <span class="n">new_word</span> <span class="o">=</span> <span class="n">new_word</span><span class="p">[:</span> <span class="n">new_word</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">)]</span>
 
-    <span class="k">if</span> <span class="n">new_word</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">new_word</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;&amp;&quot;</span><span class="p">):</span>
         <span class="n">new_word</span> <span class="o">=</span> <span class="n">new_word</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
 
     <span class="k">return</span> <span class="n">new_word</span></div>
@@ -339,23 +393,23 @@
 <span class="sd">    (2016, 2, 1)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">day_str</span><span class="p">,</span> <span class="n">month_str</span><span class="p">,</span> <span class="n">year_str</span> <span class="o">=</span> <span class="n">date_str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+        <span class="n">day_str</span><span class="p">,</span> <span class="n">month_str</span><span class="p">,</span> <span class="n">year_str</span> <span class="o">=</span> <span class="n">date_str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
         <span class="n">day</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">day_str</span><span class="p">)</span>
         <span class="n">year</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">year_str</span><span class="p">)</span>
 
         <span class="n">month_to_int</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;JAN&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="s1">&#39;FEB&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-            <span class="s1">&#39;MAR&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-            <span class="s1">&#39;APR&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
-            <span class="s1">&#39;MAY&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-            <span class="s1">&#39;JUN&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
-            <span class="s1">&#39;JUL&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
-            <span class="s1">&#39;AUG&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
-            <span class="s1">&#39;SEP&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
-            <span class="s1">&#39;OCT&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-            <span class="s1">&#39;NOV&#39;</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span>
-            <span class="s1">&#39;DEC&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+            <span class="s2">&quot;JAN&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&quot;FEB&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="s2">&quot;MAR&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="s2">&quot;APR&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+            <span class="s2">&quot;MAY&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+            <span class="s2">&quot;JUN&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+            <span class="s2">&quot;JUL&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+            <span class="s2">&quot;AUG&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+            <span class="s2">&quot;SEP&quot;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+            <span class="s2">&quot;OCT&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+            <span class="s2">&quot;NOV&quot;</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span>
+            <span class="s2">&quot;DEC&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="n">month</span> <span class="o">=</span> <span class="n">month_to_int</span><span class="p">[</span><span class="n">month_str</span><span class="p">]</span>
@@ -375,8 +429,8 @@
 <span class="sd">    -------</span>
 <span class="sd">    str</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">lemma</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">mor</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
-    <span class="n">lemma</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">lemma</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">)</span>
+    <span class="n">lemma</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">mor</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
+    <span class="n">lemma</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">lemma</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;&amp;&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">lemma</span></div>
 
 
@@ -391,8 +445,8 @@
 <span class="sd">    -------</span>
 <span class="sd">    str</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">while</span> <span class="s1">&#39;  &#39;</span> <span class="ow">in</span> <span class="n">inputstr</span><span class="p">:</span>
-        <span class="n">inputstr</span> <span class="o">=</span> <span class="n">inputstr</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;  &#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span>
+    <span class="k">while</span> <span class="s2">&quot;  &quot;</span> <span class="ow">in</span> <span class="n">inputstr</span><span class="p">:</span>
+        <span class="n">inputstr</span> <span class="o">=</span> <span class="n">inputstr</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;  &quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">inputstr</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span></div>
 
 
@@ -440,10 +494,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../devmeasures.html">Developmental measures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../freq.html">Word frequency and ngrams</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../concord.html">Word search and concordance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../lex.html">Lexicon and morphology</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../phono.html">Phonetics and phonology</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../synsem.html">Syntax and semantics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../disca.html">Discourse and conversational analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../reference.html">Library reference</a></li>
 </ul>
 
@@ -457,15 +507,15 @@
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -479,10 +529,10 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2019, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on May 22, 2019.
+      &copy;2015-2020, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on June 30, 2020.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

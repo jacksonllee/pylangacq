@@ -1,8 +1,8 @@
 # PyLangAcq
 
+[![CircleCI](https://circleci.com/gh/jacksonllee/pylangacq/tree/master.svg?style=svg)](https://circleci.com/gh/jacksonllee/pylangacq/tree/master)
 [![PyPI version](https://badge.fury.io/py/pylangacq.svg)](https://pypi.org/project/pylangacq)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/pylangacq.svg)](https://pypi.org/project/pylangacq)
-[![CircleCI](https://circleci.com/gh/jacksonllee/pylangacq/tree/master.svg?style=svg)](https://circleci.com/gh/jacksonllee/pylangacq/tree/master)
 
 PyLangAcq is a Python library for language acquisition research.
 It allows flexible handling of the CHILDES data.

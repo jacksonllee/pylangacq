@@ -17,8 +17,4 @@ Below is the complete navigation tree of this documentation.
    devmeasures
    freq
    concord
-   lex
-   phono
-   synsem
-   disca
    reference

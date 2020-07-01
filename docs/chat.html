@@ -1,18 +1,21 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>chat — Reading and parsing CHAT transcripts &#8212; PyLangAcq 0.10.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="measures — Developmental measures" href="measures.html" />
+    <link rel="prev" title="Library reference" href="reference.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -33,7 +36,7 @@
 <span id="chat"></span><h1><code class="docutils literal notranslate"><span class="pre">chat</span></code> — Reading and parsing CHAT transcripts<a class="headerlink" href="#chat-reading-and-parsing-chat-transcripts" title="Permalink to this headline">¶</a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">chat</span></code> module defines two classes
 for reading and parsing CHAT transcripts:</p>
-<table class="longtable docutils align-center">
+<table class="longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -41,9 +44,6 @@ for reading and parsing CHAT transcripts:</p>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader" title="pylangacq.chat.Reader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Reader</span></code></a>(*filenames, **kwargs)</p></td>
 <td><p>A class for reading multiple CHAT files.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SingleReader</span></code></p></td>
-<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -64,7 +64,7 @@ instead.</p>
 <a class="reference internal" href="#metadata-methods"><span class="std std-ref">Metadata methods</span></a> and <a class="reference internal" href="#data-methods"><span class="std std-ref">Data methods</span></a>.</p>
 <div class="section" id="metadata-methods">
 <span id="id1"></span><h2>Metadata methods<a class="headerlink" href="#metadata-methods" title="Permalink to this headline">¶</a></h2>
-<table class="longtable docutils align-center">
+<table class="longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -105,7 +105,7 @@ instead.</p>
 </div>
 <div class="section" id="data-methods">
 <span id="id2"></span><h2>Data methods<a class="headerlink" href="#data-methods" title="Permalink to this headline">¶</a></h2>
-<table class="longtable docutils align-center">
+<table class="longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -162,10 +162,10 @@ instead.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.update" title="pylangacq.chat.Reader.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>(self, reader)</p></td>
 <td><p>Combine the current CHAT Reader instance with <code class="docutils literal notranslate"><span class="pre">reader</span></code>.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.add" title="pylangacq.chat.Reader.add"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add</span></code></a>(self, \*filenames)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.add" title="pylangacq.chat.Reader.add"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add</span></code></a>(self, *filenames)</p></td>
 <td><p>Add one or more CHAT <code class="docutils literal notranslate"><span class="pre">filenames</span></code> to the current reader.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.remove" title="pylangacq.chat.Reader.remove"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove</span></code></a>(self, \*filenames)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.remove" title="pylangacq.chat.Reader.remove"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove</span></code></a>(self, *filenames)</p></td>
 <td><p>Remove one or more CHAT <code class="docutils literal notranslate"><span class="pre">filenames</span></code> from the current reader.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.clear" title="pylangacq.chat.Reader.clear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear</span></code></a>(self)</p></td>
@@ -176,9 +176,9 @@ instead.</p>
 </div>
 <div class="section" id="the-reader-class-api">
 <span id="reader-api"></span><h2>The <code class="docutils literal notranslate"><span class="pre">Reader</span></code> class API<a class="headerlink" href="#the-reader-class-api" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="pylangacq.chat.Reader">
-<em class="property">class </em><code class="descclassname">pylangacq.chat.</code><code class="descname">Reader</code><span class="sig-paren">(</span><em>*filenames</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pylangacq.chat.</code><code class="sig-name descname">Reader</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">filenames</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class for reading multiple CHAT files.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -198,7 +198,7 @@ to ‘utf8’. (New in version 0.9)</p>
 </dd>
 </dl>
 <p class="rubric">Methods</p>
-<table class="longtable docutils align-center">
+<table class="longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -222,7 +222,7 @@ to ‘utf8’. (New in version 0.9)</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.abspath" title="pylangacq.chat.Reader.abspath"><code class="xref py py-obj docutils literal notranslate"><span class="pre">abspath</span></code></a>(self, basename)</p></td>
 <td><p>Return the absolute path of <code class="docutils literal notranslate"><span class="pre">basename</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.add" title="pylangacq.chat.Reader.add"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add</span></code></a>(self, \*filenames)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.add" title="pylangacq.chat.Reader.add"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add</span></code></a>(self, *filenames)</p></td>
 <td><p>Add one or more CHAT <code class="docutils literal notranslate"><span class="pre">filenames</span></code> to the current reader.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.age" title="pylangacq.chat.Reader.age"><code class="xref py py-obj docutils literal notranslate"><span class="pre">age</span></code></a>(self[, participant, months])</p></td>
@@ -243,7 +243,7 @@ to ‘utf8’. (New in version 0.9)</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.filenames" title="pylangacq.chat.Reader.filenames"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filenames</span></code></a>(self[, sorted_by_age])</p></td>
 <td><p>Return the set of absolute-path filenames.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.from_chat_files" title="pylangacq.chat.Reader.from_chat_files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_chat_files</span></code></a>(\*filenames, \*\*kwargs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.from_chat_files" title="pylangacq.chat.Reader.from_chat_files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_chat_files</span></code></a>(*filenames, **kwargs)</p></td>
 <td><p>Create a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object with CHAT data files.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.from_chat_str" title="pylangacq.chat.Reader.from_chat_str"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_chat_str</span></code></a>(chat_str[, encoding])</p></td>
@@ -273,7 +273,7 @@ to ‘utf8’. (New in version 0.9)</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.participants" title="pylangacq.chat.Reader.participants"><code class="xref py py-obj docutils literal notranslate"><span class="pre">participants</span></code></a>(self)</p></td>
 <td><p>Return a dict mapping a file path to the file’s participant info.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.remove" title="pylangacq.chat.Reader.remove"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove</span></code></a>(self, \*filenames)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.remove" title="pylangacq.chat.Reader.remove"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove</span></code></a>(self, *filenames)</p></td>
 <td><p>Remove one or more CHAT <code class="docutils literal notranslate"><span class="pre">filenames</span></code> from the current reader.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.search" title="pylangacq.chat.Reader.search"><code class="xref py py-obj docutils literal notranslate"><span class="pre">search</span></code></a>(self, search_item[, participant, …])</p></td>
@@ -305,9 +305,9 @@ to ‘utf8’. (New in version 0.9)</p>
 </tr>
 </tbody>
 </table>
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.IPSyn">
-<code class="descname">IPSyn</code><span class="sig-paren">(</span><em>self</em>, <em>participant='CHI'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.IPSyn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.IPSyn" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">IPSyn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">participant</span><span class="o">=</span><span class="default_value">'CHI'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.IPSyn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.IPSyn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a map from a file path to the file’s IPSyn.</p>
 <p>IPSyn = index of productive syntax</p>
 <dl class="field-list simple">
@@ -325,9 +325,9 @@ to ‘utf8’. (New in version 0.9)</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.MLU">
-<code class="descname">MLU</code><span class="sig-paren">(</span><em>self</em>, <em>participant='CHI'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.MLU"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.MLU" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">MLU</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">participant</span><span class="o">=</span><span class="default_value">'CHI'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.MLU"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.MLU" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a map from a file path to the file’s MLU by morphemes.</p>
 <p>MLU = mean length of utterance. This method is identical to <code class="docutils literal notranslate"><span class="pre">MLUm</span></code>.</p>
 <dl class="field-list simple">
@@ -345,9 +345,9 @@ to ‘utf8’. (New in version 0.9)</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.MLUm">
-<code class="descname">MLUm</code><span class="sig-paren">(</span><em>self</em>, <em>participant='CHI'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.MLUm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.MLUm" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">MLUm</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">participant</span><span class="o">=</span><span class="default_value">'CHI'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.MLUm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.MLUm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a map from a file path to the file’s MLU by morphemes.</p>
 <p>MLU = mean length of utterance. This method is identical to <code class="docutils literal notranslate"><span class="pre">MLUm</span></code>.</p>
 <dl class="field-list simple">
@@ -365,9 +365,9 @@ to ‘utf8’. (New in version 0.9)</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.MLUw">
-<code class="descname">MLUw</code><span class="sig-paren">(</span><em>self</em>, <em>participant='CHI'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.MLUw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.MLUw" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">MLUw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">participant</span><span class="o">=</span><span class="default_value">'CHI'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.MLUw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.MLUw" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a map from a file path to the file’s MLU by words.</p>
 <p>MLU = mean length of utterance.</p>
 <dl class="field-list simple">
@@ -385,9 +385,9 @@ to ‘utf8’. (New in version 0.9)</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.TTR">
-<code class="descname">TTR</code><span class="sig-paren">(</span><em>self</em>, <em>participant='CHI'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.TTR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.TTR" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">TTR</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">participant</span><span class="o">=</span><span class="default_value">'CHI'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.TTR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.TTR" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a map from a file path to the file’s TTR.</p>
 <p>TTR = type-token ratio</p>
 <dl class="field-list simple">
@@ -405,9 +405,9 @@ to ‘utf8’. (New in version 0.9)</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.abspath">
-<code class="descname">abspath</code><span class="sig-paren">(</span><em>self</em>, <em>basename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.abspath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.abspath" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">abspath</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">basename</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.abspath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.abspath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the absolute path of <code class="docutils literal notranslate"><span class="pre">basename</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -424,9 +424,9 @@ to ‘utf8’. (New in version 0.9)</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.add">
-<code class="descname">add</code><span class="sig-paren">(</span><em>self</em>, <em>*filenames</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.add" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">filenames</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add one or more CHAT <code class="docutils literal notranslate"><span class="pre">filenames</span></code> to the current reader.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -438,9 +438,9 @@ to ‘utf8’. (New in version 0.9)</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.age">
-<code class="descname">age</code><span class="sig-paren">(</span><em>self</em>, <em>participant='CHI'</em>, <em>months=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.age"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.age" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">age</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">participant</span><span class="o">=</span><span class="default_value">'CHI'</span></em>, <em class="sig-param"><span class="n">months</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.age"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.age" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a map from a file path to the <em>participant</em>’s age.</p>
 <p>The age is in the form of (years, months, days).</p>
 <dl class="field-list simple">
@@ -460,15 +460,15 @@ to ‘utf8’. (New in version 0.9)</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.clear">
-<code class="descname">clear</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.clear" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">clear</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clear everything and reset as an empty Reader instance.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.concordance">
-<code class="descname">concordance</code><span class="sig-paren">(</span><em>self</em>, <em>search_item</em>, <em>participant=None</em>, <em>exclude=None</em>, <em>match_entire_word=True</em>, <em>lemma=False</em>, <em>by_files=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.concordance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.concordance" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">concordance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">search_item</span></em>, <em class="sig-param"><span class="n">participant</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">match_entire_word</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">lemma</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.concordance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.concordance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a list of utterances with <em>search_item</em> for <em>participant</em>.</p>
 <p>All strings are aligned for <em>search_item</em> by space
 padding to create the word concordance effect.</p>
@@ -501,9 +501,9 @@ instead of X for all files altogether.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.date_of_birth">
-<code class="descname">date_of_birth</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.date_of_birth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.date_of_birth" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">date_of_birth</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.date_of_birth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.date_of_birth" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a map from a file path to the date of birth.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -514,9 +514,9 @@ instead of X for all files altogether.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.dates_of_recording">
-<code class="descname">dates_of_recording</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.dates_of_recording"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.dates_of_recording" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">dates_of_recording</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.dates_of_recording"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.dates_of_recording" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a map from a file path to the date of recording.</p>
 <p>The date of recording is in the form of (year, month, day).</p>
 <dl class="field-list simple">
@@ -528,9 +528,9 @@ instead of X for all files altogether.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.filenames">
-<code class="descname">filenames</code><span class="sig-paren">(</span><em>self</em>, <em>sorted_by_age=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.filenames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.filenames" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">filenames</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">sorted_by_age</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.filenames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.filenames" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the set of absolute-path filenames.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -548,9 +548,9 @@ child’s age.</p>
 </dl>
 </dd></dl>
 
-<dl class="classmethod">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.from_chat_files">
-<em class="property">classmethod </em><code class="descname">from_chat_files</code><span class="sig-paren">(</span><em>*filenames</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.from_chat_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.from_chat_files" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">from_chat_files</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">filenames</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.from_chat_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.from_chat_files" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object with CHAT data files.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -580,9 +580,9 @@ an equivalent library top-level function <code class="docutils literal notransla
 is defined for convenience.</p>
 </dd></dl>
 
-<dl class="classmethod">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.from_chat_str">
-<em class="property">classmethod </em><code class="descname">from_chat_str</code><span class="sig-paren">(</span><em>chat_str</em>, <em>encoding='utf8'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.from_chat_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.from_chat_str" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">from_chat_str</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">chat_str</span></em>, <em class="sig-param"><span class="n">encoding</span><span class="o">=</span><span class="default_value">'utf8'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.from_chat_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.from_chat_str" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object with CHAT data as a string.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -602,9 +602,9 @@ CHAT data file contains.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.headers">
-<code class="descname">headers</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.headers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.headers" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">headers</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.headers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.headers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a dict mapping a file path to the headers of that file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -615,9 +615,9 @@ CHAT data file contains.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.index_to_tiers">
-<code class="descname">index_to_tiers</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.index_to_tiers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.index_to_tiers" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">index_to_tiers</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.index_to_tiers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.index_to_tiers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a dict mapping a file path to the file’s index_to_tiers dict.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -628,9 +628,9 @@ CHAT data file contains.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.languages">
-<code class="descname">languages</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.languages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.languages" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">languages</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.languages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.languages" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a map from a file path to the languages used.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -641,9 +641,9 @@ CHAT data file contains.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.number_of_files">
-<code class="descname">number_of_files</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.number_of_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.number_of_files" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">number_of_files</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.number_of_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.number_of_files" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the number of files.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -654,9 +654,9 @@ CHAT data file contains.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.number_of_utterances">
-<code class="descname">number_of_utterances</code><span class="sig-paren">(</span><em>self</em>, <em>participant=None</em>, <em>exclude=None</em>, <em>by_files=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.number_of_utterances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.number_of_utterances" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">number_of_utterances</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">participant</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.number_of_utterances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.number_of_utterances" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the number of utterances for <em>participant</em> in all files.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -680,9 +680,9 @@ instead of X for all files altogether.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.part_of_speech_tags">
-<code class="descname">part_of_speech_tags</code><span class="sig-paren">(</span><em>self</em>, <em>participant=None</em>, <em>exclude=None</em>, <em>by_files=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.part_of_speech_tags"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.part_of_speech_tags" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">part_of_speech_tags</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">participant</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.part_of_speech_tags"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.part_of_speech_tags" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the part-of-speech tags in the data for <em>participant</em>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -706,9 +706,9 @@ instead of X for all files altogether.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.participant_codes">
-<code class="descname">participant_codes</code><span class="sig-paren">(</span><em>self</em>, <em>by_files=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.participant_codes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.participant_codes" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">participant_codes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.participant_codes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.participant_codes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the participant codes (e.g., <code class="docutils literal notranslate"><span class="pre">{'CHI',</span> <span class="pre">'MOT'}</span></code>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -726,9 +726,9 @@ instead of X for all files altogether.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.participants">
-<code class="descname">participants</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.participants"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.participants" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">participants</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.participants"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.participants" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a dict mapping a file path to the file’s participant info.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -739,9 +739,9 @@ instead of X for all files altogether.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.remove">
-<code class="descname">remove</code><span class="sig-paren">(</span><em>self</em>, <em>*filenames</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.remove" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">remove</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">filenames</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.remove" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove one or more CHAT <code class="docutils literal notranslate"><span class="pre">filenames</span></code> from the current reader.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -753,9 +753,9 @@ instead of X for all files altogether.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.search">
-<code class="descname">search</code><span class="sig-paren">(</span><em>self</em>, <em>search_item</em>, <em>participant=None</em>, <em>exclude=None</em>, <em>match_entire_word=True</em>, <em>lemma=False</em>, <em>output_tagged=True</em>, <em>output_sents=True</em>, <em>by_files=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.search" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">search</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">search_item</span></em>, <em class="sig-param"><span class="n">participant</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">match_entire_word</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">lemma</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">output_tagged</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">output_sents</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.search" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a list of elements containing <em>search_item</em> by <em>participant</em>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -793,9 +793,9 @@ instead of X for all files altogether.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.sents">
-<code class="descname">sents</code><span class="sig-paren">(</span><em>self</em>, <em>participant=None</em>, <em>exclude=None</em>, <em>by_files=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.sents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.sents" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">sents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">participant</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.sents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.sents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a list of sents by <em>participant</em> in all files.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -819,9 +819,9 @@ instead of X for all files altogether.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.tagged_sents">
-<code class="descname">tagged_sents</code><span class="sig-paren">(</span><em>self</em>, <em>participant=None</em>, <em>exclude=None</em>, <em>by_files=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.tagged_sents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.tagged_sents" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">tagged_sents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">participant</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.tagged_sents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.tagged_sents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a list of tagged sents by <em>participant</em> in all files.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -845,9 +845,9 @@ instead of X for all files altogether.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.tagged_words">
-<code class="descname">tagged_words</code><span class="sig-paren">(</span><em>self</em>, <em>participant=None</em>, <em>exclude=None</em>, <em>by_files=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.tagged_words"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.tagged_words" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">tagged_words</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">participant</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.tagged_words"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.tagged_words" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a list of tagged words by <em>participant</em> in all files.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -871,9 +871,9 @@ instead of X for all files altogether.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.update">
-<code class="descname">update</code><span class="sig-paren">(</span><em>self</em>, <em>reader</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.update" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">reader</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Combine the current CHAT Reader instance with <code class="docutils literal notranslate"><span class="pre">reader</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -884,9 +884,9 @@ instead of X for all files altogether.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.utterances">
-<code class="descname">utterances</code><span class="sig-paren">(</span><em>self</em>, <em>participant=None</em>, <em>exclude=None</em>, <em>clean=True</em>, <em>by_files=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.utterances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.utterances" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">utterances</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">participant</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">clean</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.utterances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.utterances" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a list of (<em>participant</em>, utterance) pairs from all files.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -912,9 +912,9 @@ instead of X for all files altogether.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.word_frequency">
-<code class="descname">word_frequency</code><span class="sig-paren">(</span><em>self</em>, <em>participant=None</em>, <em>exclude=None</em>, <em>keep_case=True</em>, <em>by_files=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.word_frequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.word_frequency" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">word_frequency</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">participant</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">keep_case</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.word_frequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.word_frequency" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a word frequency counter for <em>participant</em> in all files.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -942,9 +942,9 @@ If <code class="docutils literal notranslate"><span class="pre">False</span></co
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.word_ngrams">
-<code class="descname">word_ngrams</code><span class="sig-paren">(</span><em>self</em>, <em>n</em>, <em>participant=None</em>, <em>exclude=None</em>, <em>keep_case=True</em>, <em>by_files=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.word_ngrams"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.word_ngrams" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">word_ngrams</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">n</span></em>, <em class="sig-param"><span class="n">participant</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">keep_case</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.word_ngrams"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.word_ngrams" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a word <code class="docutils literal notranslate"><span class="pre">n</span></code>-gram counter by <code class="docutils literal notranslate"><span class="pre">participant</span></code> in all files.
 participant : str or iterable of str, optional</p>
 <blockquote>
@@ -972,9 +972,9 @@ If <code class="docutils literal notranslate"><span class="pre">False</span></co
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.words">
-<code class="descname">words</code><span class="sig-paren">(</span><em>self</em>, <em>participant=None</em>, <em>exclude=None</em>, <em>by_files=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.words"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.words" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">words</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">participant</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.words"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.words" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a list of words by <em>participant</em> in all files.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1032,10 +1032,6 @@ instead of X for all files altogether.</p>
 <li class="toctree-l1"><a class="reference internal" href="devmeasures.html">Developmental measures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="freq.html">Word frequency and ngrams</a></li>
 <li class="toctree-l1"><a class="reference internal" href="concord.html">Word search and concordance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lex.html">Lexicon and morphology</a></li>
-<li class="toctree-l1"><a class="reference internal" href="phono.html">Phonetics and phonology</a></li>
-<li class="toctree-l1"><a class="reference internal" href="synsem.html">Syntax and semantics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="disca.html">Discourse and conversational analysis</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="reference.html">Library reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">chat</span></code> — Reading and parsing CHAT transcripts</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#metadata-methods">Metadata methods</a></li>
@@ -1055,20 +1051,22 @@ instead of X for all files altogether.</p>
 <ul>
   <li><a href="toc.html">Documentation overview</a><ul>
   <li><a href="reference.html">Library reference</a><ul>
+      <li>Previous: <a href="reference.html" title="previous chapter">Library reference</a></li>
+      <li>Next: <a href="measures.html" title="next chapter"><code class="docutils literal notranslate"><span class="pre">measures</span></code> — Developmental measures</a></li>
   </ul></li>
   </ul></li>
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -1082,10 +1080,10 @@ instead of X for all files altogether.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2019, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on May 22, 2019.
+      &copy;2015-2020, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on June 30, 2020.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

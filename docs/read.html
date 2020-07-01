@@ -1,17 +1,18 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reading data &#8212; PyLangAcq 0.10.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Accessing metadata" href="metadata.html" />
     <link rel="prev" title="Tutorial" href="tutorial.html" />
@@ -175,7 +176,7 @@ It depends on whether or not you are interested in an return object that
 organizes contents by the individual source files.
 These methods have the optional parameter <code class="docutils literal notranslate"><span class="pre">by_files</span></code> (default: <code class="docutils literal notranslate"><span class="pre">False</span></code>).
 For a given method <code class="docutils literal notranslate"><span class="pre">some_method()</span></code> called for a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> instance named <code class="docutils literal notranslate"><span class="pre">reader_instance</span></code>:</p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 30%" />
 <col style="width: 70%" />
@@ -335,10 +336,6 @@ as an empty <code class="docutils literal notranslate"><span class="pre">Reader<
 <li class="toctree-l1"><a class="reference internal" href="devmeasures.html">Developmental measures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="freq.html">Word frequency and ngrams</a></li>
 <li class="toctree-l1"><a class="reference internal" href="concord.html">Word search and concordance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lex.html">Lexicon and morphology</a></li>
-<li class="toctree-l1"><a class="reference internal" href="phono.html">Phonetics and phonology</a></li>
-<li class="toctree-l1"><a class="reference internal" href="synsem.html">Syntax and semantics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="disca.html">Discourse and conversational analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Library reference</a></li>
 </ul>
 
@@ -352,15 +349,15 @@ as an empty <code class="docutils literal notranslate"><span class="pre">Reader<
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -374,10 +371,10 @@ as an empty <code class="docutils literal notranslate"><span class="pre">Reader<
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2019, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on May 22, 2019.
+      &copy;2015-2020, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on June 30, 2020.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

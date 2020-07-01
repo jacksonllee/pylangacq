@@ -9,9 +9,9 @@ workflows:
       - build-python-3.8
 
 jobs:
-  build-python-3.6: &template
+  build-python-3.8: &template
     docker:
-      - image: python:3.6
+      - image: circleci/python:3.8
     steps:
       - checkout
       - run:
@@ -25,9 +25,15 @@ jobs:
               python setup.py sdist
               pip install dist/`ls dist/ | grep .tar.gz`
       - run:
+          name: Check for PyPI compliance via twine
+          working_directory: ~/project/
+          command: |
+            pip install twine
+            twine check dist/`ls dist/ | grep .tar.gz`
+      - run:
           name: Install the full development requirements
           working_directory: ~/project/
-          command: pip install --progress-bar off -r requirements.txt
+          command: pip install --progress-bar off -r dev-requirements.txt
       - run:
           name: Show installed Python packages
           command: pip list
@@ -43,12 +49,11 @@ jobs:
           # Avoid being able to do relative imports.
           # Test code by importing the *installed* library in site-packages.
           command: pytest -vv --cov=project/pylangacq project/pylangacq
+  build-python-3.6:
+    <<: *template
+    docker:
+      - image: circleci/python:3.6
   build-python-3.7:
     <<: *template
     docker:
-      - image: python:3.7
-  build-python-3.8:
-    <<: *template
-    docker:
-      # TODO: Switch to python:3.8 after Python 3.8 is out in Oct/Nov 2019.
-      - image: python:3.8-rc
+      - image: circleci/python:3.7

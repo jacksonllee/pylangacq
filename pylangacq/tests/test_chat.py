@@ -376,6 +376,7 @@ def test_headers(eve_one_file):
         },
         "Tape Location": "850",
         "Time Duration": "11:30-12:00",
+        "Types": "long, toyplay, TD",
         "UTF8": "",
     }
 

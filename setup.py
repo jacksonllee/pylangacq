@@ -2,21 +2,9 @@ import os
 import setuptools
 
 
-if getattr(setuptools, "__version__", "0") < "39":
-    # v36.4.0+ needed to automatically include README.md in packaging
-    # v38.6.0+ needed for long_description_content_type in setup()
-    raise EnvironmentError(
-        "Your setuptools is too old. "
-        "Please run 'pip install --upgrade pip setuptools'."
-    )
-
+_VERSION = "0.10.0"
 
 _THIS_DIR = os.path.dirname(os.path.realpath(__file__))
-
-with open(os.path.join(_THIS_DIR, "pylangacq", "_version.py")) as f:
-    # get __version__
-    exec(f.read())
-
 with open(os.path.join(_THIS_DIR, "README.md")) as f:
     _LONG_DESCRIPTION = f.read().strip()
 
@@ -24,7 +12,7 @@ with open(os.path.join(_THIS_DIR, "README.md")) as f:
 def main():
     setuptools.setup(
         name="pylangacq",
-        version=__version__,  # noqa: F821
+        version=_VERSION,
         description="PyLangAcq: Language Acquisition Research in Python",
         long_description=_LONG_DESCRIPTION,
         long_description_content_type="text/markdown",
@@ -34,6 +22,7 @@ def main():
         license="MIT License",
         packages=setuptools.find_packages(),
         python_requires=">=3.6",
+        setup_requires="setuptools>=39",
         keywords=[
             "computational linguistics",
             "natural language processing",

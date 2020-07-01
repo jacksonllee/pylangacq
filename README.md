@@ -47,7 +47,7 @@ yourself, you may obtain the latest source code through GitHub and `git`:
     git clone https://github.com/<your-github-username>/pylangacq.git
     cd pylangacq
     pip install --upgrade pip setuptools
-    pip install -r requirements.txt
+    pip install -r dev-requirements.txt
     pip install -e .
     ```
 

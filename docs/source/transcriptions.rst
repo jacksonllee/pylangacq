@@ -190,7 +190,3 @@ documentation:
 * :ref:`devmeasures`
 * :ref:`freq`
 * :ref:`concord`
-* :ref:`lex`
-* :ref:`phono`
-* :ref:`synsem`
-* :ref:`disca`

@@ -12,19 +12,6 @@ relevant pages of the library documentation for more advanced usage.
 * :ref:`transcripts`
 * :ref:`use_dev_measures`
 * :ref:`use_word_freq`
-* :ref:`by_lx_areas`
-
-
-.. NOTE::
-   Python 3 syntax is used throughout this tutorial and other pages.
-   If you are using Python 2, the "print" statements such as::
-
-       print('something', 'something else')
-
-   should be converted to the following::
-
-       print 'something', 'something else'
-
 
 .. _test_install:
 
@@ -255,18 +242,6 @@ For word combinatorics, use ``word_frequency()`` and ``word_ngrams()``:
 More on :ref:`freq`.
 
 See also ``search()`` and ``concordance()`` in :ref:`concord`.
-
-.. _by_lx_areas:
-
-Acquisition by linguistic areas
--------------------------------
-
-
-* :ref:`lex`
-* :ref:`phono`
-* :ref:`synsem`
-* :ref:`disca`
-
 
 Questions? Issues?
 ------------------

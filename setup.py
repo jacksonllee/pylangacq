@@ -2,7 +2,7 @@ import os
 import setuptools
 
 
-_VERSION = "0.10.0"
+_VERSION = "0.11.0"
 
 _THIS_DIR = os.path.dirname(os.path.realpath(__file__))
 with open(os.path.join(_THIS_DIR, "README.md")) as f:

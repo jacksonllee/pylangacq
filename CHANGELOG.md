@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.11.0] - 2020-07-02
+
 ### Added
 * Started testing Python 3.7 and 3.8 on continuous integration. (#9)
 * Add time marker support (available at `_SingleReader`),
@@ -21,9 +23,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Removed
 * Dropped support for Python 2.7, 3.4, and 3.5.
   All code related to Python 2+3 cross compatibility was removed. (#9)
-
-### Fixed
-### Security
 
 ## [0.10.0] - 2017-11-02
 

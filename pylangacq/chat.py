@@ -79,9 +79,7 @@ def params_in_docstring(*params):
 
     def real_decorator(func):
         returns_header = "\n\n        Returns\n        -------"
-        func.__doc__ = func.__doc__.replace(
-            returns_header, docstring + returns_header
-        )
+        func.__doc__ = func.__doc__.replace(returns_header, docstring + returns_header)
 
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -203,9 +201,7 @@ class Reader(object):
                 for fn in fns
             ]
 
-            filenames_set.update(
-                fnmatch.filter(candidate_filenames, abs_fullpath)
-            )
+            filenames_set.update(fnmatch.filter(candidate_filenames, abs_fullpath))
         return filenames_set
 
     def _reset_reader(self, *filenames, **kwargs):
@@ -223,9 +219,7 @@ class Reader(object):
         self._fname_to_reader = {}
         for fn in self._filenames:
             # TODO rewrite what _SingleReader takes as args
-            self._fname_to_reader[fn] = _SingleReader(
-                fn, encoding=self.encoding
-            )
+            self._fname_to_reader[fn] = _SingleReader(fn, encoding=self.encoding)
 
     def __len__(self):
         """Return the number of files.
@@ -254,10 +248,7 @@ class Reader(object):
         else:
             # sort by filename first (so filenames with same age are sorted)
             return [
-                fn
-                for fn, _ in sorted(
-                    sorted(self.age().items()), key=lambda x: x[1]
-                )
+                fn for fn, _ in sorted(sorted(self.age().items()), key=lambda x: x[1])
             ]
 
     def number_of_files(self):
@@ -270,9 +261,7 @@ class Reader(object):
         return len(self)
 
     @params_in_docstring("participant", "exclude", "by_files")
-    def number_of_utterances(
-        self, participant=None, exclude=None, by_files=False
-    ):
+    def number_of_utterances(self, participant=None, exclude=None, by_files=False):
         """Return the number of utterances for *participant* in all files.
 
         Parameters
@@ -304,9 +293,7 @@ class Reader(object):
         -------
         dict(str: dict)
         """
-        return {
-            fn: self._fname_to_reader[fn].headers() for fn in self._filenames
-        }
+        return {fn: self._fname_to_reader[fn].headers() for fn in self._filenames}
 
     def index_to_tiers(self):
         """Return a dict mapping a file path to the file's index_to_tiers dict.
@@ -316,8 +303,7 @@ class Reader(object):
         dict(str: dict)
         """
         return {
-            fn: self._fname_to_reader[fn].index_to_tiers()
-            for fn in self._filenames
+            fn: self._fname_to_reader[fn].index_to_tiers() for fn in self._filenames
         }
 
     def participants(self):
@@ -327,10 +313,7 @@ class Reader(object):
         -------
         dict(str: dict)
         """
-        return {
-            fn: self._fname_to_reader[fn].participants()
-            for fn in self._filenames
-        }
+        return {fn: self._fname_to_reader[fn].participants() for fn in self._filenames}
 
     @params_in_docstring("by_files")
     def participant_codes(self, by_files=False):
@@ -362,9 +345,7 @@ class Reader(object):
         -------
         dict(str: list(str))
         """
-        return {
-            fn: self._fname_to_reader[fn].languages() for fn in self._filenames
-        }
+        return {fn: self._fname_to_reader[fn].languages() for fn in self._filenames}
 
     def dates_of_recording(self):
         """Return a map from a file path to the date of recording.
@@ -376,8 +357,7 @@ class Reader(object):
         dict(str: list(tuple(int, int, int)))
         """
         return {
-            fn: self._fname_to_reader[fn].dates_of_recording()
-            for fn in self._filenames
+            fn: self._fname_to_reader[fn].dates_of_recording() for fn in self._filenames
         }
 
     def date_of_birth(self):
@@ -387,10 +367,7 @@ class Reader(object):
         -------
         dict(str: dict(str: tuple(int, int, int)))
         """
-        return {
-            fn: self._fname_to_reader[fn].date_of_birth()
-            for fn in self._filenames
-        }
+        return {fn: self._fname_to_reader[fn].date_of_birth() for fn in self._filenames}
 
     def age(self, participant="CHI", months=False):
         """Return a map from a file path to the *participant*'s age.
@@ -409,9 +386,7 @@ class Reader(object):
         dict(str: tuple(int, int, int)) or dict(str: float)
         """
         return {
-            fn: self._fname_to_reader[fn].age(
-                participant=participant, months=months
-            )
+            fn: self._fname_to_reader[fn].age(participant=participant, months=months)
             for fn in self._filenames
         }
 
@@ -435,9 +410,7 @@ class Reader(object):
             raise ValueError("No such file.")
 
     @params_in_docstring("participant", "exclude", "by_files")
-    def utterances(
-        self, participant=None, exclude=None, clean=True, by_files=False
-    ):
+    def utterances(self, participant=None, exclude=None, clean=True, by_files=False):
         """Return a list of (*participant*, utterance) pairs from all files.
 
         Parameters
@@ -613,9 +586,7 @@ class Reader(object):
             )
 
     @params_in_docstring("participant", "exclude", "by_files")
-    def part_of_speech_tags(
-        self, participant=None, exclude=None, by_files=False
-    ):
+    def part_of_speech_tags(self, participant=None, exclude=None, by_files=False):
         """Return the part-of-speech tags in the data for *participant*.
 
         Parameters
@@ -1019,13 +990,11 @@ class _SingleReader(object):
             if not current_line:
                 continue
 
-            if current_line.startswith("%xpho:") or current_line.startswith(
-                "%xmod:"
-            ):
+            if current_line.startswith("%xpho:") or current_line.startswith("%xmod:"):
                 current_line = current_line.replace("%x", "%", 1)
 
             if previous_line and current_line.startswith("\t"):
-                previous_line = u"{} {}".format(
+                previous_line = "{} {}".format(
                     previous_line, current_line.strip()
                 )  # strip \t
             elif previous_line:
@@ -1083,9 +1052,7 @@ class _SingleReader(object):
 
             elif utterance and line.startswith("%"):
                 tier_marker = line_split[0].rstrip(":")
-                result_with_collapses[index_][tier_marker] = " ".join(
-                    line_split[1:]
-                )
+                result_with_collapses[index_][tier_marker] = " ".join(line_split[1:])
 
         # handle collapses such as [x 4]
         result_without_collapses = {}
@@ -1166,9 +1133,11 @@ class _SingleReader(object):
                 for participant in participants:
                     participant = participant.strip()
                     code, _, participant_label = participant.partition(" ")
-                    participant_name, _, participant_role = (
-                        participant_label.partition(" ")
-                    )
+                    (
+                        participant_name,
+                        _,
+                        participant_role,
+                    ) = participant_label.partition(" ")
                     # code = participant code, e.g. CHI, MOT
                     headname_to_entry["Participants"][code] = {
                         "participant_name": participant_name
@@ -1195,9 +1164,7 @@ class _SingleReader(object):
                     "education",
                     "custom",
                 ]
-                head_to_info = dict(
-                    zip(participant_info_heads, participant_info)
-                )
+                head_to_info = dict(zip(participant_info_heads, participant_info))
 
                 headname_to_entry["Participants"][code].update(head_to_info)
 
@@ -1367,9 +1334,7 @@ class _SingleReader(object):
         except (KeyError, IndexError, ValueError):
             return None
 
-    def utterances(
-        self, participant=None, exclude=None, clean=True, time_marker=False
-    ):
+    def utterances(self, participant=None, exclude=None, clean=True, time_marker=False):
         """
         Return a list of the utterances by *participant*
         as (*participant*, *utterance*) pairs.
@@ -1409,10 +1374,14 @@ class _SingleReader(object):
                             try:
                                 time_marker = get_time_marker(line)
                             except ValueError as e:
-                                msg = "At line %d in file %s: " % (
-                                    i,
-                                    self.filename(),
-                                ) + str(e)
+                                msg = (
+                                    "At line %d in file %s: "
+                                    % (
+                                        i,
+                                        self.filename(),
+                                    )
+                                    + str(e)
+                                )
                                 raise ValueError(msg)
                             output.append(
                                 (
@@ -1561,9 +1530,7 @@ class _SingleReader(object):
             participant=participant, exclude=exclude, tagged=True, sents=True
         )
 
-    def _get_words(
-        self, participant=None, exclude=None, tagged=True, sents=True
-    ):
+    def _get_words(self, participant=None, exclude=None, tagged=True, sents=True):
         """
         Extract words for the specified participant(s).
 
@@ -1621,14 +1588,14 @@ class _SingleReader(object):
         participants = self._determine_participants(participant, exclude)
 
         if sents:
-            add_function = lambda result_, sent_: result_.append(sent_)  # noqa: E731, E501
+            add_function = lambda result_, sent_: result_.append(sent_)
         else:
-            add_function = lambda result_, sent_: result_.extend(sent_)  # noqa: E731, E501
+            add_function = lambda result_, sent_: result_.extend(sent_)
 
         if tagged:
-            sent_to_add = lambda sent_: sent_  # noqa: E731
+            sent_to_add = lambda sent_: sent_
         else:
-            sent_to_add = lambda sent_: [x[0] for x in sent_ if x[0] != CLITIC]  # noqa: E731, E501
+            sent_to_add = lambda sent_: [x[0] for x in sent_ if x[0] != CLITIC]
 
         for participant_code, tagged_sent in self._all_tagged_sents:
             if participant_code not in participants:
@@ -1791,9 +1758,7 @@ class _SingleReader(object):
             except ``'CHI'``), use ``^(?!.*CHI).*$``.
         """
         output_set = set()
-        tagged_words = self.tagged_words(
-            participant=participant, exclude=exclude
-        )
+        tagged_words = self.tagged_words(participant=participant, exclude=exclude)
 
         for tagged_word in tagged_words:
             pos = tagged_word[1]
@@ -1900,9 +1865,7 @@ class _SingleReader(object):
 
         :param participant: The participant specified, default to ``'CHI'``
         """
-        return get_IPSyn(
-            self.tagged_sents(participant=participant, exclude=exclude)
-        )
+        return get_IPSyn(self.tagged_sents(participant=participant, exclude=exclude))
 
     def search(
         self,
@@ -1958,13 +1921,11 @@ class _SingleReader(object):
 
         # set up the match function
         if match_entire_word or lemma:
-            match_function = lambda search_, test_: search_ == test_  # noqa: E731, E501
+            match_function = lambda search_, test_: search_ == test_
         else:
-            match_function = lambda search_, test_: search_ in test_  # noqa: E731, E501
+            match_function = lambda search_, test_: search_ in test_
 
-        tagged_sents = self.tagged_sents(
-            participant=participant, exclude=exclude
-        )
+        tagged_sents = self.tagged_sents(participant=participant, exclude=exclude)
 
         for tagged_sent in tagged_sents:
             for i, tagged_word in enumerate(tagged_sent):
@@ -1989,13 +1950,9 @@ class _SingleReader(object):
                         w for w in preceding_words if w != CLITIC
                     ]  # remove CLITIC
                     char_number = (
-                        sum(len(w) for w in preceding_words)
-                        + len(preceding_words)
-                        - 1
+                        sum(len(w) for w in preceding_words) + len(preceding_words) - 1
                     )  # plus spaces
-                    taggedsent_charnumber_list.append(
-                        (tagged_sent, char_number)
-                    )
+                    taggedsent_charnumber_list.append((tagged_sent, char_number))
 
         if not taggedsent_charnumber_list:  # if empty
             return taggedsent_charnumber_list
@@ -2003,16 +1960,14 @@ class _SingleReader(object):
         if not concordance:
 
             if output_sents:
-                add_function = lambda result_, sent_: result_.append(sent_)  # noqa: E731, E501
+                add_function = lambda result_, sent_: result_.append(sent_)
             else:
-                add_function = lambda result_, sent_: result_.extend(sent_)  # noqa: E731, E501
+                add_function = lambda result_, sent_: result_.extend(sent_)
 
             if output_tagged:
-                sent_to_add = lambda sent_: sent_  # noqa: E731
+                sent_to_add = lambda sent_: sent_
             else:
-                sent_to_add = lambda sent_: [  # noqa: E731
-                    x[0] for x in sent_ if x[0] != CLITIC
-                ]
+                sent_to_add = lambda sent_: [x[0] for x in sent_ if x[0] != CLITIC]
 
             result_list = []
 
@@ -2025,12 +1980,8 @@ class _SingleReader(object):
             result_list = []
 
             for tagged_sent, char_number in taggedsent_charnumber_list:
-                sent = [
-                    word_ for word_, _, _, _ in tagged_sent if word_ != CLITIC
-                ]
-                sent_str = " " * (max_char_number - char_number) + " ".join(
-                    sent
-                )
+                sent = [word_ for word_, _, _, _ in tagged_sent if word_ != CLITIC]
+                sent_str = " " * (max_char_number - char_number) + " ".join(sent)
                 result_list.append(sent_str)
 
             return result_list

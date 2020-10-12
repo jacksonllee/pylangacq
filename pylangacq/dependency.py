@@ -127,9 +127,7 @@ class DependencyGraph(object):
         for dep in range(1, number_of_nodes):
             head = dep_to_head[dep]
             rel = self.edge[dep][head]["rel"]
-            tikz_dep_code += u"    \\depedge{{{}}}{{{}}}{{{}}}\n".format(
-                dep, head, rel
-            )
+            tikz_dep_code += u"    \\depedge{{{}}}{{{}}}{{{}}}\n".format(dep, head, rel)
 
         # return tikz_dep_code
         # wrapped inside \begin{dependency}...\end{dependency}

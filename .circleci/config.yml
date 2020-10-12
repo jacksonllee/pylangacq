@@ -7,11 +7,12 @@ workflows:
       - build-python-3.6
       - build-python-3.7
       - build-python-3.8
+      - build-python-3.9
 
 jobs:
-  build-python-3.8: &template
+  build-python-3.9: &template
     docker:
-      - image: circleci/python:3.8
+      - image: circleci/python:3.9
     steps:
       - checkout
       - run:
@@ -42,7 +43,13 @@ jobs:
           working_directory: ~/
           # Avoid being able to do relative imports.
           # Test code by importing the *installed* library in site-packages.
-          command: flake8 project/setup.py project/pylangacq
+          command: flake8 --ignore=E501,W503,E731 project/setup.py project/pylangacq
+      - run:
+          name: Run autoformat check
+          working_directory: ~/
+          # Avoid being able to do relative imports.
+          # Test code by importing the *installed* library in site-packages.
+          command: black --check project/setup.py project/pylangacq
       - run:
           name: Run python tests
           working_directory: ~/
@@ -57,3 +64,7 @@ jobs:
     <<: *template
     docker:
       - image: circleci/python:3.7
+  build-python-3.8:
+    <<: *template
+    docker:
+      - image: circleci/python:3.8

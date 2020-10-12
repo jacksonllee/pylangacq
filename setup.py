@@ -2,7 +2,7 @@ import os
 import setuptools
 
 
-_VERSION = "0.11.0"
+_VERSION = "0.12.0"
 
 _THIS_DIR = os.path.dirname(os.path.realpath(__file__))
 with open(os.path.join(_THIS_DIR, "README.md")) as f:
@@ -53,6 +53,7 @@ def main():
             "Programming Language :: Python :: 3.6",
             "Programming Language :: Python :: 3.7",
             "Programming Language :: Python :: 3.8",
+            "Programming Language :: Python :: 3.9",
             "Topic :: Scientific/Engineering",
             "Topic :: Scientific/Engineering :: Artificial Intelligence",
             "Topic :: Scientific/Engineering :: Human Machine Interfaces",

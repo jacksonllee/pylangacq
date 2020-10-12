@@ -518,9 +518,9 @@ def get_IPSyn(tagged_sents):
                 if head != i:
                     continue
 
-                if graph.edge[dep][head]["rel"] == "SUBJ" and not graph.node[
-                    dep
-                ]["pos"].endswith("WH"):
+                if graph.edge[dep][head]["rel"] == "SUBJ" and not graph.node[dep][
+                    "pos"
+                ].endswith("WH"):
                     subject = True
                 elif graph.edge[dep][head]["rel"] == "PRED":
                     predicate = True
@@ -1149,16 +1149,10 @@ def get_IPSyn(tagged_sents):
                 if i != test_verb:
                     continue
 
-                if (
-                    dep < test_verb
-                    and graph.edge[dep][test_verb]["rel"] == "SUBJ"
-                ):
+                if dep < test_verb and graph.edge[dep][test_verb]["rel"] == "SUBJ":
                     has_subject = True
 
-                if (
-                    dep > test_verb
-                    and graph.edge[dep][test_verb]["rel"] == "OBJ"
-                ):
+                if dep > test_verb and graph.edge[dep][test_verb]["rel"] == "OBJ":
                     has_object = True
 
             if has_subject and has_object:
@@ -1229,11 +1223,7 @@ def get_IPSyn(tagged_sents):
             mor3 = graph.node[i + 2]["mor"]
 
             punctuations = {"", "beg", "end"}
-            if (
-                pos2 == "CONJ"
-                and mor1 not in punctuations
-                and mor3 not in punctuations
-            ):
+            if pos2 == "CONJ" and mor1 not in punctuations and mor3 not in punctuations:
                 scoring_board["S7"] += 1
                 add_one_point_if_needed("S5")
 
@@ -1394,10 +1384,7 @@ def get_IPSyn(tagged_sents):
                 continue
 
             inf = False
-            if (
-                dep + 1 in graph.nodes()
-                and graph.node[dep + 1]["word"] == "INF"
-            ):
+            if dep + 1 in graph.nodes() and graph.node[dep + 1]["word"] == "INF":
                 inf = True
 
             # we want the head of wh-word to NOT have ROOT as rel

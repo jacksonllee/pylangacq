@@ -82,9 +82,7 @@ def eve_all_files():
             open(LOCAL_EVE_PATH, encoding="utf-8").read(),
             id="from_chat_str",
         ),
-        pytest.param(
-            Reader.from_chat_files, LOCAL_EVE_PATH, id="from_chat_files"
-        ),
+        pytest.param(Reader.from_chat_files, LOCAL_EVE_PATH, id="from_chat_files"),
     ],
 )
 def test_instantiate_reader(classmethod, arg):
@@ -96,17 +94,13 @@ def test_instantiate_reader(classmethod, arg):
     header_from_classmethod = list(from_classmethod.headers().values())[0]
     header_from_read_chat = list(from_read_chat.headers().values())[0]
 
-    index_to_tiers_from_classmethod = list(
-        from_classmethod.index_to_tiers().values()
-    )[0]
-    index_to_tiers_from_read_chat = list(
-        from_read_chat.index_to_tiers().values()
-    )[0]
+    index_to_tiers_from_classmethod = list(from_classmethod.index_to_tiers().values())[
+        0
+    ]
+    index_to_tiers_from_read_chat = list(from_read_chat.index_to_tiers().values())[0]
 
     assert header_from_classmethod == header_from_read_chat
-    assert len(index_to_tiers_from_classmethod) == len(
-        index_to_tiers_from_read_chat
-    )
+    assert len(index_to_tiers_from_classmethod) == len(index_to_tiers_from_read_chat)
 
     for (i_c, tier_c), (i_r, tier_r) in zip(
         sorted(index_to_tiers_from_classmethod.items()),
@@ -416,9 +410,7 @@ def test_utterances(eve_one_file):
 
 
 def test_part_of_speech_tags(eve_all_files):
-    assert almost_equal(
-        len(eve_all_files.part_of_speech_tags()), 62, tolerance=2
-    )
+    assert almost_equal(len(eve_all_files.part_of_speech_tags()), 62, tolerance=2)
 
 
 def test_mlu_m(eve_one_file):

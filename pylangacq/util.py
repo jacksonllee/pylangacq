@@ -134,29 +134,21 @@ def clean_utterance(utterance, phon=False):
             if counter == 0:
                 angle_brackets_l2r_pairs[index_] = i
                 break
-    angle_brackets_r2l_pairs = {
-        v: k for k, v in angle_brackets_l2r_pairs.items()
-    }
+    angle_brackets_r2l_pairs = {v: k for k, v in angle_brackets_l2r_pairs.items()}
 
     index_pairs = []  # characters bounded by index pairs to be removed
 
     # remove ' [///]'
     triple_slash_right_indices = find_indices(utterance, r"> \[///\]")
-    index_pairs += [
-        (begin + 1, begin + 6) for begin in triple_slash_right_indices
-    ]
+    index_pairs += [(begin + 1, begin + 6) for begin in triple_slash_right_indices]
 
     # remove ' [//]'
     double_overlap_right_indices = find_indices(utterance, r"> \[//\]")
-    index_pairs += [
-        (begin + 1, begin + 5) for begin in double_overlap_right_indices
-    ]
+    index_pairs += [(begin + 1, begin + 5) for begin in double_overlap_right_indices]
 
     # remove ' [/]'
     single_overlap_right_indices = find_indices(utterance, r"> \[/\]")
-    index_pairs += [
-        (begin + 1, begin + 4) for begin in single_overlap_right_indices
-    ]
+    index_pairs += [(begin + 1, begin + 4) for begin in single_overlap_right_indices]
 
     # remove ' [/?]'
     slash_question_indices = find_indices(utterance, r"> \[/\?\]")
@@ -164,15 +156,11 @@ def clean_utterance(utterance, phon=False):
 
     # remove ' [::'
     double_error_right_indices = find_indices(utterance, r"> \[::")
-    index_pairs += [
-        (begin + 1, begin + 4) for begin in double_error_right_indices
-    ]
+    index_pairs += [(begin + 1, begin + 4) for begin in double_error_right_indices]
 
     # remove ' [:'
     single_error_right_indices = find_indices(utterance, r"> \[: ")
-    index_pairs += [
-        (begin + 1, begin + 3) for begin in single_error_right_indices
-    ]
+    index_pairs += [(begin + 1, begin + 3) for begin in single_error_right_indices]
 
     right_indices = (
         double_overlap_right_indices
@@ -184,8 +172,7 @@ def clean_utterance(utterance, phon=False):
     )
 
     index_pairs = index_pairs + [
-        (angle_brackets_r2l_pairs[right], right)
-        for right in sorted(right_indices)
+        (angle_brackets_r2l_pairs[right], right) for right in sorted(right_indices)
     ]
     indices_to_ignore = set()
     for left, right in index_pairs:

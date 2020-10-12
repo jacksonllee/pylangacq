@@ -13,9 +13,7 @@ def test_version_number_match_with_changelog():
     with open(os.path.join(_REPO_DIR, "CHANGELOG.md")) as f:
         changelog = f.read()
     # latest version number in changelog = the 1st occurrence of '[x.y.z]'
-    changelog_version = (
-        re.search(r"\[\d+\.\d+\.\d+\]", changelog).group().strip("[]")
-    )
+    changelog_version = re.search(r"\[\d+\.\d+\.\d+\]", changelog).group().strip("[]")
     package_version = pylangacq.__version__
     assert package_version == changelog_version, (
         f"Make sure both __version__ ({package_version}) and CHANGELOG "

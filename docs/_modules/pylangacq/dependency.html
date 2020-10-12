@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>pylangacq.dependency &#8212; PyLangAcq 0.10.0 documentation</title>
+    <title>pylangacq.dependency &#8212; PyLangAcq 0.12.0 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -160,9 +160,7 @@
         <span class="k">for</span> <span class="n">dep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">number_of_nodes</span><span class="p">):</span>
             <span class="n">head</span> <span class="o">=</span> <span class="n">dep_to_head</span><span class="p">[</span><span class="n">dep</span><span class="p">]</span>
             <span class="n">rel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="n">head</span><span class="p">][</span><span class="s2">&quot;rel&quot;</span><span class="p">]</span>
-            <span class="n">tikz_dep_code</span> <span class="o">+=</span> <span class="sa">u</span><span class="s2">&quot;    </span><span class="se">\\</span><span class="s2">depedge{{</span><span class="si">{}</span><span class="s2">}}{{</span><span class="si">{}</span><span class="s2">}}{{</span><span class="si">{}</span><span class="s2">}}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">dep</span><span class="p">,</span> <span class="n">head</span><span class="p">,</span> <span class="n">rel</span>
-            <span class="p">)</span>
+            <span class="n">tikz_dep_code</span> <span class="o">+=</span> <span class="sa">u</span><span class="s2">&quot;    </span><span class="se">\\</span><span class="s2">depedge{{</span><span class="si">{}</span><span class="s2">}}{{</span><span class="si">{}</span><span class="s2">}}{{</span><span class="si">{}</span><span class="s2">}}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dep</span><span class="p">,</span> <span class="n">head</span><span class="p">,</span> <span class="n">rel</span><span class="p">)</span>
 
         <span class="c1"># return tikz_dep_code</span>
         <span class="c1"># wrapped inside \begin{dependency}...\end{dependency}</span>
@@ -255,7 +253,7 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2020, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on June 30, 2020.
+      &copy;2015-2020, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.12.0 | Documentation last updated on October 11, 2020.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>

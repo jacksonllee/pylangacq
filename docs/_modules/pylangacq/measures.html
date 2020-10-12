@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>pylangacq.measures &#8212; PyLangAcq 0.10.0 documentation</title>
+    <title>pylangacq.measures &#8212; PyLangAcq 0.12.0 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -551,9 +551,9 @@
                 <span class="k">if</span> <span class="n">head</span> <span class="o">!=</span> <span class="n">i</span><span class="p">:</span>
                     <span class="k">continue</span>
 
-                <span class="k">if</span> <span class="n">graph</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="n">head</span><span class="p">][</span><span class="s2">&quot;rel&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;SUBJ&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">graph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span>
-                    <span class="n">dep</span>
-                <span class="p">][</span><span class="s2">&quot;pos&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;WH&quot;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">graph</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="n">head</span><span class="p">][</span><span class="s2">&quot;rel&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;SUBJ&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">graph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span>
+                    <span class="s2">&quot;pos&quot;</span>
+                <span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;WH&quot;</span><span class="p">):</span>
                     <span class="n">subject</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="k">elif</span> <span class="n">graph</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="n">head</span><span class="p">][</span><span class="s2">&quot;rel&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;PRED&quot;</span><span class="p">:</span>
                     <span class="n">predicate</span> <span class="o">=</span> <span class="kc">True</span>
@@ -1182,16 +1182,10 @@
                 <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">test_verb</span><span class="p">:</span>
                     <span class="k">continue</span>
 
-                <span class="k">if</span> <span class="p">(</span>
-                    <span class="n">dep</span> <span class="o">&lt;</span> <span class="n">test_verb</span>
-                    <span class="ow">and</span> <span class="n">graph</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="n">test_verb</span><span class="p">][</span><span class="s2">&quot;rel&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;SUBJ&quot;</span>
-                <span class="p">):</span>
+                <span class="k">if</span> <span class="n">dep</span> <span class="o">&lt;</span> <span class="n">test_verb</span> <span class="ow">and</span> <span class="n">graph</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="n">test_verb</span><span class="p">][</span><span class="s2">&quot;rel&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;SUBJ&quot;</span><span class="p">:</span>
                     <span class="n">has_subject</span> <span class="o">=</span> <span class="kc">True</span>
 
-                <span class="k">if</span> <span class="p">(</span>
-                    <span class="n">dep</span> <span class="o">&gt;</span> <span class="n">test_verb</span>
-                    <span class="ow">and</span> <span class="n">graph</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="n">test_verb</span><span class="p">][</span><span class="s2">&quot;rel&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;OBJ&quot;</span>
-                <span class="p">):</span>
+                <span class="k">if</span> <span class="n">dep</span> <span class="o">&gt;</span> <span class="n">test_verb</span> <span class="ow">and</span> <span class="n">graph</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="n">test_verb</span><span class="p">][</span><span class="s2">&quot;rel&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;OBJ&quot;</span><span class="p">:</span>
                     <span class="n">has_object</span> <span class="o">=</span> <span class="kc">True</span>
 
             <span class="k">if</span> <span class="n">has_subject</span> <span class="ow">and</span> <span class="n">has_object</span><span class="p">:</span>
@@ -1262,11 +1256,7 @@
             <span class="n">mor3</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">][</span><span class="s2">&quot;mor&quot;</span><span class="p">]</span>
 
             <span class="n">punctuations</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;beg&quot;</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">}</span>
-            <span class="k">if</span> <span class="p">(</span>
-                <span class="n">pos2</span> <span class="o">==</span> <span class="s2">&quot;CONJ&quot;</span>
-                <span class="ow">and</span> <span class="n">mor1</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">punctuations</span>
-                <span class="ow">and</span> <span class="n">mor3</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">punctuations</span>
-            <span class="p">):</span>
+            <span class="k">if</span> <span class="n">pos2</span> <span class="o">==</span> <span class="s2">&quot;CONJ&quot;</span> <span class="ow">and</span> <span class="n">mor1</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">punctuations</span> <span class="ow">and</span> <span class="n">mor3</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">punctuations</span><span class="p">:</span>
                 <span class="n">scoring_board</span><span class="p">[</span><span class="s2">&quot;S7&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="n">add_one_point_if_needed</span><span class="p">(</span><span class="s2">&quot;S5&quot;</span><span class="p">)</span>
 
@@ -1427,10 +1417,7 @@
                 <span class="k">continue</span>
 
             <span class="n">inf</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="k">if</span> <span class="p">(</span>
-                <span class="n">dep</span> <span class="o">+</span> <span class="mi">1</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
-                <span class="ow">and</span> <span class="n">graph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">dep</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="s2">&quot;word&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;INF&quot;</span>
-            <span class="p">):</span>
+            <span class="k">if</span> <span class="n">dep</span> <span class="o">+</span> <span class="mi">1</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span> <span class="ow">and</span> <span class="n">graph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">dep</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="s2">&quot;word&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;INF&quot;</span><span class="p">:</span>
                 <span class="n">inf</span> <span class="o">=</span> <span class="kc">True</span>
 
             <span class="c1"># we want the head of wh-word to NOT have ROOT as rel</span>
@@ -1686,7 +1673,7 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2020, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on June 30, 2020.
+      &copy;2015-2020, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.12.0 | Documentation last updated on October 11, 2020.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>

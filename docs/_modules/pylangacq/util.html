@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>pylangacq.util &#8212; PyLangAcq 0.10.0 documentation</title>
+    <title>pylangacq.util &#8212; PyLangAcq 0.12.0 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -167,29 +167,21 @@
             <span class="k">if</span> <span class="n">counter</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">angle_brackets_l2r_pairs</span><span class="p">[</span><span class="n">index_</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
                 <span class="k">break</span>
-    <span class="n">angle_brackets_r2l_pairs</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="n">v</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">angle_brackets_l2r_pairs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-    <span class="p">}</span>
+    <span class="n">angle_brackets_r2l_pairs</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">angle_brackets_l2r_pairs</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
 
     <span class="n">index_pairs</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># characters bounded by index pairs to be removed</span>
 
     <span class="c1"># remove &#39; [///]&#39;</span>
     <span class="n">triple_slash_right_indices</span> <span class="o">=</span> <span class="n">find_indices</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;&gt; \[///\]&quot;</span><span class="p">)</span>
-    <span class="n">index_pairs</span> <span class="o">+=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="n">begin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">begin</span> <span class="o">+</span> <span class="mi">6</span><span class="p">)</span> <span class="k">for</span> <span class="n">begin</span> <span class="ow">in</span> <span class="n">triple_slash_right_indices</span>
-    <span class="p">]</span>
+    <span class="n">index_pairs</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">begin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">begin</span> <span class="o">+</span> <span class="mi">6</span><span class="p">)</span> <span class="k">for</span> <span class="n">begin</span> <span class="ow">in</span> <span class="n">triple_slash_right_indices</span><span class="p">]</span>
 
     <span class="c1"># remove &#39; [//]&#39;</span>
     <span class="n">double_overlap_right_indices</span> <span class="o">=</span> <span class="n">find_indices</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;&gt; \[//\]&quot;</span><span class="p">)</span>
-    <span class="n">index_pairs</span> <span class="o">+=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="n">begin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">begin</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span> <span class="k">for</span> <span class="n">begin</span> <span class="ow">in</span> <span class="n">double_overlap_right_indices</span>
-    <span class="p">]</span>
+    <span class="n">index_pairs</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">begin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">begin</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span> <span class="k">for</span> <span class="n">begin</span> <span class="ow">in</span> <span class="n">double_overlap_right_indices</span><span class="p">]</span>
 
     <span class="c1"># remove &#39; [/]&#39;</span>
     <span class="n">single_overlap_right_indices</span> <span class="o">=</span> <span class="n">find_indices</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;&gt; \[/\]&quot;</span><span class="p">)</span>
-    <span class="n">index_pairs</span> <span class="o">+=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="n">begin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">begin</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span> <span class="k">for</span> <span class="n">begin</span> <span class="ow">in</span> <span class="n">single_overlap_right_indices</span>
-    <span class="p">]</span>
+    <span class="n">index_pairs</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">begin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">begin</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span> <span class="k">for</span> <span class="n">begin</span> <span class="ow">in</span> <span class="n">single_overlap_right_indices</span><span class="p">]</span>
 
     <span class="c1"># remove &#39; [/?]&#39;</span>
     <span class="n">slash_question_indices</span> <span class="o">=</span> <span class="n">find_indices</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;&gt; \[/\?\]&quot;</span><span class="p">)</span>
@@ -197,15 +189,11 @@
 
     <span class="c1"># remove &#39; [::&#39;</span>
     <span class="n">double_error_right_indices</span> <span class="o">=</span> <span class="n">find_indices</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;&gt; \[::&quot;</span><span class="p">)</span>
-    <span class="n">index_pairs</span> <span class="o">+=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="n">begin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">begin</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span> <span class="k">for</span> <span class="n">begin</span> <span class="ow">in</span> <span class="n">double_error_right_indices</span>
-    <span class="p">]</span>
+    <span class="n">index_pairs</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">begin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">begin</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span> <span class="k">for</span> <span class="n">begin</span> <span class="ow">in</span> <span class="n">double_error_right_indices</span><span class="p">]</span>
 
     <span class="c1"># remove &#39; [:&#39;</span>
     <span class="n">single_error_right_indices</span> <span class="o">=</span> <span class="n">find_indices</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;&gt; \[: &quot;</span><span class="p">)</span>
-    <span class="n">index_pairs</span> <span class="o">+=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="n">begin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">begin</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="k">for</span> <span class="n">begin</span> <span class="ow">in</span> <span class="n">single_error_right_indices</span>
-    <span class="p">]</span>
+    <span class="n">index_pairs</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">begin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">begin</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="k">for</span> <span class="n">begin</span> <span class="ow">in</span> <span class="n">single_error_right_indices</span><span class="p">]</span>
 
     <span class="n">right_indices</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">double_overlap_right_indices</span>
@@ -217,8 +205,7 @@
     <span class="p">)</span>
 
     <span class="n">index_pairs</span> <span class="o">=</span> <span class="n">index_pairs</span> <span class="o">+</span> <span class="p">[</span>
-        <span class="p">(</span><span class="n">angle_brackets_r2l_pairs</span><span class="p">[</span><span class="n">right</span><span class="p">],</span> <span class="n">right</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">right</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">right_indices</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">angle_brackets_r2l_pairs</span><span class="p">[</span><span class="n">right</span><span class="p">],</span> <span class="n">right</span><span class="p">)</span> <span class="k">for</span> <span class="n">right</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">right_indices</span><span class="p">)</span>
     <span class="p">]</span>
     <span class="n">indices_to_ignore</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="ow">in</span> <span class="n">index_pairs</span><span class="p">:</span>
@@ -529,7 +516,7 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2020, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.10.0 | Documentation last updated on June 30, 2020.
+      &copy;2015-2020, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.12.0 | Documentation last updated on October 11, 2020.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>

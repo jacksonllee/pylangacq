@@ -62,7 +62,7 @@ def clean_utterance(utterance, phon=False):
     utterance = re.sub(r"\[% [^\[]+?\]", "", utterance)
     utterance = re.sub(r"\[- [^\[]+?\]", "", utterance)
     utterance = re.sub(r"\[\^ [^\[]+?\]", "", utterance)
-    utterance = re.sub(r"[^]+?", "", utterance)  # TODO: Why need this?!
+    utterance = re.sub(r"[^]+?", "", utterance)
     utterance = re.sub(r"\[<\d?\]", "", utterance)
     utterance = re.sub(r"\[>\d?\]", "", utterance)
     utterance = re.sub(r"\(\d+?\.?\d*?\)", "", utterance)
@@ -154,6 +154,10 @@ def clean_utterance(utterance, phon=False):
     slash_question_indices = find_indices(utterance, r"> \[/\?\]")
     index_pairs += [(begin + 1, begin + 4) for begin in slash_question_indices]
 
+    # remove ' [/-]'
+    slash_dash_indices = find_indices(utterance, r"> \[/\-\]")
+    index_pairs += [(begin + 1, begin + 4) for begin in slash_dash_indices]
+
     # remove ' [::'
     double_error_right_indices = find_indices(utterance, r"> \[::")
     index_pairs += [(begin + 1, begin + 4) for begin in double_error_right_indices]
@@ -169,6 +173,7 @@ def clean_utterance(utterance, phon=False):
         + single_error_right_indices
         + triple_slash_right_indices
         + slash_question_indices
+        + slash_dash_indices
     )
 
     index_pairs = index_pairs + [
@@ -189,6 +194,7 @@ def clean_utterance(utterance, phon=False):
     utterance = re.sub(r"\S+? \[//\]", "", utterance)
     utterance = re.sub(r"\S+? \[///\]", "", utterance)
     utterance = re.sub(r"\S+? \[/\?\]", "", utterance)
+    utterance = re.sub(r"\S+? \[/\-\]", "", utterance)
 
     utterance = re.sub(r"\S+? \[::", "", utterance)
     utterance = re.sub(r"\S+? \[:", "", utterance)

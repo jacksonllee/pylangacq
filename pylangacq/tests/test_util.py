@@ -42,10 +42,13 @@ from pylangacq.util import (
         ("[*] bar", "bar"),
         ("bar [*]", "bar"),
         ("“bar”", "bar"),
+        # Step 3
+        ("foo bar [/-]", "foo"),
+        ("foo < bar baz > [/-]", "foo"),
     ],
 )
 def test_clean_utterance(original, expected):
-    # TODO: Steps 3 and 5 in the function not tested
+    # TODO: Most of step 3 and all of step 5 in the function not tested
     assert clean_utterance(original) == expected
 
 

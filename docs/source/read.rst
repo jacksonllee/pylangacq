@@ -145,8 +145,8 @@ the ``from_chat_str`` class method:
 .. code-block:: python
 
     >>> import pylangacq as pla
-    >>> reader = pla.Reader.from_chat_str(your_chat_data_str, encoding='utf-8')
-
+    >>> chat_data_str = "*CHI:\tmore cookie .\n*MOT:\tyou want more cookies ?"
+    >>> reader = pla.Reader.from_chat_str(chat_data_str)
 
 .. _reader_properties:
 

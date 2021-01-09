@@ -139,7 +139,7 @@ Method                     Return type                                         R
     >>> import pylangacq as pla
     >>> eve = pla.read_chat('Brown/Eve/*.cha')
     >>> len(eve.words())  # total number of words in Eve's data
-    120131
+    119972
     >>> eve.words()[:5]  # first five words
     ['more', 'cookie', '.', 'you', '0v']
     >>> eve.tagged_words()[:2]  # first two tagged words
@@ -162,7 +162,7 @@ Method                     Return type                                         R
      ('MOT', 'would that do just as_well ?'),
      ('MOT', 'here .')]
     >>> len(eve.part_of_speech_tags())  # total number of distinct part-of-speech tags
-    65
+    62
 
 The terminology of "words" and "sents" (= sentences, equivalent to utterances
 here) follows NLTK, and so does "tagged" as explained in :ref:`word` above.

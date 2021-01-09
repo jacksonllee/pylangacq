@@ -15,6 +15,7 @@ To test your installation:
 .. code-block:: python
 
     >>> import pylangacq
-    >>> pylangacq.__version__  # show version number
+    >>> pylangacq.__version__
+    '0.12.0'
 
 The :ref:`tutorial` page introduces the basic functionality of PyLangAcq.

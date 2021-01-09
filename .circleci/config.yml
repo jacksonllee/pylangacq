@@ -69,7 +69,9 @@ jobs:
           working_directory: ~/
           # Avoid being able to import pylangacq by relative import.
           # Test code by importing the *installed* pylangacq in site-packages.
-          command: pytest -vv --cov=project/pylangacq --junitxml=/tmp/testxml/report.xml project/pylangacq
+          command: |
+              pytest -vv --doctest-modules --cov=project/pylangacq --noconftest --junitxml=/tmp/testxml/report1.xml project/pylangacq
+              pytest -vv --junitxml=/tmp/testxml/report2.xml project/docs/source
       - store_test_results:
           path: /tmp/testxml/
 
@@ -80,7 +82,7 @@ workflows:
       - pre-build:
           name: flake8
           command-name: flake8
-          command-run: flake8 --ignore=E501,W503,E731 project/setup.py project/pylangacq
+          command-run: flake8 --config=project/setup.cfg project/setup.py project/pylangacq
       - pre-build:
           name: black
           command-name: black

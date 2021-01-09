@@ -5,63 +5,28 @@ If anything fails, we probably also have to update the documentation
 (and fix the bugs, if any).
 """
 
+import filecmp
 import os
-import zipfile
 import tempfile
 
 import pytest
-import requests
 
 from pylangacq import read_chat, Reader
-
-
-_THIS_DIR = os.path.dirname(__file__)
-
-REMOTE_BROWN_URL = "https://childes.talkbank.org/data/Eng-NA/Brown.zip"
-REMOTE_BROWN_ZIP_PATH = "brown.zip"
-REMOTE_EVE_DIR = os.path.abspath(os.path.join("Brown", "Eve"))
-REMOTE_EVE_FILE_PATH_1 = os.path.join(REMOTE_EVE_DIR, "010600a.cha")
-REMOTE_EVE_FILE_PATH_2 = os.path.join(REMOTE_EVE_DIR, "010600b.cha")
-REMOTE_EVE_FILE_PATH_ALL_FILES = os.path.join(REMOTE_EVE_DIR, "*.cha")
-LOCAL_EVE_PATH = os.path.join(_THIS_DIR, "test_data", "eve.cha")
-
-
-def almost_equal(x, y, tolerance):
-    # Could have used numpy's assert_almost_equal or something,
-    # But it's not worth depending on numpy just for testing this...
-    return abs(x - y) <= tolerance
-
-
-@pytest.mark.skipif(
-    "CI" not in os.environ,
-    reason="assuming Brown/ available, speed up local dev "
-    "for running tests without download",
+from pylangacq.tests.test_data import (
+    LOCAL_EVE_PATH,
+    REMOTE_EVE_DIR,
+    REMOTE_EVE_FILE_PATH_1,
+    REMOTE_EVE_FILE_PATH_2,
+    REMOTE_EVE_FILE_PATH_ALL_FILES,
+    download_and_extract_brown,
 )
-def test_download_and_extract_brown_zip_file():  # pragma: no cover
-    """pytest runs tests in the same order they are defined in the test
-    module, and so this test for downloading and unzipping the Brown zip
-    data file runs first. If download fails, abort all tests."""
-    try:
-        with open(REMOTE_BROWN_ZIP_PATH, "wb", encoding="utf-8") as f:
-            with requests.get(REMOTE_BROWN_URL) as r:
-                f.write(r.content)
-    except Exception as e:
-        msg = (
-            "Error in downloading {}: "
-            "network problems or invalid URL for Brown zip? "
-            "If URL needs updating, tutorial.rst in docs "
-            "has to be updated as well.".format(REMOTE_BROWN_URL)
-        )
-        try:
-            raise e
-        finally:
-            pytest.exit(msg)
-    else:
-        # If download succeeds, unzip the Brown zip file.
-        with zipfile.ZipFile(REMOTE_BROWN_ZIP_PATH) as zip_file:
-            zip_file.extractall()
-        # TODO compare the local eve.cha and CHILDES's 010600a.cha
-        # if there are differences, CHILDES has updated data and may break us
+
+# This module depends on downloaded data.
+download_and_extract_brown()
+
+
+def test_if_childes_has_updated_data():
+    assert filecmp.cmp(LOCAL_EVE_PATH, REMOTE_EVE_FILE_PATH_1)
 
 
 @pytest.fixture
@@ -183,12 +148,9 @@ def test_filenames(eve_all_files):
 
 
 def test_number_of_utterances(eve_one_file):
-    assert almost_equal(eve_one_file.number_of_utterances(), 1601, tolerance=3)
-    assert almost_equal(
-        eve_one_file.number_of_utterances(by_files=True)[LOCAL_EVE_PATH],
-        1601,
-        tolerance=3,
-    )
+    actual1 = eve_one_file.number_of_utterances()
+    actual2 = eve_one_file.number_of_utterances(by_files=True)[LOCAL_EVE_PATH]
+    assert actual1 == actual2 == 1601
 
 
 def test_participant_codes(eve_one_file):
@@ -216,7 +178,7 @@ def test_age(eve_one_file):
 
 def test_words(eve_one_file):
     words = eve_one_file.words()
-    assert almost_equal(len(words), 5843, tolerance=3)
+    assert len(words) == 5840
     assert words[:5] == ["more", "cookie", ".", "you", "0v"]
 
 
@@ -241,7 +203,7 @@ def test_word_frequency(eve_all_files):
         expected_word, expected_freq = expected
         actual_word, actual_freq = actual
         assert expected_word == actual_word
-        assert almost_equal(expected_freq, actual_freq, tolerance=3)
+        assert expected_freq == actual_freq
 
 
 def test_word_ngrams(eve_all_files):
@@ -257,7 +219,7 @@ def test_word_ngrams(eve_all_files):
         expected_bigram, expected_freq = expected
         actual_bigram, actual_freq = actual
         assert expected_bigram == actual_bigram
-        assert almost_equal(expected_freq, actual_freq, tolerance=3)
+        assert expected_freq == actual_freq
 
 
 def test_participants(eve_one_file):
@@ -410,24 +372,24 @@ def test_utterances(eve_one_file):
 
 
 def test_part_of_speech_tags(eve_all_files):
-    assert almost_equal(len(eve_all_files.part_of_speech_tags()), 62, tolerance=2)
+    assert len(eve_all_files.part_of_speech_tags()) == 62
 
 
 def test_mlu_m(eve_one_file):
     mlu_m = eve_one_file.MLUm()
-    assert almost_equal(mlu_m[LOCAL_EVE_PATH], 2.27, tolerance=0.05)
+    assert mlu_m[LOCAL_EVE_PATH] == pytest.approx(2.27, abs=0.01)
 
 
 def test_mlu_w(eve_one_file):
     mlu_w = eve_one_file.MLUw()
-    assert almost_equal(mlu_w[LOCAL_EVE_PATH], 1.45, tolerance=0.05)
+    assert mlu_w[LOCAL_EVE_PATH] == pytest.approx(1.45, abs=0.01)
 
 
 def test_ttr(eve_one_file):
     ttr = eve_one_file.TTR()
-    assert almost_equal(ttr[LOCAL_EVE_PATH], 0.18, tolerance=0.05)
+    assert ttr[LOCAL_EVE_PATH] == pytest.approx(0.18, abs=0.01)
 
 
 def test_ipsyn(eve_one_file):
     ipsyn = eve_one_file.IPSyn()
-    assert almost_equal(ipsyn[LOCAL_EVE_PATH], 29, tolerance=2)
+    assert ipsyn[LOCAL_EVE_PATH] == 29

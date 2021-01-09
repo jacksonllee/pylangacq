@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+* The test suite now covers code snippets in both the docstrings and `.rst` doc files.
+
 ### Changed
 * Switched to CircleCI orbs; update dev requirements' versions.
 

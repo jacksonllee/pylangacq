@@ -50,13 +50,13 @@ Using the metadata access methods:
     >>> import pylangacq as pla
     >>> eve = pla.read_chat('Brown/Eve/*.cha')
     >>> eve01_filename = eve.abspath('010600a.cha')  # get the absolute path of Eve's first data file
-    >>> eve.participant_codes()  # across all 20 files
-    {'RIC', 'COL', 'URS', 'FAT', 'GLO', 'CHI', 'MOT'}
-    >>> eve.participant_codes(by_files=True)[eve01_filename]  # only for 010600a.cha
-    {'COL', 'CHI', 'MOT', 'RIC'}
+    >>> sorted(eve.participant_codes())  # across all 20 files
+    ['CHI', 'COL', 'FAT', 'GLO', 'MOT', 'RIC', 'URS']
+    >>> sorted(eve.participant_codes(by_files=True)[eve01_filename])  # only for 010600a.cha
+    ['CHI', 'COL', 'MOT', 'RIC']
     >>> pprint(eve.participants()[eve01_filename])
     {'CHI': {'SES': '',
-             'age': '1;6.0',
+             'age': '1;06.00',
              'corpus': 'Brown',
              'custom': '',
              'education': '',
@@ -84,7 +84,7 @@ Using the metadata access methods:
              'language': 'eng',
              'participant_name': 'Sue',
              'participant_role': 'Mother',
-             'sex': ''},
+             'sex': 'female'},
      'RIC': {'SES': '',
              'age': '',
              'corpus': 'Brown',
@@ -116,7 +116,7 @@ methods illustrated above, they are always accessible with ``headers()``:
      'Languages': 'eng',
      'PID': '11312/c-00034743-1',
      'Participants': {'CHI': {'SES': '',
-                              'age': '1;6.0',
+                              'age': '1;06.00',
                               'corpus': 'Brown',
                               'custom': '',
                               'education': '',
@@ -144,7 +144,7 @@ methods illustrated above, they are always accessible with ``headers()``:
                               'language': 'eng',
                               'participant_name': 'Sue',
                               'participant_role': 'Mother',
-                              'sex': ''},
+                              'sex': 'female'},
                       'RIC': {'SES': '',
                               'age': '',
                               'corpus': 'Brown',
@@ -157,4 +157,5 @@ methods illustrated above, they are always accessible with ``headers()``:
                               'sex': ''}},
      'Tape Location': '850',
      'Time Duration': '11:30-12:00',
+     'Types': 'long, toyplay, TD',
      'UTF8': ''}

@@ -10,7 +10,7 @@ _REPO_DIR = os.path.dirname(os.path.dirname(_THIS_DIR))
 
 def test_version_number_match_with_changelog():
     """__version__ and CHANGELOG.md match for the latest version number."""
-    with open(os.path.join(_REPO_DIR, "CHANGELOG.md")) as f:
+    with open(os.path.join(_REPO_DIR, "CHANGELOG.md"), encoding="utf-8") as f:
         changelog = f.read()
     # latest version number in changelog = the 1st occurrence of '[x.y.z]'
     changelog_version = re.search(r"\[\d+\.\d+\.\d+\]", changelog).group().strip("[]")

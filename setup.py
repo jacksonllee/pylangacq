@@ -5,7 +5,7 @@ import setuptools
 _VERSION = "0.12.0"
 
 _THIS_DIR = os.path.dirname(os.path.realpath(__file__))
-with open(os.path.join(_THIS_DIR, "README.md")) as f:
+with open(os.path.join(_THIS_DIR, "README.md"), encoding="utf-8") as f:
     _LONG_DESCRIPTION = f.read().strip()
 
 

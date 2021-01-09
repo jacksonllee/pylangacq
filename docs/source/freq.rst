@@ -68,25 +68,15 @@ For ``word_ngrams(n)``:
     >>> from pprint import pprint
     >>> trigrams_CDS = eve.word_ngrams(3, exclude='CHI')  # 3 for trigrams; for child-directed speech
     >>> trigrams_child = eve.word_ngrams(3, participant='CHI')  # child speech
-    >>> pprint(trigrams_CDS.most_common(10))  # lots of questions in child-directed speech!
+    >>> pprint(trigrams_CDS.most_common(5))  # lots of questions in child-directed speech!
     [(("that's", 'right', '.'), 178),
      (('what', 'are', 'you'), 149),
      (('is', 'that', '?'), 124),
-     (('do', 'you', 'want'), 122),
-     (('what', 'is', 'that'), 99),
-     (('are', 'you', 'doing'), 94),
-     (("what's", 'that', '?'), 92),
-     (('is', 'it', '?'), 89),
-     (('what', 'do', 'you'), 89),
-     (('would', 'you', 'like'), 89)]
-    >>> pprint(trigrams_child.most_common(10))  # was grape juice Eve's favorite?
+     (('do', 'you', 'want'), 104),
+     (('what', 'is', 'that'), 99)]
+    >>> pprint(trigrams_child.most_common(5))
     [(('grape', 'juice', '.'), 74),
      (('another', 'one', '.'), 55),
      (('what', 'that', '?'), 50),
      (('a', 'b', 'c'), 47),
-     (('right', 'there', '.'), 45),
-     (('in', 'there', '.'), 43),
-     (('b', 'c', '.'), 42),
-     (('hi', 'Fraser', '.'), 39),
-     (('I', 'want', 'some'), 39),
-     (('a', 'minute', '.'), 35)]
+     (('right', 'there', '.'), 45)]

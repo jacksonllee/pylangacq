@@ -16,7 +16,7 @@ def main():
         description="PyLangAcq: Language Acquisition Research in Python",
         long_description=_LONG_DESCRIPTION,
         long_description_content_type="text/markdown",
-        url="http://pylangacq.org/",
+        url="https://pylangacq.org/",
         author="Jackson L. Lee",
         author_email="jacksonlunlee@gmail.com",
         license="MIT License",

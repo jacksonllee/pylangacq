@@ -41,14 +41,14 @@ or the :ref:`toc`.
 How to cite
 -----------
 
-PyLangAcq is maintained by `Jackson L. Lee <http://jacksonllee.com/>`_.
+PyLangAcq is maintained by `Jackson L. Lee <https://jacksonllee.com/>`_.
 If you use PyLangAcq in your research, please cite the following:
 
 Jackson L. Lee, Ross Burkholder, Gallagher B. Flinn, and Emily R. Coppess.
 2016.
-`Working with CHAT transcripts in Python <http://jacksonllee.com/papers/lee-etal-2016-pylangacq.pdf>`_.
+`Working with CHAT transcripts in Python <https://jacksonllee.com/papers/lee-etal-2016-pylangacq.pdf>`_.
 Technical report
-`TR-2016-02 <http://www.cs.uchicago.edu/research/publications/techreports/TR-2016-02>`_,
+`TR-2016-02 <https://newtraell.cs.uchicago.edu/research/publications/techreports/TR-2016-02>`_,
 Department of Computer Science, University of Chicago.
 [`code <papers/tech-report-2016.html>`_]
 
@@ -67,8 +67,8 @@ Technical support, library development, etc.
 --------------------------------------------
 
 If you have any questions, comments, bug reports etc, please open `issues
-at the GitHub repository <https://github.com/pylangacq/pylangacq/issues>`_, or
-contact `Jackson L. Lee <http://jacksonllee.com/>`_.
+at the GitHub repository <https://github.com/jacksonllee/pylangacq/issues>`_, or
+contact `Jackson L. Lee <https://jacksonllee.com/>`_.
 
-`Changelog <https://github.com/pylangacq/pylangacq/blob/master/CHANGELOG.md>`_
+`Changelog <https://github.com/jacksonllee/pylangacq/blob/master/CHANGELOG.md>`_
 on GitHub

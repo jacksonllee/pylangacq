@@ -57,7 +57,7 @@ master_doc = 'toc'
 # General information about the project.
 project = 'PyLangAcq'
 author = 'Jackson L. Lee'
-html_author_link = '<a href="http://jacksonllee.com/">{}</a>'.format(author)
+html_author_link = '<a href="https://jacksonllee.com/">{}</a>'.format(author)
 today_ = date.today()
 copyright = ('2015-{}, {} | '
              'PyLangAcq {} | '

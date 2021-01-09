@@ -21,7 +21,7 @@ PyLangAcq is designed to handle the CHAT transcription format as used in the
 CHILDES database for language acquisition research.
 The bare minimum of what PyLangAcq assumes about CHAT is explained here.
 (As of January 2016, PyLangAcq conforms to the latest
-`CHAT manual <http://childes.psy.cmu.edu/manuals/CHAT.pdf>`_
+`CHAT manual <https://talkbank.org/manuals/CHAT.pdf>`_
 dated September 22, 2015.)
 
 **Headers**

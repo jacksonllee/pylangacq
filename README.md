@@ -7,7 +7,7 @@
 PyLangAcq is a Python library for language acquisition research.
 It allows flexible handling of the CHILDES data.
 
-Full documentation: http://pylangacq.org/
+Full documentation: https://pylangacq.org/
 
 ## Features
 
@@ -65,12 +65,12 @@ please see
 
 ## How to Cite
 
-PyLangAcq is maintained by [Jackson Lee](http://jacksonllee.com/).
+PyLangAcq is maintained by [Jackson Lee](https://jacksonllee.com/).
 If you use PyLangAcq in your research, please cite the following:
 
 Lee, Jackson L., Ross Burkholder, Gallagher B. Flinn, and Emily R. Coppess. 2016.
-[Working with CHAT transcripts in Python](http://jacksonllee.com/papers/lee-etal-2016-pylangacq.pdf).
-Technical report [TR-2016-02](http://www.cs.uchicago.edu/research/publications/techreports/TR-2016-02),
+[Working with CHAT transcripts in Python](https://jacksonllee.com/papers/lee-etal-2016-pylangacq.pdf).
+Technical report [TR-2016-02](https://newtraell.cs.uchicago.edu/research/publications/techreports/TR-2016-02),
 Department of Computer Science, University of Chicago.
 
 ```bibtex

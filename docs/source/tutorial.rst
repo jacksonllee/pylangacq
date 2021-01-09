@@ -247,6 +247,5 @@ Questions? Issues?
 ------------------
 
 If you have any questions, comments, bug reports etc, please open `issues
-at the GitHub repository <https://github.com/pylangacq/pylangacq/issues>`_, or
-contact `Jackson L. Lee <http://jacksonllee.com/>`_.
-
+at the GitHub repository <https://github.com/jacksonllee/pylangacq/issues>`_, or
+contact `Jackson L. Lee <https://jacksonllee.com/>`_.

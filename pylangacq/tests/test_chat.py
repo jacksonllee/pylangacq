@@ -42,7 +42,7 @@ def test_download_and_extract_brown_zip_file():  # pragma: no cover
     module, and so this test for downloading and unzipping the Brown zip
     data file runs first. If download fails, abort all tests."""
     try:
-        with open(REMOTE_BROWN_ZIP_PATH, "wb") as f:
+        with open(REMOTE_BROWN_ZIP_PATH, "wb", encoding="utf-8") as f:
             with requests.get(REMOTE_BROWN_URL) as r:
                 f.write(r.content)
     except Exception as e:

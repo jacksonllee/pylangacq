@@ -1,4 +1,4 @@
-.. PyLangAcq documentation master file, created by
+.. PyLangAcq documentation main file, created by
    sphinx-quickstart on Mon Dec 28 22:50:02 2015.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
@@ -70,5 +70,5 @@ If you have any questions, comments, bug reports etc, please open `issues
 at the GitHub repository <https://github.com/jacksonllee/pylangacq/issues>`_, or
 contact `Jackson L. Lee <https://jacksonllee.com/>`_.
 
-`Changelog <https://github.com/jacksonllee/pylangacq/blob/master/CHANGELOG.md>`_
+`Changelog <https://github.com/jacksonllee/pylangacq/blob/main/CHANGELOG.md>`_
 on GitHub

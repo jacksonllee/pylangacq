@@ -24,16 +24,16 @@ and "upstream" (pointing to `jacksonllee/pylangacq`).
 
 To work on a feature or bug fix, here are the development steps: 
 
-1. Before doing any work, check out the master branch and
-   make sure that your local master branch is up-to-date with upstream master:
+1. Before doing any work, check out the main branch and
+   make sure that your local main branch is up-to-date with upstream main:
    
    ```bash
-   git checkout master
-   git pull upstream master
+   git checkout main
+   git pull upstream main
    ``` 
    
 2. Create a new branch. This branch is where you will make commits of your work.
-   (As best practice, never make commits while on a master branch.
+   (As a best practice, never make commits while on a `main` branch.
    Running `git branch` tells you which branch you are on.)
    
    ```bash

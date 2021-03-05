@@ -1,6 +1,6 @@
 # PyLangAcq
 
-[![CircleCI](https://circleci.com/gh/jacksonllee/pylangacq/tree/master.svg?style=svg)](https://circleci.com/gh/jacksonllee/pylangacq/tree/master)
+[![CircleCI](https://circleci.com/gh/jacksonllee/pylangacq/tree/main.svg?style=svg)](https://circleci.com/gh/jacksonllee/pylangacq/tree/main)
 [![PyPI version](https://badge.fury.io/py/pylangacq.svg)](https://pypi.org/project/pylangacq)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/pylangacq.svg)](https://pypi.org/project/pylangacq)
 
@@ -52,7 +52,7 @@ yourself, you may obtain the latest source code through GitHub and `git`:
     ```
 
 We keep track of notable changes in
-[CHANGELOG.md](https://github.com/jacksonllee/pylangacq/blob/master/CHANGELOG.md).
+[CHANGELOG.md](https://github.com/jacksonllee/pylangacq/blob/main/CHANGELOG.md).
 
 ## Contribution
 
@@ -61,7 +61,7 @@ please [file an issue](https://github.com/jacksonllee/pylangacq/issues).
 
 If you would like to contribute to the `pylangacq` codebase,
 please see
-[CONTRIBUTING.md](https://github.com/jacksonllee/pylangacq/blob/master/CONTRIBUTING.md).
+[CONTRIBUTING.md](https://github.com/jacksonllee/pylangacq/blob/main/CONTRIBUTING.md).
 
 ## How to Cite
 
@@ -85,8 +85,8 @@ Department of Computer Science, University of Chicago.
 
 ## License
 
-The MIT License; please see [LICENSE.txt](https://github.com/jacksonllee/pylangacq/blob/master/LICENSE.txt).
+The MIT License; please see [LICENSE.txt](https://github.com/jacksonllee/pylangacq/blob/main/LICENSE.txt).
 The test data files included
 have a [CC BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/)
 license instead; please also see
-[`pylangacq/tests/test_data/README.md`](https://github.com/jacksonllee/pylangacq/blob/master/pylangacq/tests/test_data/README.md).
+[`pylangacq/tests/test_data/README.md`](https://github.com/jacksonllee/pylangacq/blob/main/pylangacq/tests/test_data/README.md).

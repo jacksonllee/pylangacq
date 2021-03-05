@@ -1,16 +1,19 @@
 """Interfacing with CHAT data files."""
 
-import sys
-import os
+import collections
+import concurrent.futures as cf
 import fnmatch
+import io
+import os
 import re
+import sys
 import tempfile
 import uuid
-import io
 from pprint import pformat
 from collections import Counter
 from itertools import chain
 from functools import wraps
+from typing import Dict, List, Tuple
 
 from pylangacq.measures import get_MLUm, get_MLUw, get_TTR, get_IPSyn
 from pylangacq.util import (
@@ -24,6 +27,7 @@ from pylangacq.util import (
     get_time_marker,
 )
 
+_TiersType = Dict[str, str]
 
 _TEMP_DIR = tempfile.mkdtemp()
 
@@ -89,6 +93,279 @@ def params_in_docstring(*params):
         return wrapper
 
     return real_decorator
+
+
+_SingleReaderNew = collections.namedtuple(
+    "_SingleReaderNew", "file_path header all_tiers tagged_sents"
+)
+_SingleReaderNew.__doc__ = """TODO"""
+
+Word = collections.namedtuple("Word", "form pos mor rel")
+Word.__doc__ = """TODO"""
+
+
+class ReaderNew:
+    """TODO"""
+
+    def __init__(self, raw_strs: List[str], file_paths: List[str]):
+
+        if len(raw_strs) != len(file_paths):
+            raise ValueError(
+                "raw_strs and file_paths must have the same size: "
+                f"{len(raw_strs)} and {len(file_paths)}"
+            )
+
+        with cf.ProcessPoolExecutor() as executor:
+            self._single_readers = list(
+                executor.map(self._parse_one_raw_str, raw_strs, file_paths)
+            )
+
+    def _parse_one_raw_str(self, raw_str, file_path) -> _SingleReaderNew:
+        lines = self._get_lines(raw_str)
+        header = self._get_header(lines)
+        all_tiers = self._get_all_tiers(lines)
+        tagged_sents = self._get_tagged_sents(all_tiers)
+        return _SingleReaderNew(file_path, header, all_tiers, tagged_sents)
+
+    @staticmethod
+    def _get_tagged_sents(all_tiers: List[_TiersType]) -> List[Tuple[str, List[Word]]]:
+        result_list = []
+
+        for tiermarker_to_line in all_tiers:
+            participant_code = get_participant_code(tiermarker_to_line.keys())
+
+            # get the plain words from utterance tier
+            utterance = clean_utterance(tiermarker_to_line[participant_code])
+            forms = utterance.split()
+
+            # %mor tier
+            clitic_indices = []  # indices at the word items
+            clitic_count = 0
+
+            mor_items = []
+            if "%mor" in tiermarker_to_line:
+                mor_split = tiermarker_to_line["%mor"].split()
+
+                for j, item in enumerate(mor_split):
+                    tilde_count = item.count("~")
+
+                    if tilde_count:
+                        item_split = item.split("~")
+
+                        for k in range(tilde_count):
+                            clitic_indices.append(clitic_count + j + k + 1)
+                            clitic_count += 1
+
+                            mor_items.append(item_split[k])
+
+                        mor_items.append(item_split[-1])
+                    else:
+                        mor_items.append(item)
+
+            if mor_items and ((len(forms) + clitic_count) != len(mor_items)):
+                raise ValueError(
+                    "cannot align the utterance and %mor tiers:\n"
+                    f"Tiers --\n{tiermarker_to_line}\n"
+                    f"Cleaned-up utterance --\n{utterance}"
+                )
+
+            # %gra tier
+            gra_items = []
+            if "%gra" in tiermarker_to_line:
+                for item in tiermarker_to_line["%gra"].split():
+                    # an item is a string like '1|2|SUBJ'
+
+                    item_list = []
+                    for element in item.split("|"):
+                        try:
+                            converted_element = int(element)
+                        except ValueError:
+                            converted_element = element
+
+                        item_list.append(converted_element)
+
+                    gra_items.append(tuple(item_list))
+
+            if mor_items and gra_items and (len(mor_items) != len(gra_items)):
+                raise ValueError(
+                    f"cannot align the %mor and %gra tiers:\n{tiermarker_to_line}"
+                )
+
+            # utterance tier
+            if mor_items and clitic_count:
+                word_iterator = iter(forms)
+                utterance_items = [""] * len(mor_items)
+
+                for j in range(len(mor_items)):
+                    if j in clitic_indices:
+                        utterance_items[j] = CLITIC
+                    else:
+                        utterance_items[j] = next(word_iterator)
+            else:
+                utterance_items = forms
+
+            # determine what to yield (and how) to create the generator
+            if not mor_items:
+                mor_items = [""] * len(utterance_items)
+            if not gra_items:
+                gra_items = [""] * len(utterance_items)
+
+            sent = []
+
+            for word, mor, gra in zip(utterance_items, mor_items, gra_items):
+                pos, _, mor = mor.partition("|")
+
+                # pos in uppercase follows NLP convention
+                output_word = Word(clean_word(word), pos.upper(), mor, gra)
+                sent.append(output_word)
+
+            result_list.append((participant_code, sent))
+
+        return result_list
+
+    @staticmethod
+    def _get_all_tiers(lines: List[str]) -> List[_TiersType]:
+        result_with_collapses = {}
+        index_ = -1  # utterance index (1st utterance is index 0)
+        utterance = None
+
+        for line in lines:
+            if line.startswith("@"):
+                continue
+
+            line_split = line.split()
+
+            if line.startswith("*"):
+                index_ += 1
+                participant_code = line_split[0].lstrip("*").rstrip(":")
+                utterance = " ".join(line_split[1:])
+                result_with_collapses[index_] = {participant_code: utterance}
+
+            elif utterance and line.startswith("%"):
+                tier_marker = line_split[0].rstrip(":")
+                result_with_collapses[index_][tier_marker] = " ".join(line_split[1:])
+
+        # handle collapses such as [x 4]
+        result_without_collapses = {}
+        new_index = -1  # utterance index (1st utterance is index 0)
+        collapse_pattern = re.compile(r"\[x \d+?\]")  # e.g., "[x <number(s)>]"
+        number_regex = re.compile(r"\d+")
+
+        for old_index in range(len(result_with_collapses)):
+            tier_dict = result_with_collapses[old_index]
+            participant_code = get_participant_code(tier_dict.keys())
+            utterance = tier_dict[participant_code]
+
+            try:
+                collapse_str = collapse_pattern.search(utterance).group()
+                collapse_number = int(number_regex.findall(collapse_str)[0])
+            except (AttributeError, ValueError):
+                collapse_number = 1
+
+            for i in range(collapse_number):
+                new_index += 1
+                result_without_collapses[new_index] = tier_dict
+
+        return list(result_without_collapses.values())
+
+    @staticmethod
+    def _get_header(lines: List[str]) -> Dict:
+        headname_to_entry = {}
+
+        for line in lines:
+
+            if line.startswith("@Begin") or line.startswith("@End"):
+                continue
+
+            if not line.startswith("@"):
+                continue
+
+            # find head, e.g., "Languages", "Participants", "ID" etc
+            head, _, line = line.partition("\t")
+            line = line.strip()
+            head = head.lstrip("@")  # remove beginning "@"
+            head = head.rstrip(":")  # remove ending ":", if any
+
+            if head == "Participants":
+                headname_to_entry["Participants"] = {}
+
+                participants = line.split(",")
+
+                for participant in participants:
+                    participant = participant.strip()
+                    code, _, participant_label = participant.partition(" ")
+                    (
+                        participant_name,
+                        _,
+                        participant_role,
+                    ) = participant_label.partition(" ")
+                    # code = participant code, e.g. CHI, MOT
+                    headname_to_entry["Participants"][code] = {
+                        "participant_name": participant_name
+                    }
+
+            elif head == "ID":
+                participant_info = line.split("|")[:-1]
+                # final empty str removed
+
+                code = participant_info[2]
+                # participant_info contains these in order:
+                #   language, corpus, code, age, sex, group, SES, role,
+                #   education, custom
+
+                del participant_info[2]  # remove code info (3rd in list)
+                participant_info_heads = [
+                    "language",
+                    "corpus",
+                    "age",
+                    "sex",
+                    "group",
+                    "SES",
+                    "participant_role",
+                    "education",
+                    "custom",
+                ]
+                head_to_info = dict(zip(participant_info_heads, participant_info))
+
+                headname_to_entry["Participants"][code].update(head_to_info)
+
+            elif head == "Date":
+                if "Date" not in headname_to_entry:
+                    headname_to_entry["Date"] = []
+                headname_to_entry["Date"].append(line)
+
+            else:
+                headname_to_entry[head] = line
+
+        return headname_to_entry
+
+    @staticmethod
+    def _get_lines(raw_str: str) -> List[str]:
+        lines: List[str] = []
+
+        previous_line = ""
+
+        for line in raw_str.splitlines():
+            previous_line = previous_line.strip()
+            current_line = line.rstrip()  # don't remove leading \t
+
+            if not current_line:
+                continue
+
+            if current_line.startswith("%xpho:") or current_line.startswith("%xmod:"):
+                current_line = current_line.replace("%x", "%", 1)
+
+            if previous_line and current_line.startswith("\t"):
+                previous_line = f"{previous_line} {current_line.strip()}"
+            elif previous_line:
+                lines.append(previous_line)
+                previous_line = current_line
+            else:  # when it's the very first line
+                previous_line = current_line
+
+        lines.append(previous_line)  # don't forget the very last line!
+
+        return lines
 
 
 class Reader:
@@ -933,7 +1210,6 @@ class _SingleReader(object):
 
         self._headers = self._get_headers()
         self._index_to_tiers = self._get_index_to_tiers()
-        self.tier_markers = self._tier_markers()
 
         self._part_of_speech_tags = None
 
@@ -1000,15 +1276,6 @@ class _SingleReader(object):
             else:  # when it's the very first line
                 previous_line = current_line
         yield previous_line  # don't forget the very last line!
-
-    def _tier_markers(self):
-        """Determine what the %-tiers are."""
-        result = set()
-        for tiermarkers_to_tiers in self._index_to_tiers.values():
-            for tier_marker in tiermarkers_to_tiers.keys():
-                if tier_marker.startswith("%"):
-                    result.add(tier_marker)
-        return result
 
     def index_to_tiers(self):
         """

@@ -28,7 +28,7 @@ from pylangacq.util import (
 _TEMP_DIR = tempfile.mkdtemp()
 
 
-def read_chat(*filenames, **kwargs):
+def read_chat(*filenames, encoding="utf8"):
     """Create a ``Reader`` object with CHAT data files.
 
     Parameters
@@ -41,16 +41,17 @@ def read_chat(*filenames, **kwargs):
         ``?`` matches exactly one character.
         A filename can be either an absolute or relative path.
         If no *filenames* are provided, an empty Reader instance is created.
-    kwargs
-        Only the keyword ``encoding`` is recognized, which defaults
-        to 'utf8'. (New in version 0.9)
+    encoding : str, optional
+        Encoding for reading the CHAT data. The default is "utf8".
+
+        .. versionadded: 0.9.0
 
     Returns
     -------
     Reader
     """
     # TODO: Should error if any of "filenames" give no actual filenames?
-    return Reader.from_chat_files(*filenames, **kwargs)
+    return Reader.from_chat_files(*filenames, encoding=encoding)
 
 
 def params_in_docstring(*params):
@@ -90,7 +91,7 @@ def params_in_docstring(*params):
     return real_decorator
 
 
-class Reader(object):
+class Reader:
     """A class for reading multiple CHAT files.
 
     Parameters
@@ -103,13 +104,14 @@ class Reader(object):
         ``?`` matches exactly one character.
         A filename can be either an absolute or relative path.
         If no *filenames* are provided, an empty Reader instance is created.
-    kwargs
-        Only the keyword ``encoding`` is recognized, which defaults
-        to 'utf8'. (New in version 0.9)
+    encoding : str, optional
+        Encoding for reading the CHAT data. The default is "utf8".
+
+        .. versionadded: 0.9.0
     """
 
-    def __init__(self, *filenames, **kwargs):
-        self.encoding = kwargs.get("encoding", ENCODING)
+    def __init__(self, *filenames, encoding="utf8"):
+        self.encoding = encoding
         self._input_filenames = filenames
         self._reset_reader(*self._input_filenames)
 
@@ -135,7 +137,7 @@ class Reader(object):
         return cls(file_path, encoding=encoding)
 
     @classmethod
-    def from_chat_files(cls, *filenames, **kwargs):
+    def from_chat_files(cls, *filenames, encoding="utf8"):
         """Create a ``Reader`` object with CHAT data files.
 
         Parameters
@@ -148,21 +150,16 @@ class Reader(object):
             ``?`` matches exactly one character.
             A filename can be either an absolute or relative path. If
             no *filenames* are provided, an empty Reader instance is created.
-        kwargs
-            Only the keyword ``encoding`` is recognized, which defaults
-            to 'utf8'. (New in version 0.9)
+        encoding : str, optional
+            Encoding for reading the CHAT data. The default is "utf8".
+
+            .. versionadded: 0.9.0
 
         Returns
         -------
         Reader
-
-        Notes
-        -----
-        Because CHAT data most likely comes as files on disk,
-        an equivalent library top-level function ``pylangacq.read_chat``
-        is defined for convenience.
         """
-        return cls(*filenames, **kwargs)
+        return cls(*filenames, encoding=encoding)
 
     @staticmethod
     def _get_abs_filenames(*filenames):

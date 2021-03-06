@@ -189,9 +189,22 @@ class ReaderNew:
         # TODO: parameters "participant", "exclude"
         return [len(sr.utterances) for sr in self._single_readers]
 
+    def utterances(self):
+        """TODO"""
+        # TODO: parameters "participant", "exclude"
+        return [sr.utterances for sr in self._single_readers]
+
     def headers(self):
         """TODO"""
         return [sr.header for sr in self._single_readers]
+
+    def file_paths(self):
+        """TODO"""
+        return [sr.file_path for sr in self._single_readers]
+
+    def n_files(self):
+        """TODO"""
+        return len(self)
 
     def participants(self):
         """for participant codes, e.g., CHI, MOT
@@ -217,23 +230,45 @@ class ReaderNew:
             result.append(languages_list)
         return result
 
+    def tagged_sents(self) -> List[List[List[Word]]]:
+        """TODO"""
+        # TODO: parameters "participant", "exclude"
+        return [
+            [utterance.words for utterance in sr.utterances]
+            for sr in self._single_readers
+        ]
+
+    def tagged_words(self) -> List[List[Word]]:
+        """TODO"""
+        # TODO: parameters "participant", "exclude"
+        return [
+            [word for utterance in sr.utterances for word in utterance.words]
+            for sr in self._single_readers
+        ]
+
+    def sents(self) -> List[List[List[str]]]:
+        """TODO"""
+        # TODO: parameters "participant", "exclude"
+        return [
+            [[word.form for word in utterance.words] for utterance in sr.utterances]
+            for sr in self._single_readers
+        ]
+
+    def words(self) -> List[List[str]]:
+        """TODO"""
+        # TODO: parameters "participant", "exclude"
+        return [
+            [word.form for utterance in sr.utterances for word in utterance.words]
+            for sr in self._single_readers
+        ]
+
     # TODO def dates_of_recording
 
     # TODO def dates_of_birth, renamed from date_of_birth (note spelling)
 
     # TODO def ages, renamed from age (note spelling)
 
-    # TODO def utterances
-
     # TODO def word_frequency
-
-    # TODO def words
-
-    # TODO def tagged_words
-
-    # TODO def sents
-
-    # TODO def tagged_sents
 
     # TODO What to do with update, add, remove, and clear?
 
@@ -252,10 +287,6 @@ class ReaderNew:
     # TODO def search
 
     # TODO def concordance
-
-    # TODO def n_files
-
-    # TODO def filenames
 
     @classmethod
     def from_strs(cls, strs: List[str], ids: List[str] = None):

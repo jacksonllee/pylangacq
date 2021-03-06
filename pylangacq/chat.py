@@ -9,11 +9,12 @@ import re
 import sys
 import tempfile
 import uuid
+import zipfile
 from pprint import pformat
 from collections import Counter
 from itertools import chain
 from functools import wraps
-from typing import Dict, List, Tuple
+from typing import Collection, Dict, List, Tuple
 
 from pylangacq.measures import get_MLUm, get_MLUw, get_TTR, get_IPSyn
 from pylangacq.util import (
@@ -107,7 +108,10 @@ Word.__doc__ = """TODO"""
 class ReaderNew:
     """TODO"""
 
-    def __init__(self, raw_strs: List[str], file_paths: List[str]):
+    def __init__(self, raw_strs: Collection[str] = None, file_paths: List[str] = None):
+
+        raw_strs = raw_strs or []
+        file_paths = file_paths or []
 
         if len(raw_strs) != len(file_paths):
             raise ValueError(
@@ -119,6 +123,45 @@ class ReaderNew:
             self._single_readers = list(
                 executor.map(self._parse_one_raw_str, raw_strs, file_paths)
             )
+
+    @classmethod
+    def from_strs(cls, *strs: str):
+        """TODO"""
+        return cls(strs, [str(uuid.uuid4()) for _ in range(len(strs))])
+
+    @classmethod
+    def from_files(cls, *paths: str, encoding=ENCODING):
+        """TODO"""
+        paths = list(paths)
+        with cf.ThreadPoolExecutor() as executor:
+            strs = list(
+                executor.map(lambda path: open(path, encoding=encoding).read(), paths)
+            )
+        return cls(strs, paths)
+
+    @classmethod
+    def from_zip(cls, path, encoding=ENCODING):
+        """TODO"""
+        with tempfile.TemporaryDirectory() as temp_dir, zipfile.ZipFile(path) as zfile:
+            zfile.extractall(temp_dir)
+
+            file_paths = []
+            for dirpath, dirnames, filenames in os.walk(temp_dir):
+                if not filenames:
+                    continue
+                for filename in filenames:
+                    if not filename.lower().endswith(".cha"):
+                        continue
+                    dirs = []
+                    if not dirnames:
+                        dirs.append(dirpath)
+                    else:
+                        for dirname in dirnames:
+                            dirs.append(os.path.join(dirpath, dirname))
+                    for dir_ in dirs:
+                        file_paths.append(os.path.join(dir_, filename))
+
+            return cls.from_files(*file_paths, encoding=encoding)
 
     def _parse_one_raw_str(self, raw_str, file_path) -> _SingleReaderNew:
         lines = self._get_lines(raw_str)

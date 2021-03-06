@@ -8,13 +8,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+* New methods of the `Reader`:
+   - `all_tiers`
 * The test suite now covers code snippets in both the docstrings and `.rst` doc files.
 
 ### Changed
+* The following methods of the `Reader` class have been renamed as indicated:
+   - `number_of_utterances` -> `n_utterances`
+   - `number_of_files` -> `n_files`
+   - `participant_codes` -> `participants` --
+     Before this version, the methods `participant_codes` (for CHI, MOT, etc) and
+     `participants` (for, say, Eve, Mother, Investigator, etc) existed,
+     but in practice we mostly only need CHI, MOT, etc.
+     So the method `participants` for Eve etc has been removed,
+     and `participant_codes` has been renamed as `participants` instead.
 * Switched to CircleCI orbs; update dev requirements' versions.
 
 ### Deprecated
 ### Removed
+* The `by_files` parameter for the `Reader` methods have been dropped.
+* The following methods of the `Reader` class have been removed:
+   - `abspath`
+   - `index_to_tiers`
+   - `participant_codes` (renamed as `participants`, another method now removed)
+   - `part_of_speech_tags`
+
 ### Fixed
 * Handled `[/-]` in cleaning utterances.
 

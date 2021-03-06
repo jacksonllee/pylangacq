@@ -124,13 +124,107 @@ class ReaderNew:
                 executor.map(self._parse_one_raw_str, raw_strs, file_paths)
             )
 
-    @classmethod
-    def from_strs(cls, *strs: str):
+    def __len__(self):
         """TODO"""
-        return cls(strs, [str(uuid.uuid4()) for _ in range(len(strs))])
+        return len(self._single_readers)
+
+    def n_utterances(self):
+        """TODO"""
+        # TODO: parameters "participant", "exclude"
+        return [sum(sr.all_tiers) for sr in self._single_readers]
+
+    def headers(self):
+        """TODO"""
+        return [sr.header for sr in self._single_readers]
+
+    def all_tiers(self):
+        """TODO"""
+        # TODO: parameters "participant", "exclude"
+        return [sr.all_tiers for sr in self._single_readers]
+
+    def participants(self):
+        """for participant codes, e.g., CHI, MOT
+
+        more detailed participant info is in the ``headers`` method.
+        """
+        return [
+            {participant for participant, _ in sr.tagged_sents}
+            for sr in self._single_readers
+        ]
+
+    def languages(self):
+        """TODO"""
+        result = []
+        for sr in self._single_readers:
+            languages_list = []
+            try:
+                languages_line = sr.header["Languages"]
+            except KeyError:
+                continue
+            else:
+                for language in languages_line.strip().split(","):
+                    language = language.strip()
+                    if language:
+                        languages_list.append(language)
+            result.append(languages_list)
+        return result
+
+    # TODO def dates_of_recording
+
+    # TODO def dates_of_birth, renamed from date_of_birth (note spelling)
+
+    # TODO def ages, renamed from age (note spelling)
+
+    # TODO def utterances
+
+    # TODO def word_frequency
+
+    # TODO def words
+
+    # TODO def tagged_words
+
+    # TODO def sents
+
+    # TODO def tagged_sents
+
+    # TODO What to do with update, add, remove, and clear?
+
+    # TODO def word_ngrams
+
+    # TODO def mlu
+
+    # TODO def mlum
+
+    # TODO def mluw
+
+    # TODO def ttr
+
+    # TODO def ipsyn
+
+    # TODO def search
+
+    # TODO def concordance
+
+    # TODO def n_files
+
+    # TODO def filenames
 
     @classmethod
-    def from_files(cls, *paths: str, encoding=ENCODING):
+    def from_strs(cls, strs: List[str], ids: List[str] = None):
+        """TODO"""
+        strs = list(strs)
+        if ids is None:
+            ids = [str(uuid.uuid4()) for _ in range(len(strs))]
+        else:
+            ids = list(ids)
+        if len(strs) != len(ids):
+            raise ValueError(
+                f"strs and ids must have the same size: {len(strs)} and {len(ids)}"
+            )
+        return cls(strs, ids)
+
+    @classmethod
+    def from_files(cls, paths: List[str], encoding: str = ENCODING):
         """TODO"""
         paths = list(paths)
         with cf.ThreadPoolExecutor() as executor:
@@ -140,7 +234,7 @@ class ReaderNew:
         return cls(strs, paths)
 
     @classmethod
-    def from_zip(cls, path, encoding=ENCODING):
+    def from_zip(cls, path: str, encoding: str = ENCODING):
         """TODO"""
         with tempfile.TemporaryDirectory() as temp_dir, zipfile.ZipFile(path) as zfile:
             zfile.extractall(temp_dir)
@@ -161,7 +255,7 @@ class ReaderNew:
                     for dir_ in dirs:
                         file_paths.append(os.path.join(dir_, filename))
 
-            return cls.from_files(*file_paths, encoding=encoding)
+            return cls.from_files(file_paths, encoding=encoding)
 
     def _parse_one_raw_str(self, raw_str, file_path) -> _SingleReaderNew:
         lines = self._get_lines(raw_str)

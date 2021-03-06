@@ -1,7 +1,7 @@
 """Interfacing with CHAT data files."""
 
-import collections
 import concurrent.futures as cf
+import dataclasses
 import fnmatch
 import io
 import os
@@ -14,7 +14,7 @@ from pprint import pformat
 from collections import Counter
 from itertools import chain
 from functools import wraps
-from typing import Collection, Dict, List, Tuple
+from typing import Collection, Dict, List
 
 from pylangacq.measures import get_MLUm, get_MLUw, get_TTR, get_IPSyn
 from pylangacq.util import (
@@ -27,8 +27,6 @@ from pylangacq.util import (
     get_lemma_from_mor,
     get_time_marker,
 )
-
-_TiersType = Dict[str, str]
 
 _TEMP_DIR = tempfile.mkdtemp()
 
@@ -96,13 +94,71 @@ def params_in_docstring(*params):
     return real_decorator
 
 
-_SingleReaderNew = collections.namedtuple(
-    "_SingleReaderNew", "file_path header all_tiers tagged_sents"
-)
-_SingleReaderNew.__doc__ = """TODO"""
+@dataclasses.dataclass
+class Gra:
+    """Grammatical relation of a word in an utterance.
 
-Word = collections.namedtuple("Word", "form pos mor rel")
-Word.__doc__ = """TODO"""
+    Attributes
+    ----------
+    source : int
+        The current word's position in the utterance; counting starts from 1.
+    target : int
+        The target word's position in the utterance; counting starts from 1.
+    rel : str
+        Grammatical relation
+    """
+
+    __slots__ = ("source", "target", "rel")
+
+    source: int
+    target: int
+    rel: str
+
+
+@dataclasses.dataclass
+class Word:
+    """Word representation with attributes.
+
+    Attributes
+    ----------
+    form : str
+        Orthographic form
+    pos : str
+        Part-of-speech tag
+    mor : str
+        Morphological information
+    gra : Gra
+        Grammatical relation
+    """
+
+    __slots__ = ("form", "pos", "mor", "gra")
+
+    form: str
+    pos: str
+    mor: str
+    gra: Gra
+
+
+@dataclasses.dataclass
+class Utterance:
+    """TODO"""
+
+    __slots__ = ("participant", "words", "tiers")
+
+    participant: str
+    words: List[Word]
+    tiers: Dict[str, str]
+
+
+@dataclasses.dataclass
+class _SingleReaderNew:
+    """TODO"""
+
+    __slots__ = ("file_path", "header", "utterances")
+
+    file_path: str
+    header: Dict
+    utterances: List[Utterance]
 
 
 class ReaderNew:
@@ -131,26 +187,18 @@ class ReaderNew:
     def n_utterances(self):
         """TODO"""
         # TODO: parameters "participant", "exclude"
-        return [sum(sr.all_tiers) for sr in self._single_readers]
+        return [len(sr.utterances) for sr in self._single_readers]
 
     def headers(self):
         """TODO"""
         return [sr.header for sr in self._single_readers]
-
-    def all_tiers(self):
-        """TODO"""
-        # TODO: parameters "participant", "exclude"
-        return [sr.all_tiers for sr in self._single_readers]
 
     def participants(self):
         """for participant codes, e.g., CHI, MOT
 
         more detailed participant info is in the ``headers`` method.
         """
-        return [
-            {participant for participant, _ in sr.tagged_sents}
-            for sr in self._single_readers
-        ]
+        return [{u.participant for u in sr.utterances} for sr in self._single_readers]
 
     def languages(self):
         """TODO"""
@@ -261,11 +309,10 @@ class ReaderNew:
         lines = self._get_lines(raw_str)
         header = self._get_header(lines)
         all_tiers = self._get_all_tiers(lines)
-        tagged_sents = self._get_tagged_sents(all_tiers)
-        return _SingleReaderNew(file_path, header, all_tiers, tagged_sents)
+        utterances = self._get_utterances(all_tiers)
+        return _SingleReaderNew(file_path, header, utterances)
 
-    @staticmethod
-    def _get_tagged_sents(all_tiers: List[_TiersType]) -> List[Tuple[str, List[Word]]]:
+    def _get_utterances(self, all_tiers: List[Dict[str, str]]) -> List[Utterance]:
         result_list = []
 
         for tiermarker_to_line in all_tiers:
@@ -347,21 +394,33 @@ class ReaderNew:
             if not gra_items:
                 gra_items = [""] * len(utterance_items)
 
-            sent = []
+            sent: List[Word] = []
 
             for word, mor, gra in zip(utterance_items, mor_items, gra_items):
                 pos, _, mor = mor.partition("|")
 
                 # pos in uppercase follows NLP convention
-                output_word = Word(clean_word(word), pos.upper(), mor, gra)
+                output_word = Word(
+                    clean_word(word), pos.upper(), mor, self._get_gra(gra)
+                )
                 sent.append(output_word)
 
-            result_list.append((participant_code, sent))
+            result_list.append(Utterance(participant_code, sent, tiermarker_to_line))
 
         return result_list
 
     @staticmethod
-    def _get_all_tiers(lines: List[str]) -> List[_TiersType]:
+    def _get_gra(raw_gra: str) -> Gra:
+        try:
+            source, target, rel = raw_gra.strip().split("|", 2)
+            source = int(source)
+            target = int(target)
+            return Gra(source, target, rel)
+        except (ValueError, TypeError):
+            return None
+
+    @staticmethod
+    def _get_all_tiers(lines: List[str]) -> List[Dict[str, str]]:
         result_with_collapses = {}
         index_ = -1  # utterance index (1st utterance is index 0)
         utterance = None

@@ -16,7 +16,14 @@ from itertools import chain
 from functools import wraps
 from typing import Collection, Dict, List
 
-from pylangacq.measures import get_MLUm, get_MLUw, get_TTR, get_IPSyn
+from pylangacq.measures import (
+    get_MLUm,
+    get_MLUw,
+    get_TTR,
+    get_IPSyn,
+    get_mlum,
+    get_mluw,
+)
 from pylangacq.util import (
     ENCODING,
     CLITIC,
@@ -262,6 +269,21 @@ class ReaderNew:
             for sr in self._single_readers
         ]
 
+    def mlum(self) -> List[float]:
+        """TODO"""
+        # TODO: participants filtered to CHI?
+        return get_mlum(self.tagged_sents())
+
+    def mlu(self) -> List[float]:
+        """TODO"""
+        # TODO: participants filtered to CHI?
+        return self.mlum()
+
+    def mluw(self) -> List[float]:
+        """TODO"""
+        # TODO: participants filtered to CHI?
+        return get_mluw(self.sents())
+
     # TODO def dates_of_recording
 
     # TODO def dates_of_birth, renamed from date_of_birth (note spelling)
@@ -273,12 +295,6 @@ class ReaderNew:
     # TODO What to do with update, add, remove, and clear?
 
     # TODO def word_ngrams
-
-    # TODO def mlu
-
-    # TODO def mlum
-
-    # TODO def mluw
 
     # TODO def ttr
 

@@ -1,8 +1,83 @@
+from typing import List
+
 from pylangacq.util import CLITIC, get_lemma_from_mor
 from pylangacq.dependency import DependencyGraph
 
 
-# noinspection PyPep8Naming
+_POS_TO_IGNORE = frozenset({"", "!", "+...", "0", "?", "BEG"})
+_WORDS_TO_IGNORE = frozenset(
+    {
+        "",
+        "!",
+        "+...",
+        ".",
+        ",",
+        "?",
+        "‡",
+        "„",
+        "0",
+        CLITIC,
+    }
+)
+
+
+def get_mlum(tagged_sents) -> List[float]:
+    """TODO"""
+    result = []
+
+    if not tagged_sents:
+        return result
+
+    for tagged_sents_for_file in tagged_sents:
+        if not tagged_sents_for_file:
+            result.append(0.0)
+            continue
+
+        morpheme_counts_for_file = []
+        for tagged_sent in tagged_sents_for_file:
+            morpheme_count = 0
+            for word in tagged_sent:
+                if word.pos in _POS_TO_IGNORE:
+                    continue
+                morpheme_count += 1
+                if type(word.mor) == str:
+                    morpheme_count += word.mor.count("-")
+                    morpheme_count += word.mor.count("~")
+            morpheme_counts_for_file.append(morpheme_count)
+
+        if morpheme_counts_for_file:
+            result.append(sum(morpheme_counts_for_file) / len(morpheme_counts_for_file))
+        else:
+            result.append(0.0)
+
+    return result
+
+
+def get_mluw(sents) -> List[float]:
+    """TODO"""
+    result = []
+
+    if not sents:
+        return result
+
+    for sents_for_file in sents:
+        if not sents_for_file:
+            result.append(0.0)
+            continue
+
+        word_counts_for_file = []
+        for sent in sents_for_file:
+            word_count = sum(1 for word in sent if word not in _WORDS_TO_IGNORE)
+            word_counts_for_file.append(word_count)
+
+        if word_counts_for_file:
+            result.append(sum(word_counts_for_file) / len(word_counts_for_file))
+        else:
+            result.append(0.0)
+
+    return result
+
+
 def get_MLUm(tagged_sents, pos_to_ignore=None):
     """Mean length of utterance (MLU) in morphemes"""
     # *tagged_sents* already filtered for the desired participant like 'CHI'

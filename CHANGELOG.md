@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
    - `number_of_utterances` -> `n_utterances`
    - `number_of_files` -> `n_files`
    - `filenames` -> `file_paths`
+   - `MLU` -> `mlu`
+   - `mlum` -> `mlum`
+   - `mluw` -> `mluw`
    - `participant_codes` -> `participants` --
      Before this version, the methods `participant_codes` (for CHI, MOT, etc) and
      `participants` (for, say, Eve, Mother, Investigator, etc) existed,

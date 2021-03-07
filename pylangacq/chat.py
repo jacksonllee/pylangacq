@@ -1,5 +1,6 @@
 """Interfacing with CHAT data files."""
 
+import collections
 import concurrent.futures as cf
 import dataclasses
 import fnmatch
@@ -284,17 +285,43 @@ class ReaderNew:
         # TODO: participants filtered to CHI?
         return get_mluw(self.sents())
 
+    def word_ngrams(self, n, keep_case=False) -> List[collections.Counter]:
+        """TODO"""
+        # TODO: parameters "participant", "exclude"
+
+        err_msg = f"n must be a positive integer: {n}"
+        if type(n) != int:
+            raise TypeError(err_msg)
+        elif n < 1:
+            raise ValueError(err_msg)
+
+        result = []
+
+        for sents_in_file in self.sents():
+            result_for_file = collections.Counter()
+            for sent in sents_in_file:
+                if len(sent) < n:
+                    continue
+                if not keep_case:
+                    sent = [word.lower() for word in sent]
+                ngrams = zip(*[sent[i:] for i in range(n)])
+                result_for_file.update(ngrams)
+            result.append(result_for_file)
+
+        return result
+
+    def word_frequency(self, keep_case=False) -> List[collections.Counter]:
+        """TODO"""
+        # TODO: parameters "participant", "exclude"
+        return self.word_ngrams(1, keep_case=keep_case)
+
     # TODO def dates_of_recording
 
     # TODO def dates_of_birth, renamed from date_of_birth (note spelling)
 
     # TODO def ages, renamed from age (note spelling)
 
-    # TODO def word_frequency
-
     # TODO What to do with update, add, remove, and clear?
-
-    # TODO def word_ngrams
 
     # TODO def ttr
 

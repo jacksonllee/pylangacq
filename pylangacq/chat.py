@@ -428,21 +428,10 @@ class ReaderNew:
                 )
 
             # %gra tier
-            gra_items = []
-            if "%gra" in tiermarker_to_line:
-                for item in tiermarker_to_line["%gra"].split():
-                    # an item is a string like '1|2|SUBJ'
-
-                    item_list = []
-                    for element in item.split("|"):
-                        try:
-                            converted_element = int(element)
-                        except ValueError:
-                            converted_element = element
-
-                        item_list.append(converted_element)
-
-                    gra_items.append(tuple(item_list))
+            gra_items = (
+                tiermarker_to_line["%gra"].split()
+                if "%gra" in tiermarker_to_line else []
+            )
 
             if mor_items and gra_items and (len(mor_items) != len(gra_items)):
                 raise ValueError(
@@ -462,6 +451,7 @@ class ReaderNew:
             else:
                 utterance_items = forms
 
+            # TODO If %mor and %gra tiers are null, set them as [None, ..] not ["", ..]?
             # determine what to yield (and how) to create the generator
             if not mor_items:
                 mor_items = [""] * len(utterance_items)

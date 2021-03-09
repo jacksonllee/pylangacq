@@ -410,11 +410,19 @@ class ReaderNew:
     @classmethod
     def from_files(cls, paths: List[str], encoding: str = ENCODING):
         """TODO"""
+
+        # Inner function with file closing and closure to wrap in the given encoding
+        def _open_file(path: str) -> str:
+            with open(path, encoding=encoding) as f:
+                return f.read()
+
         paths = list(paths)
         with cf.ThreadPoolExecutor() as executor:
-            strs = list(
-                executor.map(lambda path: open(path, encoding=encoding).read(), paths)
-            )
+            strs = list(executor.map(_open_file, paths))
+
+        # Unzipped files from `.from_zip` have the unwieldy temp dir in the file path.
+        paths = [path.replace(_TEMP_DIR, "") for path in paths]
+
         return cls(strs, paths)
 
     @classmethod

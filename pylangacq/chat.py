@@ -225,7 +225,7 @@ class ReaderNew:
         else:
             return self._flatten(list, result_by_files)
 
-    def headers(self):
+    def headers(self):  # TODO Test
         """TODO"""
         return [sr.header for sr in self._single_readers]
 
@@ -277,7 +277,9 @@ class ReaderNew:
         else:
             return set(self._flatten(list, result_by_files))
 
-    def tagged_sents(self, by_files=False) -> Union[List[List[Word]], List[List[List[Word]]]]:
+    def tagged_sents(
+        self, by_files=False
+    ) -> Union[List[List[Word]], List[List[List[Word]]]]:
         """TODO"""
         # TODO: parameters "participant", "exclude"
         result_by_files = [
@@ -325,24 +327,24 @@ class ReaderNew:
         else:
             return self._flatten(list, result_by_files)
 
-    def mlum(self) -> List[float]:
+    def mlum(self) -> List[float]:  # TODO Test
         """TODO"""
         # TODO: participants filtered to CHI?
         return get_mlum(self.tagged_sents())
 
-    def mlu(self) -> List[float]:
+    def mlu(self) -> List[float]:  # TODO Test
         """TODO"""
         # TODO: participants filtered to CHI?
         return self.mlum()
 
-    def mluw(self) -> List[float]:
+    def mluw(self) -> List[float]:  # TODO Test
         """TODO"""
         # TODO: participants filtered to CHI?
         return get_mluw(self.sents())
 
     def word_ngrams(
         self, n, *, keep_case=False, by_files=False
-    ) -> List[collections.Counter]:
+    ) -> List[collections.Counter]:  # TODO Test
         """TODO"""
         # TODO: parameters "participant", "exclude"
 
@@ -372,7 +374,7 @@ class ReaderNew:
 
     def word_frequency(
         self, *, keep_case=False, by_files=False
-    ) -> List[collections.Counter]:
+    ) -> List[collections.Counter]:  # TODO Test
         """TODO"""
         # TODO: parameters "participant", "exclude"
         return self.word_ngrams(1, keep_case=keep_case, by_files=by_files)
@@ -534,10 +536,7 @@ class ReaderNew:
             for word, mor, gra in zip(utterance_items, mor_items, gra_items):
                 pos, _, mor = mor.partition("|")
 
-                # pos in uppercase follows NLP convention
-                output_word = Word(
-                    clean_word(word), pos.upper(), mor, self._get_gra(gra)
-                )
+                output_word = Word(clean_word(word), pos, mor, self._get_gra(gra))
                 sent.append(output_word)
 
             result_list.append(Utterance(participant_code, sent, tiermarker_to_line))

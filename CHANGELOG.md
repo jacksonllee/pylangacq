@@ -8,8 +8,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-* New methods of the `Reader`:
-   - `all_tiers`
 * The test suite now covers code snippets in both the docstrings and `.rst` doc files.
 
 ### Changed
@@ -32,7 +30,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 ### Removed
-* The `by_files` parameter for the `Reader` methods have been dropped.
 * The following methods of the `Reader` class have been removed:
    - `abspath`
    - `index_to_tiers`

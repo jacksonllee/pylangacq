@@ -15,7 +15,7 @@ from pprint import pformat
 from collections import Counter
 from itertools import chain
 from functools import wraps
-from typing import Collection, Dict, List
+from typing import Collection, Dict, List, Set, Union
 
 from pylangacq.measures import (
     get_MLUm,
@@ -192,15 +192,36 @@ class ReaderNew:
         """TODO"""
         return len(self._single_readers)
 
-    def n_utterances(self):
-        """TODO"""
-        # TODO: parameters "participant", "exclude"
-        return [len(sr.utterances) for sr in self._single_readers]
+    @staticmethod
+    def _flatten(item_type, nested) -> Union[List, Set]:
+        if item_type == list:
+            return [item for items in nested for item in items]
+        elif item_type == int:
+            return sum(nested)
+        elif item_type == set:
+            return set().union(*nested)
+        else:
+            raise ValueError(f"unrecognized item type: {item_type}")
 
-    def utterances(self):
+    def n_utterances(self, by_files=False) -> Union[int, List[int]]:
         """TODO"""
         # TODO: parameters "participant", "exclude"
-        return [sr.utterances for sr in self._single_readers]
+        result_by_files = [len(sr.utterances) for sr in self._single_readers]
+        if by_files:
+            return result_by_files
+        else:
+            return self._flatten(int, result_by_files)
+
+    def utterances(
+        self, by_files=False
+    ) -> Union[List[Utterance], List[List[Utterance]]]:
+        """TODO"""
+        # TODO: parameters "participant", "exclude"
+        result_by_files = [sr.utterances for sr in self._single_readers]
+        if by_files:
+            return result_by_files
+        else:
+            return self._flatten(list, result_by_files)
 
     def headers(self):
         """TODO"""
@@ -214,14 +235,20 @@ class ReaderNew:
         """TODO"""
         return len(self)
 
-    def participants(self):
+    def participants(self, by_files=False) -> Union[Set[str], List[Set[str]]]:
         """for participant codes, e.g., CHI, MOT
 
         more detailed participant info is in the ``headers`` method.
         """
-        return [{u.participant for u in sr.utterances} for sr in self._single_readers]
+        result_by_files = [
+            {u.participant for u in sr.utterances} for sr in self._single_readers
+        ]
+        if by_files:
+            return result_by_files
+        else:
+            return self._flatten(set, result_by_files)
 
-    def languages(self):
+    def languages(self):  # TODO by_files
         """TODO"""
         result = []
         for sr in self._single_readers:
@@ -238,7 +265,7 @@ class ReaderNew:
             result.append(languages_list)
         return result
 
-    def tagged_sents(self) -> List[List[List[Word]]]:
+    def tagged_sents(self) -> List[List[List[Word]]]:  # TODO by_files
         """TODO"""
         # TODO: parameters "participant", "exclude"
         return [
@@ -246,7 +273,7 @@ class ReaderNew:
             for sr in self._single_readers
         ]
 
-    def tagged_words(self) -> List[List[Word]]:
+    def tagged_words(self) -> List[List[Word]]:  # TODO by_files
         """TODO"""
         # TODO: parameters "participant", "exclude"
         return [
@@ -254,7 +281,7 @@ class ReaderNew:
             for sr in self._single_readers
         ]
 
-    def sents(self) -> List[List[List[str]]]:
+    def sents(self) -> List[List[List[str]]]:  # TODO by_files
         """TODO"""
         # TODO: parameters "participant", "exclude"
         return [
@@ -262,7 +289,7 @@ class ReaderNew:
             for sr in self._single_readers
         ]
 
-    def words(self) -> List[List[str]]:
+    def words(self) -> List[List[str]]:  # TODO by_files
         """TODO"""
         # TODO: parameters "participant", "exclude"
         return [
@@ -285,7 +312,9 @@ class ReaderNew:
         # TODO: participants filtered to CHI?
         return get_mluw(self.sents())
 
-    def word_ngrams(self, n, keep_case=False) -> List[collections.Counter]:
+    def word_ngrams(
+        self, n, keep_case=False
+    ) -> List[collections.Counter]:  # TODO by_files  # noqa
         """TODO"""
         # TODO: parameters "participant", "exclude"
 
@@ -310,7 +339,9 @@ class ReaderNew:
 
         return result
 
-    def word_frequency(self, keep_case=False) -> List[collections.Counter]:
+    def word_frequency(
+        self, keep_case=False
+    ) -> List[collections.Counter]:  # TODO by_files  # noqa
         """TODO"""
         # TODO: parameters "participant", "exclude"
         return self.word_ngrams(1, keep_case=keep_case)
@@ -430,7 +461,8 @@ class ReaderNew:
             # %gra tier
             gra_items = (
                 tiermarker_to_line["%gra"].split()
-                if "%gra" in tiermarker_to_line else []
+                if "%gra" in tiermarker_to_line
+                else []
             )
 
             if mor_items and gra_items and (len(mor_items) != len(gra_items)):

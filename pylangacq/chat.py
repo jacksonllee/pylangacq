@@ -200,6 +200,8 @@ class ReaderNew:
             return sum(nested)
         elif item_type == set:
             return set().union(*nested)
+        elif item_type == collections.Counter:
+            return sum(nested, start=collections.Counter())
         else:
             raise ValueError(f"unrecognized item type: {item_type}")
 
@@ -248,9 +250,15 @@ class ReaderNew:
         else:
             return self._flatten(set, result_by_files)
 
-    def languages(self):  # TODO by_files
-        """TODO"""
-        result = []
+    def languages(self, by_files=False) -> Union[Set[str], List[List[str]]]:
+        """TODO
+
+        When by_files is True, the returned object is a list of lists as expected,
+        where each inner list has a meaning ordering of language dominance.
+        However, when by_files is False, returning a flattened list wouldn't make sense,
+        and therefore it's a set instead.
+        """
+        result_by_files = []
         for sr in self._single_readers:
             languages_list = []
             try:
@@ -262,40 +270,60 @@ class ReaderNew:
                     language = language.strip()
                     if language:
                         languages_list.append(language)
-            result.append(languages_list)
-        return result
+            result_by_files.append(languages_list)
 
-    def tagged_sents(self) -> List[List[List[Word]]]:  # TODO by_files
+        if by_files:
+            return result_by_files
+        else:
+            return set(self._flatten(list, result_by_files))
+
+    def tagged_sents(self, by_files=False) -> Union[List[List[Word]], List[List[List[Word]]]]:
         """TODO"""
         # TODO: parameters "participant", "exclude"
-        return [
+        result_by_files = [
             [utterance.words for utterance in sr.utterances]
             for sr in self._single_readers
         ]
+        if by_files:
+            return result_by_files
+        else:
+            return self._flatten(list, result_by_files)
 
-    def tagged_words(self) -> List[List[Word]]:  # TODO by_files
+    def tagged_words(self, by_files=False) -> Union[List[Word], List[List[Word]]]:
         """TODO"""
         # TODO: parameters "participant", "exclude"
-        return [
+        result_by_files = [
             [word for utterance in sr.utterances for word in utterance.words]
             for sr in self._single_readers
         ]
+        if by_files:
+            return result_by_files
+        else:
+            return self._flatten(list, result_by_files)
 
-    def sents(self) -> List[List[List[str]]]:  # TODO by_files
+    def sents(self, by_files=False) -> Union[List[List[str]], List[List[List[str]]]]:
         """TODO"""
         # TODO: parameters "participant", "exclude"
-        return [
+        result_by_files = [
             [[word.form for word in utterance.words] for utterance in sr.utterances]
             for sr in self._single_readers
         ]
+        if by_files:
+            return result_by_files
+        else:
+            return self._flatten(list, result_by_files)
 
-    def words(self) -> List[List[str]]:  # TODO by_files
+    def words(self, by_files=False) -> Union[List[str], List[List[str]]]:
         """TODO"""
         # TODO: parameters "participant", "exclude"
-        return [
+        result_by_files = [
             [word.form for utterance in sr.utterances for word in utterance.words]
             for sr in self._single_readers
         ]
+        if by_files:
+            return result_by_files
+        else:
+            return self._flatten(list, result_by_files)
 
     def mlum(self) -> List[float]:
         """TODO"""
@@ -313,8 +341,8 @@ class ReaderNew:
         return get_mluw(self.sents())
 
     def word_ngrams(
-        self, n, keep_case=False
-    ) -> List[collections.Counter]:  # TODO by_files  # noqa
+        self, n, *, keep_case=False, by_files=False
+    ) -> List[collections.Counter]:
         """TODO"""
         # TODO: parameters "participant", "exclude"
 
@@ -324,7 +352,7 @@ class ReaderNew:
         elif n < 1:
             raise ValueError(err_msg)
 
-        result = []
+        result_by_files = []
 
         for sents_in_file in self.sents():
             result_for_file = collections.Counter()
@@ -335,16 +363,19 @@ class ReaderNew:
                     sent = [word.lower() for word in sent]
                 ngrams = zip(*[sent[i:] for i in range(n)])
                 result_for_file.update(ngrams)
-            result.append(result_for_file)
+            result_by_files.append(result_for_file)
 
-        return result
+        if by_files:
+            return result_by_files
+        else:
+            return self._flatten(collections.Counter, result_by_files)
 
     def word_frequency(
-        self, keep_case=False
-    ) -> List[collections.Counter]:  # TODO by_files  # noqa
+        self, *, keep_case=False, by_files=False
+    ) -> List[collections.Counter]:
         """TODO"""
         # TODO: parameters "participant", "exclude"
-        return self.word_ngrams(1, keep_case=keep_case)
+        return self.word_ngrams(1, keep_case=keep_case, by_files=by_files)
 
     # TODO def dates_of_recording
 

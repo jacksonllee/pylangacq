@@ -8,13 +8,20 @@ from pylangacq.objects import Gra, Token
 class DependencyGraph:
     """A DependencyGraph instance represents a sentence in dependency grammar.
 
-    Parameters
+    Attributes
     ----------
-    tagged_sent : list of tuple(str, str, str, str)
-        A tagged sentence as a list of (word, pos, mor, rel).
+    node : dict
+    edge : dict
+    tagged_sent : List[Token]]
     """
 
     def __init__(self, tagged_sent: List[Token]):
+        """Initialize a DependencyGraph object.
+
+        Parameters
+        ----------
+        tagged_sent : List[Token]
+        """
         self.node = {}  # from node to dict (node's properties)
         self.edge = {}  # from node to node to dict (edge's properties)
 
@@ -57,7 +64,7 @@ class DependencyGraph:
                 result[node1] = node2
         return result
 
-    def number_of_nodes(self):
+    def n_nodes(self):
         """Return the number of nodes.
 
         Returns
@@ -88,6 +95,7 @@ class DependencyGraph:
 
         self.node[0] = {"word": "ROOT", "pos": "ROOT", "mor": "ROOT"}
 
+    @property
     def faulty(self):
         """Determine whether the graph is faulty for dependency information.
 
@@ -109,7 +117,7 @@ class DependencyGraph:
 
         # get graph info
         dep_to_head = dict(self.edges())
-        number_of_nodes = self.number_of_nodes()
+        number_of_nodes = self.n_nodes()
 
         # add \begin{deptext}...\end{deptext}
         words = [self.node[n]["word"] for n in range(1, number_of_nodes)]
@@ -157,7 +165,7 @@ class DependencyGraph:
         collector = []
         dep_to_head = self.edges()
 
-        for dep in range(1, self.number_of_nodes()):
+        for dep in range(1, self.n_nodes()):
             head = dep_to_head[dep]
             word = self.node[dep]["word"]
             pos = self.node[dep]["pos"]

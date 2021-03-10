@@ -318,7 +318,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
                 break
 
             sent_graph = DependencyGraph(tagged_sent)
-            if sent_graph.faulty():
+            if sent_graph.faulty:
                 continue
 
             item_function(sent_graph)
@@ -331,7 +331,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         N1: Proper, mass, or count noun
         """
-        for i in range(1, graph.number_of_nodes()):
+        for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
 
             if pos.startswith("N:") or pos == "N":
@@ -346,7 +346,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         N2: Pronoun or prolocative, excluding modifiers
         """
-        for i in range(1, graph.number_of_nodes()):
+        for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
 
             if pos.startswith("PRO") and pos != "PRO:POSS:DET":
@@ -361,7 +361,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         N3: Modifier, including adjectives, possessives, and quantifiers
         """
-        for i in range(1, graph.number_of_nodes()):
+        for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
 
             if pos in {"PRO:POSS:DET", "ADJ", "QN"}:
@@ -376,10 +376,10 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         N4: Two-word NP: nominal preceded by article or modifier
         """
-        if not graph.number_of_nodes() > 2:
+        if not graph.n_nodes() > 2:
             return
 
-        for i in range(1, graph.number_of_nodes() - 1):
+        for i in range(1, graph.n_nodes() - 1):
             pos1 = graph.node[i]["pos"]
             pos2 = graph.node[i + 1]["pos"]
 
@@ -397,10 +397,10 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         N5: Article, used before a noun (Also credit: N4)
         """
-        if not graph.number_of_nodes() > 2:
+        if not graph.n_nodes() > 2:
             return
 
-        for i in range(1, graph.number_of_nodes() - 1):
+        for i in range(1, graph.n_nodes() - 1):
             pos1 = graph.node[i]["pos"]
             pos2 = graph.node[i + 1]["pos"]
 
@@ -417,10 +417,10 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         N6: Two-word NP (as in N4) after verb or preposition (Also credit: N4)
         """
-        if not graph.number_of_nodes() > 3:
+        if not graph.n_nodes() > 3:
             return
 
-        for i in range(1, graph.number_of_nodes() - 2):
+        for i in range(1, graph.n_nodes() - 2):
             pos1 = graph.node[i]["pos"]
             pos2 = graph.node[i + 1]["pos"]
             pos3 = graph.node[i + 2]["pos"]
@@ -442,7 +442,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         N7: Plural suffix
         """
-        for i in range(1, graph.number_of_nodes()):
+        for i in range(1, graph.n_nodes()):
             mor = graph.node[i]["mor"]
 
             if "-PL" in mor:
@@ -457,10 +457,10 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         N8: Two-word NP (as in N4) before verb (Also credit: N4)
         """
-        if not graph.number_of_nodes() > 3:
+        if not graph.n_nodes() > 3:
             return
 
-        for i in range(1, graph.number_of_nodes() - 2):
+        for i in range(1, graph.n_nodes() - 2):
             pos1 = graph.node[i]["pos"]
             pos2 = graph.node[i + 1]["pos"]
             pos3 = graph.node[i + 2]["pos"]
@@ -482,10 +482,10 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         N9: Three-word NP (Det/Mod+Mod+N) (Also credit: N4)
         """
-        if not graph.number_of_nodes() > 3:
+        if not graph.n_nodes() > 3:
             return
 
-        for i in range(1, graph.number_of_nodes() - 2):
+        for i in range(1, graph.n_nodes() - 2):
             pos1 = graph.node[i]["pos"]
             pos2 = graph.node[i + 1]["pos"]
             pos3 = graph.node[i + 2]["pos"]
@@ -507,10 +507,10 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         N10: Adverb modifying adjective or nominal (Also credit: V8)
         """
-        if not graph.number_of_nodes() > 2:
+        if not graph.n_nodes() > 2:
             return
 
-        for i in range(1, graph.number_of_nodes()):
+        for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
 
             if pos == "ADV":
@@ -531,7 +531,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         N11: Any other bound morpheme on N or adjective
         """
-        for i in range(1, graph.number_of_nodes()):
+        for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
 
             if pos in {"N", "ADJ"} or pos.startswith("N:"):
@@ -550,7 +550,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         V1: Verb
         """
-        for i in range(1, graph.number_of_nodes()):
+        for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
 
             if pos == "V":
@@ -565,7 +565,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         V2: Particle or Preposition
         """
-        for i in range(1, graph.number_of_nodes()):
+        for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
 
             if pos == "PREP":
@@ -580,7 +580,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         V3: Prepositional phrase (Prep + NP) (Also credit: V2)
         """
-        for i in range(1, graph.number_of_nodes()):
+        for i in range(1, graph.n_nodes()):
             for j in graph.edge[i].keys():
 
                 if graph.edge[i][j]["rel"] == "POBJ":
@@ -596,10 +596,10 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         V4: Copula linking two nominals (Also credit: V1)
         """
-        if not graph.number_of_nodes() > 3:
+        if not graph.n_nodes() > 3:
             return
 
-        for i in range(1, graph.number_of_nodes()):
+        for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
             if pos != "COP":
                 continue
@@ -631,7 +631,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         V5: Catenative (pseudo-auxiliary) preceding a verb
         """
-        if not graph.number_of_nodes() > 2:
+        if not graph.n_nodes() > 2:
             return
 
         pseudo_aux = {
@@ -651,7 +651,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
             "better",
         }
 
-        for i in range(1, graph.number_of_nodes() - 1):
+        for i in range(1, graph.n_nodes() - 1):
             pos2 = graph.node[i + 1]["pos"]
             if pos2 != "V":
                 continue
@@ -670,7 +670,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         V6: Auxiliary be, do, have in VP (Also credit: V5)
         """
-        for i in range(1, graph.number_of_nodes()):
+        for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
             mor = graph.node[i]["mor"]
             lemma = get_lemma_from_mor(mor)
@@ -690,7 +690,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         V7: Progressive suffix
         """
-        for i in range(1, graph.number_of_nodes()):
+        for i in range(1, graph.n_nodes()):
             mor = graph.node[i]["mor"]
 
             if mor.endswith("PRESP"):
@@ -705,7 +705,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         V8: Adverbs
         """
-        for i in range(1, graph.number_of_nodes()):
+        for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
 
             if pos == "ADV":
@@ -720,10 +720,10 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         V9: Modal preceding verb (Also credit: V5)
         """
-        if not graph.number_of_nodes() > 2:
+        if not graph.n_nodes() > 2:
             return
 
-        for i in range(1, graph.number_of_nodes() - 1):
+        for i in range(1, graph.n_nodes() - 1):
             pos = graph.node[i]["pos"]
             word = graph.node[i]["word"]
             pos2 = graph.node[i + 1]["pos"]
@@ -741,7 +741,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         V10: Third person singular present tense suffix
         """
-        for i in range(1, graph.number_of_nodes()):
+        for i in range(1, graph.n_nodes()):
             mor = graph.node[i]["mor"]
 
             if "-3S" in mor:
@@ -758,7 +758,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         past_tense_modals = {"could", "did", "might", "would", "woudn't"}
 
-        for i in range(1, graph.number_of_nodes()):
+        for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
 
             if pos != "MOD":
@@ -777,7 +777,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         V12: Regular past tense suffix
         """
-        for i in range(1, graph.number_of_nodes()):
+        for i in range(1, graph.n_nodes()):
             mor = graph.node[i]["mor"]
 
             if "-PAST" in mor and "-PASTP" not in mor:
@@ -794,7 +794,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         aux_pos = {"AUX", "MOD"}
 
-        for i in range(1, graph.number_of_nodes()):
+        for i in range(1, graph.n_nodes()):
             mor = graph.node[i]["mor"]
             pos = graph.node[i]["pos"]
 
@@ -811,7 +811,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         V14: Medial adverb (Also credit V8)
         """
-        for i in range(2, graph.number_of_nodes() - 1):
+        for i in range(2, graph.n_nodes() - 1):
             # note the possible values of i for "medial" (not 1st or last word)
 
             pos = graph.node[i]["pos"]
@@ -829,10 +829,10 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         V15: Copula, modal, or auxiliary for emphasis or ellipsis
         (uncontractible context) (Also credit V4, V6, V9, V11, V13, V16)
         """
-        if not graph.number_of_nodes() > 2:
+        if not graph.n_nodes() > 2:
             return
 
-        for i in range(1, graph.number_of_nodes() - 1):
+        for i in range(1, graph.n_nodes() - 1):
             pos1 = graph.node[i]["pos"]
 
             if pos1 not in {"COP", "AUX", "MOD"}:
@@ -858,7 +858,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         V16: Past tense copula (Also credit V4)
         """
-        for i in range(1, graph.number_of_nodes()):
+        for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
             mor = graph.node[i]["mor"]
 
@@ -876,7 +876,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         Q1: Intonationally marked question
         Automatically score 2 points if child earns 2 points on Q4 and/or Q8
         """
-        final_word = graph.node[graph.number_of_nodes() - 1]["word"]
+        final_word = graph.node[graph.n_nodes() - 1]["word"]
         if final_word != "?":
             return
 
@@ -898,7 +898,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         # needs work here
         # currently only testing for wh-pronoun alone
-        final_word = graph.node[graph.number_of_nodes() - 1]["word"]
+        final_word = graph.node[graph.n_nodes() - 1]["word"]
         if final_word != "?":
             return
 
@@ -906,7 +906,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         if first_word not in {"what", "why", "how", "which", "where", "when"}:
             return
 
-        if graph.number_of_nodes() > 2:
+        if graph.n_nodes() > 2:
             scoring_board["Q2"] += 1
 
         if turn_off_scoring_board("Q2"):
@@ -920,10 +920,10 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         neg = no(t), can't, don't
         X = NP, VP, PP, Adj, Adv, etc.
         """
-        if not graph.number_of_nodes() > 2:
+        if not graph.n_nodes() > 2:
             return
 
-        for i in range(1, graph.number_of_nodes() - 1):
+        for i in range(1, graph.n_nodes() - 1):
             word1 = graph.node[i]["word"]
             mor2 = graph.node[i + 1]["mor"]
 
@@ -944,9 +944,9 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         Q4: Initial wh-pronoun followed by verb
         (if child earns 2 points for Q8, score 2 points to *both* Q1 and Q2)
         """
-        if not graph.number_of_nodes() > 2:
+        if not graph.n_nodes() > 2:
             return
-        final_word = graph.node[graph.number_of_nodes() - 1]["word"]
+        final_word = graph.node[graph.n_nodes() - 1]["word"]
         if final_word != "?":
             return
 
@@ -971,7 +971,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         Q5: Negative morpheme between subject and verb (Also credit: Q3)
         """
-        if not graph.number_of_nodes() > 3:
+        if not graph.n_nodes() > 3:
             return
 
         for dep, head in graph.edges().items():
@@ -1003,10 +1003,10 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         Q6: Wh-question with inverted modal, copula, or auxiliary
         """
-        if not graph.number_of_nodes() > 2:
+        if not graph.n_nodes() > 2:
             return
 
-        for i in range(1, graph.number_of_nodes()):
+        for i in range(1, graph.n_nodes()):
             if scoring_board_stop["Q6"]:
                 break
 
@@ -1037,10 +1037,10 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         Q7: Negation of copula, modal, or auxiliary (Also credit Q5)
         """
-        if not graph.number_of_nodes() > 2:
+        if not graph.n_nodes() > 2:
             return
 
-        for i in range(1, graph.number_of_nodes()):
+        for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
 
             if pos not in {"MOD", "COP", "AUX"}:
@@ -1067,14 +1067,14 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         (if child earns 2 points for Q8, score 2 points to *both* Q1 and Q2)
         """
         # test may need to be checked/improved
-        if not graph.number_of_nodes() > 2:
+        if not graph.n_nodes() > 2:
             return
 
-        final_word = graph.node[graph.number_of_nodes() - 1]["word"]
+        final_word = graph.node[graph.n_nodes() - 1]["word"]
         if final_word != "?":
             return
 
-        for i in range(1, graph.number_of_nodes() - 1):
+        for i in range(1, graph.n_nodes() - 1):
             if scoring_board_stop["Q8"]:
                 break
 
@@ -1107,7 +1107,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         Q9: Why, when, which, whose
         """
         wh = {"why", "when", "which", "whose"}
-        for i in range(1, graph.number_of_nodes()):
+        for i in range(1, graph.n_nodes()):
             word = graph.node[i]["word"]
             if word in wh:
                 scoring_board["Q9"] += 1
@@ -1121,15 +1121,15 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         Q10: Tag question
         """
-        if not graph.number_of_nodes() > 2:
+        if not graph.n_nodes() > 2:
             return
 
         # Part 1: test for ending "okay ?", "ok ?", "right ?"
-        final_word = graph.node[graph.number_of_nodes() - 1]["word"]
+        final_word = graph.node[graph.n_nodes() - 1]["word"]
         if final_word != "?":
             return
 
-        second_final_word = graph.node[graph.number_of_nodes() - 2]["word"]
+        second_final_word = graph.node[graph.n_nodes() - 2]["word"]
         if second_final_word in {"okay", "ok", "right"}:
             scoring_board["Q10"] += 1
 
@@ -1140,7 +1140,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         good_pos = {"COP NEG PRO ?", "COP PRO ?"}
         collate = []
 
-        for i in range(1, graph.number_of_nodes()):
+        for i in range(1, graph.n_nodes()):
             collate.append(graph.node[i]["pos"])
 
         test = " ".join(collate)
@@ -1158,7 +1158,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         S1: Two-word combination
         """
-        if not graph.number_of_nodes() > 2:
+        if not graph.n_nodes() > 2:
             return
 
         scoring_board["S1"] += 1
@@ -1172,7 +1172,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         S2: Subject-verb sequence (Also credit: S1)
         """
-        if not graph.number_of_nodes() > 2:
+        if not graph.n_nodes() > 2:
             return
 
         for dep, head in graph.edges().items():
@@ -1199,7 +1199,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         S3: Verb-object sequence (Also credit: S1)
         """
-        if not graph.number_of_nodes() > 2:
+        if not graph.n_nodes() > 2:
             return
 
         for dep, head in graph.edges().items():
@@ -1226,10 +1226,10 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         S4: Subject-verb-object sequence (Also credit: S2 & S3)
         """
-        if not graph.number_of_nodes() > 3:
+        if not graph.n_nodes() > 3:
             return
 
-        for i in range(1, graph.number_of_nodes()):
+        for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
 
             if pos != "V":
@@ -1262,7 +1262,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         S5: Conjunction (any)
         """
-        for i in range(1, graph.number_of_nodes()):
+        for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
 
             if pos == "CONJ":
@@ -1277,7 +1277,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         S6: Sentence with two VPs
         """
-        if not graph.number_of_nodes() > 4:
+        if not graph.n_nodes() > 4:
             return
 
         all_edges = graph.edges()
@@ -1305,12 +1305,12 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         S7: Conjoined phrases (Also credit: S5)
         """
-        if not graph.number_of_nodes() > 3:
+        if not graph.n_nodes() > 3:
             return
 
         # for all trios, we want the middle word to be CONJ (for pos)
         # and the first+final words are *not* punctuation (for mor)
-        for i in range(1, graph.number_of_nodes() - 2):
+        for i in range(1, graph.n_nodes() - 2):
             mor1 = graph.node[i]["mor"]
             pos2 = graph.node[i + 1]["pos"]
             mor3 = graph.node[i + 2]["mor"]
@@ -1330,7 +1330,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         S8: Infinitive without catenative, marked with "to"
         (Also credit: S6 & V5)
         """
-        if not graph.number_of_nodes() > 3:
+        if not graph.n_nodes() > 3:
             return
 
         # we want:
@@ -1397,7 +1397,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         exceptions = {"and", "or", "then"}
 
-        for i in range(1, graph.number_of_nodes()):
+        for i in range(1, graph.n_nodes()):
             word = graph.node[i]["word"]
             pos = graph.node[i]["pos"]
 
@@ -1414,7 +1414,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         S11: Propositional complement (Also credit S6)
         """
-        if not graph.number_of_nodes() > 3:
+        if not graph.n_nodes() > 3:
             return
 
         subject_count = 0
@@ -1443,7 +1443,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         S12: Conjoined sentences (except for imperatives, will usually have
         subj+predicate in each clause) (Also credit: S6, S5)
         """
-        if not graph.number_of_nodes() > 3:
+        if not graph.n_nodes() > 3:
             return
 
         for dep, head in graph.edges().items():
@@ -1468,7 +1468,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         S13: Wh-clause (Also credit S6) (If also infinitive, credit S8 or S17)
         """
-        if not graph.number_of_nodes() > 3:
+        if not graph.n_nodes() > 3:
             return
 
         for dep, head in graph.edges().items():
@@ -1505,7 +1505,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         S14: Bitransitive predicate (Also credit S3)
         """
-        if not graph.number_of_nodes() > 3:
+        if not graph.n_nodes() > 3:
             return
 
         dep_head_pairs_for_obj = []
@@ -1533,15 +1533,11 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         S15: Sentence with 3 or more VPs (Also credit S6)
         """
-        if not graph.number_of_nodes() > 3:
+        if not graph.n_nodes() > 3:
             return
 
         number_of_verbs = sum(
-            [
-                1
-                for i in range(1, graph.number_of_nodes())
-                if graph.node[i]["pos"] == "V"
-            ]
+            [1 for i in range(1, graph.n_nodes()) if graph.node[i]["pos"] == "V"]
         )
 
         if number_of_verbs > 2:
@@ -1561,7 +1557,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         # (from Sagae et al 2005 ACL)
         # add one criterion: "and" is not one of the intervening words
 
-        if not graph.number_of_nodes() > 3:
+        if not graph.n_nodes() > 3:
             return
 
         for dep, head in graph.edges().items():
@@ -1590,7 +1586,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         S17: Infinitive clause: new subject. (Also credit: S8)
         """
-        if not graph.number_of_nodes() > 3:
+        if not graph.n_nodes() > 3:
             return
 
         # example of a hit case: "he wants me to go"
@@ -1625,7 +1621,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         """
         S18: Gerund (Also credit: V7)
         """
-        for i in range(1, graph.number_of_nodes()):
+        for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
 
             if pos == "N:GERUND":
@@ -1644,7 +1640,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         # might need more work
         # for now: check if CONJ precedes two SUBJ's
 
-        conj_position = graph.number_of_nodes()  # decrement if CONJ is found
+        conj_position = graph.n_nodes()  # decrement if CONJ is found
         subj_position_list = []
 
         for dep, head in graph.edges().items():

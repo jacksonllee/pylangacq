@@ -2,7 +2,6 @@
 
 import collections
 import concurrent.futures as cf
-import dataclasses
 import datetime
 import fnmatch
 import io
@@ -109,39 +108,70 @@ def params_in_docstring(*params):
     return real_decorator
 
 
-@dataclasses.dataclass
-class _SingleReaderNew:
-    """TODO"""
+_File = collections.namedtuple("_File", "file_path header utterances")
+_File.__doc__ = """
+A CHAT file (or string).
 
-    __slots__ = ("file_path", "header", "utterances")
-
-    file_path: str
-    header: Dict
-    utterances: List[Utterance]
+Attributes
+----------
+file_path : str
+header : dict
+utterances : List[Utterance]
+"""
 
 
 class ReaderNew:
     """TODO"""
 
-    def __init__(self, raw_strs: Collection[str] = None, file_paths: List[str] = None):
+    def __init__(self, strs: Collection[str] = None, file_paths: List[str] = None):
 
-        raw_strs = raw_strs or []
+        strs = strs or []
         file_paths = file_paths or []
 
-        if len(raw_strs) != len(file_paths):
+        if len(strs) != len(file_paths):
             raise ValueError(
-                "raw_strs and file_paths must have the same size: "
-                f"{len(raw_strs)} and {len(file_paths)}"
+                "strs and file_paths must have the same size: "
+                f"{len(strs)} and {len(file_paths)}"
             )
 
         with cf.ProcessPoolExecutor() as executor:
-            self._single_readers = list(
-                executor.map(self._parse_one_raw_str, raw_strs, file_paths)
-            )
+            self._files = list(executor.map(self._parse_chat_str, strs, file_paths))
+
+    # TODO def search
+
+    # TODO def concordance
+
+    def clear(self):
+        """TODO"""
+        self._files = []
+
+    def add(self, *readers, ignore_repeats=True):
+        """TODO"""
+        for i, reader in enumerate(readers, 1):
+            file_paths = set(self.file_paths())
+            if type(reader) != ReaderNew:
+                raise TypeError(f"{i}-th reader is not a Reader object: {type(reader)}")
+            new_file_paths = set(reader.file_paths())
+            repeats = file_paths & new_file_paths
+            if ignore_repeats and repeats:
+                new_file_paths = new_file_paths - repeats
+            files_to_add = [f for f in reader._files if f.file_path in new_file_paths]
+            self._files.extend(files_to_add)
+
+    def remove(self, *file_paths):
+        """TODO
+
+        Support regex matching
+        """
+        self._files = [
+            f
+            for f in self._files
+            if not any(re.search(p, f.file_path) for p in file_paths)
+        ]
 
     def __len__(self):
         """TODO"""
-        return len(self._single_readers)
+        return len(self._files)
 
     @staticmethod
     def _flatten(item_type, nested) -> Union[List, Set]:
@@ -159,7 +189,7 @@ class ReaderNew:
     def n_utterances(self, by_files=False) -> Union[int, List[int]]:
         """TODO"""
         # TODO: parameters "participant", "exclude"
-        result_by_files = [len(sr.utterances) for sr in self._single_readers]
+        result_by_files = [len(f.utterances) for f in self._files]
         if by_files:
             return result_by_files
         else:
@@ -170,7 +200,7 @@ class ReaderNew:
     ) -> Union[List[Utterance], List[List[Utterance]]]:
         """TODO"""
         # TODO: parameters "participant", "exclude"
-        result_by_files = [sr.utterances for sr in self._single_readers]
+        result_by_files = [f.utterances for f in self._files]
         if by_files:
             return result_by_files
         else:
@@ -178,11 +208,11 @@ class ReaderNew:
 
     def headers(self):  # TODO Test
         """TODO"""
-        return [sr.header for sr in self._single_readers]
+        return [f.header for f in self._files]
 
     def file_paths(self):
         """TODO"""
-        return [sr.file_path for sr in self._single_readers]
+        return [f.file_path for f in self._files]
 
     def n_files(self):
         """TODO"""
@@ -193,9 +223,7 @@ class ReaderNew:
 
         more detailed participant info is in the ``headers`` method.
         """
-        result_by_files = [
-            {u.participant for u in sr.utterances} for sr in self._single_readers
-        ]
+        result_by_files = [{u.participant for u in f.utterances} for f in self._files]
         if by_files:
             return result_by_files
         else:
@@ -209,9 +237,7 @@ class ReaderNew:
         However, when by_files is False, returning a flattened list wouldn't make sense,
         and therefore it's a set instead.
         """
-        result_by_files = [
-            sr.header.get("Languages", []) for sr in self._single_readers
-        ]
+        result_by_files = [f.header.get("Languages", []) for f in self._files]
         if by_files:
             return result_by_files
         else:
@@ -221,7 +247,7 @@ class ReaderNew:
         self, by_files=False
     ) -> Union[Set[datetime.date], List[Set[datetime.date]]]:
         """TODO"""
-        result_by_files = [sr.header["Date"] for sr in self._single_readers]
+        result_by_files = [f.header["Date"] for f in self._files]
         if by_files:
             return result_by_files
         else:
@@ -230,9 +256,9 @@ class ReaderNew:
     def ages(self, participant="CHI", months=False):
         """TODO"""
         result_by_files = []
-        for sr in self._single_readers:
+        for f in self._files:
             try:
-                age = sr.header["Participants"][participant]["age"]
+                age = f.header["Participants"][participant]["age"]
 
                 year_str, _, month_day = age.partition(";")
                 month_str, _, day_str = month_day.partition(".")
@@ -256,8 +282,7 @@ class ReaderNew:
         """TODO"""
         # TODO: parameters "participant", "exclude"
         result_by_files = [
-            [utterance.tokens for utterance in sr.utterances]
-            for sr in self._single_readers
+            [utterance.tokens for utterance in f.utterances] for f in self._files
         ]
         if by_files:
             return result_by_files
@@ -268,8 +293,8 @@ class ReaderNew:
         """TODO"""
         # TODO: parameters "participant", "exclude"
         result_by_files = [
-            [word for utterance in sr.utterances for word in utterance.tokens]
-            for sr in self._single_readers
+            [word for utterance in f.utterances for word in utterance.tokens]
+            for f in self._files
         ]
         if by_files:
             return result_by_files
@@ -280,8 +305,8 @@ class ReaderNew:
         """TODO"""
         # TODO: parameters "participant", "exclude"
         result_by_files = [
-            [[token.word for token in utterance.tokens] for utterance in sr.utterances]
-            for sr in self._single_readers
+            [[token.word for token in utterance.tokens] for utterance in f.utterances]
+            for f in self._files
         ]
         if by_files:
             return result_by_files
@@ -292,8 +317,8 @@ class ReaderNew:
         """TODO"""
         # TODO: parameters "participant", "exclude"
         result_by_files = [
-            [token.word for utterance in sr.utterances for token in utterance.tokens]
-            for sr in self._single_readers
+            [token.word for utterance in f.utterances for token in utterance.tokens]
+            for f in self._files
         ]
         if by_files:
             return result_by_files
@@ -362,12 +387,6 @@ class ReaderNew:
         # TODO: parameters "participant", "exclude"
         return self.word_ngrams(1, keep_case=keep_case, by_files=by_files)
 
-    # TODO What to do with update, add, remove, and clear?
-
-    # TODO def search
-
-    # TODO def concordance
-
     @classmethod
     def from_strs(cls, strs: List[str], ids: List[str] = None):
         """TODO"""
@@ -424,12 +443,12 @@ class ReaderNew:
 
             return cls.from_files(file_paths, encoding=encoding)
 
-    def _parse_one_raw_str(self, raw_str, file_path) -> _SingleReaderNew:
-        lines = self._get_lines(raw_str)
+    def _parse_chat_str(self, chat_str, file_path) -> _File:
+        lines = self._get_lines(chat_str)
         header = self._get_header(lines)
         all_tiers = self._get_all_tiers(lines)
         utterances = self._get_utterances(all_tiers)
-        return _SingleReaderNew(file_path, header, utterances)
+        return _File(file_path, header, utterances)
 
     def _get_utterances(self, all_tiers: List[Dict[str, str]]) -> List[Utterance]:
         result_list = []

@@ -25,10 +25,13 @@ from pylangacq.measures import (
     get_MLUm,
     get_MLUw,
     get_TTR,
-    get_IPSyn,
+    get_ipsyn_for_file,
+    get_ipsyn,
     get_mlum,
     get_mluw,
+    get_ttr,
 )
+from pylangacq.objects import Gra, Token, Utterance
 from pylangacq.util import (
     ENCODING,
     CLITIC,
@@ -104,62 +107,6 @@ def params_in_docstring(*params):
         return wrapper
 
     return real_decorator
-
-
-@dataclasses.dataclass
-class Gra:
-    """Grammatical relation of a word in an utterance.
-
-    Attributes
-    ----------
-    source : int
-        The current word's position in the utterance; counting starts from 1.
-    target : int
-        The target word's position in the utterance; counting starts from 1.
-    rel : str
-        Grammatical relation
-    """
-
-    __slots__ = ("source", "target", "rel")
-
-    source: int
-    target: int
-    rel: str
-
-
-@dataclasses.dataclass
-class Word:
-    """Word representation with attributes.
-
-    Attributes
-    ----------
-    form : str
-        Orthographic form
-    pos : str
-        Part-of-speech tag
-    mor : str
-        Morphological information
-    gra : Gra
-        Grammatical relation
-    """
-
-    __slots__ = ("form", "pos", "mor", "gra")
-
-    form: str
-    pos: str
-    mor: str
-    gra: Gra
-
-
-@dataclasses.dataclass
-class Utterance:
-    """TODO"""
-
-    __slots__ = ("participant", "words", "tiers")
-
-    participant: str
-    words: List[Word]
-    tiers: Dict[str, str]
 
 
 @dataclasses.dataclass
@@ -305,11 +252,11 @@ class ReaderNew:
 
     def tagged_sents(
         self, by_files=False
-    ) -> Union[List[List[Word]], List[List[List[Word]]]]:
+    ) -> Union[List[List[Token]], List[List[List[Token]]]]:
         """TODO"""
         # TODO: parameters "participant", "exclude"
         result_by_files = [
-            [utterance.words for utterance in sr.utterances]
+            [utterance.tokens for utterance in sr.utterances]
             for sr in self._single_readers
         ]
         if by_files:
@@ -317,11 +264,11 @@ class ReaderNew:
         else:
             return self._flatten(list, result_by_files)
 
-    def tagged_words(self, by_files=False) -> Union[List[Word], List[List[Word]]]:
+    def tagged_words(self, by_files=False) -> Union[List[Token], List[List[Token]]]:
         """TODO"""
         # TODO: parameters "participant", "exclude"
         result_by_files = [
-            [word for utterance in sr.utterances for word in utterance.words]
+            [word for utterance in sr.utterances for word in utterance.tokens]
             for sr in self._single_readers
         ]
         if by_files:
@@ -333,7 +280,7 @@ class ReaderNew:
         """TODO"""
         # TODO: parameters "participant", "exclude"
         result_by_files = [
-            [[word.form for word in utterance.words] for utterance in sr.utterances]
+            [[token.word for token in utterance.tokens] for utterance in sr.utterances]
             for sr in self._single_readers
         ]
         if by_files:
@@ -345,7 +292,7 @@ class ReaderNew:
         """TODO"""
         # TODO: parameters "participant", "exclude"
         result_by_files = [
-            [word.form for utterance in sr.utterances for word in utterance.words]
+            [token.word for utterance in sr.utterances for token in utterance.tokens]
             for sr in self._single_readers
         ]
         if by_files:
@@ -368,6 +315,16 @@ class ReaderNew:
         # TODO: participants filtered to CHI?
         return get_mluw(self.sents(by_files=True))
 
+    def ttr(self, keep_case=False) -> List[float]:
+        """TODO"""
+        # TODO: participants filtered to CHI?
+        return get_ttr(self.word_frequency(keep_case=keep_case, by_files=True))
+
+    def ipsyn(self) -> List[int]:
+        """TODO"""
+        # TODO: participants filtered to CHI?
+        return get_ipsyn(self.tagged_sents(by_files=True))
+
     def word_ngrams(
         self, n, *, keep_case=False, by_files=False
     ) -> Union[collections.Counter, List[collections.Counter]]:
@@ -388,7 +345,7 @@ class ReaderNew:
                 if len(sent) < n:
                     continue
                 if not keep_case:
-                    sent = [word.lower() for word in sent]
+                    sent = [word.lower() if word != CLITIC else CLITIC for word in sent]
                 ngrams = zip(*[sent[i:] for i in range(n)])
                 result_for_file.update(ngrams)
             result_by_files.append(result_for_file)
@@ -406,10 +363,6 @@ class ReaderNew:
         return self.word_ngrams(1, keep_case=keep_case, by_files=by_files)
 
     # TODO What to do with update, add, remove, and clear?
-
-    # TODO def ttr
-
-    # TODO def ipsyn
 
     # TODO def search
 
@@ -551,12 +504,12 @@ class ReaderNew:
             if not gra_items:
                 gra_items = [""] * len(utterance_items)
 
-            sent: List[Word] = []
+            sent: List[Token] = []
 
             for word, mor, gra in zip(utterance_items, mor_items, gra_items):
                 pos, _, mor = mor.partition("|")
 
-                output_word = Word(clean_word(word), pos, mor, self._get_gra(gra))
+                output_word = Token(clean_word(word), pos, mor, self._get_gra(gra))
                 sent.append(output_word)
 
             result_list.append(Utterance(participant_code, sent, tiermarker_to_line))
@@ -2500,7 +2453,9 @@ class _SingleReader(object):
 
         :param participant: The participant specified, default to ``'CHI'``
         """
-        return get_IPSyn(self.tagged_sents(participant=participant, exclude=exclude))
+        return get_ipsyn_for_file(
+            self.tagged_sents(participant=participant, exclude=exclude)
+        )
 
     def search(
         self,

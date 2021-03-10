@@ -2,7 +2,7 @@ import datetime
 
 import pytest
 
-from pylangacq.chat import Gra, ReaderNew, Utterance, Word
+from pylangacq.chat import Gra, ReaderNew, Utterance, Token
 from pylangacq.tests.test_data import LOCAL_EVE_PATH
 
 
@@ -26,21 +26,21 @@ def test_utterances():
     assert _EVE.utterances()[:2] == [
         Utterance(
             participant="CHI",
-            words=[
-                Word(
-                    form="more",
+            tokens=[
+                Token(
+                    word="more",
                     pos="qn",
                     mor="more",
                     gra=Gra(source=1, target=2, rel="QUANT"),
                 ),
-                Word(
-                    form="cookie",
+                Token(
+                    word="cookie",
                     pos="n",
                     mor="cookie",
                     gra=Gra(source=2, target=0, rel="INCROOT"),
                 ),
-                Word(
-                    form=".", pos=".", mor="", gra=Gra(source=3, target=2, rel="PUNCT")
+                Token(
+                    word=".", pos=".", mor="", gra=Gra(source=3, target=2, rel="PUNCT")
                 ),
             ],
             tiers={
@@ -52,33 +52,33 @@ def test_utterances():
         ),
         Utterance(
             participant="MOT",
-            words=[
-                Word(
-                    form="you",
+            tokens=[
+                Token(
+                    word="you",
                     pos="pro:per",
                     mor="you",
                     gra=Gra(source=1, target=2, rel="SUBJ"),
                 ),
-                Word(
-                    form="0v",
+                Token(
+                    word="0v",
                     pos="0v",
                     mor="v",
                     gra=Gra(source=2, target=0, rel="ROOT"),
                 ),
-                Word(
-                    form="more",
+                Token(
+                    word="more",
                     pos="qn",
                     mor="more",
                     gra=Gra(source=3, target=4, rel="QUANT"),
                 ),
-                Word(
-                    form="cookies",
+                Token(
+                    word="cookies",
                     pos="n",
                     mor="cookie-PL",
                     gra=Gra(source=4, target=2, rel="OBJ"),
                 ),
-                Word(
-                    form="?", pos="?", mor="", gra=Gra(source=5, target=2, rel="PUNCT")
+                Token(
+                    word="?", pos="?", mor="", gra=Gra(source=5, target=2, rel="PUNCT")
                 ),
             ],
             tiers={
@@ -180,38 +180,38 @@ def test_ages():
 
 def test_tagged_sents():
     assert _EVE.tagged_sents()[0] == [
-        Word(
-            form="more", pos="qn", mor="more", gra=Gra(source=1, target=2, rel="QUANT")
+        Token(
+            word="more", pos="qn", mor="more", gra=Gra(source=1, target=2, rel="QUANT")
         ),
-        Word(
-            form="cookie",
+        Token(
+            word="cookie",
             pos="n",
             mor="cookie",
             gra=Gra(source=2, target=0, rel="INCROOT"),
         ),
-        Word(form=".", pos=".", mor="", gra=Gra(source=3, target=2, rel="PUNCT")),
+        Token(word=".", pos=".", mor="", gra=Gra(source=3, target=2, rel="PUNCT")),
     ]
 
 
 def test_tagged_words():
     assert _EVE.tagged_words()[:5] == [
-        Word(
-            form="more", pos="qn", mor="more", gra=Gra(source=1, target=2, rel="QUANT")
+        Token(
+            word="more", pos="qn", mor="more", gra=Gra(source=1, target=2, rel="QUANT")
         ),
-        Word(
-            form="cookie",
+        Token(
+            word="cookie",
             pos="n",
             mor="cookie",
             gra=Gra(source=2, target=0, rel="INCROOT"),
         ),
-        Word(form=".", pos=".", mor="", gra=Gra(source=3, target=2, rel="PUNCT")),
-        Word(
-            form="you",
+        Token(word=".", pos=".", mor="", gra=Gra(source=3, target=2, rel="PUNCT")),
+        Token(
+            word="you",
             pos="pro:per",
             mor="you",
             gra=Gra(source=1, target=2, rel="SUBJ"),
         ),
-        Word(form="0v", pos="0v", mor="v", gra=Gra(source=2, target=0, rel="ROOT")),
+        Token(word="0v", pos="0v", mor="v", gra=Gra(source=2, target=0, rel="ROOT")),
     ]
 
 
@@ -234,17 +234,25 @@ def test_mluw():
     assert pytest.approx(_EVE.mluw(), abs=0.1) == [2.5771392879450343]
 
 
+def test_ttr():
+    assert pytest.approx(_EVE.ttr(), abs=0.01) == [0.07192953841135215]
+
+
+def test_ipsyn():
+    assert _EVE.ipsyn() == [25]
+
+
 def test_word_ngrams():
     assert _EVE.word_ngrams(1).most_common(5) == [
         ((".",), 1134),
         (("?",), 455),
-        (("clitic",), 291),
+        (("CLITIC",), 291),
         (("you",), 197),
         (("that",), 151),
     ]
     assert _EVE.word_ngrams(2).most_common(5) == [
         (("that", "?"), 101),
-        (("that's", "clitic"), 80),
+        (("that's", "CLITIC"), 80),
         (("it", "."), 65),
         (("what", "?"), 54),
         (("yes", "‡"), 45),
@@ -255,7 +263,7 @@ def test_word_frequency():
     assert _EVE.word_frequency().most_common(5) == [
         ((".",), 1134),
         (("?",), 455),
-        (("clitic",), 291),
+        (("CLITIC",), 291),
         (("you",), 197),
         (("that",), 151),
     ]

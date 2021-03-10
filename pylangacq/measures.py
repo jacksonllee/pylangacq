@@ -125,6 +125,17 @@ def get_MLUw(sents, words_to_ignore=None):
         return 0
 
 
+def get_ttr(word_freq_dicts) -> List[float]:
+    result_by_files = []
+    for word_freq in word_freq_dicts:
+        filtered = {w: f for w, f in word_freq.items() if w not in _WORDS_TO_IGNORE}
+        try:
+            result_by_files.append(len(filtered) / sum(filtered.values()))
+        except ZeroDivisionError:
+            result_by_files.append(0.0)
+    return result_by_files
+
+
 # noinspection PyPep8Naming
 def get_TTR(word_freq_dict, words_to_ignore=None):
     """Type-token ratio (TTR)"""
@@ -138,8 +149,15 @@ def get_TTR(word_freq_dict, words_to_ignore=None):
     return len(word_freq_dict) / sum(word_freq_dict.values())
 
 
+def get_ipsyn(tagged_sents) -> List[int]:
+    result_by_files = []
+    for tagged_sents_for_file in tagged_sents:
+        result_by_files.append(get_ipsyn_for_file(tagged_sents_for_file))
+    return result_by_files
+
+
 # noinspection PyPep8Naming
-def get_IPSyn(tagged_sents):
+def get_ipsyn_for_file(tagged_sents) -> int:
     """Index of Productive Syntax (IPSyn)"""
     if len(tagged_sents) > 100:
         tagged_sents = tagged_sents[:100]

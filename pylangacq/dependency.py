@@ -1,7 +1,11 @@
 """Utilities for dependency grammar and parsing."""
 
+from typing import List
 
-class DependencyGraph(object):
+from pylangacq.objects import Gra, Token
+
+
+class DependencyGraph:
     """A DependencyGraph instance represents a sentence in dependency grammar.
 
     Parameters
@@ -10,7 +14,7 @@ class DependencyGraph(object):
         A tagged sentence as a list of (word, pos, mor, rel).
     """
 
-    def __init__(self, tagged_sent):
+    def __init__(self, tagged_sent: List[Token]):
         self.node = {}  # from node to dict (node's properties)
         self.edge = {}  # from node to node to dict (edge's properties)
 
@@ -28,7 +32,7 @@ class DependencyGraph(object):
         ----------
         node1 : int
         node2 : int
-        kwargs : dict, optional
+        **kwargs
             Edge attributes
         """
         if node1 not in self.node:
@@ -64,10 +68,16 @@ class DependencyGraph(object):
 
     def _create_graph_from_chat(self):
         """Create dependency graph based on the input data."""
-        for word, pos, mor, gra in self.tagged_sent:
-            try:
-                node1, node2, relation = gra  # e.g., (1, 3, 'LINK')
-            except ValueError:
+        for token in self.tagged_sent:
+            word = token.word
+            pos = token.pos
+            mor = token.mor
+            gra = token.gra
+            if type(gra) == Gra and gra is not None:
+                node1 = gra.source
+                node2 = gra.target
+                relation = gra.rel
+            else:
                 node1 = -1
                 node2 = -1
                 relation = "**ERROR**"

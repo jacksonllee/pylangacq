@@ -15,7 +15,7 @@ from pprint import pformat
 from collections import Counter
 from itertools import chain
 from functools import wraps
-from typing import Collection, Dict, List, Set, Union
+from typing import Collection, Dict, List, Set, Tuple, Union
 
 from dateutil.parser import parse as parse_date
 from dateutil.parser import ParserError
@@ -41,6 +41,8 @@ from pylangacq.util import (
     get_lemma_from_mor,
     get_time_marker,
 )
+
+_TIMER_MARKS_REGEX = re.compile(r"\x15-?(\d+)_(\d+)-?\x15")
 
 _TEMP_DIR = tempfile.mkdtemp()
 
@@ -501,8 +503,8 @@ class ReaderNew:
             participant_code = get_participant_code(tiermarker_to_line.keys())
 
             # get the plain words from utterance tier
-            utterance = clean_utterance(tiermarker_to_line[participant_code])
-            forms = utterance.split()
+            utterance_line = clean_utterance(tiermarker_to_line[participant_code])
+            forms = utterance_line.split()
 
             # %mor tier
             clitic_indices = []  # indices at the word items
@@ -532,7 +534,7 @@ class ReaderNew:
                 raise ValueError(
                     "cannot align the utterance and %mor tiers:\n"
                     f"Tiers --\n{tiermarker_to_line}\n"
-                    f"Cleaned-up utterance --\n{utterance}"
+                    f"Cleaned-up utterance --\n{utterance_line}"
                 )
 
             # %gra tier
@@ -575,12 +577,23 @@ class ReaderNew:
                 output_word = Token(clean_word(word), pos, mor, self._get_gra(gra))
                 sent.append(output_word)
 
-            result_list.append(Utterance(participant_code, sent, tiermarker_to_line))
+            time_marks = self._get_time_marks(tiermarker_to_line[participant_code])
+            u = Utterance(participant_code, sent, time_marks, tiermarker_to_line)
+            result_list.append(u)
 
         return result_list
 
     @staticmethod
-    def _get_gra(raw_gra: str) -> Gra:
+    def _get_time_marks(line: str) -> Union[Tuple[int, int], None]:
+        match = _TIMER_MARKS_REGEX.search(line)
+        if match:
+            time_marks = match.groups()
+            return int(time_marks[0]), int(time_marks[1])
+        else:
+            return None
+
+    @staticmethod
+    def _get_gra(raw_gra: str) -> Union[Gra, None]:
         try:
             source, target, rel = raw_gra.strip().split("|", 2)
             source = int(source)

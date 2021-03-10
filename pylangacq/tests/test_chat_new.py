@@ -58,6 +58,7 @@ def test_utterances():
                     word=".", pos=".", mor="", gra=Gra(source=3, target=2, rel="PUNCT")
                 ),
             ],
+            time_marks=None,
             tiers={
                 "CHI": "more cookie . [+ IMP]",
                 "%mor": "qn|more n|cookie .",
@@ -96,6 +97,7 @@ def test_utterances():
                     word="?", pos="?", mor="", gra=Gra(source=5, target=2, rel="PUNCT")
                 ),
             ],
+            time_marks=None,
             tiers={
                 "MOT": "you 0v more cookies ?",
                 "%mor": "pro:per|you 0v|v qn|more n|cookie-PL ?",

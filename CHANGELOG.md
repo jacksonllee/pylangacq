@@ -8,9 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-* The test suite now covers code snippets in both the docstrings and `.rst` doc files.
+* Reader instantiation:
+  - `from_zip`
+  - `from_strs`
+  - `from_files`
 * Each participant's info in a header dictionary:
-   - Added the key `dob` for date of birth, value is a datetime.date object
+   - Added the key `"dob"` for date of birth (if the info is available in the CHAT header).
+     The corresponding value is a `datetime.date` object
+* The test suite now covers code snippets in both the docstrings and `.rst` doc files.
 
 ### Changed
 * `by_files` as True gives you a list of results for each file, no longer a dict.
@@ -20,8 +25,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
    - `number_of_files` -> `n_files`
    - `filenames` -> `file_paths`
    - `MLU` -> `mlu`
-   - `mlum` -> `mlum`
-   - `mluw` -> `mluw`
+   - `MLUm` -> `mlum`
+   - `MLUw` -> `mluw`
+   - `TTR` -> `ttr`
+   - `IPSyn` -> `ipsyn`
    - `participant_codes` -> `participants` --
      Before this version, the methods `participant_codes` (for CHI, MOT, etc) and
      `participants` (for, say, Eve, Mother, Investigator, etc) co-existed,

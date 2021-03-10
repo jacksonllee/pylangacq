@@ -242,23 +242,23 @@ def test_words():
 
 
 def test_mlum():
-    assert pytest.approx(_EVE.mlum(), abs=0.1) == [3.656464709556527]
+    assert pytest.approx(_EVE.mlum(), abs=0.1) == [2.267022696929239]
 
 
 def test_mlu():
-    assert pytest.approx(_EVE.mlu(), abs=0.1) == [3.656464709556527]
+    assert pytest.approx(_EVE.mlu(), abs=0.1) == [2.267022696929239]
 
 
 def test_mluw():
-    assert pytest.approx(_EVE.mluw(), abs=0.1) == [2.5771392879450343]
+    assert pytest.approx(_EVE.mluw(), abs=0.1) == [1.4459279038718291]
 
 
 def test_ttr():
-    assert pytest.approx(_EVE.ttr(), abs=0.01) == [0.07192953841135215]
+    assert pytest.approx(_EVE.ttr(), abs=0.01) == [0.10534934497816593]
 
 
 def test_ipsyn():
-    assert _EVE.ipsyn() == [25]
+    assert _EVE.ipsyn() == [4]
 
 
 def test_word_ngrams():

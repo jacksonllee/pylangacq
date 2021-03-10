@@ -188,27 +188,66 @@ class ReaderNew:
         else:
             raise ValueError(f"unrecognized item type: {item_type}")
 
-    def n_utterances(self, by_files=False) -> Union[int, List[int]]:
+    def n_utterances(
+        self, participant=None, exclude=None, by_files=False
+    ) -> Union[int, List[int]]:
         """TODO"""
-        # TODO: parameters "participant", "exclude"
-        result_by_files = [len(f.utterances) for f in self._files]
+        utterances = self._filter_utterances_by_participants(participant, exclude)
+        result_by_files = [len(us) for us in utterances]
         if by_files:
             return result_by_files
         else:
             return self._flatten(int, result_by_files)
 
     def utterances(
-        self, by_files=False
+        self, participant=None, exclude=None, by_files=False
     ) -> Union[List[Utterance], List[List[Utterance]]]:
         """TODO"""
-        # TODO: parameters "participant", "exclude"
-        result_by_files = [f.utterances for f in self._files]
+        result_by_files = self._filter_utterances_by_participants(participant, exclude)
         if by_files:
             return result_by_files
         else:
             return self._flatten(list, result_by_files)
 
-    def headers(self):  # TODO Test
+    def _filter_utterances_by_participants(
+        self, participant, exclude
+    ) -> List[List[Utterance]]:
+        if participant and exclude:
+            raise TypeError(
+                "participant and exclude cannot be specified at the same time: "
+                f"{participant}, {exclude}"
+            )
+
+        if participant is None:
+            participants: List[Set] = self.participants(by_files=True)
+        elif type(participant) == str:
+            participants: List[Set] = [{participant} for _ in range(len(self))]
+        elif hasattr(participant, "__iter__"):
+            participants: List[Set] = [set(participant) for _ in range(len(self))]
+        else:
+            raise ValueError(
+                "participant must be one of {None, a string, an iterable of strings}: "
+                f"{participant}"
+            )
+
+        if exclude is None:
+            pass
+        elif type(exclude) == str:
+            participants: List[Set] = [p - {exclude} for p in participants]
+        elif hasattr(exclude, "__iter__"):
+            participants: List[Set] = [p - set(exclude) for p in participants]
+        else:
+            raise ValueError(
+                "exclude must be one of {None, a string, an iterable of strings}: "
+                f"{exclude}"
+            )
+
+        return [
+            [u for u in us if u.participant in ps]
+            for us, ps in zip([f.utterances for f in self._files], participants)
+        ]
+
+    def headers(self):
         """TODO"""
         return [f.header for f in self._files]
 
@@ -221,6 +260,7 @@ class ReaderNew:
         return len(self)
 
     def participants(self, by_files=False) -> Union[Set[str], List[Set[str]]]:
+        # TODO docstring
         """for participant codes, e.g., CHI, MOT
 
         more detailed participant info is in the ``headers`` method.
@@ -279,84 +319,79 @@ class ReaderNew:
         return result_by_files
 
     def tagged_sents(
-        self, by_files=False
+        self, participant=None, exclude=None, by_files=False
     ) -> Union[List[List[Token]], List[List[List[Token]]]]:
         """TODO"""
-        # TODO: parameters "participant", "exclude"
+        utterances = self._filter_utterances_by_participants(participant, exclude)
+        result_by_files = [[u.tokens for u in us] for us in utterances]
+        if by_files:
+            return result_by_files
+        else:
+            return self._flatten(list, result_by_files)
+
+    def tagged_words(
+        self, participant=None, exclude=None, by_files=False
+    ) -> Union[List[Token], List[List[Token]]]:
+        """TODO"""
+        utterances = self._filter_utterances_by_participants(participant, exclude)
+        result_by_files = [[word for u in us for word in u.tokens] for us in utterances]
+        if by_files:
+            return result_by_files
+        else:
+            return self._flatten(list, result_by_files)
+
+    def sents(
+        self, participant=None, exclude=None, by_files=False
+    ) -> Union[List[List[str]], List[List[List[str]]]]:
+        """TODO"""
+        utterances = self._filter_utterances_by_participants(participant, exclude)
         result_by_files = [
-            [utterance.tokens for utterance in f.utterances] for f in self._files
+            [[t.word for t in u.tokens] for u in us] for us in utterances
         ]
         if by_files:
             return result_by_files
         else:
             return self._flatten(list, result_by_files)
 
-    def tagged_words(self, by_files=False) -> Union[List[Token], List[List[Token]]]:
+    def words(
+        self, participant=None, exclude=None, by_files=False
+    ) -> Union[List[str], List[List[str]]]:
         """TODO"""
-        # TODO: parameters "participant", "exclude"
-        result_by_files = [
-            [word for utterance in f.utterances for word in utterance.tokens]
-            for f in self._files
-        ]
+        utterances = self._filter_utterances_by_participants(participant, exclude)
+        result_by_files = [[t.word for u in us for t in u.tokens] for us in utterances]
         if by_files:
             return result_by_files
         else:
             return self._flatten(list, result_by_files)
 
-    def sents(self, by_files=False) -> Union[List[List[str]], List[List[List[str]]]]:
+    def mlum(self, participant="CHI") -> List[float]:
         """TODO"""
-        # TODO: parameters "participant", "exclude"
-        result_by_files = [
-            [[token.word for token in utterance.tokens] for utterance in f.utterances]
-            for f in self._files
-        ]
-        if by_files:
-            return result_by_files
-        else:
-            return self._flatten(list, result_by_files)
+        return get_mlum(self.tagged_sents(participant=participant, by_files=True))
 
-    def words(self, by_files=False) -> Union[List[str], List[List[str]]]:
+    def mlu(self, participant="CHI") -> List[float]:
         """TODO"""
-        # TODO: parameters "participant", "exclude"
-        result_by_files = [
-            [token.word for utterance in f.utterances for token in utterance.tokens]
-            for f in self._files
-        ]
-        if by_files:
-            return result_by_files
-        else:
-            return self._flatten(list, result_by_files)
+        return self.mlum(participant=participant)
 
-    def mlum(self) -> List[float]:
+    def mluw(self, participant="CHI") -> List[float]:
         """TODO"""
-        # TODO: participants filtered to CHI?
-        return get_mlum(self.tagged_sents(by_files=True))
+        return get_mluw(self.sents(participant=participant, by_files=True))
 
-    def mlu(self) -> List[float]:
+    def ttr(self, keep_case=False, participant="CHI") -> List[float]:
         """TODO"""
-        # TODO: participants filtered to CHI?
-        return self.mlum()
+        return get_ttr(
+            self.word_frequency(
+                keep_case=keep_case, participant=participant, by_files=True
+            )
+        )
 
-    def mluw(self) -> List[float]:
+    def ipsyn(self, participant="CHI") -> List[int]:
         """TODO"""
-        # TODO: participants filtered to CHI?
-        return get_mluw(self.sents(by_files=True))
-
-    def ttr(self, keep_case=False) -> List[float]:
-        """TODO"""
-        # TODO: participants filtered to CHI?
-        return get_ttr(self.word_frequency(keep_case=keep_case, by_files=True))
-
-    def ipsyn(self) -> List[int]:
-        """TODO"""
-        # TODO: participants filtered to CHI?
-        return get_ipsyn(self.tagged_sents(by_files=True))
+        return get_ipsyn(self.tagged_sents(participant=participant, by_files=True))
 
     def word_ngrams(
-        self, n, *, keep_case=False, by_files=False
+        self, n, keep_case=False, participant=None, exclude=None, by_files=False
     ) -> Union[collections.Counter, List[collections.Counter]]:
         """TODO"""
-        # TODO: parameters "participant", "exclude"
 
         err_msg = f"n must be a positive integer: {n}"
         if type(n) != int:
@@ -366,7 +401,9 @@ class ReaderNew:
 
         result_by_files = []
 
-        for sents_in_file in self.sents(by_files=True):
+        for sents_in_file in self.sents(
+            participant=participant, exclude=exclude, by_files=True
+        ):
             result_for_file = collections.Counter()
             for sent in sents_in_file:
                 if len(sent) < n:
@@ -383,11 +420,16 @@ class ReaderNew:
             return self._flatten(collections.Counter, result_by_files)
 
     def word_frequency(
-        self, *, keep_case=False, by_files=False
+        self, keep_case=False, participant=None, exclude=None, by_files=False
     ) -> Union[collections.Counter, List[collections.Counter]]:
         """TODO"""
-        # TODO: parameters "participant", "exclude"
-        return self.word_ngrams(1, keep_case=keep_case, by_files=by_files)
+        return self.word_ngrams(
+            1,
+            keep_case=keep_case,
+            participant=participant,
+            exclude=exclude,
+            by_files=by_files,
+        )
 
     @classmethod
     def from_strs(cls, strs: List[str], ids: List[str] = None):

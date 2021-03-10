@@ -3,6 +3,7 @@
 import collections
 import concurrent.futures as cf
 import dataclasses
+import datetime
 import fnmatch
 import io
 import os
@@ -16,6 +17,9 @@ from collections import Counter
 from itertools import chain
 from functools import wraps
 from typing import Collection, Dict, List, Set, Union
+
+from dateutil.parser import parse as parse_date
+from dateutil.parser import ParserError
 
 from pylangacq.measures import (
     get_MLUm,
@@ -201,7 +205,7 @@ class ReaderNew:
         elif item_type == set:
             return set().union(*nested)
         elif item_type == collections.Counter:
-            return sum(nested, start=collections.Counter())
+            return sum(nested, collections.Counter())
         else:
             raise ValueError(f"unrecognized item type: {item_type}")
 
@@ -258,24 +262,46 @@ class ReaderNew:
         However, when by_files is False, returning a flattened list wouldn't make sense,
         and therefore it's a set instead.
         """
-        result_by_files = []
-        for sr in self._single_readers:
-            languages_list = []
-            try:
-                languages_line = sr.header["Languages"]
-            except KeyError:
-                continue
-            else:
-                for language in languages_line.strip().split(","):
-                    language = language.strip()
-                    if language:
-                        languages_list.append(language)
-            result_by_files.append(languages_list)
-
+        result_by_files = [
+            sr.header.get("Languages", []) for sr in self._single_readers
+        ]
         if by_files:
             return result_by_files
         else:
             return set(self._flatten(list, result_by_files))
+
+    def dates_of_recording(
+        self, by_files=False
+    ) -> Union[Set[datetime.date], List[Set[datetime.date]]]:
+        """TODO"""
+        result_by_files = [sr.header["Date"] for sr in self._single_readers]
+        if by_files:
+            return result_by_files
+        else:
+            return self._flatten(set, result_by_files)
+
+    def ages(self, participant="CHI", months=False):
+        """TODO"""
+        result_by_files = []
+        for sr in self._single_readers:
+            try:
+                age = sr.header["Participants"][participant]["age"]
+
+                year_str, _, month_day = age.partition(";")
+                month_str, _, day_str = month_day.partition(".")
+
+                year_int = int(year_str) if year_str.isdigit() else 0
+                month_int = int(month_str) if month_str.isdigit() else 0
+                day_int = int(day_str) if day_str.isdigit() else 0
+
+                if months:
+                    result = year_int * 12 + month_int + day_int / 30
+                else:
+                    result = (year_int, month_int, day_int)
+            except (KeyError, IndexError, ValueError):
+                result = None
+            result_by_files.append(result)
+        return result_by_files
 
     def tagged_sents(
         self, by_files=False
@@ -327,24 +353,24 @@ class ReaderNew:
         else:
             return self._flatten(list, result_by_files)
 
-    def mlum(self) -> List[float]:  # TODO Test
+    def mlum(self) -> List[float]:
         """TODO"""
         # TODO: participants filtered to CHI?
-        return get_mlum(self.tagged_sents())
+        return get_mlum(self.tagged_sents(by_files=True))
 
-    def mlu(self) -> List[float]:  # TODO Test
+    def mlu(self) -> List[float]:
         """TODO"""
         # TODO: participants filtered to CHI?
         return self.mlum()
 
-    def mluw(self) -> List[float]:  # TODO Test
+    def mluw(self) -> List[float]:
         """TODO"""
         # TODO: participants filtered to CHI?
-        return get_mluw(self.sents())
+        return get_mluw(self.sents(by_files=True))
 
     def word_ngrams(
         self, n, *, keep_case=False, by_files=False
-    ) -> List[collections.Counter]:  # TODO Test
+    ) -> Union[collections.Counter, List[collections.Counter]]:
         """TODO"""
         # TODO: parameters "participant", "exclude"
 
@@ -356,7 +382,7 @@ class ReaderNew:
 
         result_by_files = []
 
-        for sents_in_file in self.sents():
+        for sents_in_file in self.sents(by_files=True):
             result_for_file = collections.Counter()
             for sent in sents_in_file:
                 if len(sent) < n:
@@ -374,16 +400,10 @@ class ReaderNew:
 
     def word_frequency(
         self, *, keep_case=False, by_files=False
-    ) -> List[collections.Counter]:  # TODO Test
+    ) -> Union[collections.Counter, List[collections.Counter]]:
         """TODO"""
         # TODO: parameters "participant", "exclude"
         return self.word_ngrams(1, keep_case=keep_case, by_files=by_files)
-
-    # TODO def dates_of_recording
-
-    # TODO def dates_of_birth, renamed from date_of_birth (note spelling)
-
-    # TODO def ages, renamed from age (note spelling)
 
     # TODO What to do with update, add, remove, and clear?
 
@@ -598,9 +618,8 @@ class ReaderNew:
 
         return list(result_without_collapses.values())
 
-    @staticmethod
-    def _get_header(lines: List[str]) -> Dict:
-        headname_to_entry = {}
+    def _get_header(self, lines: List[str]) -> Dict:
+        headname_to_entry = {"Date": set(), "Participants": {}}
 
         for line in lines:
 
@@ -617,7 +636,6 @@ class ReaderNew:
             head = head.rstrip(":")  # remove ending ":", if any
 
             if head == "Participants":
-                headname_to_entry["Participants"] = {}
 
                 participants = line.split(",")
 
@@ -630,9 +648,7 @@ class ReaderNew:
                         participant_role,
                     ) = participant_label.partition(" ")
                     # code = participant code, e.g. CHI, MOT
-                    headname_to_entry["Participants"][code] = {
-                        "participant_name": participant_name
-                    }
+                    headname_to_entry["Participants"][code] = {"name": participant_name}
 
             elif head == "ID":
                 participant_info = line.split("|")[:-1]
@@ -650,8 +666,8 @@ class ReaderNew:
                     "age",
                     "sex",
                     "group",
-                    "SES",
-                    "participant_role",
+                    "ses",
+                    "role",
                     "education",
                     "custom",
                 ]
@@ -660,14 +676,39 @@ class ReaderNew:
                 headname_to_entry["Participants"][code].update(head_to_info)
 
             elif head == "Date":
-                if "Date" not in headname_to_entry:
-                    headname_to_entry["Date"] = []
-                headname_to_entry["Date"].append(line)
+                try:
+                    date = self._header_line_to_date(line.strip())
+                except (TypeError, ValueError, ParserError):
+                    continue
+                headname_to_entry["Date"].add(date)
+
+            elif head.startswith("Birth of"):
+                # e.g., header is 'Birth of CHI', participant is 'CHI'
+                _, _, participant = head.split()
+                try:
+                    date = self._header_line_to_date(line.strip())
+                except (TypeError, ValueError, ParserError):
+                    continue
+                if participant not in headname_to_entry["Participants"]:
+                    headname_to_entry["Participants"][participant] = {}
+                headname_to_entry["Participants"][participant]["dob"] = date
+
+            elif head == "Languages":
+                languages = []  # not set; ordering indicates language dominance
+                for language in line.strip().split(","):
+                    language = language.strip()
+                    if language:
+                        languages.append(language)
+                headname_to_entry["Languages"] = languages
 
             else:
                 headname_to_entry[head] = line
 
         return headname_to_entry
+
+    @staticmethod
+    def _header_line_to_date(line: str) -> datetime.date:
+        return parse_date(line).date()
 
     @staticmethod
     def _get_lines(raw_str: str) -> List[str]:

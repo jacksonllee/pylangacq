@@ -23,7 +23,10 @@ def main():
         packages=setuptools.find_packages(),
         python_requires=">=3.6",
         setup_requires="setuptools>=39",
-        install_requires=["dataclasses==0.8 ; python_version < '3.6'"],
+        install_requires=[
+            "dataclasses ; python_version < '3.7'",
+            "python-dateutil>=2.0.0,<=3.0.0",
+        ],
         keywords=[
             "computational linguistics",
             "natural language processing",

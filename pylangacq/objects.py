@@ -1,5 +1,5 @@
 import dataclasses
-from typing import Dict, List
+from typing import Dict, List, Tuple, Union
 
 
 @dataclasses.dataclass
@@ -42,17 +42,18 @@ class Token:
     __slots__ = ("word", "pos", "mor", "gra")
 
     word: str
-    pos: str
-    mor: str
-    gra: Gra
+    pos: Union[str, None]
+    mor: Union[str, None]
+    gra: Union[Gra, None]
 
 
 @dataclasses.dataclass
 class Utterance:
     """TODO"""
 
-    __slots__ = ("participant", "tokens", "tiers")
+    __slots__ = ("participant", "tokens", "time_marks", "tiers")
 
     participant: str
     tokens: List[Token]
+    time_marks: Union[Tuple[int, int], None]
     tiers: Dict[str, str]

@@ -141,6 +141,8 @@ class ReaderNew:
 
     # TODO def concordance
 
+    # TODO time markers
+
     def clear(self):
         """TODO"""
         self._files = []

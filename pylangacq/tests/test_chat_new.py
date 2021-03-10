@@ -1,3 +1,4 @@
+import copy
 import datetime
 
 import pytest
@@ -12,10 +13,24 @@ _EVE = ReaderNew.from_files([LOCAL_EVE_PATH])
 def test_from_strs_same_as_from_files():
     with open(LOCAL_EVE_PATH, encoding="utf8") as f:
         from_strs = ReaderNew.from_strs([f.read()])
-    sr_from_strs = from_strs._single_readers[0]
-    sr_from_files = _EVE._single_readers[0]
+    sr_from_strs = from_strs._files[0]
+    sr_from_files = _EVE._files[0]
     assert sr_from_strs.utterances == sr_from_files.utterances
     assert sr_from_strs.header == sr_from_files.header
+
+
+def test_clear():
+    eve_copy = copy.deepcopy(_EVE)
+    eve_copy.clear()
+    assert len(eve_copy) == 0
+
+
+def test_add_remove():
+    eve_copy = copy.deepcopy(_EVE)
+    eve_copy.add(_EVE, ignore_repeats=False)
+    assert len(eve_copy) == 2
+    eve_copy.remove("eve")
+    assert len(eve_copy) == 0
 
 
 def test_n_utterances():
@@ -228,6 +243,10 @@ def test_words():
 
 def test_mlum():
     assert pytest.approx(_EVE.mlum(), abs=0.1) == [3.656464709556527]
+
+
+def test_mlu():
+    assert pytest.approx(_EVE.mlu(), abs=0.1) == [3.656464709556527]
 
 
 def test_mluw():

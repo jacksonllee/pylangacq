@@ -24,8 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
    - `mluw` -> `mluw`
    - `participant_codes` -> `participants` --
      Before this version, the methods `participant_codes` (for CHI, MOT, etc) and
-     `participants` (for, say, Eve, Mother, Investigator, etc) existed,
-     but in practice we mostly only need CHI, MOT, etc.
+     `participants` (for, say, Eve, Mother, Investigator, etc) co-existed,
+     but in practice we mostly only care about CHI, MOT, etc.
      So the method `participants` for Eve etc has been removed,
      and `participant_codes` has been renamed as `participants` instead.
 * Each participant's info in a header dictionary:
@@ -41,8 +41,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * The following methods of the `Reader` class have been removed:
    - `abspath`
    - `index_to_tiers`
-   - `participant_codes` (renamed as `participants`, another method now removed)
+   - `participant_codes` (renamed as `participants`, another method now removed; see "Changed" above)
    - `part_of_speech_tags`
+   - `update`
 
 ### Fixed
 * Handled `[/-]` in cleaning utterances.

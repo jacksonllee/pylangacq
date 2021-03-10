@@ -1,29 +1,29 @@
+import datetime
+
 import pytest
 
 from pylangacq.chat import Gra, ReaderNew, Utterance, Word
 from pylangacq.tests.test_data import LOCAL_EVE_PATH
 
 
-@pytest.fixture
-def eve():
-    return ReaderNew.from_files([LOCAL_EVE_PATH])
+_EVE = ReaderNew.from_files([LOCAL_EVE_PATH])
 
 
-def test_from_strs_same_as_from_files(eve):
+def test_from_strs_same_as_from_files():
     with open(LOCAL_EVE_PATH, encoding="utf8") as f:
         from_strs = ReaderNew.from_strs([f.read()])
     sr_from_strs = from_strs._single_readers[0]
-    sr_from_files = eve._single_readers[0]
+    sr_from_files = _EVE._single_readers[0]
     assert sr_from_strs.utterances == sr_from_files.utterances
     assert sr_from_strs.header == sr_from_files.header
 
 
-def test_n_utterances(eve):
-    assert eve.n_utterances() == 1601
+def test_n_utterances():
+    assert _EVE.n_utterances() == 1601
 
 
-def test_utterances(eve):
-    assert eve.utterances()[:2] == [
+def test_utterances():
+    assert _EVE.utterances()[:2] == [
         Utterance(
             participant="CHI",
             words=[
@@ -90,20 +90,96 @@ def test_utterances(eve):
     ]
 
 
-def test_n_files(eve):
-    assert eve.n_files() == 1
+def test_headers():
+    assert _EVE.headers() == [
+        {
+            "Date": {datetime.date(1962, 10, 15), datetime.date(1962, 10, 17)},
+            "Participants": {
+                "CHI": {
+                    "name": "Eve",
+                    "language": "eng",
+                    "corpus": "Brown",
+                    "age": "1;06.00",
+                    "sex": "female",
+                    "group": "",
+                    "ses": "",
+                    "role": "Target_Child",
+                    "education": "",
+                    "custom": "",
+                },
+                "MOT": {
+                    "name": "Sue",
+                    "language": "eng",
+                    "corpus": "Brown",
+                    "age": "",
+                    "sex": "female",
+                    "group": "",
+                    "ses": "",
+                    "role": "Mother",
+                    "education": "",
+                    "custom": "",
+                },
+                "COL": {
+                    "name": "Colin",
+                    "language": "eng",
+                    "corpus": "Brown",
+                    "age": "",
+                    "sex": "",
+                    "group": "",
+                    "ses": "",
+                    "role": "Investigator",
+                    "education": "",
+                    "custom": "",
+                },
+                "RIC": {
+                    "name": "Richard",
+                    "language": "eng",
+                    "corpus": "Brown",
+                    "age": "",
+                    "sex": "",
+                    "group": "",
+                    "ses": "",
+                    "role": "Investigator",
+                    "education": "",
+                    "custom": "",
+                },
+            },
+            "UTF8": "",
+            "PID": "11312/c-00034743-1",
+            "Languages": ["eng"],
+            "Time Duration": "11:30-12:00",
+            "Types": "long, toyplay, TD",
+            "Tape Location": "850",
+        }
+    ]
 
 
-def test_participants(eve):
-    assert eve.participants() == {"CHI", "MOT", "COL", "RIC"}
+def test_n_files():
+    assert _EVE.n_files() == 1
 
 
-def test_languages(eve):
-    assert eve.languages() == {"eng"}
+def test_participants():
+    assert _EVE.participants() == {"CHI", "MOT", "COL", "RIC"}
 
 
-def test_tagged_sents(eve):
-    assert eve.tagged_sents()[0] == [
+def test_languages():
+    assert _EVE.languages() == {"eng"}
+
+
+def test_dates_of_recording():
+    assert _EVE.dates_of_recording() == {
+        datetime.date(1962, 10, 15),
+        datetime.date(1962, 10, 17),
+    }
+
+
+def test_ages():
+    assert _EVE.ages() == [(1, 6, 0)]
+    assert _EVE.ages(months=True) == [18.0]
+
+
+def test_tagged_sents():
+    assert _EVE.tagged_sents()[0] == [
         Word(
             form="more", pos="qn", mor="more", gra=Gra(source=1, target=2, rel="QUANT")
         ),
@@ -117,8 +193,8 @@ def test_tagged_sents(eve):
     ]
 
 
-def test_tagged_words(eve):
-    assert eve.tagged_words()[:5] == [
+def test_tagged_words():
+    assert _EVE.tagged_words()[:5] == [
         Word(
             form="more", pos="qn", mor="more", gra=Gra(source=1, target=2, rel="QUANT")
         ),
@@ -139,12 +215,47 @@ def test_tagged_words(eve):
     ]
 
 
-def test_sents(eve):
-    assert eve.sents()[:2] == [
+def test_sents():
+    assert _EVE.sents()[:2] == [
         ["more", "cookie", "."],
         ["you", "0v", "more", "cookies", "?"],
     ]
 
 
-def test_words(eve):
-    assert eve.words()[:5] == ["more", "cookie", ".", "you", "0v"]
+def test_words():
+    assert _EVE.words()[:5] == ["more", "cookie", ".", "you", "0v"]
+
+
+def test_mlum():
+    assert pytest.approx(_EVE.mlum(), abs=0.1) == [3.656464709556527]
+
+
+def test_mluw():
+    assert pytest.approx(_EVE.mluw(), abs=0.1) == [2.5771392879450343]
+
+
+def test_word_ngrams():
+    assert _EVE.word_ngrams(1).most_common(5) == [
+        ((".",), 1134),
+        (("?",), 455),
+        (("clitic",), 291),
+        (("you",), 197),
+        (("that",), 151),
+    ]
+    assert _EVE.word_ngrams(2).most_common(5) == [
+        (("that", "?"), 101),
+        (("that's", "clitic"), 80),
+        (("it", "."), 65),
+        (("what", "?"), 54),
+        (("yes", "‡"), 45),
+    ]
+
+
+def test_word_frequency():
+    assert _EVE.word_frequency().most_common(5) == [
+        ((".",), 1134),
+        (("?",), 455),
+        (("clitic",), 291),
+        (("you",), 197),
+        (("that",), 151),
+    ]

@@ -9,9 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 * The test suite now covers code snippets in both the docstrings and `.rst` doc files.
+* Each participant's info in a header dictionary:
+   - Added the key `dob` for date of birth, value is a datetime.date object
 
 ### Changed
+* `by_files` as True gives you a list of results for each file, no longer a dict.
 * The following methods of the `Reader` class have been renamed as indicated:
+   - `age` -> `ages`
    - `number_of_utterances` -> `n_utterances`
    - `number_of_files` -> `n_files`
    - `filenames` -> `file_paths`
@@ -24,6 +28,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
      but in practice we mostly only need CHI, MOT, etc.
      So the method `participants` for Eve etc has been removed,
      and `participant_codes` has been renamed as `participants` instead.
+* Each participant's info in a header dictionary:
+   - `participant_name` -> `name`
+   - `participant_role` -> `role`
+   - `SES` -> `ses`
 * The `keep_case` keyword argument of the `word_ngrams` and `word_frequency` methods
   of the `Reader` class now has `False` as the default value (it used to be `True`).
 * Switched to CircleCI orbs; update dev requirements' versions.

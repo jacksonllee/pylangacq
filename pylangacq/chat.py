@@ -2692,7 +2692,7 @@ def read_chat_new(path: str, match: str = None, encoding: str = _ENCODING) -> Re
     path_lower = path.lower()
     if path_lower.endswith(".zip"):
         return ReaderNew.from_zip(path, match=match, encoding=encoding)
-    elif path_lower.endswith(".cha"):
+    elif path_lower.endswith(_CHAT_EXTENSION):
         return ReaderNew.from_files([path], match=match, encoding=encoding)
     elif os.path.isdir(path):
         return ReaderNew.from_dir(path, match=match, encoding=encoding)

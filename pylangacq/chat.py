@@ -33,7 +33,6 @@ from pylangacq.measures import (
 )
 from pylangacq.objects import Gra, Token, Utterance
 from pylangacq.util import (
-    ENCODING,
     CLITIC,
     get_participant_code,
     convert_date_to_tuple,
@@ -42,6 +41,10 @@ from pylangacq.util import (
     get_lemma_from_mor,
     get_time_marker,
 )
+
+_ENCODING = "utf8"
+
+_CHAT_EXTENSION = ".cha"
 
 _TIMER_MARKS_REGEX = re.compile(r"\x15-?(\d+)_(\d+)-?\x15")
 
@@ -456,7 +459,7 @@ class ReaderNew:
         return path
 
     @classmethod
-    def from_files(cls, paths: List[str], match: str = None, encoding: str = ENCODING):
+    def from_files(cls, paths: List[str], match: str = None, encoding: str = _ENCODING):
         """TODO"""
 
         # Inner function with file closing and closure to wrap in the given encoding
@@ -483,8 +486,8 @@ class ReaderNew:
         cls,
         path: str,
         match: str = None,
-        extension: str = ".cha",
-        encoding: str = ENCODING,
+        extension: str = _CHAT_EXTENSION,
+        encoding: str = _ENCODING,
     ):
         """TODO"""
         file_paths = []
@@ -505,7 +508,7 @@ class ReaderNew:
         return cls.from_files(file_paths, match=match, encoding=encoding)
 
     @classmethod
-    def from_zip(cls, path: str, match: str = None, encoding: str = ENCODING):
+    def from_zip(cls, path: str, match: str = None, encoding: str = _ENCODING):
         """TODO"""
         with contextlib.ExitStack() as stack:
             temp_dir = stack.enter_context(
@@ -824,7 +827,7 @@ class Reader:
         self._reset_reader(*self._input_filenames)
 
     @classmethod
-    def from_chat_str(cls, chat_str, encoding=ENCODING):
+    def from_chat_str(cls, chat_str, encoding=_ENCODING):
         """Create a ``Reader`` object with CHAT data as a string.
 
         Parameters
@@ -1622,7 +1625,7 @@ class Reader:
 class _SingleReader(object):
     """A class for reading a single CHAT file."""
 
-    def __init__(self, filename=None, str_=None, encoding=ENCODING):
+    def __init__(self, filename=None, str_=None, encoding=_ENCODING):
 
         self.encoding = encoding
 
@@ -2684,7 +2687,7 @@ class _SingleReader(object):
             return result_list
 
 
-def read_chat_new(path: str, match: str = None, encoding: str = ENCODING) -> ReaderNew:
+def read_chat_new(path: str, match: str = None, encoding: str = _ENCODING) -> ReaderNew:
     """TODO"""
     path_lower = path.lower()
     if path_lower.endswith(".zip"):

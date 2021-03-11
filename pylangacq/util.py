@@ -2,7 +2,6 @@ import re
 
 
 CLITIC = "CLITIC"
-ENCODING = "utf8"
 TIMER_MARKER_REG = re.compile(r"\x15-?(\d+)_(\d+)-?\x15")
 
 

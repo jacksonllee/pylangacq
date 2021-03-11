@@ -51,6 +51,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
    - `participant_codes` (renamed as `participants`, another method now removed; see "Changed" above)
    - `part_of_speech_tags`
    - `update`
+   - `search`
+   - `concordance`
 
 ### Fixed
 * Handled `[/-]` in cleaning utterances.

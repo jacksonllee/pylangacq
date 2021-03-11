@@ -139,12 +139,6 @@ class ReaderNew:
         with cf.ProcessPoolExecutor() as executor:
             self._files = list(executor.map(self._parse_chat_str, strs, file_paths))
 
-    # TODO def search
-
-    # TODO def concordance
-
-    # TODO time markers
-
     def clear(self):
         """TODO"""
         self._files = []
@@ -565,14 +559,17 @@ class ReaderNew:
             # TODO If %mor and %gra tiers are null, set them as [None, ..] not ["", ..]?
             # determine what to yield (and how) to create the generator
             if not mor_items:
-                mor_items = [""] * len(utterance_items)
+                mor_items = [None] * len(utterance_items)
             if not gra_items:
-                gra_items = [""] * len(utterance_items)
+                gra_items = [None] * len(utterance_items)
 
             sent: List[Token] = []
 
             for word, mor, gra in zip(utterance_items, mor_items, gra_items):
-                pos, _, mor = mor.partition("|")
+                try:
+                    pos, _, mor = mor.partition("|")
+                except AttributeError:
+                    pos, mor = None, None
 
                 output_word = Token(clean_word(word), pos, mor, self._get_gra(gra))
                 sent.append(output_word)
@@ -593,7 +590,9 @@ class ReaderNew:
             return None
 
     @staticmethod
-    def _get_gra(raw_gra: str) -> Union[Gra, None]:
+    def _get_gra(raw_gra: Union[str, None]) -> Union[Gra, None]:
+        if raw_gra is None:
+            return None
         try:
             source, target, rel = raw_gra.strip().split("|", 2)
             source = int(source)

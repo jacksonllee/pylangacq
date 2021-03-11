@@ -525,7 +525,7 @@ class ReaderNew:
                         dirs.append(os.path.join(dirpath, dirname))
                 for dir_ in dirs:
                     file_paths.append(os.path.join(dir_, filename))
-        return cls.from_files(file_paths, match=match, encoding=encoding)
+        return cls.from_files(sorted(file_paths), match=match, encoding=encoding)
 
     @classmethod
     def from_zip(

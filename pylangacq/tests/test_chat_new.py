@@ -20,8 +20,18 @@ def test_from_strs_same_as_from_files():
 
 
 def test_from_zip_remote_url():
+    sarah_path = "Brown/Sarah/020305.cha"
+    eve_path = "Brown/Eve/010600a.cha"
+
     r = ReaderNew.from_zip(REMOTE_BROWN_URL)
     assert len(r) == 214
+    assert sarah_path in r.file_paths()
+    assert eve_path in r.file_paths()
+
+    r = ReaderNew.from_zip(REMOTE_BROWN_URL, "Eve")
+    assert len(r) == 20
+    assert sarah_path not in r.file_paths()
+    assert eve_path in r.file_paths()
 
 
 def test_clear():
@@ -177,7 +187,7 @@ def test_headers():
 
 
 def test_n_files():
-    assert _EVE.n_files() == 1
+    assert _EVE.n_files() == len(_EVE) == 1
 
 
 def test_participants():

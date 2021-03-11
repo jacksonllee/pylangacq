@@ -4,7 +4,7 @@ import datetime
 import pytest
 
 from pylangacq.chat import Gra, ReaderNew, Utterance, Token
-from pylangacq.tests.test_data import LOCAL_EVE_PATH
+from pylangacq.tests.test_data import LOCAL_EVE_PATH, REMOTE_BROWN_URL
 
 
 _EVE = ReaderNew.from_files([LOCAL_EVE_PATH])
@@ -17,6 +17,11 @@ def test_from_strs_same_as_from_files():
     sr_from_files = _EVE._files[0]
     assert sr_from_strs.utterances == sr_from_files.utterances
     assert sr_from_strs.header == sr_from_files.header
+
+
+def test_from_zip_remote_url():
+    r = ReaderNew.from_zip(REMOTE_BROWN_URL)
+    assert len(r) == 214
 
 
 def test_clear():

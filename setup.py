@@ -26,6 +26,7 @@ def main():
         install_requires=[
             "dataclasses ; python_version < '3.7'",
             "python-dateutil>=2.0.0,<=3.0.0",
+            "requests>=2.18.0,<=3.0.0",
         ],
         keywords=[
             "computational linguistics",

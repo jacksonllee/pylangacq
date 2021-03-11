@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `from_zip`
   - `from_strs`
   - `from_files`
+  - `from_dir`
 * Each participant's info in a header dictionary:
    - Added the key `"dob"` for date of birth (if the info is available in the CHAT header).
      The corresponding value is a `datetime.date` object

@@ -3,7 +3,8 @@ import tempfile
 import zipfile
 
 import pytest
-import requests
+
+from pylangacq.chat import _download_zip
 
 
 REMOTE_BROWN_URL = "https://childes.talkbank.org/data/Eng-NA/Brown.zip"
@@ -11,21 +12,16 @@ REMOTE_BROWN_URL = "https://childes.talkbank.org/data/Eng-NA/Brown.zip"
 TEMP_DATA_DIR = tempfile.mkdtemp()
 _BROWN_ZIP_PATH = os.path.join(TEMP_DATA_DIR, "brown.zip")
 
-_THIS_DIR = os.path.dirname(__file__)
-LOCAL_EVE_PATH = os.path.join(_THIS_DIR, "eve.cha")
+LOCAL_EVE_PATH = os.path.join(os.path.dirname(__file__), "eve.cha")
 REMOTE_EVE_DIR = os.path.join(TEMP_DATA_DIR, "Brown", "Eve")
-REMOTE_EVE_FILE_PATH_1 = os.path.join(REMOTE_EVE_DIR, "010600a.cha")
-REMOTE_EVE_FILE_PATH_2 = os.path.join(REMOTE_EVE_DIR, "010600b.cha")
-REMOTE_EVE_FILE_PATH_ALL_FILES = os.path.join(REMOTE_EVE_DIR, "*.cha")
+REMOTE_EVE_FILE_PATH = os.path.join(REMOTE_EVE_DIR, "010600a.cha")
 
 
 def download_and_extract_brown():
     if os.path.exists(_BROWN_ZIP_PATH):
         return
     try:
-        with open(_BROWN_ZIP_PATH, "wb") as f:
-            with requests.get(REMOTE_BROWN_URL, timeout=10) as r:
-                f.write(r.content)
+        _download_zip(REMOTE_BROWN_URL, _BROWN_ZIP_PATH)
     except Exception as e:
         msg = (
             f"Error '{e}' in downloading {REMOTE_BROWN_URL}: network problems or "

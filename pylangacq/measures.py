@@ -1,8 +1,9 @@
 from typing import List
 
-from pylangacq.util import CLITIC, get_lemma_from_mor
 from pylangacq.dependency import DependencyGraph
 
+
+_CLITIC = "CLITIC"
 
 _POS_TO_IGNORE = frozenset({"", "!", "+...", "0", "?", "BEG"})
 _WORDS_TO_IGNORE = frozenset(
@@ -16,12 +17,28 @@ _WORDS_TO_IGNORE = frozenset(
         "‡",
         "„",
         "0",
-        CLITIC,
+        _CLITIC,
     }
 )
 
 
-def get_mlum(tagged_sents) -> List[float]:
+def _get_lemma_from_mor(mor):
+    """Extract lemma from ``mor``.
+
+    Parameters
+    ----------
+    mor : tuple(str, str, str)
+
+    Returns
+    -------
+    str
+    """
+    lemma, _, _ = mor.partition("-")
+    lemma, _, _ = lemma.partition("&")
+    return lemma
+
+
+def _get_mlum(tagged_sents) -> List[float]:
     """TODO"""
     result = []
 
@@ -53,7 +70,7 @@ def get_mlum(tagged_sents) -> List[float]:
     return result
 
 
-def get_mluw(sents) -> List[float]:
+def _get_mluw(sents) -> List[float]:
     """TODO"""
     result = []
 
@@ -78,54 +95,7 @@ def get_mluw(sents) -> List[float]:
     return result
 
 
-def get_MLUm(tagged_sents, pos_to_ignore=None):
-    """Mean length of utterance (MLU) in morphemes"""
-    # *tagged_sents* already filtered for the desired participant like 'CHI'
-    total_utterance_count = 0
-    total_morpheme_count = 0
-
-    for tagged_sent in tagged_sents:
-        total_utterance_count += 1
-
-        for tagged_word in tagged_sent:
-            pos = tagged_word[1]
-            morph = tagged_word[2]
-
-            if pos_to_ignore and pos in pos_to_ignore:
-                continue
-
-            total_morpheme_count += 1
-            total_morpheme_count += morph.count("-")
-            total_morpheme_count += morph.count("~")
-
-    if total_utterance_count:
-        return total_morpheme_count / total_utterance_count
-    else:
-        return 0
-
-
-# noinspection PyPep8Naming
-def get_MLUw(sents, words_to_ignore=None):
-    """Mean length of utterance (MLU) in words"""
-    # *sents* are already filtered for the desired participant like 'CHI'
-    total_utterance_count = 0
-    total_word_count = 0
-
-    for sent in sents:
-        total_utterance_count += 1
-
-        for word in sent:
-            if words_to_ignore and word in words_to_ignore:
-                continue
-            total_word_count += 1
-
-    if total_utterance_count:
-        return total_word_count / total_utterance_count
-    else:
-        return 0
-
-
-def get_ttr(word_freq_dicts) -> List[float]:
+def _get_ttr(word_freq_dicts) -> List[float]:
     result_by_files = []
     for word_freq in word_freq_dicts:
         filtered = {w: f for w, f in word_freq.items() if w not in _WORDS_TO_IGNORE}
@@ -136,28 +106,14 @@ def get_ttr(word_freq_dicts) -> List[float]:
     return result_by_files
 
 
-# noinspection PyPep8Naming
-def get_TTR(word_freq_dict, words_to_ignore=None):
-    """Type-token ratio (TTR)"""
-    # *word_freq_dict* already filtered for the desired participant like 'CHI'
-    if words_to_ignore:
-        word_freq_dict = {
-            word: freq
-            for word, freq in word_freq_dict.items()
-            if word not in words_to_ignore
-        }
-    return len(word_freq_dict) / sum(word_freq_dict.values())
-
-
-def get_ipsyn(tagged_sents) -> List[int]:
+def _get_ipsyn(tagged_sents) -> List[int]:
     result_by_files = []
     for tagged_sents_for_file in tagged_sents:
-        result_by_files.append(get_ipsyn_for_file(tagged_sents_for_file))
+        result_by_files.append(_get_ipsyn_for_file(tagged_sents_for_file))
     return result_by_files
 
 
-# noinspection PyPep8Naming
-def get_ipsyn_for_file(tagged_sents) -> int:
+def _get_ipsyn_for_file(tagged_sents) -> int:
     """Index of Productive Syntax (IPSyn)"""
     if len(tagged_sents) > 100:
         tagged_sents = tagged_sents[:100]
@@ -673,7 +629,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
         for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
             mor = graph.node[i]["mor"]
-            lemma = get_lemma_from_mor(mor)
+            lemma = _get_lemma_from_mor(mor)
 
             if (pos == "AUX" and not mor.startswith("wi")) or (
                 lemma == "do" and pos == "MOD"
@@ -728,7 +684,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
             word = graph.node[i]["word"]
             pos2 = graph.node[i + 1]["pos"]
 
-            if pos.startswith("MOD") and pos2 == "V" and word != CLITIC:
+            if pos.startswith("MOD") and pos2 == "V" and word != _CLITIC:
                 scoring_board["V9"] += 1
                 add_one_point_if_needed("V5")
 
@@ -1424,7 +1380,7 @@ def get_ipsyn_for_file(tagged_sents) -> int:
 
             if (
                 graph.edge[dep][head]["rel"] == "SUBJ"
-                and graph.node[dep]["word"] != CLITIC
+                and graph.node[dep]["word"] != _CLITIC
             ):
                 subject_count += 1
                 subject_count_increment = True

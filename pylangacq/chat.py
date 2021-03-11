@@ -9,6 +9,7 @@ import io
 import os
 import re
 import sys
+import shutil
 import tempfile
 import uuid
 import zipfile
@@ -18,6 +19,9 @@ from itertools import chain
 from functools import wraps
 from typing import Collection, Dict, List, Set, Tuple, Union
 
+import requests
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 from dateutil.parser import parse as parse_date
 from dateutil.parser import ParserError
 
@@ -118,6 +122,22 @@ def params_in_docstring(*params):
         return wrapper
 
     return real_decorator
+
+
+class _HTTPSession(requests.Session):
+    def __init__(
+        self, max_retries: int = 10, backoff_factor: float = 0.1, timeout: int = 60
+    ):
+        super().__init__()
+        retry = Retry(total=max_retries, backoff_factor=backoff_factor)
+        adapter = HTTPAdapter(max_retries=retry)
+        self.mount("http://", adapter)
+        self.mount("https://", adapter)
+        self.timeout = timeout
+
+    def request(self, *args, **kwargs):
+        kwargs.setdefault("timeout", self.timeout)
+        return super(_HTTPSession, self).request(*args, **kwargs)
 
 
 _File = collections.namedtuple("_File", "file_path header utterances")
@@ -508,15 +528,37 @@ class ReaderNew:
         return cls.from_files(file_paths, match=match, encoding=encoding)
 
     @classmethod
-    def from_zip(cls, path: str, match: str = None, encoding: str = _ENCODING):
+    def from_zip(
+        cls,
+        path: str,
+        match: str = None,
+        extension: str = _CHAT_EXTENSION,
+        encoding: str = _ENCODING,
+    ):
         """TODO"""
         with contextlib.ExitStack() as stack:
             temp_dir = stack.enter_context(
                 tempfile.TemporaryDirectory(_SUBDIR_SUFFIX, _SUBDIR_PREFIX)
             )
-            zfile = stack.enter_context(zipfile.ZipFile(path))
+
+            if path.startswith("https://") or path.startswith("http://"):
+                zip_path = os.path.join(temp_dir, os.path.basename(path))
+                with contextlib.ExitStack() as stack:
+                    f = stack.enter_context(open(zip_path, "wb"))
+                    r = stack.enter_context(_HTTPSession().get(path, stream=True))
+                    shutil.copyfileobj(r.raw, f)
+            else:
+                zip_path = path
+
+            zfile = stack.enter_context(zipfile.ZipFile(zip_path))
             zfile.extractall(temp_dir)
-            return cls.from_dir(temp_dir, match=match, encoding=encoding)
+
+            if path.startswith("https://") or path.startswith("http://"):
+                os.remove(zip_path)
+
+            return cls.from_dir(
+                temp_dir, match=match, extension=extension, encoding=encoding
+            )
 
     def _parse_chat_str(self, chat_str, file_path) -> _File:
         lines = self._get_lines(chat_str)

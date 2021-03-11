@@ -6,7 +6,7 @@ import pytest
 import requests
 
 
-_REMOTE_BROWN_URL = "https://childes.talkbank.org/data/Eng-NA/Brown.zip"
+REMOTE_BROWN_URL = "https://childes.talkbank.org/data/Eng-NA/Brown.zip"
 
 TEMP_DATA_DIR = tempfile.mkdtemp()
 _BROWN_ZIP_PATH = os.path.join(TEMP_DATA_DIR, "brown.zip")
@@ -24,11 +24,11 @@ def download_and_extract_brown():
         return
     try:
         with open(_BROWN_ZIP_PATH, "wb") as f:
-            with requests.get(_REMOTE_BROWN_URL, timeout=10) as r:
+            with requests.get(REMOTE_BROWN_URL, timeout=10) as r:
                 f.write(r.content)
     except Exception as e:
         msg = (
-            f"Error '{e}' in downloading {_REMOTE_BROWN_URL}: network problems or "
+            f"Error '{e}' in downloading {REMOTE_BROWN_URL}: network problems or "
             f"invalid URL for Brown zip? If URL needs updating, tutorial.rst in docs "
             "has to be updated as well."
         )

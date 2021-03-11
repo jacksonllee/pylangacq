@@ -2,6 +2,7 @@
 
 import collections
 import concurrent.futures as cf
+import contextlib
 import datetime
 import fnmatch
 import io
@@ -44,7 +45,15 @@ from pylangacq.util import (
 
 _TIMER_MARKS_REGEX = re.compile(r"\x15-?(\d+)_(\d+)-?\x15")
 
-_TEMP_DIR = tempfile.mkdtemp()
+_TEMPDIR = tempfile.gettempdir()
+
+# These prefix and suffix are part of the subdirectory (under _TEMPDIR)
+# in which to locate temporary files (from a zip or for a downloaded file).
+# The subdirectory part (together with _TEMPDIR) is removed (via regex matching)
+# from the Reader object's file paths.
+_SUBDIR_PREFIX = "prefix_pla"
+_SUBDIR_SUFFIX = "suffix_pla"
+_SUBDIR_REGEX = re.compile(r"prefix_pla[a-z0-9_]+suffix_pla")
 
 
 def read_chat(*filenames, encoding="utf8"):
@@ -441,8 +450,15 @@ class ReaderNew:
             )
         return cls(strs, ids)
 
+    @staticmethod
+    def _remove_tempdir(path: str) -> str:
+        path = path.replace(_TEMPDIR, "")
+        path = _SUBDIR_REGEX.sub("", path)
+        path = path.lstrip(os.sep)
+        return path
+
     @classmethod
-    def from_files(cls, paths: List[str], encoding: str = ENCODING):
+    def from_files(cls, paths: List[str], match: str = None, encoding: str = ENCODING):
         """TODO"""
 
         # Inner function with file closing and closure to wrap in the given encoding
@@ -455,33 +471,45 @@ class ReaderNew:
             strs = list(executor.map(_open_file, paths))
 
         # Unzipped files from `.from_zip` have the unwieldy temp dir in the file path.
-        paths = [path.replace(_TEMP_DIR, "") for path in paths]
+        paths = [cls._remove_tempdir(path) for path in paths]
+
+        if match:
+            regex = re.compile(match)
+            strs, paths = zip(*[(s, p) for s, p in zip(strs, paths) if regex.search(p)])
+            strs, paths = list(strs), list(paths)
 
         return cls(strs, paths)
 
     @classmethod
-    def from_zip(cls, path: str, encoding: str = ENCODING):
+    def from_dir(cls, path: str, match: str = None, encoding: str = ENCODING):
         """TODO"""
-        with tempfile.TemporaryDirectory() as temp_dir, zipfile.ZipFile(path) as zfile:
-            zfile.extractall(temp_dir)
-
-            file_paths = []
-            for dirpath, dirnames, filenames in os.walk(temp_dir):
-                if not filenames:
+        file_paths = []
+        for dirpath, dirnames, filenames in os.walk(path):
+            if not filenames:
+                continue
+            for filename in filenames:
+                if not filename.lower().endswith(".cha"):
                     continue
-                for filename in filenames:
-                    if not filename.lower().endswith(".cha"):
-                        continue
-                    dirs = []
-                    if not dirnames:
-                        dirs.append(dirpath)
-                    else:
-                        for dirname in dirnames:
-                            dirs.append(os.path.join(dirpath, dirname))
-                    for dir_ in dirs:
-                        file_paths.append(os.path.join(dir_, filename))
+                dirs = []
+                if not dirnames:
+                    dirs.append(dirpath)
+                else:
+                    for dirname in dirnames:
+                        dirs.append(os.path.join(dirpath, dirname))
+                for dir_ in dirs:
+                    file_paths.append(os.path.join(dir_, filename))
+        return cls.from_files(file_paths, match=match, encoding=encoding)
 
-            return cls.from_files(file_paths, encoding=encoding)
+    @classmethod
+    def from_zip(cls, path: str, match: str = None, encoding: str = ENCODING):
+        """TODO"""
+        with contextlib.ExitStack() as stack:
+            temp_dir = stack.enter_context(
+                tempfile.TemporaryDirectory(_SUBDIR_SUFFIX, _SUBDIR_PREFIX)
+            )
+            zfile = stack.enter_context(zipfile.ZipFile(path))
+            zfile.extractall(temp_dir)
+            return cls.from_dir(temp_dir, match=match, encoding=encoding)
 
     def _parse_chat_str(self, chat_str, file_path) -> _File:
         lines = self._get_lines(chat_str)
@@ -807,7 +835,7 @@ class Reader:
         -------
         Reader
         """
-        file_path = os.path.join(_TEMP_DIR, str(uuid.uuid4()))
+        file_path = os.path.join(tempfile.mkdtemp(), str(uuid.uuid4()))
         with open(file_path, mode="w", encoding=encoding) as f:
             f.write(chat_str)
         return cls(file_path, encoding=encoding)
@@ -2650,3 +2678,19 @@ class _SingleReader(object):
                 result_list.append(sent_str)
 
             return result_list
+
+
+def read_chat_new(path: str, match: str = None, encoding: str = ENCODING) -> ReaderNew:
+    """TODO"""
+    path_lower = path.lower()
+    if path_lower.endswith(".zip"):
+        return ReaderNew.from_zip(path, match=match, encoding=encoding)
+    elif path_lower.endswith(".cha"):
+        return ReaderNew.from_files([path], match=match, encoding=encoding)
+    elif os.path.isdir(path):
+        return ReaderNew.from_dir(path, match=match, encoding=encoding)
+    else:
+        raise ValueError(
+            "path is not one of the accepted choices of "
+            f"{{zip file, `.cha` file, local directory}}: {path}"
+        )

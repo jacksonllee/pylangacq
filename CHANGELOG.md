@@ -30,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
    - `MLUw` -> `mluw`
    - `TTR` -> `ttr`
    - `IPSyn` -> `ipsyn`
-   - `participant_codes` -> `participants` --
+   - `participant_codes` -> `participants`.
      Before this version, the methods `participant_codes` (for CHI, MOT, etc) and
      `participants` (for, say, Eve, Mother, Investigator, etc) co-existed,
      but in practice we mostly only care about CHI, MOT, etc.

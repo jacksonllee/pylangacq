@@ -1,17 +1,18 @@
 from pylangacq.dependency import DependencyGraph
+from pylangacq.objects import Gra, Token
 
 
 _CHAT_GRAPH_DATA = [
-    ("but", "CONJ", "but", (1, 3, "LINK")),
-    ("I", "PRO:SUB", "I", (2, 3, "SUBJ")),
-    ("thought", "V", "think&PAST", (3, 0, "ROOT")),
-    ("you", "PRO", "you", (4, 3, "OBJ")),
-    ("wanted", "V", "want-PAST", (5, 3, "JCT")),
-    ("me", "PRO:OBJ", "me", (6, 5, "POBJ")),
-    ("to", "INF", "to", (7, 8, "INF")),
-    ("turn", "V", "turn", (8, 3, "XCOMP")),
-    ("it", "PRO", "it", (9, 8, "OBJ")),
-    (".", ".", "", (10, 3, "PUNCT")),
+    Token("but", "CONJ", "but", Gra(1, 3, "LINK")),
+    Token("I", "PRO:SUB", "I", Gra(2, 3, "SUBJ")),
+    Token("thought", "V", "think&PAST", Gra(3, 0, "ROOT")),
+    Token("you", "PRO", "you", Gra(4, 3, "OBJ")),
+    Token("wanted", "V", "want-PAST", Gra(5, 3, "JCT")),
+    Token("me", "PRO:OBJ", "me", Gra(6, 5, "POBJ")),
+    Token("to", "INF", "to", Gra(7, 8, "INF")),
+    Token("turn", "V", "turn", Gra(8, 3, "XCOMP")),
+    Token("it", "PRO", "it", Gra(9, 8, "OBJ")),
+    Token(".", ".", "", Gra(10, 3, "PUNCT")),
 ]
 
 

@@ -49,7 +49,13 @@ class Token:
 
 @dataclasses.dataclass
 class Utterance:
-    """TODO"""
+    """
+
+    Time marker provides the start and end times (in milliseconds)
+    for a segment in a digitized video or audio file. For example:
+        ·0_1073·
+    '·' is ASCII CODE 21 (0x15), for NAK (Negative Acknowledgement)
+    """
 
     __slots__ = ("participant", "tokens", "time_marks", "tiers")
 

@@ -45,8 +45,6 @@ from pylangacq.util import (
 
 _TIMER_MARKS_REGEX = re.compile(r"\x15-?(\d+)_(\d+)-?\x15")
 
-_TEMPDIR = tempfile.gettempdir()
-
 # These prefix and suffix are part of the subdirectory (under _TEMPDIR)
 # in which to locate temporary files (from a zip or for a downloaded file).
 # The subdirectory part (together with _TEMPDIR) is removed (via regex matching)
@@ -452,7 +450,7 @@ class ReaderNew:
 
     @staticmethod
     def _remove_tempdir(path: str) -> str:
-        path = path.replace(_TEMPDIR, "")
+        path = path.replace(tempfile.gettempdir(), "")
         path = _SUBDIR_REGEX.sub("", path)
         path = path.lstrip(os.sep)
         return path
@@ -467,28 +465,34 @@ class ReaderNew:
                 return f.read()
 
         paths = list(paths)
+
+        if match:
+            regex = re.compile(match)
+            paths = [p for p in paths if regex.search(p)]
+
         with cf.ThreadPoolExecutor() as executor:
             strs = list(executor.map(_open_file, paths))
 
         # Unzipped files from `.from_zip` have the unwieldy temp dir in the file path.
         paths = [cls._remove_tempdir(path) for path in paths]
 
-        if match:
-            regex = re.compile(match)
-            strs, paths = zip(*[(s, p) for s, p in zip(strs, paths) if regex.search(p)])
-            strs, paths = list(strs), list(paths)
-
-        return cls(strs, paths)
+        return cls.from_strs(strs, paths)
 
     @classmethod
-    def from_dir(cls, path: str, match: str = None, encoding: str = ENCODING):
+    def from_dir(
+        cls,
+        path: str,
+        match: str = None,
+        extension: str = ".cha",
+        encoding: str = ENCODING,
+    ):
         """TODO"""
         file_paths = []
         for dirpath, dirnames, filenames in os.walk(path):
             if not filenames:
                 continue
             for filename in filenames:
-                if not filename.lower().endswith(".cha"):
+                if not filename.endswith(extension):
                     continue
                 dirs = []
                 if not dirnames:

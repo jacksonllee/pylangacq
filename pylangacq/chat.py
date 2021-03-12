@@ -102,8 +102,15 @@ def _params_in_docstring(*params):
     if "extension" in params:
         docstring += """
         extension : str, optional
-            File extension for CHAT data files. The default value is ``".cha"``.
-        """
+            File extension for CHAT data files. The default value is ``".cha"``."""
+
+    if "cls" in params:
+        docstring += """
+        cls : object, optional
+            Either a Reader class (the default), or a subclass from it that expects
+            the same arguments for the methods ``from_zip``, ``from_dir``, and
+            ``from_files``. Pass in your own Reader subclass for new or modified
+            behavior."""
 
     def real_decorator(func):
         returns_header = "\n\n        Returns\n        -------"
@@ -905,13 +912,23 @@ class Reader:
                     mor,
                     self._get_gra(gra),
                 )
-                sent.append(output_word)
+                sent.append(self._preprocess_token(output_word))
 
             time_marks = self._get_time_marks(tiermarker_to_line[participant_code])
             u = Utterance(participant_code, sent, time_marks, tiermarker_to_line)
-            result_list.append(u)
+            result_list.append(self._preprocess_utterance(u))
 
         return result_list
+
+    @staticmethod
+    def _preprocess_token(t: Token):
+        """Override this method in a child class for custom behavior."""
+        return t
+
+    @staticmethod
+    def _preprocess_utterance(u: Utterance):
+        """Override this method in a child class for custom behavior."""
+        return u
 
     @staticmethod
     def _preprocess_pos(pos: str) -> str:
@@ -1105,8 +1122,10 @@ class Reader:
         return lines
 
 
-@_params_in_docstring("match", "encoding")
-def read_chat(path: str, match: str = None, encoding: str = _ENCODING) -> Reader:
+@_params_in_docstring("match", "encoding", "cls")
+def read_chat(
+    path: str, match: str = None, encoding: str = _ENCODING, cls: type = Reader
+) -> Reader:
     """Create a reader of CHAT data.
 
     Parameters
@@ -1123,6 +1142,8 @@ def read_chat(path: str, match: str = None, encoding: str = _ENCODING) -> Reader
     -------
     Reader
     """
+    if cls != Reader and not issubclass(cls, Reader):
+        raise TypeError(f"Only a Reader class or its child class is allowed: {cls}")
     path_lower = path.lower()
     if path_lower.endswith(".zip"):
         return Reader.from_zip(path, match=match, encoding=encoding)

@@ -39,7 +39,6 @@ def _get_lemma_from_mor(mor):
 
 
 def _get_mlum(tagged_sents) -> List[float]:
-    """TODO"""
     result = []
 
     if not tagged_sents:
@@ -71,7 +70,6 @@ def _get_mlum(tagged_sents) -> List[float]:
 
 
 def _get_mluw(sents) -> List[float]:
-    """TODO"""
     result = []
 
     if not sents:
@@ -290,7 +288,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
         for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
 
-            if pos.startswith("N:") or pos == "N":
+            if pos.startswith("n:") or pos == "n":
                 scoring_board["N1"] += 1
 
             if turn_off_scoring_board("N1"):
@@ -305,7 +303,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
         for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
 
-            if pos.startswith("PRO") and pos != "PRO:POSS:DET":
+            if pos.startswith("pro") and pos != "pro:poss:det":
                 scoring_board["N2"] += 1
 
             if turn_off_scoring_board("N2"):
@@ -320,7 +318,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
         for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
 
-            if pos in {"PRO:POSS:DET", "ADJ", "QN"}:
+            if pos in {"pro:poss:det", "adj", "qn"}:
                 scoring_board["N3"] += 1
 
             if turn_off_scoring_board("N3"):
@@ -339,8 +337,8 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
             pos1 = graph.node[i]["pos"]
             pos2 = graph.node[i + 1]["pos"]
 
-            if pos1 in {"PRO:POSS:DET", "ADJ", "QN"} and (
-                pos2.startswith("N:") or pos2 == "N"
+            if pos1 in {"pro:poss:det", "adj", "qn"} and (
+                pos2.startswith("n:") or pos2 == "n"
             ):
                 scoring_board["N4"] += 1
 
@@ -360,7 +358,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
             pos1 = graph.node[i]["pos"]
             pos2 = graph.node[i + 1]["pos"]
 
-            if pos1 == "DET" and (pos2.startswith("N:") or pos2 == "N"):
+            if pos1 == "det" and (pos2.startswith("n:") or pos2 == "n"):
                 scoring_board["N5"] += 1
                 add_one_point_if_needed("N4")
 
@@ -382,9 +380,9 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
             pos3 = graph.node[i + 2]["pos"]
 
             if (
-                pos2 in {"PRO:POSS:DET", "ADJ", "QN"}
-                and (pos3.startswith("N:") or pos3 == "N")
-                and (pos1 in {"V", "PREP"})
+                pos2 in {"pro:poss:det", "adj", "qn"}
+                and (pos3.startswith("n:") or pos3 == "n")
+                and (pos1 in {"v", "prep"})
             ):
                 scoring_board["N6"] += 1
                 add_one_point_if_needed("N4")
@@ -422,9 +420,9 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
             pos3 = graph.node[i + 2]["pos"]
 
             if (
-                pos1 in {"PRO:POSS:DET", "ADJ", "QN"}
-                and (pos2.startswith("N:") or pos2 == "N")
-                and (pos3 == "V")
+                pos1 in {"pro:poss:det", "adj", "qn"}
+                and (pos2.startswith("n:") or pos2 == "n")
+                and (pos3 == "v")
             ):
                 scoring_board["N8"] += 1
                 add_one_point_if_needed("N4")
@@ -447,9 +445,9 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
             pos3 = graph.node[i + 2]["pos"]
 
             if (
-                (pos1 in {"PRO:POSS:DET", "ADJ", "QN"})
-                and (pos2 in {"ADJ", "QN"})
-                and (pos3.startswith("N:") or pos3 == "N")
+                (pos1 in {"pro:poss:det", "adj", "qn"})
+                and (pos2 in {"adj", "qn"})
+                and (pos3.startswith("n:") or pos3 == "n")
             ):
                 scoring_board["N9"] += 1
                 add_one_point_if_needed("N4")
@@ -469,11 +467,11 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
         for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
 
-            if pos == "ADV":
+            if pos == "adv":
                 for j in graph.edge[i].keys():
                     pos_of_head = graph.node[j]["pos"]
 
-                    if pos_of_head in {"ADJ", "N"}:
+                    if pos_of_head in {"adj", "n"}:
                         scoring_board["N10"] += 1
                         add_one_point_if_needed("V8")
                         break
@@ -490,7 +488,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
         for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
 
-            if pos in {"N", "ADJ"} or pos.startswith("N:"):
+            if pos in {"n", "adj"} or pos.startswith("n:"):
                 mor = graph.node[i]["mor"]
                 mor = mor.replace("-PL", "")
 
@@ -509,7 +507,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
         for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
 
-            if pos == "V":
+            if pos == "v":
                 scoring_board["V1"] += 1
 
             if turn_off_scoring_board("V1"):
@@ -524,7 +522,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
         for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
 
-            if pos == "PREP":
+            if pos == "prep":
                 scoring_board["V2"] += 1
 
             if turn_off_scoring_board("V2"):
@@ -557,7 +555,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
 
         for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
-            if pos != "COP":
+            if pos != "cop":
                 continue
 
             subject = False
@@ -569,7 +567,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
 
                 if graph.edge[dep][head]["rel"] == "SUBJ" and not graph.node[dep][
                     "pos"
-                ].endswith("WH"):
+                ].endswith("wh"):
                     subject = True
                 elif graph.edge[dep][head]["rel"] == "PRED":
                     predicate = True
@@ -609,7 +607,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
 
         for i in range(1, graph.n_nodes() - 1):
             pos2 = graph.node[i + 1]["pos"]
-            if pos2 != "V":
+            if pos2 != "v":
                 continue
 
             word1 = graph.node[i]["word"]
@@ -631,8 +629,8 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
             mor = graph.node[i]["mor"]
             lemma = _get_lemma_from_mor(mor)
 
-            if (pos == "AUX" and not mor.startswith("wi")) or (
-                lemma == "do" and pos == "MOD"
+            if (pos == "aux" and not mor.startswith("wi")) or (
+                lemma == "do" and pos == "mod"
             ):
                 scoring_board["V6"] += 1
                 add_one_point_if_needed("V5")
@@ -664,7 +662,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
         for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
 
-            if pos == "ADV":
+            if pos == "adv":
                 scoring_board["V8"] += 1
 
             if turn_off_scoring_board("V8"):
@@ -684,7 +682,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
             word = graph.node[i]["word"]
             pos2 = graph.node[i + 1]["pos"]
 
-            if pos.startswith("MOD") and pos2 == "V" and word != _CLITIC:
+            if pos.startswith("mod") and pos2 == "v" and word != _CLITIC:
                 scoring_board["V9"] += 1
                 add_one_point_if_needed("V5")
 
@@ -717,7 +715,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
         for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
 
-            if pos != "MOD":
+            if pos != "mod":
                 continue
 
             if graph.node[i]["word"] in past_tense_modals:
@@ -748,7 +746,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
         """
         V13: Past tense auxiliary (Also credit V6)
         """
-        aux_pos = {"AUX", "MOD"}
+        aux_pos = {"aux", "mod"}
 
         for i in range(1, graph.n_nodes()):
             mor = graph.node[i]["mor"]
@@ -771,7 +769,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
             # note the possible values of i for "medial" (not 1st or last word)
 
             pos = graph.node[i]["pos"]
-            if pos == "ADV":
+            if pos == "adv":
                 scoring_board["V14"] += 1
                 add_one_point_if_needed("V8")
 
@@ -791,7 +789,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
         for i in range(1, graph.n_nodes() - 1):
             pos1 = graph.node[i]["pos"]
 
-            if pos1 not in {"COP", "AUX", "MOD"}:
+            if pos1 not in {"cop", "aux", "mod"}:
                 continue
 
             mor2 = graph.node[i + 1]["mor"]
@@ -818,7 +816,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
             pos = graph.node[i]["pos"]
             mor = graph.node[i]["mor"]
 
-            if pos.startswith("COP") and "PAST" in mor:
+            if pos.startswith("cop") and "PAST" in mor:
                 scoring_board["V16"] += 1
                 add_one_point_if_needed("V4")
 
@@ -912,7 +910,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
 
         root = graph.edges()[1]
 
-        if graph.node[root]["pos"] == "V":
+        if graph.node[root]["pos"] == "v":
             scoring_board["Q4"] += 1
 
         if turn_off_scoring_board("Q4"):
@@ -945,7 +943,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
                 continue
 
             for i in range(dep + 1, head):  # head > dep
-                if graph.node[i]["pos"] == "NEG":
+                if graph.node[i]["pos"] == "neg":
                     scoring_board["Q5"] += 1
                     add_one_point_if_needed("Q3")
                     break
@@ -968,7 +966,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
 
             pos = graph.node[i]["pos"]
 
-            if pos not in {"COP", "MOD", "AUX"}:
+            if pos not in {"cop", "mod", "aux"}:
                 continue
 
             for dep, head in graph.edges().items():
@@ -981,7 +979,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
 
                 pos_of_dep = graph.node[dep]["pos"]
 
-                if pos_of_dep == "ADV:WH":
+                if pos_of_dep == "adv:wh":
                     scoring_board["Q6"] += 1
 
                 if turn_off_scoring_board("Q6"):
@@ -999,7 +997,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
         for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
 
-            if pos not in {"MOD", "COP", "AUX"}:
+            if pos not in {"mod", "cop", "aux"}:
                 continue
 
             for dep, head in graph.edges().items():
@@ -1008,7 +1006,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
 
                 pos_of_dep = graph.node[dep]["pos"]
 
-                if pos_of_dep == "NEG":
+                if pos_of_dep == "neg":
                     scoring_board["Q7"] += 1
                     add_one_point_if_needed("Q5")
 
@@ -1041,7 +1039,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
             else:
                 wh_test = "dummy"
 
-            if pos1 in {"COP", "MOD", "AUX"} and not wh_test.endswith("WH"):
+            if pos1 in {"cop", "mod", "aux"} and not wh_test.endswith("wh"):
 
                 for j in graph.edge[i + 1].keys():
                     rel2 = graph.edge[i + 1][j]["rel"]
@@ -1093,7 +1091,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
             return
 
         # Part 2: test for "normal" tag questions
-        good_pos = {"COP NEG PRO ?", "COP PRO ?"}
+        good_pos = {"cop neg pro ?", "cop pro ?"}
         collate = []
 
         for i in range(1, graph.n_nodes()):
@@ -1142,7 +1140,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
 
             head_pos = graph.node[head]["pos"]
 
-            if head_pos == "V":
+            if head_pos == "v":
                 scoring_board["S2"] += 1
                 add_one_point_if_needed("S1")
 
@@ -1169,7 +1167,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
 
             head_pos = graph.node[head]["pos"]
 
-            if head_pos == "V":
+            if head_pos == "v":
                 scoring_board["S3"] += 1
                 add_one_point_if_needed("S1")
 
@@ -1188,7 +1186,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
         for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
 
-            if pos != "V":
+            if pos != "v":
                 continue
 
             has_subject = False
@@ -1221,7 +1219,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
         for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
 
-            if pos == "CONJ":
+            if pos == "conj":
                 scoring_board["S5"] += 1
 
             if turn_off_scoring_board("S5"):
@@ -1243,7 +1241,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
         for dep, head in all_edges.items():
             head_pos = graph.node[head]["pos"]
 
-            if head_pos != "V":
+            if head_pos != "v":
                 continue
 
             verbs.append(head)
@@ -1272,7 +1270,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
             mor3 = graph.node[i + 2]["mor"]
 
             punctuations = {"", "beg", "end"}
-            if pos2 == "CONJ" and mor1 not in punctuations and mor3 not in punctuations:
+            if pos2 == "conj" and mor1 not in punctuations and mor3 not in punctuations:
                 scoring_board["S7"] += 1
                 add_one_point_if_needed("S5")
 
@@ -1296,7 +1294,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
         for dep, head in graph.edges().items():
             pos = graph.node[dep]["pos"]
 
-            if pos != "INF":
+            if pos != "inf":
                 continue
 
             inf_verb = head
@@ -1337,7 +1335,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
                 if test_head != target_head:
                     continue
 
-                if graph.node[test_dep]["pos"] == "V":
+                if graph.node[test_dep]["pos"] == "v":
                     scoring_board["S9"] += 1
                     break
 
@@ -1357,7 +1355,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
             word = graph.node[i]["word"]
             pos = graph.node[i]["pos"]
 
-            if pos == "CONJ" and word not in exceptions:
+            if pos == "conj" and word not in exceptions:
                 scoring_board["S10"] += 1
                 add_one_point_if_needed("S5")
 
@@ -1410,7 +1408,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
 
             rel = graph.edge[dep][head]["rel"]
 
-            if rel == "CONJ" and graph.node[head]["pos"] == "V":
+            if rel == "CONJ" and graph.node[head]["pos"] == "v":
                 scoring_board["S12"] += 1
                 add_one_point_if_needed("S6")
                 add_one_point_if_needed("S5")
@@ -1429,7 +1427,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
 
         for dep, head in graph.edges().items():
             dep_pos = graph.node[dep]["pos"]
-            if not dep_pos.endswith("WH"):
+            if not dep_pos.endswith("wh"):
                 continue
 
             inf = False
@@ -1493,7 +1491,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
             return
 
         number_of_verbs = sum(
-            [1 for i in range(1, graph.n_nodes()) if graph.node[i]["pos"] == "V"]
+            1 for i in range(1, graph.n_nodes()) if graph.node[i]["pos"] == "v"
         )
 
         if number_of_verbs > 2:
@@ -1552,7 +1550,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
             word = graph.node[dep]["word"]
             pos = graph.node[dep]["pos"]
 
-            if word != "to" or pos != "INF":
+            if word != "to" or pos != "inf":
                 continue
 
             inf_verb = head  # "go" in the example
@@ -1580,7 +1578,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
         for i in range(1, graph.n_nodes()):
             pos = graph.node[i]["pos"]
 
-            if pos == "N:GERUND":
+            if pos == "n:gerund":
                 scoring_board["S18"] += 1
                 add_one_point_if_needed("V7")
 
@@ -1603,7 +1601,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
             pos = graph.node[dep]["pos"]
             rel = graph.edge[dep][head]["rel"]
 
-            if pos == "CONJ" and dep < conj_position:
+            if pos == "conj" and dep < conj_position:
                 conj_position = dep
 
             if rel == "SUBJ":

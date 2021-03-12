@@ -67,9 +67,9 @@ def test_clear():
     assert len(eve_copy) == 0
 
 
-def test_add_remove():
+def test_append_remove():
     eve_copy = copy.deepcopy(_EVE)
-    eve_copy.add(_EVE, ignore_repeats=False)
+    eve_copy.append(_EVE, ignore_repeats=False)
     assert len(eve_copy) == 2
     eve_copy.remove("eve")
     assert len(eve_copy) == 0
@@ -302,7 +302,7 @@ def test_ttr():
 
 
 def test_ipsyn():
-    assert _EVE.ipsyn() == [4]
+    assert _EVE.ipsyn() == [29]
 
 
 def test_word_ngrams():
@@ -323,7 +323,7 @@ def test_word_ngrams():
 
 
 def test_word_frequency():
-    assert _EVE.word_frequency().most_common(5) == [
+    assert _EVE.word_frequencies().most_common(5) == [
         ((".",), 1134),
         (("?",), 455),
         (("CLITIC",), 291),

@@ -188,7 +188,7 @@ mhz = pla.read_chat('LeeWongLeung/mhz/*.cha')
 mhz_filenames = mhz.filenames(sorted_by_age=True)  # list of absolute-path filenames sorted by age
 mhz_ages = mhz.age(months=True)  # dict(filename: age in months)
 mhz_ages_sorted = [mhz_ages[fn] for fn in mhz_filenames]  # list of ages sorted by mhz_filenames
-mhz_tagged_words = mhz.tagged_words(by_files=True, participant='CHI')  # dict(filename: list of tagged words)
+mhz_tagged_words = mhz.tagged_words(by_files=True, participants='CHI')  # dict(filename: list of tagged words)
 
 
 # Counting tones in each file

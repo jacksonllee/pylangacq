@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 * `by_files` as True gives you a list of results for each file, no longer a dict.
 * The following methods of the `Reader` class have been renamed as indicated:
+   - `add` -> `append`
    - `age` -> `ages`
    - `number_of_utterances` -> `n_utterances`
    - `number_of_files` -> `n_files`
@@ -30,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
    - `MLUw` -> `mluw`
    - `TTR` -> `ttr`
    - `IPSyn` -> `ipsyn`
+   - `word_frequency` -> `word_frequencies`
    - `participant_codes` -> `participants`.
      Before this version, the methods `participant_codes` (for CHI, MOT, etc) and
      `participants` (for, say, Eve, Mother, Investigator, etc) co-existed,

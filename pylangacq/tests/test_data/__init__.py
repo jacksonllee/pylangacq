@@ -4,7 +4,7 @@ import zipfile
 
 import pytest
 
-from pylangacq.chat import _download_zip
+from pylangacq.chat import _download_file
 
 
 REMOTE_BROWN_URL = "https://childes.talkbank.org/data/Eng-NA/Brown.zip"
@@ -21,7 +21,7 @@ def download_and_extract_brown():
     if os.path.exists(_BROWN_ZIP_PATH):
         return
     try:
-        _download_zip(REMOTE_BROWN_URL, _BROWN_ZIP_PATH)
+        _download_file(REMOTE_BROWN_URL, _BROWN_ZIP_PATH)
     except Exception as e:
         msg = (
             f"Error '{e}' in downloading {REMOTE_BROWN_URL}: network problems or "

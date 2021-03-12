@@ -49,12 +49,25 @@ class Token:
 
 @dataclasses.dataclass
 class Utterance:
-    """
+    """Utterance in a CHAT transcript data.
 
-    Time marker provides the start and end times (in milliseconds)
-    for a segment in a digitized video or audio file. For example:
-        ·0_1073·
-    '·' is ASCII CODE 21 (0x15), for NAK (Negative Acknowledgement)
+    Attributes
+    ----------
+    participant : str
+        Participant of the utterance, e.g., ``"CHI"``, ``"MOT"``
+    tokens : List[Token]
+        List of tokens of the utterance
+    time_marks : Tuple[int, int]
+        If available from the CHAT data, these are the start and end times
+        (in milliseconds) for a segment in a digitized video or audio file,
+        e.g., ``(0, 1073)``, extracted from ``"·0_1073·"`` in the CHAT data.
+        ``"·"`` is ASCII code 21 (0x15), for NAK (Negative Acknowledgment).
+    tiers : Dict[str, str]
+        This dictionary contains all the original, unparsed data from the utterance,
+        including the transcribed utterance (signaled by ``*CHI:``, ``*MOT:`` etc
+        in CHAT), common tiers such as %mor and %gra, as well as all other tiers
+        associated with the utterance. This dictionary is useful to retrieve
+        whatever information not readily handled by this package.
     """
 
     __slots__ = ("participant", "tokens", "time_marks", "tiers")

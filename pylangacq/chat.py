@@ -39,29 +39,71 @@ _SUBDIR_SUFFIX = "suffix_pla"
 _SUBDIR_REGEX = re.compile(r"prefix_pla[a-z0-9_]+suffix_pla")
 
 
-def params_in_docstring(*params):
+def _params_in_docstring(*params):
     docstring = ""
-    if "participant" in params:
+
+    if "participants" in params:
         docstring += """
-        participant : str or iterable of str, optional
-            Participants of interest.
-            If unspecified or ``None``, all participants are included."""
+        participants : str or iterable of str, optional
+            Participants of interest. You may pass in a string (e.g., ``"CHI"``
+            for studying child speech)
+            or an iterable of strings (e.g., ``{"MOT", "INV"}``). Only the specified
+            participants are included.
+            If you pass in ``None`` (the default), all participants are included.
+            This parameter cannot be used together with ``exclude``."""
+
     if "exclude" in params:
         docstring += """
         exclude : str or iterable of str, optional
-            Participants to exclude.
-            If unspecified or ``None``, no participants are excluded."""
+            Participants to exclude. You may pass in a string (e.g., ``"CHI"``
+            for child-directed speech)
+            or an iterable of strings (e.g., ``{"MOT", "INV"}``). Only the specified
+            participants are excluded.
+            If you pass in ``None`` (the default), no participants are excluded.
+            This parameter cannot be used together with ``participants``."""
+
     if "by_files" in params:
         docstring += """
         by_files : bool, optional
-            If ``True``, return dict(absolute-path filename: X for that file)
-            instead of X for all files altogether."""
+            If ``True``, return a list X of results, where len(X) is the number of
+            files in the ``Reader`` object, and each element in X is the result for one
+            file; the ordering of X corresponds to that of the file paths from the
+            ``.file_paths()`` call.
+            If ``False`` (the default), return the result that collapses the file
+            distinction just described for when ``by_files`` is ``True``."""
+
     if "keep_case" in params:
         docstring += """
         keep_case : bool, optional
-            If ``True`` (the default), case distinctions are kept, e.g.,
+            If ``True``, case distinctions are kept, e.g.,
             word tokens like "the" and "The" are treated as distinct.
-            If ``False``, all word tokens are forced to be in lowercase."""
+            If ``False`` (the default), all word tokens are forced to be in lowercase
+            as a preprocessing step."""
+
+    if "match" in params:
+        docstring += """
+        match : str, optional
+            If provided, only the file paths that match this string
+            (by regular expression matching) are read and parsed.
+            For example, to work with the American English dataset Brown (containing
+            data for the children Adam, Eve, and Sarah),
+            you can pass in ``"Eve"`` here to only handle the data for Eve since
+            the unzipped Brown data from CHILDES is in a directory structure of
+            ``Brown/Eve/xxx.cha`` for Eve's data.
+            If this parameter is not specified or ``None`` is passed in (the default),
+            such file path filtering does not apply."""
+
+    if "encoding" in params:
+        docstring += """
+        encoding : str, optional
+            Text encoding to parse the CHAT data. The default value is ``"utf8"``
+            for Unicode UTF-8."""
+
+    if "extension" in params:
+        docstring += """
+        extension : str, optional
+            File extension for CHAT data files. The default value is ``".cha"``.
+        """
 
     def real_decorator(func):
         returns_header = "\n\n        Returns\n        -------"
@@ -89,7 +131,7 @@ utterances : List[Utterance]
 
 
 class Reader:
-    """TODO"""
+    """A reader that handles CHAT data."""
 
     def __init__(self, strs: Collection[str] = None, file_paths: List[str] = None):
 
@@ -106,11 +148,21 @@ class Reader:
             self._files = list(executor.map(self._parse_chat_str, strs, file_paths))
 
     def clear(self):
-        """TODO"""
+        """Turn it into an empty reader by removing all parsed CHAT data."""
         self._files = []
 
-    def add(self, *readers, ignore_repeats=True):
-        """TODO"""
+    def append(self, *readers, ignore_repeats=True) -> None:
+        """Append data from other readers.
+
+        Parameters
+        ----------
+        *readers : Reader
+            One or more ``Reader`` objects to append data from
+        ignore_repeats : bool, optional
+            If ``True`` (the default), data from the given ``Reader`` objects is
+            appended to the current ``Reader`` no matter whether there are any repeats
+            of file paths.
+        """
         for i, reader in enumerate(readers, 1):
             file_paths = set(self.file_paths())
             if type(reader) != Reader:
@@ -122,10 +174,15 @@ class Reader:
             files_to_add = [f for f in reader._files if f.file_path in new_file_paths]
             self._files.extend(files_to_add)
 
-    def remove(self, *file_paths):
-        """TODO
+    def remove(self, *file_paths) -> None:
+        """Remove data from the given file paths.
 
-        Support regex matching
+        Parameters
+        ----------
+        *file_paths : str
+            One or more file paths for which data is to be dropped from this reader.
+            Regular expression matching is supported, e.g., you can provide a partial
+            file path to match multiple file paths in the reader.
         """
         self._files = [
             f
@@ -133,8 +190,8 @@ class Reader:
             if not any(re.search(p, f.file_path) for p in file_paths)
         ]
 
-    def __len__(self):
-        """TODO"""
+    def __len__(self) -> int:
+        """Return the number of files in this reader."""
         return len(self._files)
 
     @staticmethod
@@ -150,11 +207,20 @@ class Reader:
         else:
             raise ValueError(f"unrecognized item type: {item_type}")
 
+    @_params_in_docstring("participants", "exclude", "by_files")
     def n_utterances(
-        self, participant=None, exclude=None, by_files=False
+        self, participants=None, exclude=None, by_files=False
     ) -> Union[int, List[int]]:
-        """TODO"""
-        utterances = self._filter_utterances_by_participants(participant, exclude)
+        """Return the number of utterances.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        int if by_files is False, otherwise List[int]
+        """
+        utterances = self._filter_utterances_by_participants(participants, exclude)
         result_by_files = [len(us) for us in utterances]
         if by_files:
             return result_by_files
@@ -162,34 +228,42 @@ class Reader:
             return self._flatten(int, result_by_files)
 
     def utterances(
-        self, participant=None, exclude=None, by_files=False
+        self, participants=None, exclude=None, by_files=False
     ) -> Union[List[Utterance], List[List[Utterance]]]:
-        """TODO"""
-        result_by_files = self._filter_utterances_by_participants(participant, exclude)
+        """Return the utterances.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        List[Utterance] if by_files is False, otherwise List[List[Utterance]]
+        """
+        result_by_files = self._filter_utterances_by_participants(participants, exclude)
         if by_files:
             return result_by_files
         else:
             return self._flatten(list, result_by_files)
 
     def _filter_utterances_by_participants(
-        self, participant, exclude
+        self, participants, exclude
     ) -> List[List[Utterance]]:
-        if participant and exclude:
+        if participants and exclude:
             raise TypeError(
-                "participant and exclude cannot be specified at the same time: "
-                f"{participant}, {exclude}"
+                "participants and exclude cannot be specified at the same time: "
+                f"{participants}, {exclude}"
             )
 
-        if participant is None:
+        if participants is None:
             participants: List[Set] = self.participants(by_files=True)
-        elif type(participant) == str:
-            participants: List[Set] = [{participant} for _ in range(len(self))]
-        elif hasattr(participant, "__iter__"):
-            participants: List[Set] = [set(participant) for _ in range(len(self))]
+        elif type(participants) == str:
+            participants: List[Set] = [{participants} for _ in range(len(self))]
+        elif hasattr(participants, "__iter__"):
+            participants: List[Set] = [set(participants) for _ in range(len(self))]
         else:
             raise ValueError(
-                "participant must be one of {None, a string, an iterable of strings}: "
-                f"{participant}"
+                "participants must be one of {None, a string, an iterable of strings}: "
+                f"{participants}"
             )
 
         if exclude is None:
@@ -209,23 +283,41 @@ class Reader:
             for us, ps in zip([f.utterances for f in self._files], participants)
         ]
 
-    def headers(self):
-        """TODO"""
+    def headers(self) -> List[Dict]:
+        """Return the headers.
+
+        Returns
+        -------
+        List[Dict]
+        """
         return [f.header for f in self._files]
 
     def file_paths(self):
-        """TODO"""
+        """Return the file paths.
+
+        If the data comes from in-memory strings, then the "file paths" are
+        arbitrary UUID random strings.
+
+        Returns
+        -------
+        List[str]
+        """
         return [f.file_path for f in self._files]
 
     def n_files(self):
-        """TODO"""
+        """Return the number of files."""
         return len(self)
 
+    @_params_in_docstring("by_files")
     def participants(self, by_files=False) -> Union[Set[str], List[Set[str]]]:
-        # TODO docstring
-        """for participant codes, e.g., CHI, MOT
+        """Return the participants (e.g., CHI, MOT).
 
-        more detailed participant info is in the ``headers`` method.
+        Parameters
+        ----------
+
+        Returns
+        -------
+        Set[str] if by_files is False, otherwise List[Set[str]]
         """
         result_by_files = [{u.participant for u in f.utterances} for f in self._files]
         if by_files:
@@ -233,13 +325,20 @@ class Reader:
         else:
             return self._flatten(set, result_by_files)
 
+    @_params_in_docstring("by_files")
     def languages(self, by_files=False) -> Union[Set[str], List[List[str]]]:
-        """TODO
+        """Return the languages in the data.
 
-        When by_files is True, the returned object is a list of lists as expected,
-        where each inner list has a meaning ordering of language dominance.
-        However, when by_files is False, returning a flattened list wouldn't make sense,
-        and therefore it's a set instead.
+        Parameters
+        ----------
+
+        Returns
+        -------
+        Set[str] if by_files is False, otherwise List[List[str]]
+            When by_files is True, the ordering of languages given by the list
+            indicates language dominance. Such ordering would not make sense when
+            by_files is False, in which case the returned object is a set instead of
+            a list.
         """
         result_by_files = [f.header.get("Languages", []) for f in self._files]
         if by_files:
@@ -247,10 +346,19 @@ class Reader:
         else:
             return set(self._flatten(list, result_by_files))
 
+    @_params_in_docstring("by_files")
     def dates_of_recording(
         self, by_files=False
     ) -> Union[Set[datetime.date], List[Set[datetime.date]]]:
-        """TODO"""
+        """Return the dates of recording.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        Set[datetime.date] if by_files is False, otherwise List[Set[datetime.date]]]
+        """
         result_by_files = [f.header["Date"] for f in self._files]
         if by_files:
             return result_by_files
@@ -258,7 +366,23 @@ class Reader:
             return self._flatten(set, result_by_files)
 
     def ages(self, participant="CHI", months=False):
-        """TODO"""
+        """Return the ages of the given participant in the data.
+
+        Parameters
+        ----------
+        participant : str, optional
+            Participant of interest, which defaults to the typical use case of ``"CHI"``
+            for the target child.
+        months : bool, optional
+            If False (the default), age is represented as a tuple of
+            (years, months, days), e.g., "1;06.00" in CHAT becomes `(1, 6, 0)`.
+            If True, age is a float for the number of months,
+            e.g., "1;06.00" in CHAT becomes `18.0` for 18 months.
+
+        Returns
+        -------
+        List[Tuple[int, int, int]] if months is False, otherwise List[float]
+        """
         result_by_files = []
         for f in self._files:
             try:
@@ -280,33 +404,77 @@ class Reader:
             result_by_files.append(result)
         return result_by_files
 
+    @_params_in_docstring("participants", "exclude", "by_files")
     def tagged_sents(
-        self, participant=None, exclude=None, by_files=False
+        self, participants=None, exclude=None, by_files=False
     ) -> Union[List[List[Token]], List[List[List[Token]]]]:
-        """TODO"""
-        utterances = self._filter_utterances_by_participants(participant, exclude)
+        """Return the tagged sents.
+
+        The "tagged sents/words" terminology comes from NLTK, where a sent (= sentence)
+        is the equivalent unit of an ``Utterance`` object in this package.
+        A sent is tagged in the sense that the individual words
+        (= the ``Token`` objects) in the sent have information beyond the word form,
+        such as a part-of-speech tag, morphological information,
+        and grammatical relation.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        List[List[Token]] if by_files is False, otherwise List[List[List[Token]]]
+        """
+        utterances = self._filter_utterances_by_participants(participants, exclude)
         result_by_files = [[u.tokens for u in us] for us in utterances]
         if by_files:
             return result_by_files
         else:
             return self._flatten(list, result_by_files)
 
+    @_params_in_docstring("participants", "exclude", "by_files")
     def tagged_words(
-        self, participant=None, exclude=None, by_files=False
+        self, participants=None, exclude=None, by_files=False
     ) -> Union[List[Token], List[List[Token]]]:
-        """TODO"""
-        utterances = self._filter_utterances_by_participants(participant, exclude)
+        """Return the tagged words.
+
+        The "tagged sents/words" terminology comes from NLTK, where a sent (= sentence)
+        is the equivalent unit of an ``Utterance`` object in this package.
+        A word is tagged in the sense that it has information beyond the word form,
+        such as a part-of-speech tag, morphological information, and grammatical
+        relation. A tagged word is represented as a ``Token`` object in this package.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        List[Token] if by_files is False, otherwise List[List[Token]]
+        """
+        utterances = self._filter_utterances_by_participants(participants, exclude)
         result_by_files = [[word for u in us for word in u.tokens] for us in utterances]
         if by_files:
             return result_by_files
         else:
             return self._flatten(list, result_by_files)
 
+    @_params_in_docstring("participants", "exclude", "by_files")
     def sents(
-        self, participant=None, exclude=None, by_files=False
+        self, participants=None, exclude=None, by_files=False
     ) -> Union[List[List[str]], List[List[List[str]]]]:
-        """TODO"""
-        utterances = self._filter_utterances_by_participants(participant, exclude)
+        """Return the sents.
+
+        The "sents" terminology comes from NLTK, where a sent (= sentence)
+        is the equivalent unit of an ``Utterance`` object in this package.
+        The sents are in contrast with ``.tagged_sents``.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        List[List[str]] if by_files is False, otherwise List[List[List[str]]]
+        """
+        utterances = self._filter_utterances_by_participants(participants, exclude)
         result_by_files = [
             [[t.word for t in u.tokens] for u in us] for us in utterances
         ]
@@ -315,11 +483,20 @@ class Reader:
         else:
             return self._flatten(list, result_by_files)
 
+    @_params_in_docstring("participants", "exclude", "by_files")
     def words(
-        self, participant=None, exclude=None, by_files=False
+        self, participants=None, exclude=None, by_files=False
     ) -> Union[List[str], List[List[str]]]:
-        """TODO"""
-        utterances = self._filter_utterances_by_participants(participant, exclude)
+        """Return the words.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        List[str] if by_files is False, otherwise List[List[str]]
+        """
+        utterances = self._filter_utterances_by_participants(participants, exclude)
         result_by_files = [[t.word for u in us for t in u.tokens] for us in utterances]
         if by_files:
             return result_by_files
@@ -327,33 +504,99 @@ class Reader:
             return self._flatten(list, result_by_files)
 
     def mlum(self, participant="CHI") -> List[float]:
-        """TODO"""
-        return _get_mlum(self.tagged_sents(participant=participant, by_files=True))
+        """Return the mean lengths of utterance by morphemes.
+
+        Parameters
+        ----------
+        participant : str, optional
+            Participant of interest, which defaults to the typical use case of ``"CHI"``
+            for the target child.
+
+        Returns
+        -------
+        List[float]
+        """
+        return _get_mlum(self.tagged_sents(participants=participant, by_files=True))
 
     def mlu(self, participant="CHI") -> List[float]:
-        """TODO"""
+        """Return the mean lengths of utterance.
+
+        This method is equivalent to ``.mlum()``.
+
+        Parameters
+        ----------
+        participant : str, optional
+            Participant of interest, which defaults to the typical use case of ``"CHI"``
+            for the target child.
+
+        Returns
+        -------
+        List[float]
+        """
         return self.mlum(participant=participant)
 
     def mluw(self, participant="CHI") -> List[float]:
-        """TODO"""
-        return _get_mluw(self.sents(participant=participant, by_files=True))
+        """Return the mean lengths of utterance by words.
+
+        Parameters
+        ----------
+        participant : str, optional
+            Participant of interest, which defaults to the typical use case of ``"CHI"``
+            for the target child.
+
+        Returns
+        -------
+        List[float]
+        """
+        return _get_mluw(self.sents(participants=participant, by_files=True))
 
     def ttr(self, keep_case=False, participant="CHI") -> List[float]:
-        """TODO"""
+        """Return the type-token ratios.
+
+        Parameters
+        ----------
+        participant : str, optional
+            Participant of interest, which defaults to the typical use case of ``"CHI"``
+            for the target child.
+
+        Returns
+        -------
+        List[float]
+        """
         return _get_ttr(
-            self.word_frequency(
-                keep_case=keep_case, participant=participant, by_files=True
+            self.word_frequencies(
+                keep_case=keep_case, participants=participant, by_files=True
             )
         )
 
     def ipsyn(self, participant="CHI") -> List[int]:
-        """TODO"""
-        return _get_ipsyn(self.tagged_sents(participant=participant, by_files=True))
+        """Return the indexes of productive syntax (IPSyn).
 
+        Parameters
+        ----------
+        participant : str, optional
+            Participant of interest, which defaults to the typical use case of ``"CHI"``
+            for the target child.
+
+        Returns
+        -------
+        List[float]
+        """
+        return _get_ipsyn(self.tagged_sents(participants=participant, by_files=True))
+
+    @_params_in_docstring("keep_case", "participants", "exclude", "by_files")
     def word_ngrams(
-        self, n, keep_case=False, participant=None, exclude=None, by_files=False
+        self, n, keep_case=False, participants=None, exclude=None, by_files=False
     ) -> Union[collections.Counter, List[collections.Counter]]:
-        """TODO"""
+        """Return word ngrams.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        collections.Counter if by_files is False, otherwise List[collections.Counter]
+        """
 
         err_msg = f"n must be a positive integer: {n}"
         if type(n) != int:
@@ -364,7 +607,7 @@ class Reader:
         result_by_files = []
 
         for sents_in_file in self.sents(
-            participant=participant, exclude=exclude, by_files=True
+            participants=participants, exclude=exclude, by_files=True
         ):
             result_for_file = collections.Counter()
             for sent in sents_in_file:
@@ -383,21 +626,46 @@ class Reader:
         else:
             return self._flatten(collections.Counter, result_by_files)
 
-    def word_frequency(
-        self, keep_case=False, participant=None, exclude=None, by_files=False
+    @_params_in_docstring("keep_case", "participants", "exclude", "by_files")
+    def word_frequencies(
+        self, keep_case=False, participants=None, exclude=None, by_files=False
     ) -> Union[collections.Counter, List[collections.Counter]]:
-        """TODO"""
+        """Return word frequencies.
+
+        This method is equivalent to ``.word_ngrams()`` with ``n`` = 1.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        collections.Counter if by_files is False, otherwise List[collections.Counter]
+        """
         return self.word_ngrams(
             1,
             keep_case=keep_case,
-            participant=participant,
+            participants=participants,
             exclude=exclude,
             by_files=by_files,
         )
 
     @classmethod
     def from_strs(cls, strs: List[str], ids: List[str] = None):
-        """TODO"""
+        """Instantiate a ``Reader`` object from in-memory CHAT data strings.
+
+        Parameters
+        ----------
+        strs : List[str]
+            List of CHAT data strings
+        ids : List[str], optional
+            List of identifiers. If not provided, UUID random strings are used.
+            When file paths are referred to in other parts of this package, they
+            mean these identifiers if you have instantiated the reader by this method.
+
+        Returns
+        -------
+        Reader
+        """
         strs = list(strs)
         if ids is None:
             ids = [str(uuid.uuid4()) for _ in range(len(strs))]
@@ -417,8 +685,19 @@ class Reader:
         return path
 
     @classmethod
+    @_params_in_docstring("match", "encoding")
     def from_files(cls, paths: List[str], match: str = None, encoding: str = _ENCODING):
-        """TODO"""
+        """Instantiate a ``Reader`` object from local CHAT data files.
+
+        Parameters
+        ----------
+        paths : List[str]
+            List of local file paths of the CHAT data
+
+        Returns
+        -------
+        Reader
+        """
 
         # Inner function with file closing and closure to wrap in the given encoding
         def _open_file(path: str) -> str:
@@ -440,6 +719,7 @@ class Reader:
         return cls.from_strs(strs, paths)
 
     @classmethod
+    @_params_in_docstring("match", "extension", "encoding")
     def from_dir(
         cls,
         path: str,
@@ -447,7 +727,20 @@ class Reader:
         extension: str = _CHAT_EXTENSION,
         encoding: str = _ENCODING,
     ):
-        """TODO"""
+        """Instantiate a ``Reader`` object from a local directory with CHAT data files.
+
+        Parameters
+        ----------
+        path : str
+            Local directory that contains CHAT data files. Files are searched for
+            recursively under this directory, and those that satisfy ``match`` and
+            ``extension`` are parsed and handled by the reader.
+
+        Returns
+        -------
+        Reader
+        """
+
         file_paths = []
         for dirpath, dirnames, filenames in os.walk(path):
             if not filenames:
@@ -466,6 +759,7 @@ class Reader:
         return cls.from_files(sorted(file_paths), match=match, encoding=encoding)
 
     @classmethod
+    @_params_in_docstring("match", "extension", "encoding")
     def from_zip(
         cls,
         path: str,
@@ -473,7 +767,21 @@ class Reader:
         extension: str = _CHAT_EXTENSION,
         encoding: str = _ENCODING,
     ):
-        """TODO"""
+        """Instantiate a ``Reader`` object from a local or remote ZIP file.
+
+        Parameters
+        ----------
+        path : str
+            Either a local file path or a URL (one that begins with ``"https://"``
+            or ``"http://"``) for a ZIP file containing CHAT data files.
+            For instance, you can provide either a local path to a ZIP file downloaded
+            from CHILDES, or simply a URL such as
+            ``"https://childes.talkbank.org/data/Eng-NA/Brown.zip"``.
+
+        Returns
+        -------
+        Reader
+        """
         with contextlib.ExitStack() as stack:
             temp_dir = stack.enter_context(
                 tempfile.TemporaryDirectory(_SUBDIR_SUFFIX, _SUBDIR_PREFIX)
@@ -481,7 +789,7 @@ class Reader:
 
             if path.startswith("https://") or path.startswith("http://"):
                 zip_path = os.path.join(temp_dir, os.path.basename(path))
-                _download_zip(path, zip_path)
+                _download_file(path, zip_path)
             else:
                 zip_path = path
 
@@ -577,7 +885,6 @@ class Reader:
             else:
                 utterance_items = forms
 
-            # TODO If %mor and %gra tiers are null, set them as [None, ..] not ["", ..]?
             # determine what to yield (and how) to create the generator
             if not mor_items:
                 mor_items = [None] * len(utterance_items)
@@ -592,7 +899,12 @@ class Reader:
                 except AttributeError:
                     pos, mor = None, None
 
-                output_word = Token(_clean_word(word), pos, mor, self._get_gra(gra))
+                output_word = Token(
+                    _clean_word(word),
+                    self._preprocess_pos(pos),
+                    mor,
+                    self._get_gra(gra),
+                )
                 sent.append(output_word)
 
             time_marks = self._get_time_marks(tiermarker_to_line[participant_code])
@@ -600,6 +912,12 @@ class Reader:
             result_list.append(u)
 
         return result_list
+
+    @staticmethod
+    def _preprocess_pos(pos: str) -> str:
+        """If POS tag preprocessing is needed, create a child class of Reader and
+        override this method."""
+        return pos
 
     @staticmethod
     def _get_time_marks(line: str) -> Union[Tuple[int, int], None]:
@@ -787,15 +1105,31 @@ class Reader:
         return lines
 
 
+@_params_in_docstring("match", "encoding")
 def read_chat(path: str, match: str = None, encoding: str = _ENCODING) -> Reader:
-    """TODO"""
+    """Create a reader of CHAT data.
+
+    Parameters
+    ----------
+    path : str
+        A path that points to one of the following:
+        - ZIP file. Either a local file path or a URL (one that begins with
+          ``"https://"`` or ``"http://"``).
+          Example of a URL: ``"https://childes.talkbank.org/data/Eng-NA/Brown.zip"``
+        - A local directory, for files under this directory recursively.
+        - A single CHAT file.
+
+    Returns
+    -------
+    Reader
+    """
     path_lower = path.lower()
     if path_lower.endswith(".zip"):
         return Reader.from_zip(path, match=match, encoding=encoding)
-    elif path_lower.endswith(_CHAT_EXTENSION):
-        return Reader.from_files([path], match=match, encoding=encoding)
     elif os.path.isdir(path):
         return Reader.from_dir(path, match=match, encoding=encoding)
+    elif path_lower.endswith(_CHAT_EXTENSION):
+        return Reader.from_files([path], match=match, encoding=encoding)
     else:
         raise ValueError(
             "path is not one of the accepted choices of "
@@ -1125,8 +1459,8 @@ class _HTTPSession(requests.Session):
         return super(_HTTPSession, self).request(*args, **kwargs)
 
 
-def _download_zip(url, zip_path):
+def _download_file(url, path):
     with contextlib.ExitStack() as stack:
-        f = stack.enter_context(open(zip_path, "wb"))
+        f = stack.enter_context(open(path, "wb"))
         r = stack.enter_context(_HTTPSession().get(url, stream=True))
         shutil.copyfileobj(r.raw, f)

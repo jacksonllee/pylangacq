@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>chat — Reading and parsing CHAT transcripts &#8212; PyLangAcq 0.12.0 documentation</title>
+    <title>API Reference &#8212; PyLangAcq 0.12.0 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -13,6 +13,7 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Developmental Measures" href="measures.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -29,96 +30,8 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="chat-reading-and-parsing-chat-transcripts">
-<span id="chat"></span><h1><code class="docutils literal notranslate"><span class="pre">chat</span></code> — Reading and parsing CHAT transcripts<a class="headerlink" href="#chat-reading-and-parsing-chat-transcripts" title="Permalink to this headline">¶</a></h1>
-<p>The <code class="docutils literal notranslate"><span class="pre">chat</span></code> module defines two classes
-for reading and parsing CHAT transcripts:</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader" title="pylangacq.chat.Reader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Reader</span></code></a>(strs, file_paths)</p></td>
-<td><p>A reader that handles CHAT data.</p></td>
-</tr>
-</tbody>
-</table>
-<p>The user does not usually need to call or create objects
-directly with <code class="docutils literal notranslate"><span class="pre">Reader</span></code> or <code class="docutils literal notranslate"><span class="pre">SingleReader</span></code> in their code.
-Under most circumstances, <code class="docutils literal notranslate"><span class="pre">pylangchat.read_chat()</span></code> is sufficient;
-underlyingly, this function returns a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object
-which relies on <code class="docutils literal notranslate"><span class="pre">SingleReader</span></code> for handling individual
-data files.</p>
-<p>Most of the methods of interest are those of the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> class.
-Many of them have the optional parameter <code class="docutils literal notranslate"><span class="pre">by_files</span></code>.
-By default, <code class="docutils literal notranslate"><span class="pre">by_files</span></code> is
-<code class="docutils literal notranslate"><span class="pre">False</span></code> and a given method X() returns whatever it is for all the files
-in question. When <code class="docutils literal notranslate"><span class="pre">by_files</span></code> is set to be <code class="docutils literal notranslate"><span class="pre">True</span></code>,
-then the return object is dict(absolute-path filename: X() for that file)
-instead.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">Reader</span></code> methods are categorized into
-<a class="reference internal" href="#metadata-methods"><span class="std std-ref">Metadata methods</span></a> and <a class="reference internal" href="#data-methods"><span class="std std-ref">Data methods</span></a>.</p>
-<div class="section" id="metadata-methods">
-<span id="id1"></span><h2>Metadata methods<a class="headerlink" href="#metadata-methods" title="Permalink to this headline">¶</a></h2>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.headers" title="pylangacq.chat.Reader.headers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">headers</span></code></a>()</p></td>
-<td><p>Return the headers.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.participants" title="pylangacq.chat.Reader.participants"><code class="xref py py-obj docutils literal notranslate"><span class="pre">participants</span></code></a>([by_files])</p></td>
-<td><p>Return the participants (e.g., CHI, MOT).</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.languages" title="pylangacq.chat.Reader.languages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">languages</span></code></a>([by_files])</p></td>
-<td><p>Return the languages in the data.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.dates_of_recording" title="pylangacq.chat.Reader.dates_of_recording"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dates_of_recording</span></code></a>([by_files])</p></td>
-<td><p>Return the dates of recording.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="data-methods">
-<span id="id2"></span><h2>Data methods<a class="headerlink" href="#data-methods" title="Permalink to this headline">¶</a></h2>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.utterances" title="pylangacq.chat.Reader.utterances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utterances</span></code></a>([participants, exclude, by_files])</p></td>
-<td><p>Return the utterances.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.words" title="pylangacq.chat.Reader.words"><code class="xref py py-obj docutils literal notranslate"><span class="pre">words</span></code></a>([participants, exclude, by_files])</p></td>
-<td><p>Return the words.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.tagged_words" title="pylangacq.chat.Reader.tagged_words"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tagged_words</span></code></a>([participants, exclude, by_files])</p></td>
-<td><p>Return the tagged words.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.sents" title="pylangacq.chat.Reader.sents"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sents</span></code></a>([participants, exclude, by_files])</p></td>
-<td><p>Return the sents.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.tagged_sents" title="pylangacq.chat.Reader.tagged_sents"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tagged_sents</span></code></a>([participants, exclude, by_files])</p></td>
-<td><p>Return the tagged sents.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.word_ngrams" title="pylangacq.chat.Reader.word_ngrams"><code class="xref py py-obj docutils literal notranslate"><span class="pre">word_ngrams</span></code></a>(n[, keep_case, participants, …])</p></td>
-<td><p>Return word ngrams.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.remove" title="pylangacq.chat.Reader.remove"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove</span></code></a>(*file_paths)</p></td>
-<td><p>Remove data from the given file paths.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.clear" title="pylangacq.chat.Reader.clear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear</span></code></a>()</p></td>
-<td><p>Turn it into an empty reader by removing all parsed CHAT data.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="the-reader-class-api">
-<span id="reader-api"></span><h2>The <code class="docutils literal notranslate"><span class="pre">Reader</span></code> class API<a class="headerlink" href="#the-reader-class-api" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="api-reference">
+<span id="api"></span><h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="pylangacq.chat.Reader">
 <em class="property">class </em><code class="sig-prename descclassname">pylangacq.chat.</code><code class="sig-name descname">Reader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">strs</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Collection<span class="p">[</span>str<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">file_paths</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span>str<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader" title="Permalink to this definition">¶</a></dt>
@@ -130,85 +43,85 @@ instead.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.ages" title="pylangacq.chat.Reader.ages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ages</span></code></a>([participant, months])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.ages" title="pylangacq.chat.Reader.ages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ages</span></code></a>([participant, months])</p></td>
 <td><p>Return the ages of the given participant in the data.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.append" title="pylangacq.chat.Reader.append"><code class="xref py py-obj docutils literal notranslate"><span class="pre">append</span></code></a>(*readers[, ignore_repeats])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.append" title="pylangacq.chat.Reader.append"><code class="xref py py-obj docutils literal notranslate"><span class="pre">append</span></code></a>(*readers[, ignore_repeats])</p></td>
 <td><p>Append data from other readers.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.clear" title="pylangacq.chat.Reader.clear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.clear" title="pylangacq.chat.Reader.clear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear</span></code></a>()</p></td>
 <td><p>Turn it into an empty reader by removing all parsed CHAT data.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.dates_of_recording" title="pylangacq.chat.Reader.dates_of_recording"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dates_of_recording</span></code></a>([by_files])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.dates_of_recording" title="pylangacq.chat.Reader.dates_of_recording"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dates_of_recording</span></code></a>([by_files])</p></td>
 <td><p>Return the dates of recording.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.file_paths" title="pylangacq.chat.Reader.file_paths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">file_paths</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.file_paths" title="pylangacq.chat.Reader.file_paths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">file_paths</span></code></a>()</p></td>
 <td><p>Return the file paths.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.from_dir" title="pylangacq.chat.Reader.from_dir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_dir</span></code></a>(path[, match, extension, encoding])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.from_dir" title="pylangacq.chat.Reader.from_dir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_dir</span></code></a>(path[, match, extension, encoding])</p></td>
 <td><p>Instantiate a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object from a local directory with CHAT data files.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.from_files" title="pylangacq.chat.Reader.from_files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_files</span></code></a>(paths[, match, encoding])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.from_files" title="pylangacq.chat.Reader.from_files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_files</span></code></a>(paths[, match, encoding])</p></td>
 <td><p>Instantiate a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object from local CHAT data files.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.from_strs" title="pylangacq.chat.Reader.from_strs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_strs</span></code></a>(strs[, ids])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.from_strs" title="pylangacq.chat.Reader.from_strs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_strs</span></code></a>(strs[, ids])</p></td>
 <td><p>Instantiate a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object from in-memory CHAT data strings.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.from_zip" title="pylangacq.chat.Reader.from_zip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_zip</span></code></a>(path[, match, extension, encoding])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.from_zip" title="pylangacq.chat.Reader.from_zip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_zip</span></code></a>(path[, match, extension, encoding])</p></td>
 <td><p>Instantiate a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object from a local or remote ZIP file.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.headers" title="pylangacq.chat.Reader.headers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">headers</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.headers" title="pylangacq.chat.Reader.headers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">headers</span></code></a>()</p></td>
 <td><p>Return the headers.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.ipsyn" title="pylangacq.chat.Reader.ipsyn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ipsyn</span></code></a>([participant])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.ipsyn" title="pylangacq.chat.Reader.ipsyn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ipsyn</span></code></a>([participant])</p></td>
 <td><p>Return the indexes of productive syntax (IPSyn).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.languages" title="pylangacq.chat.Reader.languages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">languages</span></code></a>([by_files])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.languages" title="pylangacq.chat.Reader.languages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">languages</span></code></a>([by_files])</p></td>
 <td><p>Return the languages in the data.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.mlu" title="pylangacq.chat.Reader.mlu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mlu</span></code></a>([participant])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.mlu" title="pylangacq.chat.Reader.mlu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mlu</span></code></a>([participant])</p></td>
 <td><p>Return the mean lengths of utterance.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.mlum" title="pylangacq.chat.Reader.mlum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mlum</span></code></a>([participant])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.mlum" title="pylangacq.chat.Reader.mlum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mlum</span></code></a>([participant])</p></td>
 <td><p>Return the mean lengths of utterance by morphemes.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.mluw" title="pylangacq.chat.Reader.mluw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mluw</span></code></a>([participant])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.mluw" title="pylangacq.chat.Reader.mluw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mluw</span></code></a>([participant])</p></td>
 <td><p>Return the mean lengths of utterance by words.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.n_files" title="pylangacq.chat.Reader.n_files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_files</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.n_files" title="pylangacq.chat.Reader.n_files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_files</span></code></a>()</p></td>
 <td><p>Return the number of files.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.n_utterances" title="pylangacq.chat.Reader.n_utterances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_utterances</span></code></a>([participants, exclude, by_files])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.n_utterances" title="pylangacq.chat.Reader.n_utterances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_utterances</span></code></a>([participants, exclude, by_files])</p></td>
 <td><p>Return the number of utterances.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.participants" title="pylangacq.chat.Reader.participants"><code class="xref py py-obj docutils literal notranslate"><span class="pre">participants</span></code></a>([by_files])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.participants" title="pylangacq.chat.Reader.participants"><code class="xref py py-obj docutils literal notranslate"><span class="pre">participants</span></code></a>([by_files])</p></td>
 <td><p>Return the participants (e.g., CHI, MOT).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.remove" title="pylangacq.chat.Reader.remove"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove</span></code></a>(*file_paths)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.remove" title="pylangacq.chat.Reader.remove"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove</span></code></a>(*file_paths)</p></td>
 <td><p>Remove data from the given file paths.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.sents" title="pylangacq.chat.Reader.sents"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sents</span></code></a>([participants, exclude, by_files])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.sents" title="pylangacq.chat.Reader.sents"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sents</span></code></a>([participants, exclude, by_files])</p></td>
 <td><p>Return the sents.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.tagged_sents" title="pylangacq.chat.Reader.tagged_sents"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tagged_sents</span></code></a>([participants, exclude, by_files])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.tagged_sents" title="pylangacq.chat.Reader.tagged_sents"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tagged_sents</span></code></a>([participants, exclude, by_files])</p></td>
 <td><p>Return the tagged sents.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.tagged_words" title="pylangacq.chat.Reader.tagged_words"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tagged_words</span></code></a>([participants, exclude, by_files])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.tagged_words" title="pylangacq.chat.Reader.tagged_words"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tagged_words</span></code></a>([participants, exclude, by_files])</p></td>
 <td><p>Return the tagged words.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.ttr" title="pylangacq.chat.Reader.ttr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ttr</span></code></a>([keep_case, participant])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.ttr" title="pylangacq.chat.Reader.ttr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ttr</span></code></a>([keep_case, participant])</p></td>
 <td><p>Return the type-token ratios.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.utterances" title="pylangacq.chat.Reader.utterances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utterances</span></code></a>([participants, exclude, by_files])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.utterances" title="pylangacq.chat.Reader.utterances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utterances</span></code></a>([participants, exclude, by_files])</p></td>
 <td><p>Return the utterances.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.word_frequencies" title="pylangacq.chat.Reader.word_frequencies"><code class="xref py py-obj docutils literal notranslate"><span class="pre">word_frequencies</span></code></a>([keep_case, participants, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.word_frequencies" title="pylangacq.chat.Reader.word_frequencies"><code class="xref py py-obj docutils literal notranslate"><span class="pre">word_frequencies</span></code></a>([keep_case, participants, …])</p></td>
 <td><p>Return word frequencies.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.word_ngrams" title="pylangacq.chat.Reader.word_ngrams"><code class="xref py py-obj docutils literal notranslate"><span class="pre">word_ngrams</span></code></a>(n[, keep_case, participants, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.word_ngrams" title="pylangacq.chat.Reader.word_ngrams"><code class="xref py py-obj docutils literal notranslate"><span class="pre">word_ngrams</span></code></a>(n[, keep_case, participants, …])</p></td>
 <td><p>Return word ngrams.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.chat.Reader.words" title="pylangacq.chat.Reader.words"><code class="xref py py-obj docutils literal notranslate"><span class="pre">words</span></code></a>([participants, exclude, by_files])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.words" title="pylangacq.chat.Reader.words"><code class="xref py py-obj docutils literal notranslate"><span class="pre">words</span></code></a>([participants, exclude, by_files])</p></td>
 <td><p>Return the words.</p></td>
 </tr>
 </tbody>
@@ -925,7 +838,6 @@ distinction just described for when <code class="docutils literal notranslate"><
 </dd></dl>
 
 </div>
-</div>
 
 
           </div>
@@ -946,20 +858,21 @@ distinction just described for when <code class="docutils literal notranslate"><
 
 
 <h3>Navigation</h3>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="read.html">Reading CHAT Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="headers.html">Accessing Headers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="transcriptions.html">Transcriptions and Annotations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="frequencies.html">Word Frequencies and Ngrams</a></li>
 <li class="toctree-l1"><a class="reference internal" href="measures.html">Developmental Measures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="measures.html" title="previous chapter">Developmental Measures</a></li>
   </ul></li>
 </ul>
 </div>

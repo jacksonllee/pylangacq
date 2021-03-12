@@ -1,7 +1,7 @@
-.. _freq:
+.. _frequencies:
 
-Word frequency and ngrams
-=========================
+Word Frequencies and Ngrams
+===========================
 
 The way words combine in natural language data is of great interest in all areas
 of linguistic research.

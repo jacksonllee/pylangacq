@@ -4,18 +4,17 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tutorial &#8212; PyLangAcq 0.12.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quickstart &#8212; PyLangAcq 0.12.0 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Reading data" href="read.html" />
-    <link rel="prev" title="Download and install" href="download.html" />
+    <link rel="next" title="Reading CHAT Data" href="read.html" />
+    <link rel="prev" title="PyLangAcq: Language Acquisition Research in Python" href="index.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -32,8 +31,8 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="tutorial">
-<span id="id1"></span><h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="quickstart">
+<span id="id1"></span><h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
 <p>This page introduces the basic functionalities of PyLangAcq and points to
 relevant pages of the library documentation for more advanced usage.</p>
 <ul class="simple">
@@ -46,7 +45,7 @@ relevant pages of the library documentation for more advanced usage.</p>
 </ul>
 <div class="section" id="testing-the-library-installation">
 <span id="test-install"></span><h2>Testing the library installation<a class="headerlink" href="#testing-the-library-installation" title="Permalink to this headline">¶</a></h2>
-<p>To test that PyLangAcq is installed on your system (see <a class="reference internal" href="download.html#download"><span class="std std-ref">Download and install</span></a>), open your terminal with
+<p>To test that PyLangAcq is installed on your system (see <span class="xref std std-ref">download</span>), open your terminal with
 your Python interpretor of choice (= the one for installing PyLangAcq):</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span>
 </pre></div>
@@ -68,7 +67,7 @@ we can read the Eve data using PyLangAcq:</p>
 <span class="go">20</span>
 </pre></div>
 </div>
-<p>More on <a class="reference internal" href="read.html#read"><span class="std std-ref">Reading data</span></a>.</p>
+<p>More on <a class="reference internal" href="read.html#read"><span class="std std-ref">Reading CHAT Data</span></a>.</p>
 </div>
 <div class="section" id="metadata">
 <span id="get-metadata"></span><h2>Metadata<a class="headerlink" href="#metadata" title="Permalink to this headline">¶</a></h2>
@@ -102,7 +101,7 @@ in <code class="docutils literal notranslate"><span class="pre">eve</span></code
 <p><code class="docutils literal notranslate"><span class="pre">eve.age()</span></code> returns a dict that maps a filename to the respective
 file’s age information (as a 3-tuple, e.g., <code class="docutils literal notranslate"><span class="pre">(1,</span> <span class="pre">6,</span> <span class="pre">0)</span></code> for 1 year and
 6 months).</p>
-<p>More on <a class="reference internal" href="metadata.html#metadata"><span class="std std-ref">Accessing metadata</span></a>.</p>
+<p>More on <span class="xref std std-ref">metadata</span>.</p>
 </div>
 <div class="section" id="transcriptions-and-annotations">
 <span id="transcripts"></span><h2>Transcriptions and annotations<a class="headerlink" href="#transcriptions-and-annotations" title="Permalink to this headline">¶</a></h2>
@@ -121,34 +120,34 @@ to check out the word counts in <code class="docutils literal notranslate"><span
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">filenames</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">filenames</span><span class="p">()</span>  <span class="c1"># the set of 20 absolute-path filenames</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">words</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">words</span><span class="p">()</span>  <span class="c1"># all words across as a list across all 20 files</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>  <span class="c1"># total word count</span>
-<span class="go">120133</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">words</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>
+<span class="go">119972</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">words</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span>
 <span class="go">[&#39;more&#39;, &#39;cookie&#39;, &#39;.&#39;, &#39;you&#39;, &#39;0v&#39;, &#39;more&#39;, &#39;cookies&#39;, &#39;?&#39;]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">words_by_files</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="n">by_files</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># dict(filename: word list for that file)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">filenames</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">words_by_files</span><span class="p">[</span><span class="n">filename</span><span class="p">]))</span>
 <span class="gp">...</span>
-<span class="go">010600a.cha 5843</span>
-<span class="go">010600b.cha 5310</span>
-<span class="go">010700a.cha 2492</span>
-<span class="go">010700b.cha 5757</span>
-<span class="go">010800.cha 5715</span>
-<span class="go">010900a.cha 4353</span>
-<span class="go">010900b.cha 5320</span>
-<span class="go">010900c.cha 8902</span>
-<span class="go">011000a.cha 4466</span>
+<span class="go">010600a.cha 5840</span>
+<span class="go">010600b.cha 5309</span>
+<span class="go">010700a.cha 2493</span>
+<span class="go">010700b.cha 5753</span>
+<span class="go">010800.cha 5709</span>
+<span class="go">010900a.cha 4350</span>
+<span class="go">010900b.cha 5314</span>
+<span class="go">010900c.cha 8901</span>
+<span class="go">011000a.cha 4462</span>
 <span class="go">011000b.cha 4535</span>
-<span class="go">011100a.cha 4200</span>
-<span class="go">011100b.cha 6218</span>
-<span class="go">020000a.cha 4469</span>
-<span class="go">020000b.cha 5203</span>
-<span class="go">020100a.cha 8099</span>
-<span class="go">020100b.cha 7385</span>
-<span class="go">020200a.cha 10885</span>
-<span class="go">020200b.cha 8425</span>
-<span class="go">020300a.cha 6929</span>
-<span class="go">020300b.cha 5625</span>
+<span class="go">011100a.cha 4196</span>
+<span class="go">011100b.cha 6214</span>
+<span class="go">020000a.cha 4464</span>
+<span class="go">020000b.cha 5202</span>
+<span class="go">020100a.cha 8075</span>
+<span class="go">020100b.cha 7361</span>
+<span class="go">020200a.cha 10872</span>
+<span class="go">020200b.cha 8407</span>
+<span class="go">020300a.cha 6903</span>
+<span class="go">020300b.cha 5612</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">words()</span></code> and other methods can optionally take the argument <em>participant</em>.
@@ -169,14 +168,14 @@ and <em>rel</em> is the dependency and grammatical relation:</p>
 <span class="go">(&#39;more&#39;, &#39;QN&#39;, &#39;more&#39;, (3, 4, &#39;QUANT&#39;))</span>
 <span class="go">(&#39;cookies&#39;, &#39;N&#39;, &#39;cookie-PL&#39;, (4, 2, &#39;OBJ&#39;))</span>
 <span class="go">(&#39;?&#39;, &#39;?&#39;, &#39;&#39;, (5, 2, &#39;PUNCT&#39;))</span>
-<span class="go">(&#39;how_about&#39;, &#39;ADV:INT&#39;, &#39;how_about&#39;, (1, 3, &#39;LINK&#39;))</span>
+<span class="go">(&#39;how_about&#39;, &#39;PRO:INT&#39;, &#39;how_about&#39;, (1, 3, &#39;LINK&#39;))</span>
 <span class="go">(&#39;another&#39;, &#39;QN&#39;, &#39;another&#39;, (2, 3, &#39;QUANT&#39;))</span>
 <span class="go">(&#39;grahamcracker&#39;, &#39;N&#39;, &#39;+n|graham+n|cracker&#39;, (3, 0, &#39;INCROOT&#39;))</span>
 <span class="go">(&#39;?&#39;, &#39;?&#39;, &#39;&#39;, (4, 3, &#39;PUNCT&#39;))</span>
 <span class="go">(&#39;would&#39;, &#39;MOD&#39;, &#39;will&amp;COND&#39;, (1, 3, &#39;AUX&#39;))</span>
-<span class="go">(&#39;that&#39;, &#39;PRO:REL&#39;, &#39;that&#39;, (2, 3, &#39;LINK&#39;))</span>
+<span class="go">(&#39;that&#39;, &#39;PRO:DEM&#39;, &#39;that&#39;, (2, 3, &#39;SUBJ&#39;))</span>
 <span class="go">(&#39;do&#39;, &#39;V&#39;, &#39;do&#39;, (3, 0, &#39;ROOT&#39;))</span>
-<span class="go">(&#39;just&#39;, &#39;ADV&#39;, &#39;just&#39;, (4, 3, &#39;JCT&#39;))</span>
+<span class="go">(&#39;just&#39;, &#39;ADV&#39;, &#39;just&#39;, (4, 5, &#39;JCT&#39;))</span>
 <span class="go">(&#39;as_well&#39;, &#39;ADV&#39;, &#39;as_well&#39;, (5, 3, &#39;JCT&#39;))</span>
 <span class="go">(&#39;?&#39;, &#39;?&#39;, &#39;&#39;, (6, 3, &#39;PUNCT&#39;))</span>
 <span class="go">(&#39;here&#39;, &#39;ADV&#39;, &#39;here&#39;, (1, 0, &#39;INCROOT&#39;))</span>
@@ -186,7 +185,7 @@ and <em>rel</em> is the dependency and grammatical relation:</p>
 <span class="go">(&#39;go&#39;, &#39;V&#39;, &#39;go&#39;, (3, 0, &#39;ROOT&#39;))</span>
 </pre></div>
 </div>
-<p>More on <a class="reference internal" href="transcriptions.html#transcriptions"><span class="std std-ref">Transcriptions and annotations</span></a>.</p>
+<p>More on <a class="reference internal" href="transcriptions.html#transcriptions"><span class="std std-ref">Transcriptions and Annotations</span></a>.</p>
 </div>
 <div class="section" id="developmental-measures">
 <span id="use-dev-measures"></span><h2>Developmental measures<a class="headerlink" href="#developmental-measures" title="Permalink to this headline">¶</a></h2>
@@ -194,31 +193,31 @@ and <em>rel</em> is the dependency and grammatical relation:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">filename</span><span class="p">,</span> <span class="n">mlum</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">MLUm</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
 <span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">mlum</span><span class="p">)</span>
 <span class="gp">...</span>
-<span class="go">010600a.cha 2.265687583444593</span>
-<span class="go">010600b.cha 2.4487704918032787</span>
+<span class="go">010600a.cha 2.267022696929239</span>
+<span class="go">010600b.cha 2.4508196721311477</span>
 <span class="go">010700a.cha 2.7628458498023716</span>
-<span class="go">010700b.cha 2.5728813559322035</span>
+<span class="go">010700b.cha 2.571186440677966</span>
 <span class="go">010800.cha 2.8528995756718527</span>
-<span class="go">010900a.cha 3.1660516605166054</span>
-<span class="go">010900b.cha 3.115530303030303</span>
-<span class="go">010900c.cha 3.3733055265901983</span>
-<span class="go">011000a.cha 3.817658349328215</span>
-<span class="go">011000b.cha 3.7915904936014626</span>
-<span class="go">011100a.cha 3.859060402684564</span>
-<span class="go">011100b.cha 4.154320987654321</span>
-<span class="go">020000a.cha 4.239130434782608</span>
-<span class="go">020000b.cha 3.96218487394958</span>
-<span class="go">020100a.cha 4.44475138121547</span>
-<span class="go">020100b.cha 4.405616224648986</span>
-<span class="go">020200a.cha 4.462389380530974</span>
-<span class="go">020200b.cha 4.2768647281921615</span>
-<span class="go">020300a.cha 4.339969372128637</span>
-<span class="go">020300b.cha 3.1521335807050095</span>
+<span class="go">010900a.cha 3.1734317343173433</span>
+<span class="go">010900b.cha 3.1268939393939394</span>
+<span class="go">010900c.cha 3.380604796663191</span>
+<span class="go">011000a.cha 3.8214971209213053</span>
+<span class="go">011000b.cha 3.8062157221206583</span>
+<span class="go">011100a.cha 3.87248322147651</span>
+<span class="go">011100b.cha 4.157407407407407</span>
+<span class="go">020000a.cha 4.247826086956522</span>
+<span class="go">020000b.cha 3.9684873949579833</span>
+<span class="go">020100a.cha 4.448895027624309</span>
+<span class="go">020100b.cha 4.416536661466458</span>
+<span class="go">020200a.cha 4.476769911504425</span>
+<span class="go">020200b.cha 4.286978508217446</span>
+<span class="go">020300a.cha 4.346094946401225</span>
+<span class="go">020300b.cha 3.165120593692022</span>
 </pre></div>
 </div>
 <p>Other language developmental measures, such as type-token ratio (TTR) and
 Index of Productive Syntax (IPSyn), are also implemented.
-More on <a class="reference internal" href="devmeasures.html#devmeasures"><span class="std std-ref">Developmental measures</span></a></p>
+More on <span class="xref std std-ref">devmeasures</span></p>
 </div>
 <div class="section" id="word-frequency-info-ngrams-search-and-concordance">
 <span id="use-word-freq"></span><h2>Word frequency info, ngrams, search, and concordance<a class="headerlink" href="#word-frequency-info-ngrams-search-and-concordance" title="Permalink to this headline">¶</a></h2>
@@ -232,14 +231,13 @@ More on <a class="reference internal" href="devmeasures.html#devmeasures"><span 
 <span class="go">[((&#39;it&#39;, &#39;.&#39;), 705), ((&#39;that&#39;, &#39;?&#39;), 619), ((&#39;what&#39;, &#39;?&#39;), 560), ((&#39;yeah&#39;, &#39;.&#39;), 510), ((&#39;there&#39;, &#39;.&#39;), 471)]</span>
 </pre></div>
 </div>
-<p>More on <a class="reference internal" href="freq.html#freq"><span class="std std-ref">Word frequency and ngrams</span></a>.</p>
-<p>See also <code class="docutils literal notranslate"><span class="pre">search()</span></code> and <code class="docutils literal notranslate"><span class="pre">concordance()</span></code> in <a class="reference internal" href="concord.html#concord"><span class="std std-ref">Word search and concordance</span></a>.</p>
+<p>More on <span class="xref std std-ref">freq</span>.</p>
 </div>
 <div class="section" id="questions-issues">
 <h2>Questions? Issues?<a class="headerlink" href="#questions-issues" title="Permalink to this headline">¶</a></h2>
-<p>If you have any questions, comments, bug reports etc, please open <a class="reference external" href="https://github.com/pylangacq/pylangacq/issues">issues
+<p>If you have any questions, comments, bug reports etc, please open <a class="reference external" href="https://github.com/jacksonllee/pylangacq/issues">issues
 at the GitHub repository</a>, or
-contact <a class="reference external" href="http://jacksonllee.com/">Jackson L. Lee</a>.</p>
+contact <a class="reference external" href="https://jacksonllee.com/">Jackson L. Lee</a>.</p>
 </div>
 </div>
 
@@ -250,7 +248,7 @@ contact <a class="reference external" href="http://jacksonllee.com/">Jackson L. 
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="toc.html">PyLangAcq</a></h1>
+<h1 class="logo"><a href="index.html">PyLangAcq</a></h1>
 
 
 
@@ -263,9 +261,7 @@ contact <a class="reference external" href="http://jacksonllee.com/">Jackson L. 
 
 <h3>Navigation</h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="index.html">PyLangAcq: Language Acquisition Research in Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="download.html">Download and install</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#testing-the-library-installation">Testing the library installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#reading-chat-data">Reading CHAT data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#metadata">Metadata</a></li>
@@ -275,21 +271,20 @@ contact <a class="reference external" href="http://jacksonllee.com/">Jackson L. 
 <li class="toctree-l2"><a class="reference internal" href="#questions-issues">Questions? Issues?</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="read.html">Reading data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="metadata.html">Accessing metadata</a></li>
-<li class="toctree-l1"><a class="reference internal" href="transcriptions.html">Transcriptions and annotations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="devmeasures.html">Developmental measures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="freq.html">Word frequency and ngrams</a></li>
-<li class="toctree-l1"><a class="reference internal" href="concord.html">Word search and concordance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference.html">Library reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="read.html">Reading CHAT Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="headers.html">Accessing Headers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transcriptions.html">Transcriptions and Annotations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequencies.html">Word Frequencies and Ngrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="measures.html">Developmental Measures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
-  <li><a href="toc.html">Documentation overview</a><ul>
-      <li>Previous: <a href="download.html" title="previous chapter">Download and install</a></li>
-      <li>Next: <a href="read.html" title="next chapter">Reading data</a></li>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">PyLangAcq: Language Acquisition Research in Python</a></li>
+      <li>Next: <a href="read.html" title="next chapter">Reading CHAT Data</a></li>
   </ul></li>
 </ul>
 </div>
@@ -316,10 +311,10 @@ contact <a class="reference external" href="http://jacksonllee.com/">Jackson L. 
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2020, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.12.0 | Documentation last updated on October 11, 2020.
+      &copy;2015-2021, <a href="https://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.12.0 | Documentation last updated on March 11, 2021.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

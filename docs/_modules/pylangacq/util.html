@@ -4,15 +4,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>pylangacq.util &#8212; PyLangAcq 0.12.0 documentation</title>
-    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
     <link rel="search" title="Search" href="../../search.html" />
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
@@ -95,7 +94,7 @@
     <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[% [^\[]+?\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
     <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[- [^\[]+?\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
     <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[\^ [^\[]+?\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
-    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^]+?&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>  <span class="c1"># TODO: Why need this?!</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^]+?&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
     <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[&lt;\d?\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
     <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[&gt;\d?\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
     <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\(\d+?\.?\d*?\)&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
@@ -187,6 +186,10 @@
     <span class="n">slash_question_indices</span> <span class="o">=</span> <span class="n">find_indices</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;&gt; \[/\?\]&quot;</span><span class="p">)</span>
     <span class="n">index_pairs</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">begin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">begin</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span> <span class="k">for</span> <span class="n">begin</span> <span class="ow">in</span> <span class="n">slash_question_indices</span><span class="p">]</span>
 
+    <span class="c1"># remove &#39; [/-]&#39;</span>
+    <span class="n">slash_dash_indices</span> <span class="o">=</span> <span class="n">find_indices</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;&gt; \[/\-\]&quot;</span><span class="p">)</span>
+    <span class="n">index_pairs</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">begin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">begin</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span> <span class="k">for</span> <span class="n">begin</span> <span class="ow">in</span> <span class="n">slash_dash_indices</span><span class="p">]</span>
+
     <span class="c1"># remove &#39; [::&#39;</span>
     <span class="n">double_error_right_indices</span> <span class="o">=</span> <span class="n">find_indices</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;&gt; \[::&quot;</span><span class="p">)</span>
     <span class="n">index_pairs</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">begin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">begin</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span> <span class="k">for</span> <span class="n">begin</span> <span class="ow">in</span> <span class="n">double_error_right_indices</span><span class="p">]</span>
@@ -202,6 +205,7 @@
         <span class="o">+</span> <span class="n">single_error_right_indices</span>
         <span class="o">+</span> <span class="n">triple_slash_right_indices</span>
         <span class="o">+</span> <span class="n">slash_question_indices</span>
+        <span class="o">+</span> <span class="n">slash_dash_indices</span>
     <span class="p">)</span>
 
     <span class="n">index_pairs</span> <span class="o">=</span> <span class="n">index_pairs</span> <span class="o">+</span> <span class="p">[</span>
@@ -222,6 +226,7 @@
     <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\S+? \[//\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
     <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\S+? \[///\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
     <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\S+? \[/\?\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
+    <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\S+? \[/\-\]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
 
     <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\S+? \[::&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
     <span class="n">utterance</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\S+? \[:&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">utterance</span><span class="p">)</span>
@@ -459,7 +464,7 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../../toc.html">PyLangAcq</a></h1>
+<h1 class="logo"><a href="../../index.html">PyLangAcq</a></h1>
 
 
 
@@ -480,14 +485,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../../transcriptions.html">Transcriptions and annotations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../devmeasures.html">Developmental measures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../freq.html">Word frequency and ngrams</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../concord.html">Word search and concordance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../reference.html">Library reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
-  <li><a href="../../toc.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
   <li><a href="../index.html">Module code</a><ul>
   </ul></li>
   </ul></li>
@@ -516,10 +521,10 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2020, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.12.0 | Documentation last updated on October 11, 2020.
+      &copy;2015-2021, <a href="https://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.12.0 | Documentation last updated on March 11, 2021.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

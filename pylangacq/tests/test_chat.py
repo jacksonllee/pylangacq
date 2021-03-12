@@ -32,7 +32,7 @@ def test_if_childes_has_updated_data():
 
 
 def test_from_strs_same_as_from_files():
-    with open(LOCAL_EVE_PATH, encoding="utf8") as f:
+    with open(LOCAL_EVE_PATH, encoding="utf-8") as f:
         from_strs = Reader.from_strs([f.read()])
     file_from_strs = from_strs._files[0]
     file_from_files = _EVE._files[0]

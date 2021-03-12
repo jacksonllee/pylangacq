@@ -4,18 +4,15 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>dependency — Modeling syntax and semantics &#8212; PyLangAcq 0.12.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="util — General functions and constants" href="util.html" />
-    <link rel="prev" title="measures — Developmental measures" href="measures.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -36,17 +33,18 @@
 <span id="grammar"></span><h1><code class="docutils literal notranslate"><span class="pre">dependency</span></code> — Modeling syntax and semantics<a class="headerlink" href="#dependency-modeling-syntax-and-semantics" title="Permalink to this headline">¶</a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">dependency</span></code> module defines classes and functions for handling information
 regarding dependency and grammatical relations based on the <code class="docutils literal notranslate"><span class="pre">%gra</span></code> tiers in
-CHAT transcripts. See <span class="xref std std-ref">synsem</span> for usage.</p>
+CHAT transcripts.</p>
 <span class="target" id="module-pylangacq.dependency"></span><p>Utilities for dependency grammar and parsing.</p>
 <dl class="py class">
 <dt id="pylangacq.dependency.DependencyGraph">
-<em class="property">class </em><code class="sig-prename descclassname">pylangacq.dependency.</code><code class="sig-name descname">DependencyGraph</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tagged_sent</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pylangacq.dependency.</code><code class="sig-name descname">DependencyGraph</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tagged_sent</span><span class="p">:</span> <span class="n">List<span class="p">[</span>pylangacq.objects.Token<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph" title="Permalink to this definition">¶</a></dt>
 <dd><p>A DependencyGraph instance represents a sentence in dependency grammar.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Attributes</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>tagged_sent</strong><span class="classifier">list of tuple(str, str, str, str)</span></dt><dd><p>A tagged sentence as a list of (word, pos, mor, rel).</p>
-</dd>
+<dt><strong>node</strong><span class="classifier">dict</span></dt><dd></dd>
+<dt><strong>edge</strong><span class="classifier">dict</span></dt><dd></dd>
+<dt><strong>tagged_sent</strong><span class="classifier">List[Token]]</span></dt><dd></dd>
 </dl>
 </dd>
 </dl>
@@ -57,29 +55,26 @@ CHAT transcripts. See <span class="xref std std-ref">synsem</span> for usage.</p
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.dependency.DependencyGraph.add_edge" title="pylangacq.dependency.DependencyGraph.add_edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_edge</span></code></a>(self, node1, node2, **kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.dependency.DependencyGraph.add_edge" title="pylangacq.dependency.DependencyGraph.add_edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_edge</span></code></a>(node1, node2, **kwargs)</p></td>
 <td><p>Add an edge between <code class="docutils literal notranslate"><span class="pre">node1</span></code> and <code class="docutils literal notranslate"><span class="pre">node2</span></code>.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.dependency.DependencyGraph.edges" title="pylangacq.dependency.DependencyGraph.edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edges</span></code></a>(self)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.dependency.DependencyGraph.edges" title="pylangacq.dependency.DependencyGraph.edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edges</span></code></a>()</p></td>
 <td><p>Return the edges.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.dependency.DependencyGraph.faulty" title="pylangacq.dependency.DependencyGraph.faulty"><code class="xref py py-obj docutils literal notranslate"><span class="pre">faulty</span></code></a>(self)</p></td>
-<td><p>Determine whether the graph is faulty for dependency information.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.dependency.DependencyGraph.number_of_nodes" title="pylangacq.dependency.DependencyGraph.number_of_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">number_of_nodes</span></code></a>(self)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.dependency.DependencyGraph.n_nodes" title="pylangacq.dependency.DependencyGraph.n_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_nodes</span></code></a>()</p></td>
 <td><p>Return the number of nodes.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.dependency.DependencyGraph.to_conll" title="pylangacq.dependency.DependencyGraph.to_conll"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_conll</span></code></a>(self)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.dependency.DependencyGraph.to_conll" title="pylangacq.dependency.DependencyGraph.to_conll"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_conll</span></code></a>()</p></td>
 <td><p>Return the dependency graph in the CoNLL format.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.dependency.DependencyGraph.to_tikz" title="pylangacq.dependency.DependencyGraph.to_tikz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_tikz</span></code></a>(self)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.dependency.DependencyGraph.to_tikz" title="pylangacq.dependency.DependencyGraph.to_tikz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_tikz</span></code></a>()</p></td>
 <td><p>Return the dependency graph as LaTeX tikz-dependency code.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py method">
 <dt id="pylangacq.dependency.DependencyGraph.add_edge">
-<code class="sig-name descname">add_edge</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">node1</span></em>, <em class="sig-param"><span class="n">node2</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph.add_edge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.add_edge" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_edge</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">node1</span></em>, <em class="sig-param"><span class="n">node2</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph.add_edge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.add_edge" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add an edge between <code class="docutils literal notranslate"><span class="pre">node1</span></code> and <code class="docutils literal notranslate"><span class="pre">node2</span></code>.</p>
 <p>If a node doesn’t yet exist, it is added to the graph.</p>
 <dl class="field-list simple">
@@ -87,7 +82,7 @@ CHAT transcripts. See <span class="xref std std-ref">synsem</span> for usage.</p
 <dd class="field-odd"><dl class="simple">
 <dt><strong>node1</strong><span class="classifier">int</span></dt><dd></dd>
 <dt><strong>node2</strong><span class="classifier">int</span></dt><dd></dd>
-<dt><strong>kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>Edge attributes</p>
+<dt><strong>**kwargs</strong></dt><dd><p>Edge attributes</p>
 </dd>
 </dl>
 </dd>
@@ -96,7 +91,7 @@ CHAT transcripts. See <span class="xref std std-ref">synsem</span> for usage.</p
 
 <dl class="py method">
 <dt id="pylangacq.dependency.DependencyGraph.edges">
-<code class="sig-name descname">edges</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph.edges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.edges" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">edges</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph.edges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.edges" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the edges.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -109,7 +104,7 @@ CHAT transcripts. See <span class="xref std std-ref">synsem</span> for usage.</p
 
 <dl class="py method">
 <dt id="pylangacq.dependency.DependencyGraph.faulty">
-<code class="sig-name descname">faulty</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph.faulty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.faulty" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">faulty</code><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.faulty" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determine whether the graph is faulty for dependency information.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -121,8 +116,8 @@ CHAT transcripts. See <span class="xref std std-ref">synsem</span> for usage.</p
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.dependency.DependencyGraph.number_of_nodes">
-<code class="sig-name descname">number_of_nodes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph.number_of_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.number_of_nodes" title="Permalink to this definition">¶</a></dt>
+<dt id="pylangacq.dependency.DependencyGraph.n_nodes">
+<code class="sig-name descname">n_nodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph.n_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.n_nodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the number of nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -135,7 +130,7 @@ CHAT transcripts. See <span class="xref std std-ref">synsem</span> for usage.</p
 
 <dl class="py method">
 <dt id="pylangacq.dependency.DependencyGraph.to_conll">
-<code class="sig-name descname">to_conll</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph.to_conll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.to_conll" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">to_conll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph.to_conll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.to_conll" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the dependency graph in the CoNLL format.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -149,7 +144,7 @@ CHAT transcripts. See <span class="xref std std-ref">synsem</span> for usage.</p
 
 <dl class="py method">
 <dt id="pylangacq.dependency.DependencyGraph.to_tikz">
-<code class="sig-name descname">to_tikz</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph.to_tikz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.to_tikz" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">to_tikz</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/dependency.html#DependencyGraph.to_tikz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.dependency.DependencyGraph.to_tikz" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the dependency graph as LaTeX tikz-dependency code.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -172,7 +167,7 @@ CHAT transcripts. See <span class="xref std std-ref">synsem</span> for usage.</p
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="toc.html">PyLangAcq</a></h1>
+<h1 class="logo"><a href="index.html">PyLangAcq</a></h1>
 
 
 
@@ -184,33 +179,20 @@ CHAT transcripts. See <span class="xref std std-ref">synsem</span> for usage.</p
 
 
 <h3>Navigation</h3>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="index.html">PyLangAcq: Language Acquisition Research in Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="download.html">Download and install</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="read.html">Reading data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="metadata.html">Accessing metadata</a></li>
-<li class="toctree-l1"><a class="reference internal" href="transcriptions.html">Transcriptions and annotations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="devmeasures.html">Developmental measures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="freq.html">Word frequency and ngrams</a></li>
-<li class="toctree-l1"><a class="reference internal" href="concord.html">Word search and concordance</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="reference.html">Library reference</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="chat.html"><code class="docutils literal notranslate"><span class="pre">chat</span></code> — Reading and parsing CHAT transcripts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="measures.html"><code class="docutils literal notranslate"><span class="pre">measures</span></code> — Developmental measures</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">dependency</span></code> — Modeling syntax and semantics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.html"><code class="docutils literal notranslate"><span class="pre">util</span></code> — General functions and constants</a></li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="read.html">Reading CHAT Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="headers.html">Accessing Headers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transcriptions.html">Transcriptions and Annotations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequencies.html">Word Frequencies and Ngrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="measures.html">Developmental Measures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
-  <li><a href="toc.html">Documentation overview</a><ul>
-  <li><a href="reference.html">Library reference</a><ul>
-      <li>Previous: <a href="measures.html" title="previous chapter"><code class="docutils literal notranslate"><span class="pre">measures</span></code> — Developmental measures</a></li>
-      <li>Next: <a href="util.html" title="next chapter"><code class="docutils literal notranslate"><span class="pre">util</span></code> — General functions and constants</a></li>
-  </ul></li>
+  <li><a href="index.html">Documentation overview</a><ul>
   </ul></li>
 </ul>
 </div>
@@ -237,10 +219,10 @@ CHAT transcripts. See <span class="xref std std-ref">synsem</span> for usage.</p
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2020, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.12.0 | Documentation last updated on October 11, 2020.
+      &copy;2015-2021, <a href="https://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.12.0 | Documentation last updated on March 11, 2021.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

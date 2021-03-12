@@ -1,7 +1,7 @@
-.. _tutorial:
+.. _quickstart:
 
-Tutorial
-========
+Quickstart
+==========
 
 This page introduces the basic functionalities of PyLangAcq and points to
 relevant pages of the library documentation for more advanced usage.
@@ -240,8 +240,6 @@ For word combinatorics, use ``word_frequency()`` and ``word_ngrams()``:
     [(('it', '.'), 705), (('that', '?'), 619), (('what', '?'), 560), (('yeah', '.'), 510), (('there', '.'), 471)]
 
 More on :ref:`freq`.
-
-See also ``search()`` and ``concordance()`` in :ref:`concord`.
 
 Questions? Issues?
 ------------------

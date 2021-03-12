@@ -4,15 +4,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>pylangacq.dependency &#8212; PyLangAcq 0.12.0 documentation</title>
-    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
     <link rel="search" title="Search" href="../../search.html" />
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
@@ -33,17 +32,28 @@
   <h1>Source code for pylangacq.dependency</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Utilities for dependency grammar and parsing.&quot;&quot;&quot;</span>
 
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span>
 
-<div class="viewcode-block" id="DependencyGraph"><a class="viewcode-back" href="../../dependency.html#pylangacq.dependency.DependencyGraph">[docs]</a><span class="k">class</span> <span class="nc">DependencyGraph</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="kn">from</span> <span class="nn">pylangacq.objects</span> <span class="k">import</span> <span class="n">Gra</span><span class="p">,</span> <span class="n">Token</span>
+
+
+<div class="viewcode-block" id="DependencyGraph"><a class="viewcode-back" href="../../dependency.html#pylangacq.dependency.DependencyGraph">[docs]</a><span class="k">class</span> <span class="nc">DependencyGraph</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;A DependencyGraph instance represents a sentence in dependency grammar.</span>
 
-<span class="sd">    Parameters</span>
+<span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    tagged_sent : list of tuple(str, str, str, str)</span>
-<span class="sd">        A tagged sentence as a list of (word, pos, mor, rel).</span>
+<span class="sd">    node : dict</span>
+<span class="sd">    edge : dict</span>
+<span class="sd">    tagged_sent : List[Token]]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tagged_sent</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tagged_sent</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Token</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize a DependencyGraph object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tagged_sent : List[Token]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># from node to dict (node&#39;s properties)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">edge</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># from node to node to dict (edge&#39;s properties)</span>
 
@@ -61,7 +71,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        node1 : int</span>
 <span class="sd">        node2 : int</span>
-<span class="sd">        kwargs : dict, optional</span>
+<span class="sd">        **kwargs</span>
 <span class="sd">            Edge attributes</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">node1</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">:</span>
@@ -86,7 +96,7 @@
                 <span class="n">result</span><span class="p">[</span><span class="n">node1</span><span class="p">]</span> <span class="o">=</span> <span class="n">node2</span>
         <span class="k">return</span> <span class="n">result</span></div>
 
-<div class="viewcode-block" id="DependencyGraph.number_of_nodes"><a class="viewcode-back" href="../../dependency.html#pylangacq.dependency.DependencyGraph.number_of_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">number_of_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DependencyGraph.n_nodes"><a class="viewcode-back" href="../../dependency.html#pylangacq.dependency.DependencyGraph.n_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">n_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the number of nodes.</span>
 
 <span class="sd">        Returns</span>
@@ -97,10 +107,16 @@
 
     <span class="k">def</span> <span class="nf">_create_graph_from_chat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create dependency graph based on the input data.&quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">word</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">mor</span><span class="p">,</span> <span class="n">gra</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tagged_sent</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">,</span> <span class="n">relation</span> <span class="o">=</span> <span class="n">gra</span>  <span class="c1"># e.g., (1, 3, &#39;LINK&#39;)</span>
-            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tagged_sent</span><span class="p">:</span>
+            <span class="n">word</span> <span class="o">=</span> <span class="n">token</span><span class="o">.</span><span class="n">word</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">token</span><span class="o">.</span><span class="n">pos</span>
+            <span class="n">mor</span> <span class="o">=</span> <span class="n">token</span><span class="o">.</span><span class="n">mor</span>
+            <span class="n">gra</span> <span class="o">=</span> <span class="n">token</span><span class="o">.</span><span class="n">gra</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">gra</span><span class="p">)</span> <span class="o">==</span> <span class="n">Gra</span> <span class="ow">and</span> <span class="n">gra</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">node1</span> <span class="o">=</span> <span class="n">gra</span><span class="o">.</span><span class="n">source</span>
+                <span class="n">node2</span> <span class="o">=</span> <span class="n">gra</span><span class="o">.</span><span class="n">target</span>
+                <span class="n">relation</span> <span class="o">=</span> <span class="n">gra</span><span class="o">.</span><span class="n">rel</span>
+            <span class="k">else</span><span class="p">:</span>
                 <span class="n">node1</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
                 <span class="n">node2</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
                 <span class="n">relation</span> <span class="o">=</span> <span class="s2">&quot;**ERROR**&quot;</span>
@@ -111,14 +127,15 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;word&quot;</span><span class="p">:</span> <span class="s2">&quot;ROOT&quot;</span><span class="p">,</span> <span class="s2">&quot;pos&quot;</span><span class="p">:</span> <span class="s2">&quot;ROOT&quot;</span><span class="p">,</span> <span class="s2">&quot;mor&quot;</span><span class="p">:</span> <span class="s2">&quot;ROOT&quot;</span><span class="p">}</span>
 
-<div class="viewcode-block" id="DependencyGraph.faulty"><a class="viewcode-back" href="../../dependency.html#pylangacq.dependency.DependencyGraph.faulty">[docs]</a>    <span class="k">def</span> <span class="nf">faulty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">faulty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Determine whether the graph is faulty for dependency information.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        bool</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faulty</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faulty</span>
 
 <div class="viewcode-block" id="DependencyGraph.to_tikz"><a class="viewcode-back" href="../../dependency.html#pylangacq.dependency.DependencyGraph.to_tikz">[docs]</a>    <span class="k">def</span> <span class="nf">to_tikz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the dependency graph as LaTeX tikz-dependency code.</span>
@@ -132,7 +149,7 @@
 
         <span class="c1"># get graph info</span>
         <span class="n">dep_to_head</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">())</span>
-        <span class="n">number_of_nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span>
+        <span class="n">number_of_nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span><span class="p">()</span>
 
         <span class="c1"># add \begin{deptext}...\end{deptext}</span>
         <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s2">&quot;word&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">number_of_nodes</span><span class="p">)]</span>
@@ -180,7 +197,7 @@
         <span class="n">collector</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">dep_to_head</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span>
 
-        <span class="k">for</span> <span class="n">dep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()):</span>
+        <span class="k">for</span> <span class="n">dep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span><span class="p">()):</span>
             <span class="n">head</span> <span class="o">=</span> <span class="n">dep_to_head</span><span class="p">[</span><span class="n">dep</span><span class="p">]</span>
             <span class="n">word</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="s2">&quot;word&quot;</span><span class="p">]</span>
             <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">dep</span><span class="p">][</span><span class="s2">&quot;pos&quot;</span><span class="p">]</span>
@@ -196,7 +213,7 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../../toc.html">PyLangAcq</a></h1>
+<h1 class="logo"><a href="../../index.html">PyLangAcq</a></h1>
 
 
 
@@ -209,22 +226,19 @@
 
 <h3>Navigation</h3>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../index.html">PyLangAcq: Language Acquisition Research in Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../download.html">Download and install</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../read.html">Reading data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../metadata.html">Accessing metadata</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../transcriptions.html">Transcriptions and annotations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../devmeasures.html">Developmental measures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../freq.html">Word frequency and ngrams</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../concord.html">Word search and concordance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../reference.html">Library reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../read.html">Reading CHAT Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../headers.html">Accessing Headers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../transcriptions.html">Transcriptions and Annotations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../frequencies.html">Word Frequencies and Ngrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../measures.html">Developmental Measures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
-  <li><a href="../../toc.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
   <li><a href="../index.html">Module code</a><ul>
   </ul></li>
   </ul></li>
@@ -253,10 +267,10 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2020, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.12.0 | Documentation last updated on October 11, 2020.
+      &copy;2015-2021, <a href="https://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.12.0 | Documentation last updated on March 11, 2021.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

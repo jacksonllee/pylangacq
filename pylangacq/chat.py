@@ -23,7 +23,7 @@ from pylangacq.measures import _CLITIC, _get_ipsyn, _get_mlum, _get_mluw, _get_t
 from pylangacq.objects import Gra, Token, Utterance
 
 
-_ENCODING = "utf8"
+_ENCODING = "utf-8"
 
 _CHAT_EXTENSION = ".cha"
 
@@ -96,7 +96,7 @@ def _params_in_docstring(*params):
     if "encoding" in params:
         docstring += """
         encoding : str, optional
-            Text encoding to parse the CHAT data. The default value is ``"utf8"``
+            Text encoding to parse the CHAT data. The default value is ``"utf-8"``
             for Unicode UTF-8."""
 
     if "extension" in params:

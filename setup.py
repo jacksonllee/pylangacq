@@ -1,12 +1,21 @@
 import os
+import re
 import setuptools
 
 
 _VERSION = "0.12.0"
 
 _THIS_DIR = os.path.dirname(os.path.realpath(__file__))
-with open(os.path.join(_THIS_DIR, "README.md"), encoding="utf-8") as f:
-    _LONG_DESCRIPTION = f.read().strip()
+
+
+def _get_long_description():
+    with open(os.path.join(_THIS_DIR, "README.rst"), encoding="utf8") as f:
+        readme = f.read().strip()
+    # PyPI / twine doesn't accept the `raw` directive in reStructuredText.
+    long_description = re.sub(
+        r"\.\. start-raw-directive[\s\S]+?\.\. end-raw-directive", "", readme
+    )
+    return long_description
 
 
 def main():
@@ -14,9 +23,14 @@ def main():
         name="pylangacq",
         version=_VERSION,
         description="PyLangAcq: Language Acquisition Research in Python",
-        long_description=_LONG_DESCRIPTION,
-        long_description_content_type="text/markdown",
+        long_description=_get_long_description(),
+        long_description_content_type="text/x-rst",
         url="https://pylangacq.org/",
+        project_urls={
+            "Bug Tracker": "https://github.com/jacksonllee/pylangacq/issues",
+            "Source Code": "https://github.com/jacksonllee/pylangacq",
+        },
+        download_url="https://pypi.org/project/pylangacq/#files",
         author="Jackson L. Lee",
         author_email="jacksonlunlee@gmail.com",
         license="MIT License",
@@ -69,7 +83,7 @@ def main():
             "Topic :: Text Processing :: Indexing",
             "Topic :: Text Processing :: Linguistic",
         ],
-        data_files=[(".", ["LICENSE.txt", "CHANGELOG.md"])],
+        data_files=[(".", ["README.rst", "LICENSE.txt", "CHANGELOG.md"])],
     )
 
 

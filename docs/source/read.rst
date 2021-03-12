@@ -1,7 +1,7 @@
 .. _read:
 
-Reading data
-============
+Reading CHAT Data
+=================
 
 This page provides details of the CHAT data format that PyLangAcq assumes and
 explains how CHAT data files are read.

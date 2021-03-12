@@ -5,7 +5,7 @@
 
 The ``dependency`` module defines classes and functions for handling information
 regarding dependency and grammatical relations based on the ``%gra`` tiers in
-CHAT transcripts. See :ref:`synsem` for usage.
+CHAT transcripts.
 
 .. automodule:: pylangacq.dependency
    :members:

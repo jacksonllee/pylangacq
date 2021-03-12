@@ -4,18 +4,17 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transcriptions and annotations &#8212; PyLangAcq 0.12.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transcriptions and Annotations &#8212; PyLangAcq 0.12.0 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Developmental measures" href="devmeasures.html" />
-    <link rel="prev" title="Accessing metadata" href="metadata.html" />
+    <link rel="next" title="Word Frequencies and Ngrams" href="frequencies.html" />
+    <link rel="prev" title="Accessing Headers" href="headers.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -33,10 +32,10 @@
           <div class="body" role="main">
             
   <div class="section" id="transcriptions-and-annotations">
-<span id="transcriptions"></span><h1>Transcriptions and annotations<a class="headerlink" href="#transcriptions-and-annotations" title="Permalink to this headline">¶</a></h1>
+<span id="transcriptions"></span><h1>Transcriptions and Annotations<a class="headerlink" href="#transcriptions-and-annotations" title="Permalink to this headline">¶</a></h1>
 <p>This page introduces the data methods of <code class="docutils literal notranslate"><span class="pre">Reader</span></code> objects for transcriptions
 and annotations.
-For metadata access, see <a class="reference internal" href="metadata.html#metadata"><span class="std std-ref">Accessing metadata</span></a>.
+For metadata access, see <span class="xref std std-ref">metadata</span>.
 For details of the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> class, see <a class="reference internal" href="chat.html#reader-api"><span class="std std-ref">The Reader class API</span></a>.</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#cds"><span class="std std-ref">Child speech versus child directed speech</span></a></p></li>
@@ -171,7 +170,7 @@ access methods introduced in <a class="reference internal" href="#utterances"><s
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span> <span class="kn">as</span> <span class="nn">pla</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pla</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="s1">&#39;Brown/Eve/*.cha&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">words</span><span class="p">())</span>  <span class="c1"># total number of words in Eve&#39;s data</span>
-<span class="go">120131</span>
+<span class="go">119972</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">words</span><span class="p">()[:</span><span class="mi">5</span><span class="p">]</span>  <span class="c1"># first five words</span>
 <span class="go">[&#39;more&#39;, &#39;cookie&#39;, &#39;.&#39;, &#39;you&#39;, &#39;0v&#39;]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">tagged_words</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># first two tagged words</span>
@@ -194,7 +193,7 @@ access methods introduced in <a class="reference internal" href="#utterances"><s
 <span class="go"> (&#39;MOT&#39;, &#39;would that do just as_well ?&#39;),</span>
 <span class="go"> (&#39;MOT&#39;, &#39;here .&#39;)]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">part_of_speech_tags</span><span class="p">())</span>  <span class="c1"># total number of distinct part-of-speech tags</span>
-<span class="go">65</span>
+<span class="go">62</span>
 </pre></div>
 </div>
 <p>The terminology of “words” and “sents” (= sentences, equivalent to utterances
@@ -215,9 +214,8 @@ PyLangAcq also provides additional functionalities built on top of these
 methods, and they are described in other parts of the
 documentation:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="devmeasures.html#devmeasures"><span class="std std-ref">Developmental measures</span></a></p></li>
-<li><p><a class="reference internal" href="freq.html#freq"><span class="std std-ref">Word frequency and ngrams</span></a></p></li>
-<li><p><a class="reference internal" href="concord.html#concord"><span class="std std-ref">Word search and concordance</span></a></p></li>
+<li><p><span class="xref std std-ref">devmeasures</span></p></li>
+<li><p><span class="xref std std-ref">freq</span></p></li>
 </ul>
 </div>
 </div>
@@ -229,7 +227,7 @@ documentation:</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="toc.html">PyLangAcq</a></h1>
+<h1 class="logo"><a href="index.html">PyLangAcq</a></h1>
 
 
 
@@ -242,30 +240,27 @@ documentation:</p>
 
 <h3>Navigation</h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="index.html">PyLangAcq: Language Acquisition Research in Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="download.html">Download and install</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="read.html">Reading data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="metadata.html">Accessing metadata</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Transcriptions and annotations</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="read.html">Reading CHAT Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="headers.html">Accessing Headers</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Transcriptions and Annotations</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#child-speech-versus-child-directed-speech">Child speech versus child directed speech</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#the-representation-of-words">The representation of “words”</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#utterances">Utterances</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#advanced-usage">Advanced usage</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="devmeasures.html">Developmental measures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="freq.html">Word frequency and ngrams</a></li>
-<li class="toctree-l1"><a class="reference internal" href="concord.html">Word search and concordance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference.html">Library reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequencies.html">Word Frequencies and Ngrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="measures.html">Developmental Measures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
-  <li><a href="toc.html">Documentation overview</a><ul>
-      <li>Previous: <a href="metadata.html" title="previous chapter">Accessing metadata</a></li>
-      <li>Next: <a href="devmeasures.html" title="next chapter">Developmental measures</a></li>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="headers.html" title="previous chapter">Accessing Headers</a></li>
+      <li>Next: <a href="frequencies.html" title="next chapter">Word Frequencies and Ngrams</a></li>
   </ul></li>
 </ul>
 </div>
@@ -292,10 +287,10 @@ documentation:</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2020, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.12.0 | Documentation last updated on October 11, 2020.
+      &copy;2015-2021, <a href="https://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.12.0 | Documentation last updated on March 11, 2021.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

@@ -52,7 +52,7 @@ source_suffix = '.rst'
 #source_encoding = 'utf-8-sig'
 
 # The master toctree document.
-master_doc = 'toc'
+master_doc = 'index'
 
 # General information about the project.
 project = 'PyLangAcq'
@@ -146,13 +146,13 @@ html_sidebars = {
 #html_theme_options = {}
 html_theme_options = {
     # 'logo': 'logo.png',
-    'github_user': 'pylangacq',
+    'github_user': 'jacksonllee',
     'github_repo': 'pylangacq',
     'github_button': False,  # default is True
     'github_banner': False,  # default is False
     'show_related': False,  # default is False
-    'page_width': '1200px',  # default is '940px'
-    'sidebar_width': '230px',  # default is '220px'
+    'page_width': '1366px',  # default is '940px'
+    'sidebar_width': '273px',  # default is '220px'
 }
 # For what these HTML theme options mean and many other options I haven't used,
 # see <https://pypi.python.org/pypi/alabaster>.

@@ -1,7 +1,7 @@
-.. _metadata:
+.. _headers:
 
-Accessing metadata
-==================
+Accessing Headers
+=================
 
 A ``Reader`` object has an array of methods for accessing metadata
 (based on headers given by the ``@`` lines) and data

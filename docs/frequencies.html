@@ -4,18 +4,17 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Word frequency and ngrams &#8212; PyLangAcq 0.12.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Word Frequencies and Ngrams &#8212; PyLangAcq 0.12.0 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Word search and concordance" href="concord.html" />
-    <link rel="prev" title="Developmental measures" href="devmeasures.html" />
+    <link rel="next" title="Developmental Measures" href="measures.html" />
+    <link rel="prev" title="Transcriptions and Annotations" href="transcriptions.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -32,8 +31,8 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="word-frequency-and-ngrams">
-<span id="freq"></span><h1>Word frequency and ngrams<a class="headerlink" href="#word-frequency-and-ngrams" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="word-frequencies-and-ngrams">
+<span id="frequencies"></span><h1>Word Frequencies and Ngrams<a class="headerlink" href="#word-frequencies-and-ngrams" title="Permalink to this headline">¶</a></h1>
 <p>The way words combine in natural language data is of great interest in all areas
 of linguistic research.
 PyLangAcq provides several handy functionality for word combinatorics.</p>
@@ -99,28 +98,18 @@ child directed speech in terms of pronoun distribution.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">trigrams_CDS</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_ngrams</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">)</span>  <span class="c1"># 3 for trigrams; for child-directed speech</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">trigrams_child</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_ngrams</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">)</span>  <span class="c1"># child speech</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">trigrams_CDS</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>  <span class="c1"># lots of questions in child-directed speech!</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">trigrams_CDS</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>  <span class="c1"># lots of questions in child-directed speech!</span>
 <span class="go">[((&quot;that&#39;s&quot;, &#39;right&#39;, &#39;.&#39;), 178),</span>
 <span class="go"> ((&#39;what&#39;, &#39;are&#39;, &#39;you&#39;), 149),</span>
 <span class="go"> ((&#39;is&#39;, &#39;that&#39;, &#39;?&#39;), 124),</span>
-<span class="go"> ((&#39;do&#39;, &#39;you&#39;, &#39;want&#39;), 122),</span>
-<span class="go"> ((&#39;what&#39;, &#39;is&#39;, &#39;that&#39;), 99),</span>
-<span class="go"> ((&#39;are&#39;, &#39;you&#39;, &#39;doing&#39;), 94),</span>
-<span class="go"> ((&quot;what&#39;s&quot;, &#39;that&#39;, &#39;?&#39;), 92),</span>
-<span class="go"> ((&#39;is&#39;, &#39;it&#39;, &#39;?&#39;), 89),</span>
-<span class="go"> ((&#39;what&#39;, &#39;do&#39;, &#39;you&#39;), 89),</span>
-<span class="go"> ((&#39;would&#39;, &#39;you&#39;, &#39;like&#39;), 89)]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">trigrams_child</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>  <span class="c1"># was grape juice Eve&#39;s favorite?</span>
+<span class="go"> ((&#39;do&#39;, &#39;you&#39;, &#39;want&#39;), 104),</span>
+<span class="go"> ((&#39;what&#39;, &#39;is&#39;, &#39;that&#39;), 99)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">trigrams_child</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
 <span class="go">[((&#39;grape&#39;, &#39;juice&#39;, &#39;.&#39;), 74),</span>
 <span class="go"> ((&#39;another&#39;, &#39;one&#39;, &#39;.&#39;), 55),</span>
 <span class="go"> ((&#39;what&#39;, &#39;that&#39;, &#39;?&#39;), 50),</span>
 <span class="go"> ((&#39;a&#39;, &#39;b&#39;, &#39;c&#39;), 47),</span>
-<span class="go"> ((&#39;right&#39;, &#39;there&#39;, &#39;.&#39;), 45),</span>
-<span class="go"> ((&#39;in&#39;, &#39;there&#39;, &#39;.&#39;), 43),</span>
-<span class="go"> ((&#39;b&#39;, &#39;c&#39;, &#39;.&#39;), 42),</span>
-<span class="go"> ((&#39;hi&#39;, &#39;Fraser&#39;, &#39;.&#39;), 39),</span>
-<span class="go"> ((&#39;I&#39;, &#39;want&#39;, &#39;some&#39;), 39),</span>
-<span class="go"> ((&#39;a&#39;, &#39;minute&#39;, &#39;.&#39;), 35)]</span>
+<span class="go"> ((&#39;right&#39;, &#39;there&#39;, &#39;.&#39;), 45)]</span>
 </pre></div>
 </div>
 </div>
@@ -132,7 +121,7 @@ child directed speech in terms of pronoun distribution.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="toc.html">PyLangAcq</a></h1>
+<h1 class="logo"><a href="index.html">PyLangAcq</a></h1>
 
 
 
@@ -145,24 +134,21 @@ child directed speech in terms of pronoun distribution.</p>
 
 <h3>Navigation</h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="index.html">PyLangAcq: Language Acquisition Research in Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="download.html">Download and install</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="read.html">Reading data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="metadata.html">Accessing metadata</a></li>
-<li class="toctree-l1"><a class="reference internal" href="transcriptions.html">Transcriptions and annotations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="devmeasures.html">Developmental measures</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Word frequency and ngrams</a></li>
-<li class="toctree-l1"><a class="reference internal" href="concord.html">Word search and concordance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference.html">Library reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="read.html">Reading CHAT Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="headers.html">Accessing Headers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transcriptions.html">Transcriptions and Annotations</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Word Frequencies and Ngrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="measures.html">Developmental Measures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
-  <li><a href="toc.html">Documentation overview</a><ul>
-      <li>Previous: <a href="devmeasures.html" title="previous chapter">Developmental measures</a></li>
-      <li>Next: <a href="concord.html" title="next chapter">Word search and concordance</a></li>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="transcriptions.html" title="previous chapter">Transcriptions and Annotations</a></li>
+      <li>Next: <a href="measures.html" title="next chapter">Developmental Measures</a></li>
   </ul></li>
 </ul>
 </div>
@@ -189,10 +175,10 @@ child directed speech in terms of pronoun distribution.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2020, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.12.0 | Documentation last updated on October 11, 2020.
+      &copy;2015-2021, <a href="https://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.12.0 | Documentation last updated on March 11, 2021.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

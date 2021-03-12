@@ -1,6 +1,6 @@
 .. _transcriptions:
 
-Transcriptions and annotations
+Transcriptions and Annotations
 ==============================
 
 This page introduces the data methods of ``Reader`` objects for transcriptions
@@ -189,4 +189,3 @@ documentation:
 
 * :ref:`devmeasures`
 * :ref:`freq`
-* :ref:`concord`

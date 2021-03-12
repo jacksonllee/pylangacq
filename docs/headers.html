@@ -4,18 +4,17 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accessing metadata &#8212; PyLangAcq 0.12.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Accessing Headers &#8212; PyLangAcq 0.12.0 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Transcriptions and annotations" href="transcriptions.html" />
-    <link rel="prev" title="Reading data" href="read.html" />
+    <link rel="next" title="Transcriptions and Annotations" href="transcriptions.html" />
+    <link rel="prev" title="Reading CHAT Data" href="read.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -32,13 +31,13 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="accessing-metadata">
-<span id="metadata"></span><h1>Accessing metadata<a class="headerlink" href="#accessing-metadata" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="accessing-headers">
+<span id="headers"></span><h1>Accessing Headers<a class="headerlink" href="#accessing-headers" title="Permalink to this headline">¶</a></h1>
 <p>A <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object has an array of methods for accessing metadata
 (based on headers given by the <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> lines) and data
 (the transcriptions with <code class="docutils literal notranslate"><span class="pre">*</span></code> and dependent tiers with <code class="docutils literal notranslate"><span class="pre">%</span></code>).
 This page introduces the metadata methods.
-For data methods, see <a class="reference internal" href="transcriptions.html#transcriptions"><span class="std std-ref">Transcriptions and annotations</span></a>.
+For data methods, see <a class="reference internal" href="transcriptions.html#transcriptions"><span class="std std-ref">Transcriptions and Annotations</span></a>.
 For details of the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> class, see <a class="reference internal" href="chat.html#reader-api"><span class="std std-ref">The Reader class API</span></a>.</p>
 <p>Metadata methods for handling information from the <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> headers:</p>
 <table class="docutils align-default">
@@ -95,13 +94,13 @@ such as <code class="docutils literal notranslate"><span class="pre">eve01.cha</
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span> <span class="kn">as</span> <span class="nn">pla</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pla</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="s1">&#39;Brown/Eve/*.cha&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve01_filename</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;010600a.cha&#39;</span><span class="p">)</span>  <span class="c1"># get the absolute path of Eve&#39;s first data file</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">participant_codes</span><span class="p">()</span>  <span class="c1"># across all 20 files</span>
-<span class="go">{&#39;RIC&#39;, &#39;COL&#39;, &#39;URS&#39;, &#39;FAT&#39;, &#39;GLO&#39;, &#39;CHI&#39;, &#39;MOT&#39;}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">participant_codes</span><span class="p">(</span><span class="n">by_files</span><span class="o">=</span><span class="bp">True</span><span class="p">)[</span><span class="n">eve01_filename</span><span class="p">]</span>  <span class="c1"># only for 010600a.cha</span>
-<span class="go">{&#39;COL&#39;, &#39;CHI&#39;, &#39;MOT&#39;, &#39;RIC&#39;}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sorted</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">participant_codes</span><span class="p">())</span>  <span class="c1"># across all 20 files</span>
+<span class="go">[&#39;CHI&#39;, &#39;COL&#39;, &#39;FAT&#39;, &#39;GLO&#39;, &#39;MOT&#39;, &#39;RIC&#39;, &#39;URS&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sorted</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">participant_codes</span><span class="p">(</span><span class="n">by_files</span><span class="o">=</span><span class="bp">True</span><span class="p">)[</span><span class="n">eve01_filename</span><span class="p">])</span>  <span class="c1"># only for 010600a.cha</span>
+<span class="go">[&#39;CHI&#39;, &#39;COL&#39;, &#39;MOT&#39;, &#39;RIC&#39;]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">participants</span><span class="p">()[</span><span class="n">eve01_filename</span><span class="p">])</span>
 <span class="go">{&#39;CHI&#39;: {&#39;SES&#39;: &#39;&#39;,</span>
-<span class="go">         &#39;age&#39;: &#39;1;6.0&#39;,</span>
+<span class="go">         &#39;age&#39;: &#39;1;06.00&#39;,</span>
 <span class="go">         &#39;corpus&#39;: &#39;Brown&#39;,</span>
 <span class="go">         &#39;custom&#39;: &#39;&#39;,</span>
 <span class="go">         &#39;education&#39;: &#39;&#39;,</span>
@@ -129,7 +128,7 @@ such as <code class="docutils literal notranslate"><span class="pre">eve01.cha</
 <span class="go">         &#39;language&#39;: &#39;eng&#39;,</span>
 <span class="go">         &#39;participant_name&#39;: &#39;Sue&#39;,</span>
 <span class="go">         &#39;participant_role&#39;: &#39;Mother&#39;,</span>
-<span class="go">         &#39;sex&#39;: &#39;&#39;},</span>
+<span class="go">         &#39;sex&#39;: &#39;female&#39;},</span>
 <span class="go"> &#39;RIC&#39;: {&#39;SES&#39;: &#39;&#39;,</span>
 <span class="go">         &#39;age&#39;: &#39;&#39;,</span>
 <span class="go">         &#39;corpus&#39;: &#39;Brown&#39;,</span>
@@ -159,7 +158,7 @@ methods illustrated above, they are always accessible with <code class="docutils
 <span class="go"> &#39;Languages&#39;: &#39;eng&#39;,</span>
 <span class="go"> &#39;PID&#39;: &#39;11312/c-00034743-1&#39;,</span>
 <span class="go"> &#39;Participants&#39;: {&#39;CHI&#39;: {&#39;SES&#39;: &#39;&#39;,</span>
-<span class="go">                          &#39;age&#39;: &#39;1;6.0&#39;,</span>
+<span class="go">                          &#39;age&#39;: &#39;1;06.00&#39;,</span>
 <span class="go">                          &#39;corpus&#39;: &#39;Brown&#39;,</span>
 <span class="go">                          &#39;custom&#39;: &#39;&#39;,</span>
 <span class="go">                          &#39;education&#39;: &#39;&#39;,</span>
@@ -187,7 +186,7 @@ methods illustrated above, they are always accessible with <code class="docutils
 <span class="go">                          &#39;language&#39;: &#39;eng&#39;,</span>
 <span class="go">                          &#39;participant_name&#39;: &#39;Sue&#39;,</span>
 <span class="go">                          &#39;participant_role&#39;: &#39;Mother&#39;,</span>
-<span class="go">                          &#39;sex&#39;: &#39;&#39;},</span>
+<span class="go">                          &#39;sex&#39;: &#39;female&#39;},</span>
 <span class="go">                  &#39;RIC&#39;: {&#39;SES&#39;: &#39;&#39;,</span>
 <span class="go">                          &#39;age&#39;: &#39;&#39;,</span>
 <span class="go">                          &#39;corpus&#39;: &#39;Brown&#39;,</span>
@@ -200,6 +199,7 @@ methods illustrated above, they are always accessible with <code class="docutils
 <span class="go">                          &#39;sex&#39;: &#39;&#39;}},</span>
 <span class="go"> &#39;Tape Location&#39;: &#39;850&#39;,</span>
 <span class="go"> &#39;Time Duration&#39;: &#39;11:30-12:00&#39;,</span>
+<span class="go"> &#39;Types&#39;: &#39;long, toyplay, TD&#39;,</span>
 <span class="go"> &#39;UTF8&#39;: &#39;&#39;}</span>
 </pre></div>
 </div>
@@ -212,7 +212,7 @@ methods illustrated above, they are always accessible with <code class="docutils
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="toc.html">PyLangAcq</a></h1>
+<h1 class="logo"><a href="index.html">PyLangAcq</a></h1>
 
 
 
@@ -225,24 +225,21 @@ methods illustrated above, they are always accessible with <code class="docutils
 
 <h3>Navigation</h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="index.html">PyLangAcq: Language Acquisition Research in Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="download.html">Download and install</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="read.html">Reading data</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Accessing metadata</a></li>
-<li class="toctree-l1"><a class="reference internal" href="transcriptions.html">Transcriptions and annotations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="devmeasures.html">Developmental measures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="freq.html">Word frequency and ngrams</a></li>
-<li class="toctree-l1"><a class="reference internal" href="concord.html">Word search and concordance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference.html">Library reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="read.html">Reading CHAT Data</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Accessing Headers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transcriptions.html">Transcriptions and Annotations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequencies.html">Word Frequencies and Ngrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="measures.html">Developmental Measures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
-  <li><a href="toc.html">Documentation overview</a><ul>
-      <li>Previous: <a href="read.html" title="previous chapter">Reading data</a></li>
-      <li>Next: <a href="transcriptions.html" title="next chapter">Transcriptions and annotations</a></li>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="read.html" title="previous chapter">Reading CHAT Data</a></li>
+      <li>Next: <a href="transcriptions.html" title="next chapter">Transcriptions and Annotations</a></li>
   </ul></li>
 </ul>
 </div>
@@ -269,10 +266,10 @@ methods illustrated above, they are always accessible with <code class="docutils
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2020, <a href="http://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.12.0 | Documentation last updated on October 11, 2020.
+      &copy;2015-2021, <a href="https://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.12.0 | Documentation last updated on March 11, 2021.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

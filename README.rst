@@ -34,7 +34,7 @@ PyLangAcq is a Python library for language acquisition research. Features:
 Download and Install
 --------------------
 
-To download and install the stable, most recent version::
+To download and install the most recent version::
 
     $ pip install --upgrade pylangacq
 
@@ -42,8 +42,11 @@ To test your installation in the Python interpreter:
 
 .. code-block:: python
 
-    >>> import pylangacq as pla
-    >>> pla.__version__  # show version number
+    >>> import pylangacq
+    >>> pylangacq.__version__  # show version number
+
+Ready for more?
+Check out the `Quickstart <https://pylangacq.org/quickstart.html>`_ page.
 
 Links
 -----

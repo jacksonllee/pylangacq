@@ -3,67 +3,52 @@
 Quickstart
 ==========
 
-This page introduces the basic functionalities of PyLangAcq and points to
+This page introduces the basic functionality of PyLangAcq and points to
 relevant pages of the library documentation for more advanced usage.
 
-* :ref:`test_install`
-* :ref:`read_data`
-* :ref:`get_metadata`
-* :ref:`transcripts`
-* :ref:`use_dev_measures`
-* :ref:`use_word_freq`
-
-.. _test_install:
-
-Testing the library installation
---------------------------------
-
-To test that PyLangAcq is installed on your system (see :ref:`download`), open your terminal with
-your Python interpretor of choice (= the one for installing PyLangAcq):
+To start, import the package ``pylangacq`` in your Python code:
 
 .. code-block:: python
 
     >>> import pylangacq
 
-If all goes well, there should be no import errors.
-
-.. _read_data:
+No errors? Great! Now you're ready to proceed.
 
 Reading CHAT data
 -----------------
 
-Assuming that the CHAT transcripts for the Brown portion of CHILDES
-(`zipped here <https://childes.talkbank.org/data/Eng-NA/Brown.zip>`_)
-are available at the current directory,
-we can read the Eve data using PyLangAcq:
+First off, we need some CHAT data to work with.
+The function ``read_chat`` asks for a data source and returns a CHAT data reader.
+The data source can either be local on your computer,
+or a remote source as a ZIP archive file containing `.cha` files.
+A prototypical example for the latter is a dataset from CHILDES.
+To illustrate, let's use Eve's data from the Brown corpus of American English:
 
 .. code-block:: python
 
-    >>> import pylangacq as pla
-    >>> eve = pla.read_chat('Brown/Eve/*.cha')
-
-``'Brown/Eve/*.cha'`` matches all the 20 ``'.cha'`` files for Eve:
-
-.. code-block:: python
-
-    >>> eve.number_of_files()
+    >>> url = "https://childes.talkbank.org/data/Eng-NA/Brown.zip"
+    >>> eve = pylangacq.read_chat(url, "Eve")
+    >>> len(eve)
     20
+
+``eve`` is a ``Reader`` instance.
+It has Eve's 20 CHAT data files all parsed and ready at your disposal.
+``eve`` has various methods through which you can access different information
+with Pythonic data structures.
 
 More on :ref:`read`.
 
-.. _get_metadata:
+Header Information
+------------------
 
-Metadata
---------
-
-CHAT transcripts store metadata as headers with lines beginning with
-``@``. For instance, we can retrieve the age information of the target child
-in ``eve`` created above:
+CHAT transcript files store metadata in the header with lines beginning with ``@``.
+Among other things, we can find the ages (if available from the header)
+of the target child when the recordings were made:
 
 .. code-block:: python
 
     >>> from pprint import pprint
-    >>> pprint(sorted(eve.age().values()))
+    >>> pprint(eve.ages())
     [(1, 6, 0),
      (1, 6, 0),
      (1, 7, 0),
@@ -85,64 +70,59 @@ in ``eve`` created above:
      (2, 3, 0),
      (2, 3, 0)]
 
-``eve.age()`` returns a dict that maps a filename to the respective
-file's age information (as a 3-tuple, e.g., ``(1, 6, 0)`` for 1 year and
-6 months).
+In this example, we can see the age information of Eve's 20 recording sessions,
+from 1 year and 6 months old to 2 years and 3 months old.
 
-More on :ref:`metadata`.
+More on :ref:`headers`.
 
-.. _transcripts:
+Transcript Data
+---------------
 
-Transcriptions and annotations
-------------------------------
-
-
-Transcriptions and annotations from the ``%mor`` and ``%gra`` tiers
+Transcriptions as well as annotations from the ``%mor`` and ``%gra`` tiers
 (for morphology, part-of-speech tags, and grammatical relations)
 are accessible via NLTK-like
 corpus access methods such as ``words()``, ``tagged_words()``, ``sents()``,
-and ``tagged_sents()``. By default, these methods
-return an object "X" lumping together results from all the files.
-If we are interested in return objects for individual files and therefore need
-the file structure, these methods take the optional parameter ``by_files``: if
-``True``, the return object is "dict(filename: X for that file)"
-a dict mapping an absolute-path filename to the method's return
-object for that file (similar to ``age()`` introduced above). For example,
-to check out the word counts in ``eve``:
+and ``tagged_sents()``.
+
+By default, these methods each return a flat list of results from all the files.
+If we are interested in the results for individual files,
+these methods take the optional boolean parameter ``by_files``:
 
 .. code-block:: python
 
-    >>> filenames = eve.filenames()  # the set of 20 absolute-path filenames
-    >>> words = eve.words()  # all words across as a list across all 20 files
+    >>> words = eve.words()  # list of strings, for all the words across all 20 files
     >>> len(words)  # total word count
     119972
     >>> words[:8]
     ['more', 'cookie', '.', 'you', '0v', 'more', 'cookies', '?']
-    >>> words_by_files = eve.words(by_files=True)  # dict(filename: word list for that file)
-    >>> import os
-    >>> for filename in sorted(filenames):
-    ...     print(os.path.basename(filename), len(words_by_files[filename]))
+    >>> words_by_files = eve.words(by_files=True)  # list of lists of strings, each inner list for one file
+    >>> len(words_by_files)  # expects 20 -- that's the number of files of ``eve``
+    20
+    >>> for words_one_file in words_by_files:
+    ...     print(len(words_one_file))
     ...
-    010600a.cha 5840
-    010600b.cha 5309
-    010700a.cha 2493
-    010700b.cha 5753
-    010800.cha 5709
-    010900a.cha 4350
-    010900b.cha 5314
-    010900c.cha 8901
-    011000a.cha 4462
-    011000b.cha 4535
-    011100a.cha 4196
-    011100b.cha 6214
-    020000a.cha 4464
-    020000b.cha 5202
-    020100a.cha 8075
-    020100b.cha 7361
-    020200a.cha 10872
-    020200b.cha 8407
-    020300a.cha 6903
-    020300b.cha 5612
+    5840
+    5309
+    2493
+    5753
+    5709
+    4350
+    5314
+    8901
+    4462
+    4535
+    4196
+    6214
+    4464
+    5202
+    8075
+    7361
+    10872
+    8407
+    6903
+    5612
+
+
 
 ``words()`` and other methods can optionally take the argument *participant*.
 For instance, ``eve.words(participant='CHI')`` gets words by the target

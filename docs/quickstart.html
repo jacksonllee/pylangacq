@@ -33,49 +33,40 @@
             
   <div class="section" id="quickstart">
 <span id="id1"></span><h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
-<p>This page introduces the basic functionalities of PyLangAcq and points to
+<p>This page introduces the basic functionality of PyLangAcq and points to
 relevant pages of the library documentation for more advanced usage.</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#test-install"><span class="std std-ref">Testing the library installation</span></a></p></li>
-<li><p><a class="reference internal" href="#read-data"><span class="std std-ref">Reading CHAT data</span></a></p></li>
-<li><p><a class="reference internal" href="#get-metadata"><span class="std std-ref">Metadata</span></a></p></li>
-<li><p><a class="reference internal" href="#transcripts"><span class="std std-ref">Transcriptions and annotations</span></a></p></li>
-<li><p><a class="reference internal" href="#use-dev-measures"><span class="std std-ref">Developmental measures</span></a></p></li>
-<li><p><a class="reference internal" href="#use-word-freq"><span class="std std-ref">Word frequency info, ngrams, search, and concordance</span></a></p></li>
-</ul>
-<div class="section" id="testing-the-library-installation">
-<span id="test-install"></span><h2>Testing the library installation<a class="headerlink" href="#testing-the-library-installation" title="Permalink to this headline">¶</a></h2>
-<p>To test that PyLangAcq is installed on your system (see <span class="xref std std-ref">download</span>), open your terminal with
-your Python interpretor of choice (= the one for installing PyLangAcq):</p>
+<p>To start, import the package <code class="docutils literal notranslate"><span class="pre">pylangacq</span></code> in your Python code:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span>
 </pre></div>
 </div>
-<p>If all goes well, there should be no import errors.</p>
-</div>
+<p>No errors? Great! Now you’re ready to proceed.</p>
 <div class="section" id="reading-chat-data">
-<span id="read-data"></span><h2>Reading CHAT data<a class="headerlink" href="#reading-chat-data" title="Permalink to this headline">¶</a></h2>
-<p>Assuming that the CHAT transcripts for the Brown portion of CHILDES
-(<a class="reference external" href="https://childes.talkbank.org/data/Eng-NA/Brown.zip">zipped here</a>)
-are available at the current directory,
-we can read the Eve data using PyLangAcq:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span> <span class="kn">as</span> <span class="nn">pla</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pla</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="s1">&#39;Brown/Eve/*.cha&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">'Brown/Eve/*.cha'</span></code> matches all the 20 <code class="docutils literal notranslate"><span class="pre">'.cha'</span></code> files for Eve:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">number_of_files</span><span class="p">()</span>
+<h2>Reading CHAT data<a class="headerlink" href="#reading-chat-data" title="Permalink to this headline">¶</a></h2>
+<p>First off, we need some CHAT data to work with.
+The function <code class="docutils literal notranslate"><span class="pre">read_chat</span></code> asks for a data source and returns a CHAT data reader.
+The data source can either be local on your computer,
+or a remote source as a ZIP archive file containing <cite>.cha</cite> files.
+A prototypical example for the latter is a dataset from CHILDES.
+To illustrate, let’s use Eve’s data from the Brown corpus of American English:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://childes.talkbank.org/data/Eng-NA/Brown.zip&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;Eve&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">eve</span><span class="p">)</span>
 <span class="go">20</span>
 </pre></div>
 </div>
+<p><code class="docutils literal notranslate"><span class="pre">eve</span></code> is a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> instance.
+It has Eve’s 20 CHAT data files all parsed and ready at your disposal.
+<code class="docutils literal notranslate"><span class="pre">eve</span></code> has various methods through which you can access different information
+with Pythonic data structures.</p>
 <p>More on <a class="reference internal" href="read.html#read"><span class="std std-ref">Reading CHAT Data</span></a>.</p>
 </div>
-<div class="section" id="metadata">
-<span id="get-metadata"></span><h2>Metadata<a class="headerlink" href="#metadata" title="Permalink to this headline">¶</a></h2>
-<p>CHAT transcripts store metadata as headers with lines beginning with
-<code class="docutils literal notranslate"><span class="pre">&#64;</span></code>. For instance, we can retrieve the age information of the target child
-in <code class="docutils literal notranslate"><span class="pre">eve</span></code> created above:</p>
+<div class="section" id="header-information">
+<h2>Header Information<a class="headerlink" href="#header-information" title="Permalink to this headline">¶</a></h2>
+<p>CHAT transcript files store metadata in the header with lines beginning with <code class="docutils literal notranslate"><span class="pre">&#64;</span></code>.
+Among other things, we can find the ages (if available from the header)
+of the target child when the recordings were made:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">age</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">ages</span><span class="p">())</span>
 <span class="go">[(1, 6, 0),</span>
 <span class="go"> (1, 6, 0),</span>
 <span class="go"> (1, 7, 0),</span>
@@ -98,56 +89,51 @@ in <code class="docutils literal notranslate"><span class="pre">eve</span></code
 <span class="go"> (2, 3, 0)]</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">eve.age()</span></code> returns a dict that maps a filename to the respective
-file’s age information (as a 3-tuple, e.g., <code class="docutils literal notranslate"><span class="pre">(1,</span> <span class="pre">6,</span> <span class="pre">0)</span></code> for 1 year and
-6 months).</p>
-<p>More on <span class="xref std std-ref">metadata</span>.</p>
+<p>In this example, we can see the age information of Eve’s 20 recording sessions,
+from 1 year and 6 months old to 2 years and 3 months old.</p>
+<p>More on <a class="reference internal" href="headers.html#headers"><span class="std std-ref">Accessing Headers</span></a>.</p>
 </div>
-<div class="section" id="transcriptions-and-annotations">
-<span id="transcripts"></span><h2>Transcriptions and annotations<a class="headerlink" href="#transcriptions-and-annotations" title="Permalink to this headline">¶</a></h2>
-<p>Transcriptions and annotations from the <code class="docutils literal notranslate"><span class="pre">%mor</span></code> and <code class="docutils literal notranslate"><span class="pre">%gra</span></code> tiers
+<div class="section" id="transcript-data">
+<h2>Transcript Data<a class="headerlink" href="#transcript-data" title="Permalink to this headline">¶</a></h2>
+<p>Transcriptions as well as annotations from the <code class="docutils literal notranslate"><span class="pre">%mor</span></code> and <code class="docutils literal notranslate"><span class="pre">%gra</span></code> tiers
 (for morphology, part-of-speech tags, and grammatical relations)
 are accessible via NLTK-like
 corpus access methods such as <code class="docutils literal notranslate"><span class="pre">words()</span></code>, <code class="docutils literal notranslate"><span class="pre">tagged_words()</span></code>, <code class="docutils literal notranslate"><span class="pre">sents()</span></code>,
-and <code class="docutils literal notranslate"><span class="pre">tagged_sents()</span></code>. By default, these methods
-return an object “X” lumping together results from all the files.
-If we are interested in return objects for individual files and therefore need
-the file structure, these methods take the optional parameter <code class="docutils literal notranslate"><span class="pre">by_files</span></code>: if
-<code class="docutils literal notranslate"><span class="pre">True</span></code>, the return object is “dict(filename: X for that file)”
-a dict mapping an absolute-path filename to the method’s return
-object for that file (similar to <code class="docutils literal notranslate"><span class="pre">age()</span></code> introduced above). For example,
-to check out the word counts in <code class="docutils literal notranslate"><span class="pre">eve</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">filenames</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">filenames</span><span class="p">()</span>  <span class="c1"># the set of 20 absolute-path filenames</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">words</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">words</span><span class="p">()</span>  <span class="c1"># all words across as a list across all 20 files</span>
+and <code class="docutils literal notranslate"><span class="pre">tagged_sents()</span></code>.</p>
+<p>By default, these methods each return a flat list of results from all the files.
+If we are interested in the results for individual files,
+these methods take the optional boolean parameter <code class="docutils literal notranslate"><span class="pre">by_files</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">words</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">words</span><span class="p">()</span>  <span class="c1"># list of strings, for all the words across all 20 files</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>  <span class="c1"># total word count</span>
 <span class="go">119972</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">words</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span>
 <span class="go">[&#39;more&#39;, &#39;cookie&#39;, &#39;.&#39;, &#39;you&#39;, &#39;0v&#39;, &#39;more&#39;, &#39;cookies&#39;, &#39;?&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">words_by_files</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="n">by_files</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># dict(filename: word list for that file)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">filenames</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">words_by_files</span><span class="p">[</span><span class="n">filename</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">words_by_files</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="n">by_files</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># list of lists of strings, each inner list for one file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">words_by_files</span><span class="p">)</span>  <span class="c1"># expects 20 -- that&#39;s the number of files of ``eve``</span>
+<span class="go">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">words_one_file</span> <span class="ow">in</span> <span class="n">words_by_files</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">words_one_file</span><span class="p">))</span>
 <span class="gp">...</span>
-<span class="go">010600a.cha 5840</span>
-<span class="go">010600b.cha 5309</span>
-<span class="go">010700a.cha 2493</span>
-<span class="go">010700b.cha 5753</span>
-<span class="go">010800.cha 5709</span>
-<span class="go">010900a.cha 4350</span>
-<span class="go">010900b.cha 5314</span>
-<span class="go">010900c.cha 8901</span>
-<span class="go">011000a.cha 4462</span>
-<span class="go">011000b.cha 4535</span>
-<span class="go">011100a.cha 4196</span>
-<span class="go">011100b.cha 6214</span>
-<span class="go">020000a.cha 4464</span>
-<span class="go">020000b.cha 5202</span>
-<span class="go">020100a.cha 8075</span>
-<span class="go">020100b.cha 7361</span>
-<span class="go">020200a.cha 10872</span>
-<span class="go">020200b.cha 8407</span>
-<span class="go">020300a.cha 6903</span>
-<span class="go">020300b.cha 5612</span>
+<span class="go">5840</span>
+<span class="go">5309</span>
+<span class="go">2493</span>
+<span class="go">5753</span>
+<span class="go">5709</span>
+<span class="go">4350</span>
+<span class="go">5314</span>
+<span class="go">8901</span>
+<span class="go">4462</span>
+<span class="go">4535</span>
+<span class="go">4196</span>
+<span class="go">6214</span>
+<span class="go">4464</span>
+<span class="go">5202</span>
+<span class="go">8075</span>
+<span class="go">7361</span>
+<span class="go">10872</span>
+<span class="go">8407</span>
+<span class="go">6903</span>
+<span class="go">5612</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">words()</span></code> and other methods can optionally take the argument <em>participant</em>.
@@ -262,10 +248,9 @@ contact <a class="reference external" href="https://jacksonllee.com/">Jackson L.
 <h3>Navigation</h3>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#testing-the-library-installation">Testing the library installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#reading-chat-data">Reading CHAT data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#metadata">Metadata</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#transcriptions-and-annotations">Transcriptions and annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#header-information">Header Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transcript-data">Transcript Data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#developmental-measures">Developmental measures</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#word-frequency-info-ngrams-search-and-concordance">Word frequency info, ngrams, search, and concordance</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#questions-issues">Questions? Issues?</a></li>
@@ -311,7 +296,7 @@ contact <a class="reference external" href="https://jacksonllee.com/">Jackson L.
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2021, <a href="https://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.12.0 | Documentation last updated on March 11, 2021.
+      &copy;2015-2021, <a href="https://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.12.0 | Documentation last updated on March 12, 2021.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>

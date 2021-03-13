@@ -213,11 +213,19 @@ For word combinatorics, check out ``word_frequencies()`` and ``word_ngrams()``:
 
     >>> word_freq = eve.word_frequencies()  # a collections.Counter object
     >>> word_freq.most_common(5)
-    [('.', 20130), ('?', 6358), ('you', 3695), ('the', 2524), ('it', 2365)]
+    [('.', 20130),
+     ('?', 6358),
+     ('you', 3695),
+     ('the', 2524),
+     ('it', 2365)]
 
     >>> bigrams = eve.word_ngrams(2)  # a collections.Counter object
     >>> bigrams.most_common(5)
-    [(('it', '.'), 705), (('that', '?'), 619), (('what', '?'), 560), (('yeah', '.'), 510), (('there', '.'), 471)]
+    [(('it', '.'), 705),
+     (('that', '?'), 619),
+     (('what', '?'), 560),
+     (('yeah', '.'), 510),
+     (('there', '.'), 471)]
 
 More on :ref:`frequencies`.
 

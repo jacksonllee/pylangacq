@@ -10,7 +10,7 @@ PyLangAcq: Language Acquisition Research in Python
 
 .. meta::
    :description:
-        PyCantonese: Cantonese Linguistics and NLP in Python
+        PyLangAcq: Language Acquisition Research in Python
    :keywords:
         childes, chat, computational linguistics, natural language procesing,
         nlp, linguistics, corpora, speech, language, transcription,

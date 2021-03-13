@@ -63,10 +63,7 @@ def _params_in_docstring(*params):
             or an iterable of strings (e.g., ``{"MOT", "INV"}``). Only the specified
             participants are included.
             If you pass in ``None`` (the default), all participants are included.
-            This parameter cannot be used together with ``exclude``."""
-
-    if "exclude" in params:
-        docstring += """
+            This parameter cannot be used together with ``exclude``.
         exclude : str or iterable of str, optional
             Participants to exclude. You may pass in a string (e.g., ``"CHI"``
             for child-directed speech)
@@ -112,7 +109,10 @@ def _params_in_docstring(*params):
             the unzipped Brown data from CHILDES is in a directory structure of
             ``Brown/Eve/xxx.cha`` for Eve's data.
             If this parameter is not specified or ``None`` is passed in (the default),
-            such file path filtering does not apply."""
+            such file path filtering does not apply.
+        exclude : str, optional
+            If provided, the file paths that match this string (by regular expression
+            matching) are excluded for reading and parsing."""
 
     if "encoding" in params:
         docstring += """
@@ -778,8 +778,14 @@ class Reader:
         return path
 
     @classmethod
-    @_params_in_docstring("match", "encoding")
-    def from_files(cls, paths: List[str], match: str = None, encoding: str = _ENCODING):
+    @_params_in_docstring("match", "exclude", "encoding")
+    def from_files(
+        cls,
+        paths: List[str],
+        match: str = None,
+        exclude: str = None,
+        encoding: str = _ENCODING,
+    ):
         """Instantiate a ``Reader`` object from local CHAT data files.
 
         Parameters
@@ -803,6 +809,10 @@ class Reader:
             regex = re.compile(match)
             paths = [p for p in paths if regex.search(p)]
 
+        if exclude:
+            regex = re.compile(exclude)
+            paths = [p for p in paths if not regex.search(p)]
+
         with cf.ThreadPoolExecutor() as executor:
             strs = list(executor.map(_open_file, paths))
 
@@ -812,11 +822,12 @@ class Reader:
         return cls.from_strs(strs, paths)
 
     @classmethod
-    @_params_in_docstring("match", "extension", "encoding")
+    @_params_in_docstring("match", "exclude", "extension", "encoding")
     def from_dir(
         cls,
         path: str,
         match: str = None,
+        exclude: str = None,
         extension: str = _CHAT_EXTENSION,
         encoding: str = _ENCODING,
     ):
@@ -849,14 +860,17 @@ class Reader:
                         dirs.append(os.path.join(dirpath, dirname))
                 for dir_ in dirs:
                     file_paths.append(os.path.join(dir_, filename))
-        return cls.from_files(sorted(file_paths), match=match, encoding=encoding)
+        return cls.from_files(
+            sorted(file_paths), match=match, exclude=exclude, encoding=encoding
+        )
 
     @classmethod
-    @_params_in_docstring("match", "extension", "encoding")
+    @_params_in_docstring("match", "exclude", "extension", "encoding")
     def from_zip(
         cls,
         path: str,
         match: str = None,
+        exclude: str = None,
         extension: str = _CHAT_EXTENSION,
         encoding: str = _ENCODING,
     ):
@@ -893,7 +907,11 @@ class Reader:
                 os.remove(zip_path)
 
             return cls.from_dir(
-                temp_dir, match=match, extension=extension, encoding=encoding
+                temp_dir,
+                match=match,
+                exclude=exclude,
+                extension=extension,
+                encoding=encoding,
             )
 
     def _parse_chat_str(self, chat_str, file_path) -> _File:
@@ -1208,9 +1226,13 @@ class Reader:
         return lines
 
 
-@_params_in_docstring("match", "encoding", "cls")
+@_params_in_docstring("match", "exclude", "encoding", "cls")
 def read_chat(
-    path: str, match: str = None, encoding: str = _ENCODING, cls: type = Reader
+    path: str,
+    match: str = None,
+    exclude: str = None,
+    encoding: str = _ENCODING,
+    cls: type = Reader,
 ) -> Reader:
     """Create a reader of CHAT data.
 
@@ -1232,15 +1254,15 @@ def read_chat(
         raise TypeError(f"Only a Reader class or its child class is allowed: {cls}")
     path_lower = path.lower()
     if path_lower.endswith(".zip"):
-        return Reader.from_zip(path, match=match, encoding=encoding)
+        return cls.from_zip(path, match=match, exclude=exclude, encoding=encoding)
     elif os.path.isdir(path):
-        return Reader.from_dir(path, match=match, encoding=encoding)
+        return cls.from_dir(path, match=match, exclude=exclude, encoding=encoding)
     elif path_lower.endswith(_CHAT_EXTENSION):
-        return Reader.from_files([path], match=match, encoding=encoding)
+        return cls.from_files([path], match=match, exclude=exclude, encoding=encoding)
     else:
         raise ValueError(
             "path is not one of the accepted choices of "
-            f"{{zip file, `.cha` file, local directory}}: {path}"
+            f"{{zip file, local directory, `.cha` file}}: {path}"
         )
 
 

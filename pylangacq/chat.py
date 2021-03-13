@@ -284,6 +284,18 @@ class Reader:
         else:
             return self._flatten(list, result_by_files)
 
+    def _get_result_by_utterances_by_files(self, result, by_utterances, by_files):
+        if by_files and by_utterances:
+            pass
+        elif by_files and not by_utterances:
+            result = [self._flatten(list, f) for f in result]
+        elif not by_files and by_utterances:
+            result = self._flatten(list, result)
+        else:
+            # not by_files and not by_utterances
+            result = self._flatten(list, (self._flatten(list, f) for f in result))
+        return result
+
     @_params_in_docstring("participants", "exclude", "by_utterances", "by_files")
     def tokens(
         self, participants=None, exclude=None, by_utterances=False, by_files=False
@@ -304,16 +316,7 @@ class Reader:
             participants=participants, exclude=exclude, by_files=True
         )
         result = [[u.tokens for u in us] for us in utterances]
-        if by_files and by_utterances:
-            pass
-        elif by_files and not by_utterances:
-            result = [self._flatten(list, f) for f in result]
-        elif not by_files and by_utterances:
-            result = self._flatten(list, result)
-        else:
-            # not by_files and not by_utterances
-            result = self._flatten(list, (self._flatten(list, f) for f in result))
-        return result
+        return self._get_result_by_utterances_by_files(result, by_utterances, by_files)
 
     @_params_in_docstring("participants", "exclude", "by_utterances", "by_files")
     def words(
@@ -340,16 +343,7 @@ class Reader:
         result = [
             [[t.word for t in ts if t.word != _CLITIC] for ts in tss] for tss in tokens
         ]
-        if by_files and by_utterances:
-            pass
-        elif by_files and not by_utterances:
-            result = [self._flatten(list, f) for f in result]
-        elif not by_files and by_utterances:
-            result = self._flatten(list, result)
-        else:
-            # not by_files and not by_utterances
-            result = self._flatten(list, (self._flatten(list, f) for f in result))
-        return result
+        return self._get_result_by_utterances_by_files(result, by_utterances, by_files)
 
     def _filter_utterances_by_participants(
         self, participants, exclude

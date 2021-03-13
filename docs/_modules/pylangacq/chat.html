@@ -42,6 +42,7 @@
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">tempfile</span>
 <span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">zipfile</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
@@ -71,6 +72,18 @@
 <span class="n">_SUBDIR_REGEX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;prefix_pla[a-z0-9_]+suffix_pla&quot;</span><span class="p">)</span>
 
 
+<span class="n">_File</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;_File&quot;</span><span class="p">,</span> <span class="s2">&quot;file_path header utterances&quot;</span><span class="p">)</span>
+<span class="n">_File</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">A CHAT file (or string).</span>
+
+<span class="s2">Attributes</span>
+<span class="s2">----------</span>
+<span class="s2">file_path : str</span>
+<span class="s2">header : dict</span>
+<span class="s2">utterances : List[Utterance]</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+
 <span class="k">def</span> <span class="nf">_params_in_docstring</span><span class="p">(</span><span class="o">*</span><span class="n">params</span><span class="p">):</span>
     <span class="n">docstring</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
@@ -93,6 +106,14 @@
 <span class="s2">            participants are excluded.</span>
 <span class="s2">            If you pass in ``None`` (the default), no participants are excluded.</span>
 <span class="s2">            This parameter cannot be used together with ``participants``.&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="s2">&quot;by_utterances&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+        <span class="n">docstring</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        by_utterances : bool, optional</span>
+<span class="s2">            If ``True``, the resulting objects are wrapped as a list at the utterance</span>
+<span class="s2">            level.</span>
+<span class="s2">            If ``False`` (the default), such utterance-level list structure</span>
+<span class="s2">            does not exist.&quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="s2">&quot;by_files&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
         <span class="n">docstring</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
@@ -157,16 +178,26 @@
     <span class="k">return</span> <span class="n">real_decorator</span>
 
 
-<span class="n">_File</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;_File&quot;</span><span class="p">,</span> <span class="s2">&quot;file_path header utterances&quot;</span><span class="p">)</span>
-<span class="n">_File</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">A CHAT file (or string).</span>
+<span class="k">def</span> <span class="nf">_deprecate_warning</span><span class="p">(</span><span class="n">what</span><span class="p">,</span> <span class="n">since_version</span><span class="p">,</span> <span class="n">use_instead</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Throws a FutureWarning for deprecation.</span>
 
-<span class="s2">Attributes</span>
-<span class="s2">----------</span>
-<span class="s2">file_path : str</span>
-<span class="s2">header : dict</span>
-<span class="s2">utterances : List[Utterance]</span>
-<span class="s2">&quot;&quot;&quot;</span>
+<span class="sd">    FutureWarning is used instead of DeprecationWarning, because Python</span>
+<span class="sd">    does not show DeprecationWarning by default.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    what : str</span>
+<span class="sd">        What to deprecate.</span>
+<span class="sd">    since_version : str</span>
+<span class="sd">        Version &quot;x.y.z&quot; since which the deprecation is in effect.</span>
+<span class="sd">    use_instead : str</span>
+<span class="sd">        Use this instead.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+        <span class="n">f</span><span class="s2">&quot;&#39;</span><span class="si">{what}</span><span class="s2">&#39; has been deprecated since PyLangAcq v</span><span class="si">{since_version}</span><span class="s2">. &quot;</span>
+        <span class="n">f</span><span class="s2">&quot;Please use </span><span class="si">{use_instead}</span><span class="s2"> instead.&quot;</span><span class="p">,</span>
+        <span class="ne">FutureWarning</span><span class="p">,</span>
+    <span class="p">)</span>
 
 
 <div class="viewcode-block" id="Reader"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader">[docs]</a><span class="k">class</span> <span class="nc">Reader</span><span class="p">:</span>
@@ -266,7 +297,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">result_by_files</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.utterances"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.utterances">[docs]</a>    <span class="k">def</span> <span class="nf">utterances</span><span class="p">(</span>
+<div class="viewcode-block" id="Reader.utterances"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.utterances">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;participants&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">utterances</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">participants</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Utterance</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Utterance</span><span class="p">]]]:</span>
         <span class="sd">&quot;&quot;&quot;Return the utterances.</span>
@@ -283,6 +315,71 @@
             <span class="k">return</span> <span class="n">result_by_files</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">result_by_files</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Reader.tokens"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.tokens">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;participants&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;by_utterances&quot;</span><span class="p">,</span> <span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">tokens</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">participants</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">by_utterances</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Token</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Token</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Token</span><span class="p">]]]]:</span>
+        <span class="sd">&quot;&quot;&quot;Return the tokens.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[List[List[Token]]] if both by_utterances and by_files are True</span>
+<span class="sd">        List[List[Token]] if by_utterances is True and by_files is False</span>
+<span class="sd">        List[List[Token]] if by_utterances is False and by_files is True</span>
+<span class="sd">        List[Token] if both by_utterances and by_files are False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">utterances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">utterances</span><span class="p">(</span>
+            <span class="n">participants</span><span class="o">=</span><span class="n">participants</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="n">exclude</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[[</span><span class="n">u</span><span class="o">.</span><span class="n">tokens</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">us</span><span class="p">]</span> <span class="k">for</span> <span class="n">us</span> <span class="ow">in</span> <span class="n">utterances</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">by_files</span> <span class="ow">and</span> <span class="n">by_utterances</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">by_files</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">by_utterances</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">by_files</span> <span class="ow">and</span> <span class="n">by_utterances</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># not by_files and not by_utterances</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">result</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="Reader.words"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.words">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;participants&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;by_utterances&quot;</span><span class="p">,</span> <span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">words</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">participants</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">by_utterances</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]]:</span>
+        <span class="sd">&quot;&quot;&quot;Return the words.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[List[List[str]]] if both by_utterances and by_files are True</span>
+<span class="sd">        List[List[str]] if by_utterances is True and by_files is False</span>
+<span class="sd">        List[List[str]] if by_utterances is False and by_files is True</span>
+<span class="sd">        List[str] if both by_utterances and by_files are False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span><span class="p">(</span>
+            <span class="n">participants</span><span class="o">=</span><span class="n">participants</span><span class="p">,</span>
+            <span class="n">exclude</span><span class="o">=</span><span class="n">exclude</span><span class="p">,</span>
+            <span class="n">by_utterances</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">by_files</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[[[</span><span class="n">t</span><span class="o">.</span><span class="n">word</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">ts</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">word</span> <span class="o">!=</span> <span class="n">_CLITIC</span><span class="p">]</span> <span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="n">tss</span><span class="p">]</span> <span class="k">for</span> <span class="n">tss</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">by_files</span> <span class="ow">and</span> <span class="n">by_utterances</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">by_files</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">by_utterances</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">by_files</span> <span class="ow">and</span> <span class="n">by_utterances</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># not by_files and not by_utterances</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">result</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">result</span></div>
 
     <span class="k">def</span> <span class="nf">_filter_utterances_by_participants</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">participants</span><span class="p">,</span> <span class="n">exclude</span>
@@ -449,13 +546,6 @@
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Token</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Token</span><span class="p">]]]]:</span>
         <span class="sd">&quot;&quot;&quot;Return the tagged sents.</span>
 
-<span class="sd">        The &quot;tagged sents/words&quot; terminology comes from NLTK, where a sent (= sentence)</span>
-<span class="sd">        is the equivalent unit of an ``Utterance`` object in this package.</span>
-<span class="sd">        A sent is tagged in the sense that the individual words</span>
-<span class="sd">        (= the ``Token`` objects) in the sent have information beyond the word form,</span>
-<span class="sd">        such as a part-of-speech tag, morphological information,</span>
-<span class="sd">        and grammatical relation.</span>
-
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
@@ -463,6 +553,11 @@
 <span class="sd">        -------</span>
 <span class="sd">        List[List[Token]] if by_files is False, otherwise List[List[List[Token]]]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_deprecate_warning</span><span class="p">(</span>
+            <span class="s2">&quot;tagged_sents&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;0.13.0&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;the `.tokens()` method with by_utterances=True&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="n">utterances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_utterances_by_participants</span><span class="p">(</span><span class="n">participants</span><span class="p">,</span> <span class="n">exclude</span><span class="p">)</span>
         <span class="n">result_by_files</span> <span class="o">=</span> <span class="p">[[</span><span class="n">u</span><span class="o">.</span><span class="n">tokens</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">us</span><span class="p">]</span> <span class="k">for</span> <span class="n">us</span> <span class="ow">in</span> <span class="n">utterances</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">by_files</span><span class="p">:</span>
@@ -476,12 +571,6 @@
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Token</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Token</span><span class="p">]]]:</span>
         <span class="sd">&quot;&quot;&quot;Return the tagged words.</span>
 
-<span class="sd">        The &quot;tagged sents/words&quot; terminology comes from NLTK, where a sent (= sentence)</span>
-<span class="sd">        is the equivalent unit of an ``Utterance`` object in this package.</span>
-<span class="sd">        A word is tagged in the sense that it has information beyond the word form,</span>
-<span class="sd">        such as a part-of-speech tag, morphological information, and grammatical</span>
-<span class="sd">        relation. A tagged word is represented as a ``Token`` object in this package.</span>
-
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
@@ -489,6 +578,9 @@
 <span class="sd">        -------</span>
 <span class="sd">        List[Token] if by_files is False, otherwise List[List[Token]]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_deprecate_warning</span><span class="p">(</span>
+            <span class="s2">&quot;tagged_words&quot;</span><span class="p">,</span> <span class="s2">&quot;0.13.0&quot;</span><span class="p">,</span> <span class="s2">&quot;the `.tokens()` method with by_utterances=False&quot;</span>
+        <span class="p">)</span>
         <span class="n">utterances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_utterances_by_participants</span><span class="p">(</span><span class="n">participants</span><span class="p">,</span> <span class="n">exclude</span><span class="p">)</span>
         <span class="n">result_by_files</span> <span class="o">=</span> <span class="p">[[</span><span class="n">word</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">us</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">u</span><span class="o">.</span><span class="n">tokens</span><span class="p">]</span> <span class="k">for</span> <span class="n">us</span> <span class="ow">in</span> <span class="n">utterances</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">by_files</span><span class="p">:</span>
@@ -502,10 +594,6 @@
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]]:</span>
         <span class="sd">&quot;&quot;&quot;Return the sents.</span>
 
-<span class="sd">        The &quot;sents&quot; terminology comes from NLTK, where a sent (= sentence)</span>
-<span class="sd">        is the equivalent unit of an ``Utterance`` object in this package.</span>
-<span class="sd">        The sents are in contrast with ``.tagged_sents``.</span>
-
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
@@ -513,30 +601,13 @@
 <span class="sd">        -------</span>
 <span class="sd">        List[List[str]] if by_files is False, otherwise List[List[List[str]]]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_deprecate_warning</span><span class="p">(</span>
+            <span class="s2">&quot;words&quot;</span><span class="p">,</span> <span class="s2">&quot;0.13.0&quot;</span><span class="p">,</span> <span class="s2">&quot;the `.words()` method with by_utterances=True&quot;</span>
+        <span class="p">)</span>
         <span class="n">utterances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_utterances_by_participants</span><span class="p">(</span><span class="n">participants</span><span class="p">,</span> <span class="n">exclude</span><span class="p">)</span>
         <span class="n">result_by_files</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">[[</span><span class="n">t</span><span class="o">.</span><span class="n">word</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">u</span><span class="o">.</span><span class="n">tokens</span><span class="p">]</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">us</span><span class="p">]</span> <span class="k">for</span> <span class="n">us</span> <span class="ow">in</span> <span class="n">utterances</span>
         <span class="p">]</span>
-        <span class="k">if</span> <span class="n">by_files</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">result_by_files</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">result_by_files</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="Reader.words"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.words">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;participants&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">words</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">participants</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]:</span>
-        <span class="sd">&quot;&quot;&quot;Return the words.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        List[str] if by_files is False, otherwise List[List[str]]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">utterances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_utterances_by_participants</span><span class="p">(</span><span class="n">participants</span><span class="p">,</span> <span class="n">exclude</span><span class="p">)</span>
-        <span class="n">result_by_files</span> <span class="o">=</span> <span class="p">[[</span><span class="n">t</span><span class="o">.</span><span class="n">word</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">us</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">u</span><span class="o">.</span><span class="n">tokens</span><span class="p">]</span> <span class="k">for</span> <span class="n">us</span> <span class="ow">in</span> <span class="n">utterances</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">by_files</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">result_by_files</span>
         <span class="k">else</span><span class="p">:</span>
@@ -555,7 +626,9 @@
 <span class="sd">        -------</span>
 <span class="sd">        List[float]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">_get_mlum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tagged_sents</span><span class="p">(</span><span class="n">participants</span><span class="o">=</span><span class="n">participant</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="n">_get_mlum</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span><span class="p">(</span><span class="n">participants</span><span class="o">=</span><span class="n">participant</span><span class="p">,</span> <span class="n">by_utterances</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="Reader.mlu"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.mlu">[docs]</a>    <span class="k">def</span> <span class="nf">mlu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s2">&quot;CHI&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Return the mean lengths of utterance.</span>
@@ -587,7 +660,9 @@
 <span class="sd">        -------</span>
 <span class="sd">        List[float]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">_get_mluw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sents</span><span class="p">(</span><span class="n">participants</span><span class="o">=</span><span class="n">participant</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="n">_get_mluw</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="n">participants</span><span class="o">=</span><span class="n">participant</span><span class="p">,</span> <span class="n">by_utterances</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="Reader.ttr"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.ttr">[docs]</a>    <span class="k">def</span> <span class="nf">ttr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keep_case</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s2">&quot;CHI&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Return the type-token ratios.</span>
@@ -621,7 +696,9 @@
 <span class="sd">        -------</span>
 <span class="sd">        List[float]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">_get_ipsyn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tagged_sents</span><span class="p">(</span><span class="n">participants</span><span class="o">=</span><span class="n">participant</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="n">_get_ipsyn</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span><span class="p">(</span><span class="n">participants</span><span class="o">=</span><span class="n">participant</span><span class="p">,</span> <span class="n">by_utterances</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="Reader.word_ngrams"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.word_ngrams">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;keep_case&quot;</span><span class="p">,</span> <span class="s2">&quot;participants&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">word_ngrams</span><span class="p">(</span>
@@ -645,17 +722,18 @@
 
         <span class="n">result_by_files</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="k">for</span> <span class="n">sents_in_file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sents</span><span class="p">(</span>
-            <span class="n">participants</span><span class="o">=</span><span class="n">participants</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="n">exclude</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">True</span>
+        <span class="k">for</span> <span class="n">sents_in_file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">words</span><span class="p">(</span>
+            <span class="n">participants</span><span class="o">=</span><span class="n">participants</span><span class="p">,</span>
+            <span class="n">exclude</span><span class="o">=</span><span class="n">exclude</span><span class="p">,</span>
+            <span class="n">by_utterances</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">by_files</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">):</span>
             <span class="n">result_for_file</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">sents_in_file</span><span class="p">:</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
                     <span class="k">continue</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">keep_case</span><span class="p">:</span>
-                    <span class="n">sent</span> <span class="o">=</span> <span class="p">[</span>
-                        <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">if</span> <span class="n">word</span> <span class="o">!=</span> <span class="n">_CLITIC</span> <span class="k">else</span> <span class="n">_CLITIC</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">sent</span>
-                    <span class="p">]</span>
+                    <span class="n">sent</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">sent</span><span class="p">]</span>
                 <span class="n">ngrams</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">sent</span><span class="p">[</span><span class="n">i</span><span class="p">:]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)])</span>
                 <span class="n">result_for_file</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">ngrams</span><span class="p">)</span>
             <span class="n">result_by_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result_for_file</span><span class="p">)</span>
@@ -671,8 +749,6 @@
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;Return word frequencies.</span>
 
-<span class="sd">        This method is equivalent to ``.word_ngrams()`` with ``n`` = 1.</span>
-
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
@@ -680,13 +756,21 @@
 <span class="sd">        -------</span>
 <span class="sd">        collections.Counter if by_files is False, otherwise List[collections.Counter]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">word_ngrams</span><span class="p">(</span>
+        <span class="n">result_by_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">word_ngrams</span><span class="p">(</span>
             <span class="mi">1</span><span class="p">,</span>
             <span class="n">keep_case</span><span class="o">=</span><span class="n">keep_case</span><span class="p">,</span>
             <span class="n">participants</span><span class="o">=</span><span class="n">participants</span><span class="p">,</span>
             <span class="n">exclude</span><span class="o">=</span><span class="n">exclude</span><span class="p">,</span>
-            <span class="n">by_files</span><span class="o">=</span><span class="n">by_files</span><span class="p">,</span>
-        <span class="p">)</span></div>
+            <span class="n">by_files</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">result_by_files</span> <span class="o">=</span> <span class="p">[</span>
+              <span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">({</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span>
+              <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">result_by_files</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="n">by_files</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">result_by_files</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">,</span> <span class="n">result_by_files</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Reader.from_strs"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.from_strs">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_strs</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">strs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>

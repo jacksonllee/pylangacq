@@ -33,8 +33,6 @@
             
   <div class="section" id="quickstart">
 <span id="id1"></span><h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
-<p>This page introduces the basic functionality of PyLangAcq and points to
-relevant pages of the library documentation for more advanced usage.</p>
 <p>To start, import the package <code class="docutils literal notranslate"><span class="pre">pylangacq</span></code> in your Python code:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span>
 </pre></div>
@@ -47,15 +45,17 @@ The function <code class="docutils literal notranslate"><span class="pre">read_c
 The data source can either be local on your computer,
 or a remote source as a ZIP archive file containing <cite>.cha</cite> files.
 A prototypical example for the latter is a dataset from CHILDES.
-To illustrate, let’s use Eve’s data from the Brown corpus of American English:</p>
+To illustrate, let’s use Eve’s data from the
+<a class="reference external" href="https://childes.talkbank.org/access/Eng-NA/Brown.html">Brown</a>
+corpus of American English:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://childes.talkbank.org/data/Eng-NA/Brown.zip&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;Eve&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">eve</span><span class="p">)</span>
 <span class="go">20</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">eve</span></code> is a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> instance.
-It has Eve’s 20 CHAT data files all parsed and ready at your disposal.
+<p><code class="docutils literal notranslate"><span class="pre">eve</span></code> is a <code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code> instance.
+It has Eve’s 20 CHAT data files all parsed and ready for your analysis.
 <code class="docutils literal notranslate"><span class="pre">eve</span></code> has various methods through which you can access different information
 with Pythonic data structures.</p>
 <p>More on <a class="reference internal" href="read.html#read"><span class="std std-ref">Reading CHAT Data</span></a>.</p>
@@ -63,10 +63,9 @@ with Pythonic data structures.</p>
 <div class="section" id="header-information">
 <h2>Header Information<a class="headerlink" href="#header-information" title="Permalink to this headline">¶</a></h2>
 <p>CHAT transcript files store metadata in the header with lines beginning with <code class="docutils literal notranslate"><span class="pre">&#64;</span></code>.
-Among other things, we can find the ages (if available from the header)
-of the target child when the recordings were made:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">ages</span><span class="p">())</span>
+Among other things, <code class="docutils literal notranslate"><span class="pre">eve</span></code> has the age information of Eve when the recordings were made,
+which is from 1 year and 6 months old to 2 years and 3 months old:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">ages</span><span class="p">()</span>
 <span class="go">[(1, 6, 0),</span>
 <span class="go"> (1, 6, 0),</span>
 <span class="go"> (1, 7, 0),</span>
@@ -89,26 +88,22 @@ of the target child when the recordings were made:</p>
 <span class="go"> (2, 3, 0)]</span>
 </pre></div>
 </div>
-<p>In this example, we can see the age information of Eve’s 20 recording sessions,
-from 1 year and 6 months old to 2 years and 3 months old.</p>
 <p>More on <a class="reference internal" href="headers.html#headers"><span class="std std-ref">Accessing Headers</span></a>.</p>
 </div>
-<div class="section" id="transcript-data">
-<h2>Transcript Data<a class="headerlink" href="#transcript-data" title="Permalink to this headline">¶</a></h2>
-<p>Transcriptions as well as annotations from the <code class="docutils literal notranslate"><span class="pre">%mor</span></code> and <code class="docutils literal notranslate"><span class="pre">%gra</span></code> tiers
-(for morphology, part-of-speech tags, and grammatical relations)
-are accessible via NLTK-like
-corpus access methods such as <code class="docutils literal notranslate"><span class="pre">words()</span></code>, <code class="docutils literal notranslate"><span class="pre">tagged_words()</span></code>, <code class="docutils literal notranslate"><span class="pre">sents()</span></code>,
-and <code class="docutils literal notranslate"><span class="pre">tagged_sents()</span></code>.</p>
-<p>By default, these methods each return a flat list of results from all the files.
-If we are interested in the results for individual files,
-these methods take the optional boolean parameter <code class="docutils literal notranslate"><span class="pre">by_files</span></code>:</p>
+<div class="section" id="transcriptions-and-annotations">
+<h2>Transcriptions and Annotations<a class="headerlink" href="#transcriptions-and-annotations" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">words()</span></code> is the basic method to access the transcriptions:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">words</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">words</span><span class="p">()</span>  <span class="c1"># list of strings, for all the words across all 20 files</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>  <span class="c1"># total word count</span>
 <span class="go">119972</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">words</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span>
 <span class="go">[&#39;more&#39;, &#39;cookie&#39;, &#39;.&#39;, &#39;you&#39;, &#39;0v&#39;, &#39;more&#39;, &#39;cookies&#39;, &#39;?&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">words_by_files</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="n">by_files</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># list of lists of strings, each inner list for one file</span>
+</pre></div>
+</div>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">words()</span></code> returns a flat list of results from all the files.
+If we are interested in the results for individual files,
+the method has the optional boolean parameter <code class="docutils literal notranslate"><span class="pre">by_files</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">words_by_files</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="n">by_files</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># list of lists of strings, each inner list for one file</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">words_by_files</span><span class="p">)</span>  <span class="c1"># expects 20 -- that&#39;s the number of files of ``eve``</span>
 <span class="go">20</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">words_one_file</span> <span class="ow">in</span> <span class="n">words_by_files</span><span class="p">:</span>
@@ -136,88 +131,97 @@ these methods take the optional boolean parameter <code class="docutils literal 
 <span class="go">5612</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">words()</span></code> and other methods can optionally take the argument <em>participant</em>.
-For instance, <code class="docutils literal notranslate"><span class="pre">eve.words(participant='CHI')</span></code> gets words by the target
-child instead of all participants in the data.
-(For more on the <em>participant</em> parameter, see <a class="reference internal" href="transcriptions.html#cds"><span class="std std-ref">Child speech versus child directed speech</span></a>.)</p>
-<p>The “tagged” methods represent a word as a tuple of
-(<em>word</em>, <em>pos</em>, <em>mor</em>, <em>rel</em>)
-where <em>pos</em> is the part-of-speech tag, <em>mor</em> is the
-morphological information (for the lemma and inflectional affix, for instance),
-and <em>rel</em> is the dependency and grammatical relation:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mother_tagged_words</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">tagged_words</span><span class="p">(</span><span class="n">participant</span><span class="o">=</span><span class="s1">&#39;MOT&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">tagged_word</span> <span class="ow">in</span> <span class="n">mother_tagged_words</span><span class="p">[:</span><span class="mi">20</span><span class="p">]:</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">tagged_word</span><span class="p">)</span>
+<p>Apart from transcriptions, CHAT data has rich annotations for linguistic
+and extra-linguistic information.
+Such annotations are accessible through the methods <code class="docutils literal notranslate"><span class="pre">tokens()</span></code> and <code class="docutils literal notranslate"><span class="pre">utterances()</span></code>.</p>
+<p>Many CHAT datasets on CHILDES have the <code class="docutils literal notranslate"><span class="pre">%mor</span></code> and <code class="docutils literal notranslate"><span class="pre">%gra</span></code> tiers
+for morphological information and grammatical relations, respectively.
+A reader such as <code class="docutils literal notranslate"><span class="pre">eve</span></code> from above has all this information readily available
+to you via the <code class="docutils literal notranslate"><span class="pre">tokens()</span></code> method – think of <code class="docutils literal notranslate"><span class="pre">tokens()</span></code> as <code class="docutils literal notranslate"><span class="pre">words()</span></code> with annotations:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">some_tokens</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">tokens</span><span class="p">()[:</span><span class="mi">5</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">some_tokens</span>
+<span class="go">[Token(word=&#39;more&#39;, pos=&#39;qn&#39;, mor=&#39;more&#39;, gra=Gra(source=1, target=2, rel=&#39;QUANT&#39;)),</span>
+<span class="go"> Token(word=&#39;cookie&#39;, pos=&#39;n&#39;, mor=&#39;cookie&#39;, gra=Gra(source=2, target=0, rel=&#39;INCROOT&#39;)),</span>
+<span class="go"> Token(word=&#39;.&#39;, pos=&#39;.&#39;, mor=&#39;&#39;, gra=Gra(source=3, target=2, rel=&#39;PUNCT&#39;)),</span>
+<span class="go"> Token(word=&#39;you&#39;, pos=&#39;pro:per&#39;, mor=&#39;you&#39;, gra=Gra(source=1, target=2, rel=&#39;SUBJ&#39;)),</span>
+<span class="go"> Token(word=&#39;0v&#39;, pos=&#39;0v&#39;, mor=&#39;v&#39;, gra=Gra(source=2, target=0, rel=&#39;ROOT&#39;))]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># The Token class is a dataclass. A Token instance has attributes as shown above.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">some_tokens</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">word</span><span class="p">,</span> <span class="n">token</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
 <span class="gp">...</span>
-<span class="go">(&#39;you&#39;, &#39;PRO:PER&#39;, &#39;you&#39;, (1, 2, &#39;SUBJ&#39;))</span>
-<span class="go">(&#39;0v&#39;, &#39;0V&#39;, &#39;v&#39;, (2, 0, &#39;ROOT&#39;))</span>
-<span class="go">(&#39;more&#39;, &#39;QN&#39;, &#39;more&#39;, (3, 4, &#39;QUANT&#39;))</span>
-<span class="go">(&#39;cookies&#39;, &#39;N&#39;, &#39;cookie-PL&#39;, (4, 2, &#39;OBJ&#39;))</span>
-<span class="go">(&#39;?&#39;, &#39;?&#39;, &#39;&#39;, (5, 2, &#39;PUNCT&#39;))</span>
-<span class="go">(&#39;how_about&#39;, &#39;PRO:INT&#39;, &#39;how_about&#39;, (1, 3, &#39;LINK&#39;))</span>
-<span class="go">(&#39;another&#39;, &#39;QN&#39;, &#39;another&#39;, (2, 3, &#39;QUANT&#39;))</span>
-<span class="go">(&#39;grahamcracker&#39;, &#39;N&#39;, &#39;+n|graham+n|cracker&#39;, (3, 0, &#39;INCROOT&#39;))</span>
-<span class="go">(&#39;?&#39;, &#39;?&#39;, &#39;&#39;, (4, 3, &#39;PUNCT&#39;))</span>
-<span class="go">(&#39;would&#39;, &#39;MOD&#39;, &#39;will&amp;COND&#39;, (1, 3, &#39;AUX&#39;))</span>
-<span class="go">(&#39;that&#39;, &#39;PRO:DEM&#39;, &#39;that&#39;, (2, 3, &#39;SUBJ&#39;))</span>
-<span class="go">(&#39;do&#39;, &#39;V&#39;, &#39;do&#39;, (3, 0, &#39;ROOT&#39;))</span>
-<span class="go">(&#39;just&#39;, &#39;ADV&#39;, &#39;just&#39;, (4, 5, &#39;JCT&#39;))</span>
-<span class="go">(&#39;as_well&#39;, &#39;ADV&#39;, &#39;as_well&#39;, (5, 3, &#39;JCT&#39;))</span>
-<span class="go">(&#39;?&#39;, &#39;?&#39;, &#39;&#39;, (6, 3, &#39;PUNCT&#39;))</span>
-<span class="go">(&#39;here&#39;, &#39;ADV&#39;, &#39;here&#39;, (1, 0, &#39;INCROOT&#39;))</span>
-<span class="go">(&#39;.&#39;, &#39;.&#39;, &#39;&#39;, (2, 1, &#39;PUNCT&#39;))</span>
-<span class="go">(&#39;here&#39;, &#39;ADV&#39;, &#39;here&#39;, (1, 3, &#39;JCT&#39;))</span>
-<span class="go">(&#39;you&#39;, &#39;PRO:PER&#39;, &#39;you&#39;, (2, 3, &#39;SUBJ&#39;))</span>
-<span class="go">(&#39;go&#39;, &#39;V&#39;, &#39;go&#39;, (3, 0, &#39;ROOT&#39;))</span>
+<span class="go">more qn</span>
+<span class="go">cookie n</span>
+<span class="go">. .</span>
+<span class="go">you pro:per</span>
+<span class="go">0v 0v</span>
+</pre></div>
+</div>
+<p>Beyond the <code class="docutils literal notranslate"><span class="pre">%mor</span></code> and <code class="docutils literal notranslate"><span class="pre">%gra</span></code> tiers,
+an utterance has yet more information from the original CHAT data file.
+If you need information such as the unsegmented transcription, time marks,
+or any unparsed tiers, the method <code class="docutils literal notranslate"><span class="pre">utterances()</span></code> is what you need:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">utterances</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">Utterance(participant=&#39;CHI&#39;,</span>
+<span class="go">          tokens=[Token(word=&#39;more&#39;, pos=&#39;qn&#39;, mor=&#39;more&#39;, gra=Gra(source=1, target=2, rel=&#39;QUANT&#39;)),</span>
+<span class="go">                  Token(word=&#39;cookie&#39;, pos=&#39;n&#39;, mor=&#39;cookie&#39;, gra=Gra(source=2, target=0, rel=&#39;INCROOT&#39;)),</span>
+<span class="go">                  Token(word=&#39;.&#39;, pos=&#39;.&#39;, mor=&#39;&#39;, gra=Gra(source=3, target=2, rel=&#39;PUNCT&#39;))],</span>
+<span class="go">          time_marks=None,</span>
+<span class="go">          tiers={&#39;CHI&#39;: &#39;more cookie . [+ IMP]&#39;,</span>
+<span class="go">                 &#39;%mor&#39;: &#39;qn|more n|cookie .&#39;,</span>
+<span class="go">                 &#39;%gra&#39;: &#39;1|2|QUANT 2|0|INCROOT 3|2|PUNCT&#39;,</span>
+<span class="go">                 &#39;%int&#39;: &#39;distinctive , loud&#39;})</span>
 </pre></div>
 </div>
 <p>More on <a class="reference internal" href="transcriptions.html#transcriptions"><span class="std std-ref">Transcriptions and Annotations</span></a>.</p>
 </div>
 <div class="section" id="developmental-measures">
-<span id="use-dev-measures"></span><h2>Developmental measures<a class="headerlink" href="#developmental-measures" title="Permalink to this headline">¶</a></h2>
-<p>To get the mean length of utterance (MLU) in morphemes, use <code class="docutils literal notranslate"><span class="pre">MLUm()</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">filename</span><span class="p">,</span> <span class="n">mlum</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">MLUm</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">mlum</span><span class="p">)</span>
-<span class="gp">...</span>
-<span class="go">010600a.cha 2.267022696929239</span>
-<span class="go">010600b.cha 2.4508196721311477</span>
-<span class="go">010700a.cha 2.7628458498023716</span>
-<span class="go">010700b.cha 2.571186440677966</span>
-<span class="go">010800.cha 2.8528995756718527</span>
-<span class="go">010900a.cha 3.1734317343173433</span>
-<span class="go">010900b.cha 3.1268939393939394</span>
-<span class="go">010900c.cha 3.380604796663191</span>
-<span class="go">011000a.cha 3.8214971209213053</span>
-<span class="go">011000b.cha 3.8062157221206583</span>
-<span class="go">011100a.cha 3.87248322147651</span>
-<span class="go">011100b.cha 4.157407407407407</span>
-<span class="go">020000a.cha 4.247826086956522</span>
-<span class="go">020000b.cha 3.9684873949579833</span>
-<span class="go">020100a.cha 4.448895027624309</span>
-<span class="go">020100b.cha 4.416536661466458</span>
-<span class="go">020200a.cha 4.476769911504425</span>
-<span class="go">020200b.cha 4.286978508217446</span>
-<span class="go">020300a.cha 4.346094946401225</span>
-<span class="go">020300b.cha 3.165120593692022</span>
+<h2>Developmental Measures<a class="headerlink" href="#developmental-measures" title="Permalink to this headline">¶</a></h2>
+<p>To get the mean length of utterance (MLU), use the method <code class="docutils literal notranslate"><span class="pre">mlu()</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">mlu</span><span class="p">()</span>
+<span class="go">[2.316421895861148,</span>
+<span class="go"> 2.5163934426229506,</span>
+<span class="go"> 2.8063241106719365,</span>
+<span class="go"> 2.611864406779661,</span>
+<span class="go"> 2.8854314002828856,</span>
+<span class="go"> 3.195571955719557,</span>
+<span class="go"> 3.1818181818181817,</span>
+<span class="go"> 3.4171011470281543,</span>
+<span class="go"> 3.840690978886756,</span>
+<span class="go"> 3.822669104204753,</span>
+<span class="go"> 3.883668903803132,</span>
+<span class="go"> 4.165123456790123,</span>
+<span class="go"> 4.269565217391304,</span>
+<span class="go"> 3.976890756302521,</span>
+<span class="go"> 4.457182320441989,</span>
+<span class="go"> 4.422776911076443,</span>
+<span class="go"> 4.495575221238938,</span>
+<span class="go"> 4.292035398230088,</span>
+<span class="go"> 4.3813169984686064,</span>
+<span class="go"> 3.320964749536178]</span>
 </pre></div>
 </div>
-<p>Other language developmental measures, such as type-token ratio (TTR) and
-Index of Productive Syntax (IPSyn), are also implemented.
-More on <span class="xref std std-ref">devmeasures</span></p>
+<p>The result is the MLU for each CHAT file.
+As this is a list of floats, they can be readily piped into
+other packages for making plots, for example.</p>
+<p>The other language developmental measures implemented so far are
+<code class="docutils literal notranslate"><span class="pre">ttr()</span></code> for the type-token ratio (TTR) and
+<code class="docutils literal notranslate"><span class="pre">ipsyn()</span></code> for the index of productive syntax (IPSyn).</p>
+<p>More on <a class="reference internal" href="measures.html#measures"><span class="std std-ref">Developmental Measures</span></a>.</p>
 </div>
-<div class="section" id="word-frequency-info-ngrams-search-and-concordance">
-<span id="use-word-freq"></span><h2>Word frequency info, ngrams, search, and concordance<a class="headerlink" href="#word-frequency-info-ngrams-search-and-concordance" title="Permalink to this headline">¶</a></h2>
-<p>For word combinatorics, use <code class="docutils literal notranslate"><span class="pre">word_frequency()</span></code> and <code class="docutils literal notranslate"><span class="pre">word_ngrams()</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_frequency</span><span class="p">()</span>
+<div class="section" id="word-frequencies-and-ngrams">
+<h2>Word Frequencies and Ngrams<a class="headerlink" href="#word-frequencies-and-ngrams" title="Permalink to this headline">¶</a></h2>
+<p>For word combinatorics, check out <code class="docutils literal notranslate"><span class="pre">word_frequencies()</span></code> and <code class="docutils literal notranslate"><span class="pre">word_ngrams()</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_frequencies</span><span class="p">()</span>  <span class="c1"># a collections.Counter object</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 <span class="go">[(&#39;.&#39;, 20130), (&#39;?&#39;, 6358), (&#39;you&#39;, 3695), (&#39;the&#39;, 2524), (&#39;it&#39;, 2365)]</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bigrams</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_ngrams</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bigrams</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_ngrams</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># a collections.Counter object</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bigrams</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 <span class="go">[((&#39;it&#39;, &#39;.&#39;), 705), ((&#39;that&#39;, &#39;?&#39;), 619), ((&#39;what&#39;, &#39;?&#39;), 560), ((&#39;yeah&#39;, &#39;.&#39;), 510), ((&#39;there&#39;, &#39;.&#39;), 471)]</span>
 </pre></div>
 </div>
-<p>More on <span class="xref std std-ref">freq</span>.</p>
+<p>More on <a class="reference internal" href="frequencies.html#frequencies"><span class="std std-ref">Word Frequencies and Ngrams</span></a>.</p>
 </div>
 <div class="section" id="questions-issues">
 <h2>Questions? Issues?<a class="headerlink" href="#questions-issues" title="Permalink to this headline">¶</a></h2>
@@ -250,9 +254,9 @@ contact <a class="reference external" href="https://jacksonllee.com/">Jackson L.
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#reading-chat-data">Reading CHAT data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#header-information">Header Information</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#transcript-data">Transcript Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#developmental-measures">Developmental measures</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#word-frequency-info-ngrams-search-and-concordance">Word frequency info, ngrams, search, and concordance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transcriptions-and-annotations">Transcriptions and Annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#developmental-measures">Developmental Measures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#word-frequencies-and-ngrams">Word Frequencies and Ngrams</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#questions-issues">Questions? Issues?</a></li>
 </ul>
 </li>

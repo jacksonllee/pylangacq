@@ -337,7 +337,9 @@ class Reader:
             by_utterances=True,
             by_files=True,
         )
-        result = [[[t.word for t in ts] for ts in tss] for tss in tokens]
+        result = [
+            [[t.word for t in ts if t.word != _CLITIC] for ts in tss] for tss in tokens
+        ]
         if by_files and by_utterances:
             pass
         elif by_files and not by_utterances:
@@ -701,9 +703,7 @@ class Reader:
                 if len(sent) < n:
                     continue
                 if not keep_case:
-                    sent = [
-                        word.lower() if word != _CLITIC else _CLITIC for word in sent
-                    ]
+                    sent = [w.lower() for w in sent]
                 ngrams = zip(*[sent[i:] for i in range(n)])
                 result_for_file.update(ngrams)
             result_by_files.append(result_for_file)
@@ -719,8 +719,6 @@ class Reader:
     ) -> Union[collections.Counter, List[collections.Counter]]:
         """Return word frequencies.
 
-        This method is equivalent to ``.word_ngrams()`` with ``n`` = 1.
-
         Parameters
         ----------
 
@@ -728,13 +726,21 @@ class Reader:
         -------
         collections.Counter if by_files is False, otherwise List[collections.Counter]
         """
-        return self.word_ngrams(
+        result_by_files = self.word_ngrams(
             1,
             keep_case=keep_case,
             participants=participants,
             exclude=exclude,
-            by_files=by_files,
+            by_files=True,
         )
+        result_by_files = [
+            collections.Counter({k[0]: v for k, v in r.items()})
+            for r in result_by_files
+        ]
+        if by_files:
+            return result_by_files
+        else:
+            return self._flatten(collections.Counter, result_by_files)
 
     @classmethod
     def from_strs(cls, strs: List[str], ids: List[str] = None):

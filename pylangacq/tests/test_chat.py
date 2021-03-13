@@ -298,7 +298,7 @@ def test_mluw():
 
 
 def test_ttr():
-    assert pytest.approx(_EVE.ttr(), abs=0.01) == [0.10534934497816593]
+    assert pytest.approx(_EVE.ttr(), abs=0.01) == [0.17543859649122806]
 
 
 def test_ipsyn():
@@ -309,26 +309,26 @@ def test_word_ngrams():
     assert _EVE.word_ngrams(1).most_common(5) == [
         ((".",), 1134),
         (("?",), 455),
-        (("CLITIC",), 291),
         (("you",), 197),
         (("that",), 151),
+        (("the",), 132),
     ]
     assert _EVE.word_ngrams(2).most_common(5) == [
         (("that", "?"), 101),
-        (("that's", "CLITIC"), 80),
         (("it", "."), 65),
         (("what", "?"), 54),
         (("yes", "‡"), 45),
+        (("it", "?"), 39),
     ]
 
 
 def test_word_frequency():
     assert _EVE.word_frequencies().most_common(5) == [
-        ((".",), 1134),
-        (("?",), 455),
-        (("CLITIC",), 291),
-        (("you",), 197),
-        (("that",), 151),
+        (".", 1134),
+        ("?", 455),
+        ("you", 197),
+        ("that", 151),
+        ("the", 132),
     ]
 
 

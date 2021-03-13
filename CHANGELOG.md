@@ -47,6 +47,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Switched to CircleCI orbs; update dev requirements' versions.
 
 ### Deprecated
+* `tagged_sents`, `tagged_words`, and `sents`
+
 ### Removed
 * The following methods of the `Reader` class have been removed:
    - `abspath`

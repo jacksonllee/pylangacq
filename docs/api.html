@@ -109,19 +109,22 @@
 <tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.tagged_words" title="pylangacq.chat.Reader.tagged_words"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tagged_words</span></code></a>([participants, exclude, by_files])</p></td>
 <td><p>Return the tagged words.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.ttr" title="pylangacq.chat.Reader.ttr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ttr</span></code></a>([keep_case, participant])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.tokens" title="pylangacq.chat.Reader.tokens"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tokens</span></code></a>([participants, exclude, …])</p></td>
+<td><p>Return the tokens.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.ttr" title="pylangacq.chat.Reader.ttr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ttr</span></code></a>([keep_case, participant])</p></td>
 <td><p>Return the type-token ratios.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.utterances" title="pylangacq.chat.Reader.utterances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utterances</span></code></a>([participants, exclude, by_files])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.utterances" title="pylangacq.chat.Reader.utterances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utterances</span></code></a>([participants, exclude, by_files])</p></td>
 <td><p>Return the utterances.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.word_frequencies" title="pylangacq.chat.Reader.word_frequencies"><code class="xref py py-obj docutils literal notranslate"><span class="pre">word_frequencies</span></code></a>([keep_case, participants, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.word_frequencies" title="pylangacq.chat.Reader.word_frequencies"><code class="xref py py-obj docutils literal notranslate"><span class="pre">word_frequencies</span></code></a>([keep_case, participants, …])</p></td>
 <td><p>Return word frequencies.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.word_ngrams" title="pylangacq.chat.Reader.word_ngrams"><code class="xref py py-obj docutils literal notranslate"><span class="pre">word_ngrams</span></code></a>(n[, keep_case, participants, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.word_ngrams" title="pylangacq.chat.Reader.word_ngrams"><code class="xref py py-obj docutils literal notranslate"><span class="pre">word_ngrams</span></code></a>(n[, keep_case, participants, …])</p></td>
 <td><p>Return word ngrams.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.words" title="pylangacq.chat.Reader.words"><code class="xref py py-obj docutils literal notranslate"><span class="pre">words</span></code></a>([participants, exclude, by_files])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.chat.Reader.words" title="pylangacq.chat.Reader.words"><code class="xref py py-obj docutils literal notranslate"><span class="pre">words</span></code></a>([participants, exclude, …])</p></td>
 <td><p>Return the words.</p></td>
 </tr>
 </tbody>
@@ -553,9 +556,6 @@ file path to match multiple file paths in the reader.</p>
 <dt id="pylangacq.chat.Reader.sents">
 <code class="sig-name descname">sents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">participants</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>List<span class="p">[</span>List<span class="p">[</span>str<span class="p">]</span><span class="p">]</span><span class="p">, </span>List<span class="p">[</span>List<span class="p">[</span>List<span class="p">[</span>str<span class="p">]</span><span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.sents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.sents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the sents.</p>
-<p>The “sents” terminology comes from NLTK, where a sent (= sentence)
-is the equivalent unit of an <code class="docutils literal notranslate"><span class="pre">Utterance</span></code> object in this package.
-The sents are in contrast with <code class="docutils literal notranslate"><span class="pre">.tagged_sents</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -594,12 +594,6 @@ distinction just described for when <code class="docutils literal notranslate"><
 <dt id="pylangacq.chat.Reader.tagged_sents">
 <code class="sig-name descname">tagged_sents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">participants</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>List<span class="p">[</span>List<span class="p">[</span>pylangacq.objects.Token<span class="p">]</span><span class="p">]</span><span class="p">, </span>List<span class="p">[</span>List<span class="p">[</span>List<span class="p">[</span>pylangacq.objects.Token<span class="p">]</span><span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.tagged_sents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.tagged_sents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the tagged sents.</p>
-<p>The “tagged sents/words” terminology comes from NLTK, where a sent (= sentence)
-is the equivalent unit of an <code class="docutils literal notranslate"><span class="pre">Utterance</span></code> object in this package.
-A sent is tagged in the sense that the individual words
-(= the <code class="docutils literal notranslate"><span class="pre">Token</span></code> objects) in the sent have information beyond the word form,
-such as a part-of-speech tag, morphological information,
-and grammatical relation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -638,11 +632,6 @@ distinction just described for when <code class="docutils literal notranslate"><
 <dt id="pylangacq.chat.Reader.tagged_words">
 <code class="sig-name descname">tagged_words</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">participants</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>List<span class="p">[</span>pylangacq.objects.Token<span class="p">]</span><span class="p">, </span>List<span class="p">[</span>List<span class="p">[</span>pylangacq.objects.Token<span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.tagged_words"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.tagged_words" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the tagged words.</p>
-<p>The “tagged sents/words” terminology comes from NLTK, where a sent (= sentence)
-is the equivalent unit of an <code class="docutils literal notranslate"><span class="pre">Utterance</span></code> object in this package.
-A word is tagged in the sense that it has information beyond the word form,
-such as a part-of-speech tag, morphological information, and grammatical
-relation. A tagged word is represented as a <code class="docutils literal notranslate"><span class="pre">Token</span></code> object in this package.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -678,6 +667,52 @@ distinction just described for when <code class="docutils literal notranslate"><
 </dd></dl>
 
 <dl class="py method">
+<dt id="pylangacq.chat.Reader.tokens">
+<code class="sig-name descname">tokens</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">participants</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">by_utterances</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>List<span class="p">[</span>pylangacq.objects.Token<span class="p">]</span><span class="p">, </span>List<span class="p">[</span>List<span class="p">[</span>pylangacq.objects.Token<span class="p">]</span><span class="p">]</span><span class="p">, </span>List<span class="p">[</span>List<span class="p">[</span>List<span class="p">[</span>pylangacq.objects.Token<span class="p">]</span><span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.tokens"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.tokens" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the tokens.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>participants</strong><span class="classifier">str or iterable of str, optional</span></dt><dd><p>Participants of interest. You may pass in a string (e.g., <code class="docutils literal notranslate"><span class="pre">&quot;CHI&quot;</span></code>
+for studying child speech)
+or an iterable of strings (e.g., <code class="docutils literal notranslate"><span class="pre">{&quot;MOT&quot;,</span> <span class="pre">&quot;INV&quot;}</span></code>). Only the specified
+participants are included.
+If you pass in <code class="docutils literal notranslate"><span class="pre">None</span></code> (the default), all participants are included.
+This parameter cannot be used together with <code class="docutils literal notranslate"><span class="pre">exclude</span></code>.</p>
+</dd>
+<dt><strong>exclude</strong><span class="classifier">str or iterable of str, optional</span></dt><dd><p>Participants to exclude. You may pass in a string (e.g., <code class="docutils literal notranslate"><span class="pre">&quot;CHI&quot;</span></code>
+for child-directed speech)
+or an iterable of strings (e.g., <code class="docutils literal notranslate"><span class="pre">{&quot;MOT&quot;,</span> <span class="pre">&quot;INV&quot;}</span></code>). Only the specified
+participants are excluded.
+If you pass in <code class="docutils literal notranslate"><span class="pre">None</span></code> (the default), no participants are excluded.
+This parameter cannot be used together with <code class="docutils literal notranslate"><span class="pre">participants</span></code>.</p>
+</dd>
+<dt><strong>by_utterances</strong><span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the resulting objects are wrapped as a list at the utterance
+level.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code> (the default), such utterance-level list structure
+does not exist.</p>
+</dd>
+<dt><strong>by_files</strong><span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, return a list X of results, where len(X) is the number of
+files in the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object, and each element in X is the result for one
+file; the ordering of X corresponds to that of the file paths from the
+<code class="docutils literal notranslate"><span class="pre">.file_paths()</span></code> call.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code> (the default), return the result that collapses the file
+distinction just described for when <code class="docutils literal notranslate"><span class="pre">by_files</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>List[List[List[Token]]] if both by_utterances and by_files are True</dt><dd></dd>
+<dt>List[List[Token]] if by_utterances is True and by_files is False</dt><dd></dd>
+<dt>List[List[Token]] if by_utterances is False and by_files is True</dt><dd></dd>
+<dt>List[Token] if both by_utterances and by_files are False</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="pylangacq.chat.Reader.ttr">
 <code class="sig-name descname">ttr</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">keep_case</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">participant</span><span class="o">=</span><span class="default_value">'CHI'</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>float<span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.ttr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.ttr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the type-token ratios.</p>
@@ -702,8 +737,33 @@ for the target child.</p>
 <code class="sig-name descname">utterances</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">participants</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>List<span class="p">[</span>pylangacq.objects.Utterance<span class="p">]</span><span class="p">, </span>List<span class="p">[</span>List<span class="p">[</span>pylangacq.objects.Utterance<span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.utterances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.utterances" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the utterances.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
+<dt><strong>participants</strong><span class="classifier">str or iterable of str, optional</span></dt><dd><p>Participants of interest. You may pass in a string (e.g., <code class="docutils literal notranslate"><span class="pre">&quot;CHI&quot;</span></code>
+for studying child speech)
+or an iterable of strings (e.g., <code class="docutils literal notranslate"><span class="pre">{&quot;MOT&quot;,</span> <span class="pre">&quot;INV&quot;}</span></code>). Only the specified
+participants are included.
+If you pass in <code class="docutils literal notranslate"><span class="pre">None</span></code> (the default), all participants are included.
+This parameter cannot be used together with <code class="docutils literal notranslate"><span class="pre">exclude</span></code>.</p>
+</dd>
+<dt><strong>exclude</strong><span class="classifier">str or iterable of str, optional</span></dt><dd><p>Participants to exclude. You may pass in a string (e.g., <code class="docutils literal notranslate"><span class="pre">&quot;CHI&quot;</span></code>
+for child-directed speech)
+or an iterable of strings (e.g., <code class="docutils literal notranslate"><span class="pre">{&quot;MOT&quot;,</span> <span class="pre">&quot;INV&quot;}</span></code>). Only the specified
+participants are excluded.
+If you pass in <code class="docutils literal notranslate"><span class="pre">None</span></code> (the default), no participants are excluded.
+This parameter cannot be used together with <code class="docutils literal notranslate"><span class="pre">participants</span></code>.</p>
+</dd>
+<dt><strong>by_files</strong><span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, return a list X of results, where len(X) is the number of
+files in the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object, and each element in X is the result for one
+file; the ordering of X corresponds to that of the file paths from the
+<code class="docutils literal notranslate"><span class="pre">.file_paths()</span></code> call.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code> (the default), return the result that collapses the file
+distinction just described for when <code class="docutils literal notranslate"><span class="pre">by_files</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
 <dt>List[Utterance] if by_files is False, otherwise List[List[Utterance]]</dt><dd></dd>
 </dl>
 </dd>
@@ -714,7 +774,6 @@ for the target child.</p>
 <dt id="pylangacq.chat.Reader.word_frequencies">
 <code class="sig-name descname">word_frequencies</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">keep_case</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">participants</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>collections.Counter<span class="p">, </span>List<span class="p">[</span>collections.Counter<span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.word_frequencies"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.word_frequencies" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return word frequencies.</p>
-<p>This method is equivalent to <code class="docutils literal notranslate"><span class="pre">.word_ngrams()</span></code> with <code class="docutils literal notranslate"><span class="pre">n</span></code> = 1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -799,7 +858,7 @@ as a preprocessing step.</p>
 
 <dl class="py method">
 <dt id="pylangacq.chat.Reader.words">
-<code class="sig-name descname">words</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">participants</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>List<span class="p">[</span>str<span class="p">]</span><span class="p">, </span>List<span class="p">[</span>List<span class="p">[</span>str<span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.words"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.words" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">words</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">participants</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">by_utterances</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>List<span class="p">[</span>str<span class="p">]</span><span class="p">, </span>List<span class="p">[</span>List<span class="p">[</span>str<span class="p">]</span><span class="p">]</span><span class="p">, </span>List<span class="p">[</span>List<span class="p">[</span>List<span class="p">[</span>str<span class="p">]</span><span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.words"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Reader.words" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the words.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -818,6 +877,11 @@ participants are excluded.
 If you pass in <code class="docutils literal notranslate"><span class="pre">None</span></code> (the default), no participants are excluded.
 This parameter cannot be used together with <code class="docutils literal notranslate"><span class="pre">participants</span></code>.</p>
 </dd>
+<dt><strong>by_utterances</strong><span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the resulting objects are wrapped as a list at the utterance
+level.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code> (the default), such utterance-level list structure
+does not exist.</p>
+</dd>
 <dt><strong>by_files</strong><span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, return a list X of results, where len(X) is the number of
 files in the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object, and each element in X is the result for one
 file; the ordering of X corresponds to that of the file paths from the
@@ -829,7 +893,10 @@ distinction just described for when <code class="docutils literal notranslate"><
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt>List[str] if by_files is False, otherwise List[List[str]]</dt><dd></dd>
+<dt>List[List[List[str]]] if both by_utterances and by_files are True</dt><dd></dd>
+<dt>List[List[str]] if by_utterances is True and by_files is False</dt><dd></dd>
+<dt>List[List[str]] if by_utterances is False and by_files is True</dt><dd></dd>
+<dt>List[str] if both by_utterances and by_files are False</dt><dd></dd>
 </dl>
 </dd>
 </dl>

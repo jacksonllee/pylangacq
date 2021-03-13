@@ -1,5 +1,19 @@
 .. _transcriptions:
 
+After the headers come the transcriptions. All transcriptions are signaled by
+``*`` at the beginning of the line::
+
+    *Code1: good morning .
+
+``*`` is immediately followed by the participant code (e.g., ``Code1``), and then
+by a colon ``:`` and a space (or tab). Then the transcribed line follows.
+
+For research purposes, many CHAT transcripts have additional tiers signaled by
+``%mor`` (for morphological information such as part-of-speech tag and lemma),
+``%gra`` (for dependency and grammatical relations), and other ``%`` tiers.
+Much of what PyLangAcq can do relies on the annotations in these tiers with
+rich linguistic information.
+
 Transcriptions and Annotations
 ==============================
 

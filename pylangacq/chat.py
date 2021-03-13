@@ -114,6 +114,12 @@ def _params_in_docstring(*params, class_method=True):
             If provided, the file paths that match this string (by regular expression
             matching) are excluded for reading and parsing."""
 
+    if "allow_remote" in params:
+        docstring += """
+        allow_remote : bool, optional
+            If ``True`` (the default), and if the data source looks like a URL,
+            downloading the data from the internet will be attempted."""
+
     if "encoding" in params:
         docstring += """
         encoding : str, optional
@@ -193,6 +199,13 @@ class Reader:
         with cf.ProcessPoolExecutor() as executor:
             self._files = list(executor.map(self._parse_chat_str, strs, file_paths))
 
+    def __len__(self):
+        raise NotImplementedError(
+            "__len__ of a CHAT reader is intentionally undefined. "
+            "Intuitively, there are different lengths one may refer to: "
+            "Number of files in this reader? Utterances? Words? Something else?"
+        )
+
     def clear(self) -> None:
         """Turn it into an empty reader by removing all parsed CHAT data."""
         self._files = []
@@ -236,10 +249,6 @@ class Reader:
             if not any(re.search(p, f.file_path) for p in file_paths)
         ]
 
-    def __len__(self) -> int:
-        """Return the number of files in this reader."""
-        return len(self._files)
-
     @staticmethod
     def _flatten(item_type, nested) -> Union[List, Set]:
         if item_type == list:
@@ -252,26 +261,6 @@ class Reader:
             return sum(nested, collections.Counter())
         else:
             raise ValueError(f"unrecognized item type: {item_type}")
-
-    @_params_in_docstring("participants", "exclude", "by_files")
-    def n_utterances(
-        self, participants=None, exclude=None, by_files=False
-    ) -> Union[int, List[int]]:
-        """Return the number of utterances.
-
-        Parameters
-        ----------
-
-        Returns
-        -------
-        int if ``by_files`` is ``False``, otherwise List[int]
-        """
-        utterances = self._filter_utterances_by_participants(participants, exclude)
-        result_by_files = [len(us) for us in utterances]
-        if by_files:
-            return result_by_files
-        else:
-            return self._flatten(int, result_by_files)
 
     @_params_in_docstring("participants", "exclude", "by_files")
     def utterances(
@@ -365,9 +354,9 @@ class Reader:
         if participants is None:
             participants: List[Set] = self.participants(by_files=True)
         elif type(participants) == str:
-            participants: List[Set] = [{participants} for _ in range(len(self))]
+            participants: List[Set] = [{participants} for _ in range(self.n_files())]
         elif hasattr(participants, "__iter__"):
-            participants: List[Set] = [set(participants) for _ in range(len(self))]
+            participants: List[Set] = [set(participants) for _ in range(self.n_files())]
         else:
             raise ValueError(
                 "participants must be one of {None, a string, an iterable of strings}: "
@@ -414,7 +403,7 @@ class Reader:
 
     def n_files(self) -> int:
         """Return the number of files."""
-        return len(self)
+        return len(self._files)
 
     @_params_in_docstring("by_files")
     def participants(self, by_files=False) -> Union[Set[str], List[Set[str]]]:
@@ -890,13 +879,14 @@ class Reader:
         )
 
     @classmethod
-    @_params_in_docstring("match", "exclude", "extension", "encoding")
+    @_params_in_docstring("match", "exclude", "extension", "allow_remote", "encoding")
     def from_zip(
         cls,
         path: str,
         match: str = None,
         exclude: str = None,
         extension: str = _CHAT_EXTENSION,
+        allow_remote: bool = True,
         encoding: str = _ENCODING,
     ) -> "Reader":
         """Instantiate a ``Reader`` object from a local or remote ZIP file.
@@ -918,8 +908,9 @@ class Reader:
             temp_dir = stack.enter_context(
                 tempfile.TemporaryDirectory(_SUBDIR_SUFFIX, _SUBDIR_PREFIX)
             )
+            is_url = path.startswith("https://") or path.startswith("http://")
 
-            if path.startswith("https://") or path.startswith("http://"):
+            if allow_remote and is_url:
                 zip_path = os.path.join(temp_dir, os.path.basename(path))
                 _download_file(path, zip_path)
             else:
@@ -928,7 +919,7 @@ class Reader:
             zfile = stack.enter_context(zipfile.ZipFile(zip_path))
             zfile.extractall(temp_dir)
 
-            if path.startswith("https://") or path.startswith("http://"):
+            if allow_remote and is_url:
                 os.remove(zip_path)
 
             return cls.from_dir(

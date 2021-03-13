@@ -4,7 +4,7 @@ Reference: https://sybil.readthedocs.io/en/latest/use.html#pytest
 """
 
 import os
-from doctest import NORMALIZE_WHITESPACE
+from doctest import ELLIPSIS, NORMALIZE_WHITESPACE
 
 import pytest
 from sybil import Sybil
@@ -26,7 +26,7 @@ def tempdir():
 
 
 pytest_collect_file = Sybil(
-    parsers=[DocTestParser(NORMALIZE_WHITESPACE), skip],
+    parsers=[DocTestParser(ELLIPSIS | NORMALIZE_WHITESPACE), skip],
     pattern="*.rst",
     fixtures=["tempdir"],
 ).pytest()

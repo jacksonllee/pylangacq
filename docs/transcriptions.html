@@ -101,10 +101,14 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="read.html">Reading CHAT Data</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="read.html#the-chat-transcription-format">The CHAT transcription format</a></li>
-<li class="toctree-l2"><a class="reference internal" href="read.html#initializing-a-reader-instance">Initializing a Reader instance</a></li>
-<li class="toctree-l2"><a class="reference internal" href="read.html#reader-methods">Reader methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="read.html#adding-and-removing-transcripts-in-a-reader">Adding and removing transcripts in a reader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read.html#initializing-a-reader-instance">Initializing a <code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code> Instance</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="read.html#read-chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="read.html#from-a-zip-file-or-local-directory">From a ZIP File or Local Directory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="read.html#from-specific-chat-data-files">From Specific CHAT Data Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="read.html#from-in-memory-strings">From In-Memory Strings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="read.html#adding-and-removing-data-in-a-reader">Adding and Removing Data in a <code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="headers.html">Accessing Headers</a></li>
@@ -188,8 +192,20 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="transcriptions-and-annotations">
-<span id="transcriptions"></span><h1>Transcriptions and Annotations<a class="headerlink" href="#transcriptions-and-annotations" title="Permalink to this headline">¶</a></h1>
+  <p id="transcriptions">After the headers come the transcriptions. All transcriptions are signaled by
+<code class="docutils literal notranslate"><span class="pre">*</span></code> at the beginning of the line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">Code1</span><span class="p">:</span> <span class="n">good</span> <span class="n">morning</span> <span class="o">.</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">*</span></code> is immediately followed by the participant code (e.g., <code class="docutils literal notranslate"><span class="pre">Code1</span></code>), and then
+by a colon <code class="docutils literal notranslate"><span class="pre">:</span></code> and a space (or tab). Then the transcribed line follows.</p>
+<p>For research purposes, many CHAT transcripts have additional tiers signaled by
+<code class="docutils literal notranslate"><span class="pre">%mor</span></code> (for morphological information such as part-of-speech tag and lemma),
+<code class="docutils literal notranslate"><span class="pre">%gra</span></code> (for dependency and grammatical relations), and other <code class="docutils literal notranslate"><span class="pre">%</span></code> tiers.
+Much of what PyLangAcq can do relies on the annotations in these tiers with
+rich linguistic information.</p>
+<div class="section" id="transcriptions-and-annotations">
+<h1>Transcriptions and Annotations<a class="headerlink" href="#transcriptions-and-annotations" title="Permalink to this headline">¶</a></h1>
 <p>This page introduces the data methods of <code class="docutils literal notranslate"><span class="pre">Reader</span></code> objects for transcriptions
 and annotations.
 For metadata access, see <span class="xref std std-ref">metadata</span>.
@@ -360,7 +376,7 @@ appear in the individual CHAT transcripts, which in turn are ordered
 alphabetically by filenames.</p>
 <p>All of these data access methods have the optional parameter <code class="docutils literal notranslate"><span class="pre">by_files</span></code> for
 whether a return object X or dict(filename: X) is desired;
-see <a class="reference internal" href="read.html#reader-properties"><span class="std std-ref">Reader methods</span></a>.</p>
+see <span class="xref std std-ref">reader_properties</span>.</p>
 </div>
 <div class="section" id="advanced-usage">
 <span id="transcriptions-advanced"></span><h2>Advanced usage<a class="headerlink" href="#advanced-usage" title="Permalink to this headline">¶</a></h2>

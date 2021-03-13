@@ -99,10 +99,14 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../read.html">Reading CHAT Data</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../read.html#the-chat-transcription-format">The CHAT transcription format</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../read.html#initializing-a-reader-instance">Initializing a Reader instance</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../read.html#reader-methods">Reader methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../read.html#adding-and-removing-transcripts-in-a-reader">Adding and removing transcripts in a reader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../read.html#initializing-a-reader-instance">Initializing a <code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code> Instance</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../read.html#read-chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../read.html#from-a-zip-file-or-local-directory">From a ZIP File or Local Directory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../read.html#from-specific-chat-data-files">From Specific CHAT Data Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../read.html#from-in-memory-strings">From In-Memory Strings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../read.html#adding-and-removing-data-in-a-reader">Adding and Removing Data in a <code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../headers.html">Accessing Headers</a></li>
@@ -303,6 +307,12 @@
 <span class="s2">            If provided, the file paths that match this string (by regular expression</span>
 <span class="s2">            matching) are excluded for reading and parsing.&quot;&quot;&quot;</span>
 
+    <span class="k">if</span> <span class="s2">&quot;allow_remote&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+        <span class="n">docstring</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        allow_remote : bool, optional</span>
+<span class="s2">            If ``True`` (the default), and if the data source looks like a URL,</span>
+<span class="s2">            downloading the data from the internet will be attempted.&quot;&quot;&quot;</span>
+
     <span class="k">if</span> <span class="s2">&quot;encoding&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
         <span class="n">docstring</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">        encoding : str, optional</span>
@@ -382,6 +392,13 @@
         <span class="k">with</span> <span class="n">cf</span><span class="o">.</span><span class="n">ProcessPoolExecutor</span><span class="p">()</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">executor</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parse_chat_str</span><span class="p">,</span> <span class="n">strs</span><span class="p">,</span> <span class="n">file_paths</span><span class="p">))</span>
 
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+            <span class="s2">&quot;__len__ of a CHAT reader is intentionally undefined. &quot;</span>
+            <span class="s2">&quot;Intuitively, there are different lengths one may refer to: &quot;</span>
+            <span class="s2">&quot;Number of files in this reader? Utterances? Words? Something else?&quot;</span>
+        <span class="p">)</span>
+
 <div class="viewcode-block" id="Reader.clear"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Turn it into an empty reader by removing all parsed CHAT data.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_files</span> <span class="o">=</span> <span class="p">[]</span></div>
@@ -425,10 +442,6 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">file_path</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">file_paths</span><span class="p">)</span>
         <span class="p">]</span></div>
 
-    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Return the number of files in this reader.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_files</span><span class="p">)</span>
-
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_flatten</span><span class="p">(</span><span class="n">item_type</span><span class="p">,</span> <span class="n">nested</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">Set</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">item_type</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
@@ -441,26 +454,6 @@
             <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">nested</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">())</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;unrecognized item type: </span><span class="si">{item_type}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<div class="viewcode-block" id="Reader.n_utterances"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.n_utterances">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;participants&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">n_utterances</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">participants</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;Return the number of utterances.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        int if ``by_files`` is ``False``, otherwise List[int]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">utterances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_utterances_by_participants</span><span class="p">(</span><span class="n">participants</span><span class="p">,</span> <span class="n">exclude</span><span class="p">)</span>
-        <span class="n">result_by_files</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">us</span><span class="p">)</span> <span class="k">for</span> <span class="n">us</span> <span class="ow">in</span> <span class="n">utterances</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">by_files</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">result_by_files</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">result_by_files</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Reader.utterances"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.utterances">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;participants&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">utterances</span><span class="p">(</span>
@@ -554,9 +547,9 @@
         <span class="k">if</span> <span class="n">participants</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">participants</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Set</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">participants</span><span class="p">(</span><span class="n">by_files</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">participants</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
-            <span class="n">participants</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Set</span><span class="p">]</span> <span class="o">=</span> <span class="p">[{</span><span class="n">participants</span><span class="p">}</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">))]</span>
+            <span class="n">participants</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Set</span><span class="p">]</span> <span class="o">=</span> <span class="p">[{</span><span class="n">participants</span><span class="p">}</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_files</span><span class="p">())]</span>
         <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">participants</span><span class="p">,</span> <span class="s2">&quot;__iter__&quot;</span><span class="p">):</span>
-            <span class="n">participants</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Set</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">set</span><span class="p">(</span><span class="n">participants</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">))]</span>
+            <span class="n">participants</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Set</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">set</span><span class="p">(</span><span class="n">participants</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_files</span><span class="p">())]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s2">&quot;participants must be one of {None, a string, an iterable of strings}: &quot;</span>
@@ -603,7 +596,7 @@
 
 <div class="viewcode-block" id="Reader.n_files"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.n_files">[docs]</a>    <span class="k">def</span> <span class="nf">n_files</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Return the number of files.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_files</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Reader.participants"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.participants">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">participants</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]:</span>
@@ -1079,13 +1072,14 @@
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="Reader.from_zip"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.from_zip">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;match&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;extension&quot;</span><span class="p">,</span> <span class="s2">&quot;encoding&quot;</span><span class="p">)</span>
+    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;match&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;extension&quot;</span><span class="p">,</span> <span class="s2">&quot;allow_remote&quot;</span><span class="p">,</span> <span class="s2">&quot;encoding&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">from_zip</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">match</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">exclude</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">extension</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_CHAT_EXTENSION</span><span class="p">,</span>
+        <span class="n">allow_remote</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_ENCODING</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Reader&quot;</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Instantiate a ``Reader`` object from a local or remote ZIP file.</span>
@@ -1107,8 +1101,9 @@
             <span class="n">temp_dir</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">enter_context</span><span class="p">(</span>
                 <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">(</span><span class="n">_SUBDIR_SUFFIX</span><span class="p">,</span> <span class="n">_SUBDIR_PREFIX</span><span class="p">)</span>
             <span class="p">)</span>
+            <span class="n">is_url</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http://&quot;</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http://&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">allow_remote</span> <span class="ow">and</span> <span class="n">is_url</span><span class="p">:</span>
                 <span class="n">zip_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
                 <span class="n">_download_file</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">zip_path</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -1117,7 +1112,7 @@
             <span class="n">zfile</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">enter_context</span><span class="p">(</span><span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">zip_path</span><span class="p">))</span>
             <span class="n">zfile</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http://&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">allow_remote</span> <span class="ow">and</span> <span class="n">is_url</span><span class="p">:</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">zip_path</span><span class="p">)</span>
 
             <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_dir</span><span class="p">(</span>

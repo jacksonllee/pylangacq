@@ -3,306 +3,195 @@
 Reading CHAT Data
 =================
 
-This page provides details of the CHAT data format that PyLangAcq assumes and
-explains how CHAT data files are read.
+PyLangAcq is designed to handle conversational data represented in the CHAT format
+as used in the CHILDES database for language acquisition research;
+CHAT is documented in its `official manual <https://talkbank.org/manuals/CHAT.pdf>`_.
+This page describes the ways CHAT data can be read by the ``pylangacq`` package.
 
-* :ref:`chat_format`
-* :ref:`initialize_reader`
-* :ref:`reader_properties`
-* :ref:`add_remove_transcripts`
+Initializing a :class:`~pylangacq.Reader` Instance
+--------------------------------------------------
 
+:func:`~pylangacq.read_chat`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. _chat_format:
-
-The CHAT transcription format
------------------------------
-
-PyLangAcq is designed to handle the CHAT transcription format as used in the
-CHILDES database for language acquisition research.
-The bare minimum of what PyLangAcq assumes about CHAT is explained here.
-(As of January 2016, PyLangAcq conforms to the latest
-`CHAT manual <https://talkbank.org/manuals/CHAT.pdf>`_
-dated September 22, 2015.)
-
-**Headers**
-
-A CHAT transcript file (typically with the extension name ``.cha``, though not
-strictly required) provides metadata headers using lines starting with ``@``.
-Among the many possible headers,
-``@Participants`` and ``@ID`` are of particular interest::
-
-    @Participants: Code1 Name1 Role1 , Code2 Name2 Role2
-    @ID: ||Code1|1;6.||||Role1|||
-    @ID: ||Code2|||||Role2|||
-
-The ``@Participants`` header states the participants of the transcript. In this
-hypothetical example shown just above, there are two participants.
-Each participant has a participant code (e.g., ``Code1``), a participant name
-(e.g., ``Name1``), and a participant role (e.g., ``Role1``).
-The participant code must be an alphanumeric three-character string
-which begins with a letter, and all letters must be in uppercase.
-The participant code must come first, immediately
-followed by a space, and then by the participant name, and in turn by
-another space and then the participant role. A comma separates
-information between two participants.
-
-If there are ``@ID`` headers, they must appear after, but not before, the
-``@Participants`` header.
-The number of ``@ID`` headers is equal to the number of participants.
-An ``@ID`` header contains detailed information about a
-participant::
-
-    language|corpus|participant_code|age|sex|group|SES|participant_role|education|custom|
-
-Within ``@ID``, the fields ``participant_code`` and ``participant_role``
-must match the information of the relevant participant in the ``@Participants``
-header.
-Often of interest in language acquisition research is the age of the
-participant (e.g., the target child). For instance, the age of
-participant ``Code1`` is 1 year and 6 months, as given by ``1;6.``.
-Fields are left empty if no information is available.
-
-While all other ``@`` headers are optional, PyLangAcq has built-in functions
-specifically for ``@Languages`` and ``@Date`` for potential usage.
-
-
-**Transcriptions**
-
-After the headers come the transcriptions. All transcriptions are signaled by
-``*`` at the beginning of the line::
-
-    *Code1: good morning .
-
-``*`` is immediately followed by the participant code (e.g., ``Code1``), and then
-by a colon ``:`` and a space (or tab). Then the transcribed line follows.
-
-For research purposes, many CHAT transcripts have additional tiers signaled by
-``%mor`` (for morphological information such as part-of-speech tag and lemma),
-``%gra`` (for dependency and grammatical relations), and other ``%`` tiers.
-Much of what PyLangAcq can do relies on the annotations in these tiers with
-rich linguistic information.
-
-
-**Line continuations**
-
-For any header and transcription lines that are too long, line continuations
-are allowed in CHAT files with a tab character (denoted by ``<TAB>`` below), from::
-
-    *Code1: this line is to demonstrate how line continuations are done in CHAT .
-
-to::
-
-    *Code1: this line is to demonstrate how line continuations
-    <TAB>are done in CHAT .
-
-This implies that all lines in a CHAT file must begin with any of the following
-characters only: ``@``, ``*``, ``%``, ``<TAB>``.
-
-
-.. _initialize_reader:
-
-Initializing a Reader instance
-------------------------------
-
-Assuming that the CHAT transcripts for the Brown portion of CHILDES
-(i.e., ``eve01.cha``, ``eve02.cha`` etc.)
-are at the current directory:
+Reading CHAT data in PyLangAcq is all about creating a :class:`~pylangacq.Reader` object.
+The most convenient way to do it is to use the :func:`~pylangacq.read_chat` function,
+which asks for a data source and several optional arguments.
+As an example, let's use the `Brown <https://childes.talkbank.org/access/Eng-NA/Brown.html>`_
+dataset of American English on CHILDES:
 
 .. code-block:: python
 
-    >>> import pylangacq as pla
-    >>> eve = pla.read_chat('Brown/Eve/*.cha')
+    >>> import pylangacq
+    >>> url = "https://childes.talkbank.org/data/Eng-NA/Brown.zip"
+    >>> brown = pylangacq.read_chat(url)
 
-.. NOTE::
-   The UTF-8 encoding is assumed for all CHAT files.
-   If your data files are encoded differently (e.g., in Latin-1 instead),
-   ``read_chat`` takes the keyword argument ``'encoding'``. For instance,
-   you can read in data like this::
-
-      data = pla.read_chat('path/to/data/files', encoding='latin1')
-
-``read_chat()`` can take one or multiple filenames.
-These filenames can be either relative paths to the current directory
-(as exemplified here) or
-absolute paths. Filename pattern matching with ``*``
-(wildcard for zero or more characters) and ``?`` (wildcard for one or more
-characters) can be used. In this example with Eve's files, ``*`` matches all
-the 20 CHAT
-files in the subdirectory ``Brown/Eve/`` relative to the current directory.
-
-``read_chat()`` returns an instance of the
-``pylangacq.chat.Reader``
-class. For example, ``eve`` is a ``pylangacq.chat.Reader`` instance,
-or simply ``Reader`` instance for short.
-Most of the functionality of PyLangAcq is accessed via methods of ``Reader``
-instances, in the form of ``reader_instance.method_name()``.
-
-
-If your CHAT data comes as an in-memory string (a string of what a single
-CHAT data file would look like), a ``Reader`` instance can be created by
-the ``from_chat_str`` class method:
+If your data source is a URL pointing to a ZIP archive file, like the Brown
+example here or many others from CHILDES,
+:func:`~pylangacq.read_chat` automatically handles everything behind the scenes for you,
+from downloading the ZIP file, unzipping it, traversing through the CHAT files found,
+as well as parsing the files.
+If the ZIP file has a fair amount of data
+(the Brown dataset has over 200 CHAT data files, with over 180,000 utterances),
+a :func:`~pylangacq.read_chat` call like this typically takes a couple seconds.
 
 .. code-block:: python
 
-    >>> import pylangacq as pla
-    >>> chat_data_str = "*CHI:\tmore cookie .\n*MOT:\tyou want more cookies ?"
-    >>> reader = pla.Reader.from_chat_str(chat_data_str)
+    >>> brown.n_files()
+    214
+    >>> len(brown.utterances())
+    184758
 
-.. _reader_properties:
-
-Reader methods
---------------
-
-Basic information of a ``Reader`` instance such as ``eve`` can be accessed
-as follows:
+In practice, you likely only need a subset of the data at a time, e.g.,
+focusing on a particular child. The Brown dataset contains data for the three children
+Adam, Eve, and Sarah. Suppose you need Eve's data only.
+:func:`~pylangacq.read_chat` takes the optional argument ``match`` which, if specified,
+matches the file paths and only handles the matching data files.
+To know what the file paths look like and therefore determine what the ``match`` argument should be,
+either you independently have the unzipped files on your system
+and see the subdirectory structure, or the ``brown`` :class:`~pylangacq.Reader` object
+from the code snippets above can tell you that via :func:`~pylangacq.Reader.file_paths`:
 
 .. code-block:: python
 
-    >>> eve.number_of_files()  # from eve01.cha through eve20.cha
+    >>> brown.file_paths()
+    ['Brown/Adam/020304.cha',
+     'Brown/Adam/020318.cha',
+     ...
+     'Brown/Eve/010600a.cha',
+     'Brown/Eve/010600b.cha',
+     ...
+     'Brown/Sarah/020305.cha',
+     'Brown/Sarah/020307.cha',
+     ...
+     'Brown/Sarah/050106.cha']
+
+It looks like all and only Eve's data is inside the subdirectory called ``"Eve"``.
+If we pass ``"Eve"`` to ``match``, we should be getting only Eve's data this time
+(and the function should run and finish noticeably faster due to the much smaller
+data amount):
+
+.. code-block:: python
+
+    >>> eve = pylangacq.read_chat(url, match="Eve")
+    >>> eve.n_files()
     20
-    >>> len(eve)  # same as number_of_files()
-    20
-    >>> eve.number_of_utterances()  # across all 20 files and all participants
+    >>> len(eve.utterances())
     26979
 
-The bulk of the library documentation is about the various ``Reader`` methods.
-The full API details can be found in :ref:`reader_api`.
+So far, we've seen how :func:`~pylangacq.read_chat` works with a URL that points
+to a ZIP file. Other data sources that this function is designed for are:
 
-For the method ``number_of_utterances()``, an utterance is a transcription line that
-begins with ``*`` in the CHAT transcripts.
+1. A ZIP file on your local system:
 
+    .. skip: next
 
-Many methods of ``Reader`` have a dual structure in terms of the return object.
-It depends on whether or not you are interested in an return object that
-organizes contents by the individual source files.
-These methods have the optional parameter ``by_files`` (default: ``False``).
-For a given method ``some_method()`` called for a ``Reader`` instance named ``reader_instance``:
+    .. code-block:: python
 
-==============================================  =============================================================
-Method                                          Return object
-==============================================  =============================================================
-``reader_instance.some_method()``               whatever ``some_method()`` is for all files in ``reader_instance``, with no knowledge of the file structure
-``reader_instance.some_method(by_files=True)``  dict(absolute-path filename: ``some_method()`` for that file)
-==============================================  =============================================================
+        >>> reader = pylangacq.read_chat("path/to/your/local/data.zip")
 
-``number_of_utterances()`` is one of the methods with ``by_files``:
+2. A directory (i.e., folder) on your local system, where CHAT data files are found immediately or recursively in subdirectories:
 
-.. code-block:: python
+    .. skip: next
 
-    >>> eve.number_of_utterances()  # by_files is False by default
-    26979
-    >>> counts_by_files = eve.number_of_utterances(by_files=True)  # dict(filename: num of utterances)
-    >>> import os
-    >>> for abs_filename, n in sorted(counts_by_files.items()):
-    ...     print(os.path.basename(abs_filename), n)
-    ...
-    010600a.cha 1601
-    010600b.cha 1304
-    010700a.cha 618
-    010700b.cha 1456
-    010800.cha 1479
-    010900a.cha 1075
-    010900b.cha 1277
-    010900c.cha 2058
-    011000a.cha 1024
-    011000b.cha 1060
-    011100a.cha 952
-    011100b.cha 1339
-    020000a.cha 959
-    020000b.cha 1094
-    020100a.cha 1651
-    020100b.cha 1500
-    020200a.cha 2156
-    020200b.cha 1760
-    020300a.cha 1348
-    020300b.cha 1268
+    .. code-block:: python
 
-(Many data access methods have the parameter ``by_files``
-for the dual possibilities of return objects;
-see :ref:`transcriptions`.)
+        >>> reader = pylangacq.read_chat("path/to/your/local/directory/")
 
-We are often interested in what concerns specific participants in the data,
-e.g., the target child whose participant code is ``'CHI'``.
-Many
-methods accept an optional argument to specify the parameter ``participant``
-(see also :ref:`cds`):
+3. A single CHAT file on your system:
 
-.. code-block:: python
+    .. skip: next
 
-    >>> for abs_filename, n in sorted(eve.number_of_utterances(participant='CHI', by_files=True).items()):
-    ...     print(os.path.basename(abs_filename), n)
-    ...
-    010600a.cha 749
-    010600b.cha 488
-    010700a.cha 253
-    010700b.cha 590
-    010800.cha 707
-    010900a.cha 542
-    010900b.cha 528
-    010900c.cha 959
-    011000a.cha 521
-    011000b.cha 547
-    011100a.cha 447
-    011100b.cha 648
-    020000a.cha 460
-    020000b.cha 476
-    020100a.cha 724
-    020100b.cha 641
-    020200a.cha 904
-    020200b.cha 791
-    020300a.cha 653
-    020300b.cha 539
+    .. code-block:: python
+
+        >>> reader = pylangacq.read_chat("path/to/your/local/data.cha")
 
 
-.. _add_remove_transcripts:
+:func:`~pylangacq.read_chat` is designed to cover the common use cases of reading in CHAT data.
+Under the hood, it is a wrapper of several classmethods of :class:`~pylangacq.Reader`,
+some of which aren't available from :func:`~pylangacq.read_chat`.
 
-Adding and removing transcripts in a reader
--------------------------------------------
 
-It is possible to add or remove transcripts in a ``Reader`` instance;
-this is important where dynamic data handling is needed.
-Three methods are available:
-``add()``, ``remove()``, ``update()``, and ``clear()``.
+From a ZIP File or Local Directory
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To illustrate, we initialize ``corpus`` as an empty ``Reader`` instance:
+Perhaps you don't want :func:`~pylangacq.read_chat` to do the guess work of
+what type of your data source is, or you want more fine-grained control
+of what counts as CHAT data files or not in your data source.
+While :func:`~pylangacq.read_chat` already handles a ZIP archive file and
+a local directory, the :class:`~pylangacq.Reader` classmethods
+:func:`~pylangacq.Reader.from_zip` and :func:`~pylangacq.Reader.from_dir`
+allow more optional arguments for customization.
+Here's sample code for using these classmethods in the base case:
 
-.. code-block:: python
+    .. skip: start
 
-    >>> corpus = pla.read_chat()  # empty, no filenames given
+    .. code-block:: python
 
-To add transcripts, use ``add()`` which takes one or more filenames
-as arguments:
+        >>> reader = pylangacq.Reader.from_zip("path/to/your/local/data.zip")
+        >>> reader = pylangacq.Reader.from_dir("path/to/your/local/directory/")
 
-.. code-block:: python
+    .. skip: end
 
-    >>> corpus.add('Brown/Eve/01*.cha')  # all data prior to 2;0. (files are conveniently named by age)
-    >>> corpus.number_of_files()
-    12
 
-To remove transcripts with ``remove()``:
+From Specific CHAT Data Files
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. code-block:: python
+If you'd like to target specific files, the :class:`~pylangacq.Reader` classmethod
+:func:`~pylangacq.Reader.from_files` takes a list of file paths:
 
-    >>> corpus.remove('Brown/Eve/010*.cha')  # remove data files prior to 1;10.
-    >>> corpus.number_of_files()
-    4
+    .. skip: start
 
-``update()`` takes a ``Reader`` instance and updates the current one:
+    .. code-block:: python
 
-.. code-block:: python
+        >>> path1 = "path/to/one/data/file.cha"
+        >>> path2 = "path/to/another/data/file.cha"
+        >>> reader = pylangacq.Reader.from_files([path1, path2])
 
-    >>> new_corpus = pla.read_chat('Brown/Eve/02*.cha')  # all data from 2;0.
-    >>> new_corpus.number_of_files()
-    8
-    >>> corpus.update(new_corpus)  # use "update" to combine new_corpus into corpus
-    >>> corpus.number_of_files()
-    12
+    .. skip: end
 
-``clear()`` applies to a ``Reader`` instance to clear everything and reset it
-as an empty ``Reader`` instance:
 
-.. code-block:: python
+From In-Memory Strings
+^^^^^^^^^^^^^^^^^^^^^^
 
-    >>> corpus.clear()
-    >>> corpus.number_of_files()
-    0
+If your CHAT data comes from in-memory strings,
+the :class:`~pylangacq.Reader` classmethod
+:func:`~pylangacq.Reader.from_strs` takes a list of strings,
+where each string is assumed to conform to the
+`CHAT data format <https://talkbank.org/manuals/CHAT.pdf>`_:
+
+    .. code-block:: python
+
+        >>> # Let's create some minimal CHAT data as a string.
+        >>> data = "*CHI:\tI want cookie .\n*MOT:\tokay ."
+        >>>
+        >>> # We should see two utterances.
+        >>> print(data)
+        *CHI:       I want cookie .
+        *MOT:       okay .
+        >>>
+        >>> reader = pylangacq.Reader.from_strs([data])
+        >>> len(reader.utterances())
+        2
+        >>> reader.utterances()
+        [Utterance(participant='CHI',
+                   tokens=[Token(word='I', pos=None, mor=None, gra=None),
+                           Token(word='want', pos=None, mor=None, gra=None),
+                           Token(word='cookie', pos=None, mor=None, gra=None),
+                           Token(word='.', pos=None, mor=None, gra=None)],
+                   time_marks=None,
+                   tiers={'CHI': 'I want cookie .'}),
+         Utterance(participant='MOT',
+                   tokens=[Token(word='okay', pos=None, mor=None, gra=None),
+                           Token(word='.', pos=None, mor=None, gra=None)],
+                   time_marks=None,
+                   tiers={'MOT': 'okay .'})]
+
+We are getting ahead of ourselves by showing the result
+of the :class:`~pylangacq.Reader` classmethod :func:`~pylangacq.Reader.utterances`.
+We are going to drill down to this and many other functions
+in the upcoming parts of the documentation,
+but this quick example gives you a glimpse of how PyLangAcq represents CHAT data.
+
+Adding and Removing Data in a :class:`~pylangacq.Reader`
+--------------------------------------------------------

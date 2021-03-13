@@ -101,10 +101,14 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="read.html">Reading CHAT Data</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="read.html#the-chat-transcription-format">The CHAT transcription format</a></li>
-<li class="toctree-l2"><a class="reference internal" href="read.html#initializing-a-reader-instance">Initializing a Reader instance</a></li>
-<li class="toctree-l2"><a class="reference internal" href="read.html#reader-methods">Reader methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="read.html#adding-and-removing-transcripts-in-a-reader">Adding and removing transcripts in a reader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read.html#initializing-a-reader-instance">Initializing a <code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code> Instance</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="read.html#read-chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="read.html#from-a-zip-file-or-local-directory">From a ZIP File or Local Directory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="read.html#from-specific-chat-data-files">From Specific CHAT Data Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="read.html#from-in-memory-strings">From In-Memory Strings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="read.html#adding-and-removing-data-in-a-reader">Adding and Removing Data in a <code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Accessing Headers</a></li>
@@ -188,13 +192,49 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="accessing-headers">
-<span id="headers"></span><h1>Accessing Headers<a class="headerlink" href="#accessing-headers" title="Permalink to this headline">¶</a></h1>
+  <p id="headers">A CHAT transcript file (typically with the extension name <code class="docutils literal notranslate"><span class="pre">.cha</span></code>, though not
+strictly required) provides metadata headers using lines starting with <code class="docutils literal notranslate"><span class="pre">&#64;</span></code>.
+Among the many possible headers,
+<code class="docutils literal notranslate"><span class="pre">&#64;Participants</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;ID</span></code> are of particular interest:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@Participants</span><span class="p">:</span> <span class="n">Code1</span> <span class="n">Name1</span> <span class="n">Role1</span> <span class="p">,</span> <span class="n">Code2</span> <span class="n">Name2</span> <span class="n">Role2</span>
+<span class="nd">@ID</span><span class="p">:</span> <span class="o">||</span><span class="n">Code1</span><span class="o">|</span><span class="mi">1</span><span class="p">;</span><span class="mf">6.</span><span class="o">||||</span><span class="n">Role1</span><span class="o">|||</span>
+<span class="nd">@ID</span><span class="p">:</span> <span class="o">||</span><span class="n">Code2</span><span class="o">|||||</span><span class="n">Role2</span><span class="o">|||</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">&#64;Participants</span></code> header states the participants of the transcript. In this
+hypothetical example shown just above, there are two participants.
+Each participant has a participant code (e.g., <code class="docutils literal notranslate"><span class="pre">Code1</span></code>), a participant name
+(e.g., <code class="docutils literal notranslate"><span class="pre">Name1</span></code>), and a participant role (e.g., <code class="docutils literal notranslate"><span class="pre">Role1</span></code>).
+The participant code must be an alphanumeric three-character string
+which begins with a letter, and all letters must be in uppercase.
+The participant code must come first, immediately
+followed by a space, and then by the participant name, and in turn by
+another space and then the participant role. A comma separates
+information between two participants.</p>
+<p>If there are <code class="docutils literal notranslate"><span class="pre">&#64;ID</span></code> headers, they must appear after, but not before, the
+<code class="docutils literal notranslate"><span class="pre">&#64;Participants</span></code> header.
+The number of <code class="docutils literal notranslate"><span class="pre">&#64;ID</span></code> headers is equal to the number of participants.
+An <code class="docutils literal notranslate"><span class="pre">&#64;ID</span></code> header contains detailed information about a
+participant:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">language</span><span class="o">|</span><span class="n">corpus</span><span class="o">|</span><span class="n">participant_code</span><span class="o">|</span><span class="n">age</span><span class="o">|</span><span class="n">sex</span><span class="o">|</span><span class="n">group</span><span class="o">|</span><span class="n">SES</span><span class="o">|</span><span class="n">participant_role</span><span class="o">|</span><span class="n">education</span><span class="o">|</span><span class="n">custom</span><span class="o">|</span>
+</pre></div>
+</div>
+<p>Within <code class="docutils literal notranslate"><span class="pre">&#64;ID</span></code>, the fields <code class="docutils literal notranslate"><span class="pre">participant_code</span></code> and <code class="docutils literal notranslate"><span class="pre">participant_role</span></code>
+must match the information of the relevant participant in the <code class="docutils literal notranslate"><span class="pre">&#64;Participants</span></code>
+header.
+Often of interest in language acquisition research is the age of the
+participant (e.g., the target child). For instance, the age of
+participant <code class="docutils literal notranslate"><span class="pre">Code1</span></code> is 1 year and 6 months, as given by <code class="docutils literal notranslate"><span class="pre">1;6.</span></code>.
+Fields are left empty if no information is available.</p>
+<p>While all other <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> headers are optional, PyLangAcq has built-in functions
+specifically for <code class="docutils literal notranslate"><span class="pre">&#64;Languages</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;Date</span></code> for potential usage.</p>
+<div class="section" id="accessing-headers">
+<h1>Accessing Headers<a class="headerlink" href="#accessing-headers" title="Permalink to this headline">¶</a></h1>
 <p>A <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object has an array of methods for accessing metadata
 (based on headers given by the <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> lines) and data
 (the transcriptions with <code class="docutils literal notranslate"><span class="pre">*</span></code> and dependent tiers with <code class="docutils literal notranslate"><span class="pre">%</span></code>).
 This page introduces the metadata methods.
-For data methods, see <a class="reference internal" href="transcriptions.html#transcriptions"><span class="std std-ref">Transcriptions and Annotations</span></a>.
+For data methods, see <span class="xref std std-ref">transcriptions</span>.
 For details of the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> class, see <a class="reference internal" href="chat.html#reader-api"><span class="std std-ref">The Reader class API</span></a>.</p>
 <p>Metadata methods for handling information from the <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> headers:</p>
 <table class="docutils align-default">

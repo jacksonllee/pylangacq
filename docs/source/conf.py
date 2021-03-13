@@ -15,7 +15,8 @@
 
 from datetime import date
 
-import alabaster
+import sphinx_rtd_theme  # noqa: F401 (imported but not used)
+
 import pylangacq
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -28,6 +29,10 @@ import pylangacq
 # If your documentation needs a minimal Sphinx version, state it here.
 #needs_sphinx = '1.0'
 
+# Setting this flag is needed to enable the generation of source code pages
+# (under "API Reference") and hyperlinks to them.
+autosummary_generate = True
+
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
@@ -37,7 +42,7 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.autosummary',
     'numpydoc.numpydoc',
-    'alabaster',
+    "sphinx_rtd_theme",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -57,7 +62,8 @@ master_doc = 'index'
 # General information about the project.
 project = 'PyLangAcq'
 author = 'Jackson L. Lee'
-html_author_link = '<a href="https://jacksonllee.com/">{}</a>'.format(author)
+html_author_link = author  # can't use the next line?
+# html_author_link = '<a href="https://jacksonllee.com/">{}</a>'.format(author)
 today_ = date.today()
 copyright = ('2015-{}, {} | '
              'PyLangAcq {} | '
@@ -128,7 +134,7 @@ todo_include_todos = False
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'alabaster'
+html_theme = 'sphinx_rtd_theme'
 
 html_sidebars = {
     '**': [
@@ -145,21 +151,12 @@ html_sidebars = {
 # documentation.
 #html_theme_options = {}
 html_theme_options = {
-    # 'logo': 'logo.png',
-    'github_user': 'jacksonllee',
-    'github_repo': 'pylangacq',
-    'github_button': False,  # default is True
-    'github_banner': False,  # default is False
-    'show_related': False,  # default is False
-    'page_width': '1366px',  # default is '940px'
-    'sidebar_width': '273px',  # default is '220px'
+    "collapse_navigation": False,
+    "canonical_url": "https://pylangacq.org/",
 }
-# For what these HTML theme options mean and many other options I haven't used,
-# see <https://pypi.python.org/pypi/alabaster>.
 
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []
-html_theme_path = [alabaster.get_path()]
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
@@ -189,7 +186,7 @@ html_static_path = ['_static']
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
-html_last_updated_fmt = '%b %d, %Y'
+# html_last_updated_fmt = '%b %d, %Y'
 
 # If true, SmartyPants will be used to convert quotes and dashes to
 # typographically correct entities.
@@ -206,7 +203,7 @@ html_last_updated_fmt = '%b %d, %Y'
 #html_domain_indices = True
 
 # If false, no index is generated.
-html_use_index = False
+# html_use_index = True
 
 # If true, the index is split into individual pages for each letter.
 #html_split_index = False
@@ -325,3 +322,8 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
+
+# Example configuration for intersphinx: refer to the Python standard library.
+intersphinx_mapping = {
+    "python": ('https://docs.python.org/3/', None),
+}

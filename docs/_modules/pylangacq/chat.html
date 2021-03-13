@@ -44,7 +44,7 @@
 <span class="kn">import</span> <span class="nn">uuid</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">zipfile</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">from</span> <span class="nn">requests.adapters</span> <span class="k">import</span> <span class="n">HTTPAdapter</span>
@@ -84,7 +84,7 @@
 <span class="s2">&quot;&quot;&quot;</span>
 
 
-<span class="k">def</span> <span class="nf">_params_in_docstring</span><span class="p">(</span><span class="o">*</span><span class="n">params</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_params_in_docstring</span><span class="p">(</span><span class="o">*</span><span class="n">params</span><span class="p">,</span> <span class="n">class_method</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="n">docstring</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
     <span class="k">if</span> <span class="s2">&quot;participants&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
@@ -95,10 +95,7 @@
 <span class="s2">            or an iterable of strings (e.g., ``{&quot;MOT&quot;, &quot;INV&quot;}``). Only the specified</span>
 <span class="s2">            participants are included.</span>
 <span class="s2">            If you pass in ``None`` (the default), all participants are included.</span>
-<span class="s2">            This parameter cannot be used together with ``exclude``.&quot;&quot;&quot;</span>
-
-    <span class="k">if</span> <span class="s2">&quot;exclude&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-        <span class="n">docstring</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            This parameter cannot be used together with ``exclude``.</span>
 <span class="s2">        exclude : str or iterable of str, optional</span>
 <span class="s2">            Participants to exclude. You may pass in a string (e.g., ``&quot;CHI&quot;``</span>
 <span class="s2">            for child-directed speech)</span>
@@ -120,8 +117,8 @@
 <span class="s2">        by_files : bool, optional</span>
 <span class="s2">            If ``True``, return a list X of results, where len(X) is the number of</span>
 <span class="s2">            files in the ``Reader`` object, and each element in X is the result for one</span>
-<span class="s2">            file; the ordering of X corresponds to that of the file paths from the</span>
-<span class="s2">            ``.file_paths()`` call.</span>
+<span class="s2">            file; the ordering of X corresponds to that of the file paths from</span>
+<span class="s2">            :func:`~pylangacq.Reader.file_paths`.</span>
 <span class="s2">            If ``False`` (the default), return the result that collapses the file</span>
 <span class="s2">            distinction just described for when ``by_files`` is ``True``.&quot;&quot;&quot;</span>
 
@@ -144,7 +141,10 @@
 <span class="s2">            the unzipped Brown data from CHILDES is in a directory structure of</span>
 <span class="s2">            ``Brown/Eve/xxx.cha`` for Eve&#39;s data.</span>
 <span class="s2">            If this parameter is not specified or ``None`` is passed in (the default),</span>
-<span class="s2">            such file path filtering does not apply.&quot;&quot;&quot;</span>
+<span class="s2">            such file path filtering does not apply.</span>
+<span class="s2">        exclude : str, optional</span>
+<span class="s2">            If provided, the file paths that match this string (by regular expression</span>
+<span class="s2">            matching) are excluded for reading and parsing.&quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="s2">&quot;encoding&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
         <span class="n">docstring</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
@@ -159,14 +159,22 @@
 
     <span class="k">if</span> <span class="s2">&quot;cls&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
         <span class="n">docstring</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        cls : object, optional</span>
-<span class="s2">            Either a Reader class (the default), or a subclass from it that expects</span>
-<span class="s2">            the same arguments for the methods ``from_zip``, ``from_dir``, and</span>
-<span class="s2">            ``from_files``. Pass in your own Reader subclass for new or modified</span>
-<span class="s2">            behavior.&quot;&quot;&quot;</span>
+<span class="s2">        cls : type, optional</span>
+<span class="s2">            Either :class:`~pylangacq.Reader` (the default),</span>
+<span class="s2">            or a subclass from it that expects the same arguments for the methods</span>
+<span class="s2">            :func:`~pylangacq.Reader.from_zip`, :func:`~pylangacq.Reader.from_dir`,</span>
+<span class="s2">            and :func:`~pylangacq.Reader.from_files`.</span>
+<span class="s2">            Pass in your own :class:`~pylangacq.Reader` subclass</span>
+<span class="s2">            for new or modified behavior of the returned reader object.&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">class_method</span><span class="p">:</span>
+        <span class="n">docstring</span> <span class="o">=</span> <span class="n">docstring</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">        &quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">    &quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">real_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-        <span class="n">returns_header</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">        Returns</span><span class="se">\n</span><span class="s2">        -------&quot;</span>
+        <span class="k">if</span> <span class="n">class_method</span><span class="p">:</span>
+            <span class="n">returns_header</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">        Returns</span><span class="se">\n</span><span class="s2">        -------&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">returns_header</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">    Returns</span><span class="se">\n</span><span class="s2">    -------&quot;</span>
         <span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">returns_header</span><span class="p">,</span> <span class="n">docstring</span> <span class="o">+</span> <span class="n">returns_header</span><span class="p">)</span>
 
         <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
@@ -200,7 +208,7 @@
     <span class="p">)</span>
 
 
-<div class="viewcode-block" id="Reader"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader">[docs]</a><span class="k">class</span> <span class="nc">Reader</span><span class="p">:</span>
+<div class="viewcode-block" id="Reader"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader">[docs]</a><span class="k">class</span> <span class="nc">Reader</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;A reader that handles CHAT data.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strs</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">file_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
@@ -217,11 +225,11 @@
         <span class="k">with</span> <span class="n">cf</span><span class="o">.</span><span class="n">ProcessPoolExecutor</span><span class="p">()</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">executor</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parse_chat_str</span><span class="p">,</span> <span class="n">strs</span><span class="p">,</span> <span class="n">file_paths</span><span class="p">))</span>
 
-<div class="viewcode-block" id="Reader.clear"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.clear"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Turn it into an empty reader by removing all parsed CHAT data.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_files</span> <span class="o">=</span> <span class="p">[]</span></div>
 
-<div class="viewcode-block" id="Reader.append"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.append">[docs]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">readers</span><span class="p">,</span> <span class="n">ignore_repeats</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="Reader.append"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.append">[docs]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">readers</span><span class="p">,</span> <span class="n">ignore_repeats</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Append data from other readers.</span>
 
 <span class="sd">        Parameters</span>
@@ -244,7 +252,7 @@
             <span class="n">files_to_add</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">reader</span><span class="o">.</span><span class="n">_files</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">file_path</span> <span class="ow">in</span> <span class="n">new_file_paths</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_files</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">files_to_add</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.remove"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">file_paths</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="Reader.remove"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">file_paths</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Remove data from the given file paths.</span>
 
 <span class="sd">        Parameters</span>
@@ -277,7 +285,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;unrecognized item type: </span><span class="si">{item_type}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Reader.n_utterances"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.n_utterances">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;participants&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="Reader.n_utterances"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.n_utterances">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;participants&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">n_utterances</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">participants</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
@@ -288,7 +296,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        int if by_files is False, otherwise List[int]</span>
+<span class="sd">        int if ``by_files`` is ``False``, otherwise List[int]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">utterances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_utterances_by_participants</span><span class="p">(</span><span class="n">participants</span><span class="p">,</span> <span class="n">exclude</span><span class="p">)</span>
         <span class="n">result_by_files</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">us</span><span class="p">)</span> <span class="k">for</span> <span class="n">us</span> <span class="ow">in</span> <span class="n">utterances</span><span class="p">]</span>
@@ -297,7 +305,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">result_by_files</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.utterances"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.utterances">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;participants&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="Reader.utterances"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.utterances">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;participants&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">utterances</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">participants</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Utterance</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Utterance</span><span class="p">]]]:</span>
@@ -308,7 +316,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        List[Utterance] if by_files is False, otherwise List[List[Utterance]]</span>
+<span class="sd">        List[Utterance] if ``by_files`` is ``False``, otherwise List[List[Utterance]]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">result_by_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_utterances_by_participants</span><span class="p">(</span><span class="n">participants</span><span class="p">,</span> <span class="n">exclude</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">by_files</span><span class="p">:</span>
@@ -316,7 +324,19 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">result_by_files</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.tokens"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.tokens">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;participants&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;by_utterances&quot;</span><span class="p">,</span> <span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_get_result_by_utterances_by_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">by_utterances</span><span class="p">,</span> <span class="n">by_files</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">by_files</span> <span class="ow">and</span> <span class="n">by_utterances</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">by_files</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">by_utterances</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">by_files</span> <span class="ow">and</span> <span class="n">by_utterances</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># not by_files and not by_utterances</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">result</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+<div class="viewcode-block" id="Reader.tokens"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.tokens">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;participants&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;by_utterances&quot;</span><span class="p">,</span> <span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">tokens</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">participants</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">by_utterances</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Token</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Token</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Token</span><span class="p">]]]]:</span>
@@ -327,27 +347,18 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        List[List[List[Token]]] if both by_utterances and by_files are True</span>
-<span class="sd">        List[List[Token]] if by_utterances is True and by_files is False</span>
-<span class="sd">        List[List[Token]] if by_utterances is False and by_files is True</span>
-<span class="sd">        List[Token] if both by_utterances and by_files are False</span>
+<span class="sd">        List[List[List[Token]]] if both ``by_utterances`` and ``by_files`` are ``True``</span>
+<span class="sd">        List[List[Token]] if ``by_utterances`` is ``True`` and ``by_files`` is ``False``</span>
+<span class="sd">        List[List[Token]] if ``by_utterances`` is ``False`` and ``by_files`` is ``True``</span>
+<span class="sd">        List[Token] if both ``by_utterances`` and ``by_files`` are ``False``</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">utterances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">utterances</span><span class="p">(</span>
             <span class="n">participants</span><span class="o">=</span><span class="n">participants</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="n">exclude</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">[[</span><span class="n">u</span><span class="o">.</span><span class="n">tokens</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">us</span><span class="p">]</span> <span class="k">for</span> <span class="n">us</span> <span class="ow">in</span> <span class="n">utterances</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">by_files</span> <span class="ow">and</span> <span class="n">by_utterances</span><span class="p">:</span>
-            <span class="k">pass</span>
-        <span class="k">elif</span> <span class="n">by_files</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">by_utterances</span><span class="p">:</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span>
-        <span class="k">elif</span> <span class="ow">not</span> <span class="n">by_files</span> <span class="ow">and</span> <span class="n">by_utterances</span><span class="p">:</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># not by_files and not by_utterances</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">result</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">result</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_result_by_utterances_by_files</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">by_utterances</span><span class="p">,</span> <span class="n">by_files</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.words"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.words">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;participants&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;by_utterances&quot;</span><span class="p">,</span> <span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="Reader.words"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.words">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;participants&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;by_utterances&quot;</span><span class="p">,</span> <span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">words</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">participants</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">by_utterances</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]]:</span>
@@ -358,10 +369,10 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        List[List[List[str]]] if both by_utterances and by_files are True</span>
-<span class="sd">        List[List[str]] if by_utterances is True and by_files is False</span>
-<span class="sd">        List[List[str]] if by_utterances is False and by_files is True</span>
-<span class="sd">        List[str] if both by_utterances and by_files are False</span>
+<span class="sd">        List[List[List[str]]] if both ``by_utterances`` and ``by_files`` are ``True``</span>
+<span class="sd">        List[List[str]] if ``by_utterances`` is ``True`` and ``by_files`` is ``False``</span>
+<span class="sd">        List[List[str]] if ``by_utterances`` is ``False`` and ``by_files`` is ``True``</span>
+<span class="sd">        List[str] if both ``by_utterances`` and ``by_files`` are ``False``</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">tokens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span><span class="p">(</span>
             <span class="n">participants</span><span class="o">=</span><span class="n">participants</span><span class="p">,</span>
@@ -369,17 +380,10 @@
             <span class="n">by_utterances</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">by_files</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="p">[[[</span><span class="n">t</span><span class="o">.</span><span class="n">word</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">ts</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">word</span> <span class="o">!=</span> <span class="n">_CLITIC</span><span class="p">]</span> <span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="n">tss</span><span class="p">]</span> <span class="k">for</span> <span class="n">tss</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">by_files</span> <span class="ow">and</span> <span class="n">by_utterances</span><span class="p">:</span>
-            <span class="k">pass</span>
-        <span class="k">elif</span> <span class="n">by_files</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">by_utterances</span><span class="p">:</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span>
-        <span class="k">elif</span> <span class="ow">not</span> <span class="n">by_files</span> <span class="ow">and</span> <span class="n">by_utterances</span><span class="p">:</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># not by_files and not by_utterances</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">result</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">result</span></div>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">[[</span><span class="n">t</span><span class="o">.</span><span class="n">word</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">ts</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">word</span> <span class="o">!=</span> <span class="n">_CLITIC</span><span class="p">]</span> <span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="n">tss</span><span class="p">]</span> <span class="k">for</span> <span class="n">tss</span> <span class="ow">in</span> <span class="n">tokens</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_result_by_utterances_by_files</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">by_utterances</span><span class="p">,</span> <span class="n">by_files</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_filter_utterances_by_participants</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">participants</span><span class="p">,</span> <span class="n">exclude</span>
@@ -419,7 +423,7 @@
             <span class="k">for</span> <span class="n">us</span><span class="p">,</span> <span class="n">ps</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">f</span><span class="o">.</span><span class="n">utterances</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_files</span><span class="p">],</span> <span class="n">participants</span><span class="p">)</span>
         <span class="p">]</span>
 
-<div class="viewcode-block" id="Reader.headers"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.headers">[docs]</a>    <span class="k">def</span> <span class="nf">headers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<div class="viewcode-block" id="Reader.headers"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.headers">[docs]</a>    <span class="k">def</span> <span class="nf">headers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Return the headers.</span>
 
 <span class="sd">        Returns</span>
@@ -428,7 +432,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">header</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_files</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="Reader.file_paths"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.file_paths">[docs]</a>    <span class="k">def</span> <span class="nf">file_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.file_paths"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.file_paths">[docs]</a>    <span class="k">def</span> <span class="nf">file_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Return the file paths.</span>
 
 <span class="sd">        If the data comes from in-memory strings, then the &quot;file paths&quot; are</span>
@@ -440,11 +444,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">file_path</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_files</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="Reader.n_files"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.n_files">[docs]</a>    <span class="k">def</span> <span class="nf">n_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.n_files"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.n_files">[docs]</a>    <span class="k">def</span> <span class="nf">n_files</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Return the number of files.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.participants"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.participants">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="Reader.participants"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.participants">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">participants</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]:</span>
         <span class="sd">&quot;&quot;&quot;Return the participants (e.g., CHI, MOT).</span>
 
@@ -453,7 +457,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        Set[str] if by_files is False, otherwise List[Set[str]]</span>
+<span class="sd">        Set[str] if ``by_files`` is ``False``, otherwise List[Set[str]]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">result_by_files</span> <span class="o">=</span> <span class="p">[{</span><span class="n">u</span><span class="o">.</span><span class="n">participant</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">utterances</span><span class="p">}</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_files</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">by_files</span><span class="p">:</span>
@@ -461,7 +465,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">set</span><span class="p">,</span> <span class="n">result_by_files</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.languages"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.languages">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="Reader.languages"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.languages">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">languages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]:</span>
         <span class="sd">&quot;&quot;&quot;Return the languages in the data.</span>
 
@@ -470,11 +474,11 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        Set[str] if by_files is False, otherwise List[List[str]]</span>
-<span class="sd">            When by_files is True, the ordering of languages given by the list</span>
+<span class="sd">        Set[str] if ``by_files`` is ``False``, otherwise List[List[str]]</span>
+<span class="sd">            When ``by_files`` is ``True``, the ordering of languages given by the list</span>
 <span class="sd">            indicates language dominance. Such ordering would not make sense when</span>
-<span class="sd">            by_files is False, in which case the returned object is a set instead of</span>
-<span class="sd">            a list.</span>
+<span class="sd">            ``by_files`` is ``False``, in which case the returned object is a set</span>
+<span class="sd">            instead of a list.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">result_by_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Languages&quot;</span><span class="p">,</span> <span class="p">[])</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_files</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">by_files</span><span class="p">:</span>
@@ -482,7 +486,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">result_by_files</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Reader.dates_of_recording"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.dates_of_recording">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="Reader.dates_of_recording"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.dates_of_recording">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">dates_of_recording</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">]]]:</span>
@@ -493,7 +497,8 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        Set[datetime.date] if by_files is False, otherwise List[Set[datetime.date]]]</span>
+<span class="sd">        Set[datetime.date] if ``by_files`` is ``False``,</span>
+<span class="sd">        otherwise List[Set[datetime.date]]]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">result_by_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;Date&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_files</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">by_files</span><span class="p">:</span>
@@ -501,7 +506,9 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">set</span><span class="p">,</span> <span class="n">result_by_files</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.ages"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.ages">[docs]</a>    <span class="k">def</span> <span class="nf">ages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s2">&quot;CHI&quot;</span><span class="p">,</span> <span class="n">months</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.ages"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.ages">[docs]</a>    <span class="k">def</span> <span class="nf">ages</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s2">&quot;CHI&quot;</span><span class="p">,</span> <span class="n">months</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;Return the ages of the given participant in the data.</span>
 
 <span class="sd">        Parameters</span>
@@ -510,14 +517,14 @@
 <span class="sd">            Participant of interest, which defaults to the typical use case of ``&quot;CHI&quot;``</span>
 <span class="sd">            for the target child.</span>
 <span class="sd">        months : bool, optional</span>
-<span class="sd">            If False (the default), age is represented as a tuple of</span>
-<span class="sd">            (years, months, days), e.g., &quot;1;06.00&quot; in CHAT becomes `(1, 6, 0)`.</span>
-<span class="sd">            If True, age is a float for the number of months,</span>
-<span class="sd">            e.g., &quot;1;06.00&quot; in CHAT becomes `18.0` for 18 months.</span>
+<span class="sd">            If ``False`` (the default), age is represented as a tuple of</span>
+<span class="sd">            (years, months, days), e.g., &quot;1;06.00&quot; in CHAT becomes ``(1, 6, 0)``.</span>
+<span class="sd">            If ``True``, age is a float for the number of months,</span>
+<span class="sd">            e.g., &quot;1;06.00&quot; in CHAT becomes ``18.0`` for 18 months.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        List[Tuple[int, int, int]] if months is False, otherwise List[float]</span>
+<span class="sd">        List[Tuple[int, int, int]] if months is ``False``, otherwise List[float]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">result_by_files</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_files</span><span class="p">:</span>
@@ -540,18 +547,23 @@
             <span class="n">result_by_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">result_by_files</span></div>
 
-<div class="viewcode-block" id="Reader.tagged_sents"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.tagged_sents">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;participants&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="Reader.tagged_sents"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.tagged_sents">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;participants&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">tagged_sents</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">participants</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Token</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Token</span><span class="p">]]]]:</span>
         <span class="sd">&quot;&quot;&quot;Return the tagged sents.</span>
+
+<span class="sd">        .. deprecated:: 0.13.0</span>
+<span class="sd">            Please use :func:`~pylangacq.Reader.tokens` with ``by_utterances=True``</span>
+<span class="sd">            instead.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        List[List[Token]] if by_files is False, otherwise List[List[List[Token]]]</span>
+<span class="sd">        List[List[Token]] if ``by_files`` is ``False``,</span>
+<span class="sd">        otherwise List[List[List[Token]]]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">_deprecate_warning</span><span class="p">(</span>
             <span class="s2">&quot;tagged_sents&quot;</span><span class="p">,</span>
@@ -565,18 +577,22 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">result_by_files</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.tagged_words"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.tagged_words">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;participants&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="Reader.tagged_words"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.tagged_words">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;participants&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">tagged_words</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">participants</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Token</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Token</span><span class="p">]]]:</span>
         <span class="sd">&quot;&quot;&quot;Return the tagged words.</span>
+
+<span class="sd">        .. deprecated:: 0.13.0</span>
+<span class="sd">            Please use :func:`~pylangacq.Reader.tokens` with ``by_utterances=False``</span>
+<span class="sd">            instead.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        List[Token] if by_files is False, otherwise List[List[Token]]</span>
+<span class="sd">        List[Token] if ``by_files`` is ``False``, otherwise List[List[Token]]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">_deprecate_warning</span><span class="p">(</span>
             <span class="s2">&quot;tagged_words&quot;</span><span class="p">,</span> <span class="s2">&quot;0.13.0&quot;</span><span class="p">,</span> <span class="s2">&quot;the `.tokens()` method with by_utterances=False&quot;</span>
@@ -588,18 +604,22 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">result_by_files</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.sents"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.sents">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;participants&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="Reader.sents"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.sents">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;participants&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">sents</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">participants</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]]:</span>
         <span class="sd">&quot;&quot;&quot;Return the sents.</span>
+
+<span class="sd">        .. deprecated:: 0.13.0</span>
+<span class="sd">            Please use :func:`~pylangacq.Reader.words` with ``by_utterances=True``</span>
+<span class="sd">            instead.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        List[List[str]] if by_files is False, otherwise List[List[List[str]]]</span>
+<span class="sd">        List[List[str]] if ``by_files`` is ``False``, otherwise List[List[List[str]]]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">_deprecate_warning</span><span class="p">(</span>
             <span class="s2">&quot;words&quot;</span><span class="p">,</span> <span class="s2">&quot;0.13.0&quot;</span><span class="p">,</span> <span class="s2">&quot;the `.words()` method with by_utterances=True&quot;</span>
@@ -613,7 +633,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">result_by_files</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.mlum"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.mlum">[docs]</a>    <span class="k">def</span> <span class="nf">mlum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s2">&quot;CHI&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<div class="viewcode-block" id="Reader.mlum"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.mlum">[docs]</a>    <span class="k">def</span> <span class="nf">mlum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s2">&quot;CHI&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Return the mean lengths of utterance by morphemes.</span>
 
 <span class="sd">        Parameters</span>
@@ -630,10 +650,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span><span class="p">(</span><span class="n">participants</span><span class="o">=</span><span class="n">participant</span><span class="p">,</span> <span class="n">by_utterances</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.mlu"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.mlu">[docs]</a>    <span class="k">def</span> <span class="nf">mlu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s2">&quot;CHI&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;Return the mean lengths of utterance.</span>
+<div class="viewcode-block" id="Reader.mlu"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.mlu">[docs]</a>    <span class="k">def</span> <span class="nf">mlu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s2">&quot;CHI&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Return the mean lengths of utterance (MLU).</span>
 
-<span class="sd">        This method is equivalent to ``.mlum()``.</span>
+<span class="sd">        This method is equivalent to :func:`~pylangacq.Reader.mlum`.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -647,7 +667,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mlum</span><span class="p">(</span><span class="n">participant</span><span class="o">=</span><span class="n">participant</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.mluw"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.mluw">[docs]</a>    <span class="k">def</span> <span class="nf">mluw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s2">&quot;CHI&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<div class="viewcode-block" id="Reader.mluw"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.mluw">[docs]</a>    <span class="k">def</span> <span class="nf">mluw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s2">&quot;CHI&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Return the mean lengths of utterance by words.</span>
 
 <span class="sd">        Parameters</span>
@@ -664,11 +684,16 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="n">participants</span><span class="o">=</span><span class="n">participant</span><span class="p">,</span> <span class="n">by_utterances</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.ttr"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.ttr">[docs]</a>    <span class="k">def</span> <span class="nf">ttr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keep_case</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s2">&quot;CHI&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<div class="viewcode-block" id="Reader.ttr"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.ttr">[docs]</a>    <span class="k">def</span> <span class="nf">ttr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keep_case</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s2">&quot;CHI&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Return the type-token ratios.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        keep_case : bool, optional</span>
+<span class="sd">            If ``True``, case distinctions are kept, e.g.,</span>
+<span class="sd">            word tokens like &quot;the&quot; and &quot;The&quot; are treated as distinct.</span>
+<span class="sd">            If ``False`` (the default), all word tokens are forced to be in lowercase</span>
+<span class="sd">            as a preprocessing step.</span>
 <span class="sd">        participant : str, optional</span>
 <span class="sd">            Participant of interest, which defaults to the typical use case of ``&quot;CHI&quot;``</span>
 <span class="sd">            for the target child.</span>
@@ -683,7 +708,7 @@
             <span class="p">)</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.ipsyn"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.ipsyn">[docs]</a>    <span class="k">def</span> <span class="nf">ipsyn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s2">&quot;CHI&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<div class="viewcode-block" id="Reader.ipsyn"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.ipsyn">[docs]</a>    <span class="k">def</span> <span class="nf">ipsyn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s2">&quot;CHI&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Return the indexes of productive syntax (IPSyn).</span>
 
 <span class="sd">        Parameters</span>
@@ -700,7 +725,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span><span class="p">(</span><span class="n">participants</span><span class="o">=</span><span class="n">participant</span><span class="p">,</span> <span class="n">by_utterances</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.word_ngrams"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.word_ngrams">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;keep_case&quot;</span><span class="p">,</span> <span class="s2">&quot;participants&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="Reader.word_ngrams"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.word_ngrams">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;keep_case&quot;</span><span class="p">,</span> <span class="s2">&quot;participants&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">word_ngrams</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">keep_case</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">participants</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">]]:</span>
@@ -711,7 +736,8 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        collections.Counter if by_files is False, otherwise List[collections.Counter]</span>
+<span class="sd">        collections.Counter if ``by_files`` is ``False``,</span>
+<span class="sd">        otherwise List[collections.Counter]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">err_msg</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;n must be a positive integer: </span><span class="si">{n}</span><span class="s2">&quot;</span>
@@ -743,7 +769,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">,</span> <span class="n">result_by_files</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.word_frequencies"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.word_frequencies">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;keep_case&quot;</span><span class="p">,</span> <span class="s2">&quot;participants&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="Reader.word_frequencies"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.word_frequencies">[docs]</a>    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;keep_case&quot;</span><span class="p">,</span> <span class="s2">&quot;participants&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;by_files&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">word_frequencies</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">keep_case</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">participants</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">]]:</span>
@@ -754,7 +780,8 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        collections.Counter if by_files is False, otherwise List[collections.Counter]</span>
+<span class="sd">        collections.Counter if ``by_files`` is ``False``,</span>
+<span class="sd">        otherwise List[collections.Counter]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">result_by_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">word_ngrams</span><span class="p">(</span>
             <span class="mi">1</span><span class="p">,</span>
@@ -764,16 +791,16 @@
             <span class="n">by_files</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">result_by_files</span> <span class="o">=</span> <span class="p">[</span>
-              <span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">({</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span>
-              <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">result_by_files</span>
+            <span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">({</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">result_by_files</span>
         <span class="p">]</span>
         <span class="k">if</span> <span class="n">by_files</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">result_by_files</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">,</span> <span class="n">result_by_files</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.from_strs"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.from_strs">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_strs</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">strs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.from_strs"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.from_strs">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_strs</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">strs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Reader&quot;</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Instantiate a ``Reader`` object from in-memory CHAT data strings.</span>
 
 <span class="sd">        Parameters</span>
@@ -807,9 +834,15 @@
         <span class="n">path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">path</span>
 
-<div class="viewcode-block" id="Reader.from_files"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.from_files">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;match&quot;</span><span class="p">,</span> <span class="s2">&quot;encoding&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">from_files</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">match</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_ENCODING</span><span class="p">):</span>
+<div class="viewcode-block" id="Reader.from_files"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.from_files">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;match&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;encoding&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">from_files</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">match</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">exclude</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_ENCODING</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Reader&quot;</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Instantiate a ``Reader`` object from local CHAT data files.</span>
 
 <span class="sd">        Parameters</span>
@@ -833,6 +866,10 @@
             <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">match</span><span class="p">)</span>
             <span class="n">paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">paths</span> <span class="k">if</span> <span class="n">regex</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">p</span><span class="p">)]</span>
 
+        <span class="k">if</span> <span class="n">exclude</span><span class="p">:</span>
+            <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">exclude</span><span class="p">)</span>
+            <span class="n">paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">paths</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">regex</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">p</span><span class="p">)]</span>
+
         <span class="k">with</span> <span class="n">cf</span><span class="o">.</span><span class="n">ThreadPoolExecutor</span><span class="p">()</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
             <span class="n">strs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">executor</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">_open_file</span><span class="p">,</span> <span class="n">paths</span><span class="p">))</span>
 
@@ -841,15 +878,16 @@
 
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_strs</span><span class="p">(</span><span class="n">strs</span><span class="p">,</span> <span class="n">paths</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.from_dir"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.from_dir">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;match&quot;</span><span class="p">,</span> <span class="s2">&quot;extension&quot;</span><span class="p">,</span> <span class="s2">&quot;encoding&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="Reader.from_dir"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.from_dir">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;match&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;extension&quot;</span><span class="p">,</span> <span class="s2">&quot;encoding&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">from_dir</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">match</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">exclude</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">extension</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_CHAT_EXTENSION</span><span class="p">,</span>
         <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_ENCODING</span><span class="p">,</span>
-    <span class="p">):</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Reader&quot;</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Instantiate a ``Reader`` object from a local directory with CHAT data files.</span>
 
 <span class="sd">        Parameters</span>
@@ -879,17 +917,20 @@
                         <span class="n">dirs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirpath</span><span class="p">,</span> <span class="n">dirname</span><span class="p">))</span>
                 <span class="k">for</span> <span class="n">dir_</span> <span class="ow">in</span> <span class="n">dirs</span><span class="p">:</span>
                     <span class="n">file_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dir_</span><span class="p">,</span> <span class="n">filename</span><span class="p">))</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_files</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">file_paths</span><span class="p">),</span> <span class="n">match</span><span class="o">=</span><span class="n">match</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_files</span><span class="p">(</span>
+            <span class="nb">sorted</span><span class="p">(</span><span class="n">file_paths</span><span class="p">),</span> <span class="n">match</span><span class="o">=</span><span class="n">match</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="n">exclude</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span>
+        <span class="p">)</span></div>
 
-<div class="viewcode-block" id="Reader.from_zip"><a class="viewcode-back" href="../../chat.html#pylangacq.chat.Reader.from_zip">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;match&quot;</span><span class="p">,</span> <span class="s2">&quot;extension&quot;</span><span class="p">,</span> <span class="s2">&quot;encoding&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="Reader.from_zip"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.from_zip">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;match&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;extension&quot;</span><span class="p">,</span> <span class="s2">&quot;encoding&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">from_zip</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">match</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">exclude</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">extension</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_CHAT_EXTENSION</span><span class="p">,</span>
         <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_ENCODING</span><span class="p">,</span>
-    <span class="p">):</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Reader&quot;</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Instantiate a ``Reader`` object from a local or remote ZIP file.</span>
 
 <span class="sd">        Parameters</span>
@@ -923,7 +964,11 @@
                 <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">zip_path</span><span class="p">)</span>
 
             <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_dir</span><span class="p">(</span>
-                <span class="n">temp_dir</span><span class="p">,</span> <span class="n">match</span><span class="o">=</span><span class="n">match</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="n">extension</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span>
+                <span class="n">temp_dir</span><span class="p">,</span>
+                <span class="n">match</span><span class="o">=</span><span class="n">match</span><span class="p">,</span>
+                <span class="n">exclude</span><span class="o">=</span><span class="n">exclude</span><span class="p">,</span>
+                <span class="n">extension</span><span class="o">=</span><span class="n">extension</span><span class="p">,</span>
+                <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">,</span>
             <span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_parse_chat_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chat_str</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_File</span><span class="p">:</span>
@@ -1062,7 +1107,7 @@
             <span class="k">return</span> <span class="kc">None</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_get_gra</span><span class="p">(</span><span class="n">raw_gra</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Gra</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">_get_gra</span><span class="p">(</span><span class="n">raw_gra</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Gra</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">raw_gra</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1238,9 +1283,13 @@
         <span class="k">return</span> <span class="n">lines</span></div>
 
 
-<span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;match&quot;</span><span class="p">,</span> <span class="s2">&quot;encoding&quot;</span><span class="p">,</span> <span class="s2">&quot;cls&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="read_chat"><a class="viewcode-back" href="../../api.html#pylangacq.read_chat">[docs]</a><span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;match&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;encoding&quot;</span><span class="p">,</span> <span class="s2">&quot;cls&quot;</span><span class="p">,</span> <span class="n">class_method</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">read_chat</span><span class="p">(</span>
-    <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">match</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_ENCODING</span><span class="p">,</span> <span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span> <span class="o">=</span> <span class="n">Reader</span>
+    <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">match</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">exclude</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_ENCODING</span><span class="p">,</span>
+    <span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span> <span class="o">=</span> <span class="n">Reader</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Reader</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Create a reader of CHAT data.</span>
 
@@ -1248,6 +1297,7 @@
 <span class="sd">    ----------</span>
 <span class="sd">    path : str</span>
 <span class="sd">        A path that points to one of the following:</span>
+
 <span class="sd">        - ZIP file. Either a local file path or a URL (one that begins with</span>
 <span class="sd">          ``&quot;https://&quot;`` or ``&quot;http://&quot;``).</span>
 <span class="sd">          Example of a URL: ``&quot;https://childes.talkbank.org/data/Eng-NA/Brown.zip&quot;``</span>
@@ -1256,22 +1306,22 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    Reader</span>
+<span class="sd">    :class:`~pylangacq.Reader`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">cls</span> <span class="o">!=</span> <span class="n">Reader</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">Reader</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Only a Reader class or its child class is allowed: </span><span class="si">{cls}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">path_lower</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">path_lower</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.zip&quot;</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Reader</span><span class="o">.</span><span class="n">from_zip</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">match</span><span class="o">=</span><span class="n">match</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_zip</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">match</span><span class="o">=</span><span class="n">match</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="n">exclude</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Reader</span><span class="o">.</span><span class="n">from_dir</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">match</span><span class="o">=</span><span class="n">match</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_dir</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">match</span><span class="o">=</span><span class="n">match</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="n">exclude</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">path_lower</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">_CHAT_EXTENSION</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Reader</span><span class="o">.</span><span class="n">from_files</span><span class="p">([</span><span class="n">path</span><span class="p">],</span> <span class="n">match</span><span class="o">=</span><span class="n">match</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_files</span><span class="p">([</span><span class="n">path</span><span class="p">],</span> <span class="n">match</span><span class="o">=</span><span class="n">match</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="n">exclude</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;path is not one of the accepted choices of &quot;</span>
-            <span class="n">f</span><span class="s2">&quot;{{zip file, `.cha` file, local directory}}: </span><span class="si">{path}</span><span class="s2">&quot;</span>
-        <span class="p">)</span>
+            <span class="n">f</span><span class="s2">&quot;{{zip file, local directory, `.cha` file}}: </span><span class="si">{path}</span><span class="s2">&quot;</span>
+        <span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">_clean_utterance</span><span class="p">(</span><span class="n">utterance</span><span class="p">,</span> <span class="n">phon</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -1282,7 +1332,7 @@
 <span class="sd">    utterance : str</span>
 <span class="sd">        The utterance as a str</span>
 <span class="sd">    phon : bool, optional</span>
-<span class="sd">        whether we are handling PhonBank data; defaults to False.</span>
+<span class="sd">        whether we are handling PhonBank data; defaults to ``False``.</span>
 <span class="sd">        If ``True``, words like &quot;xxx&quot; and &quot;yyy&quot; won&#39;t be removed.</span>
 
 <span class="sd">    Returns</span>
@@ -1663,7 +1713,7 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015-2021, <a href="https://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.12.0 | Documentation last updated on March 12, 2021.
+      &copy;2015-2021, <a href="https://jacksonllee.com/">Jackson L. Lee</a> | PyLangAcq 0.12.0 | Documentation last updated on March 13, 2021.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>

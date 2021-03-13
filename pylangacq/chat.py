@@ -12,7 +12,7 @@ import tempfile
 import uuid
 import warnings
 import zipfile
-from typing import Collection, Dict, Iterable, List, Set, Tuple, Union
+from typing import Collection, Dict, Iterable, List, Optional, Set, Tuple, Union
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -52,7 +52,7 @@ utterances : List[Utterance]
 """
 
 
-def _params_in_docstring(*params):
+def _params_in_docstring(*params, class_method=True):
     docstring = ""
 
     if "participants" in params:
@@ -85,8 +85,8 @@ def _params_in_docstring(*params):
         by_files : bool, optional
             If ``True``, return a list X of results, where len(X) is the number of
             files in the ``Reader`` object, and each element in X is the result for one
-            file; the ordering of X corresponds to that of the file paths from the
-            ``.file_paths()`` call.
+            file; the ordering of X corresponds to that of the file paths from
+            :func:`~pylangacq.Reader.file_paths`.
             If ``False`` (the default), return the result that collapses the file
             distinction just described for when ``by_files`` is ``True``."""
 
@@ -127,14 +127,22 @@ def _params_in_docstring(*params):
 
     if "cls" in params:
         docstring += """
-        cls : object, optional
-            Either a Reader class (the default), or a subclass from it that expects
-            the same arguments for the methods ``from_zip``, ``from_dir``, and
-            ``from_files``. Pass in your own Reader subclass for new or modified
-            behavior."""
+        cls : type, optional
+            Either :class:`~pylangacq.Reader` (the default),
+            or a subclass from it that expects the same arguments for the methods
+            :func:`~pylangacq.Reader.from_zip`, :func:`~pylangacq.Reader.from_dir`,
+            and :func:`~pylangacq.Reader.from_files`.
+            Pass in your own :class:`~pylangacq.Reader` subclass
+            for new or modified behavior of the returned reader object."""
+
+    if not class_method:
+        docstring = docstring.replace("\n        ", "\n    ")
 
     def real_decorator(func):
-        returns_header = "\n\n        Returns\n        -------"
+        if class_method:
+            returns_header = "\n\n        Returns\n        -------"
+        else:
+            returns_header = "\n\n    Returns\n    -------"
         func.__doc__ = func.__doc__.replace(returns_header, docstring + returns_header)
 
         @functools.wraps(func)
@@ -185,7 +193,7 @@ class Reader:
         with cf.ProcessPoolExecutor() as executor:
             self._files = list(executor.map(self._parse_chat_str, strs, file_paths))
 
-    def clear(self):
+    def clear(self) -> None:
         """Turn it into an empty reader by removing all parsed CHAT data."""
         self._files = []
 
@@ -256,7 +264,7 @@ class Reader:
 
         Returns
         -------
-        int if by_files is False, otherwise List[int]
+        int if ``by_files`` is ``False``, otherwise List[int]
         """
         utterances = self._filter_utterances_by_participants(participants, exclude)
         result_by_files = [len(us) for us in utterances]
@@ -276,7 +284,7 @@ class Reader:
 
         Returns
         -------
-        List[Utterance] if by_files is False, otherwise List[List[Utterance]]
+        List[Utterance] if ``by_files`` is ``False``, otherwise List[List[Utterance]]
         """
         result_by_files = self._filter_utterances_by_participants(participants, exclude)
         if by_files:
@@ -307,10 +315,10 @@ class Reader:
 
         Returns
         -------
-        List[List[List[Token]]] if both by_utterances and by_files are True
-        List[List[Token]] if by_utterances is True and by_files is False
-        List[List[Token]] if by_utterances is False and by_files is True
-        List[Token] if both by_utterances and by_files are False
+        List[List[List[Token]]] if both ``by_utterances`` and ``by_files`` are ``True``
+        List[List[Token]] if ``by_utterances`` is ``True`` and ``by_files`` is ``False``
+        List[List[Token]] if ``by_utterances`` is ``False`` and ``by_files`` is ``True``
+        List[Token] if both ``by_utterances`` and ``by_files`` are ``False``
         """
         utterances = self.utterances(
             participants=participants, exclude=exclude, by_files=True
@@ -329,10 +337,10 @@ class Reader:
 
         Returns
         -------
-        List[List[List[str]]] if both by_utterances and by_files are True
-        List[List[str]] if by_utterances is True and by_files is False
-        List[List[str]] if by_utterances is False and by_files is True
-        List[str] if both by_utterances and by_files are False
+        List[List[List[str]]] if both ``by_utterances`` and ``by_files`` are ``True``
+        List[List[str]] if ``by_utterances`` is ``True`` and ``by_files`` is ``False``
+        List[List[str]] if ``by_utterances`` is ``False`` and ``by_files`` is ``True``
+        List[str] if both ``by_utterances`` and ``by_files`` are ``False``
         """
         tokens = self.tokens(
             participants=participants,
@@ -392,7 +400,7 @@ class Reader:
         """
         return [f.header for f in self._files]
 
-    def file_paths(self):
+    def file_paths(self) -> List[str]:
         """Return the file paths.
 
         If the data comes from in-memory strings, then the "file paths" are
@@ -404,7 +412,7 @@ class Reader:
         """
         return [f.file_path for f in self._files]
 
-    def n_files(self):
+    def n_files(self) -> int:
         """Return the number of files."""
         return len(self)
 
@@ -417,7 +425,7 @@ class Reader:
 
         Returns
         -------
-        Set[str] if by_files is False, otherwise List[Set[str]]
+        Set[str] if ``by_files`` is ``False``, otherwise List[Set[str]]
         """
         result_by_files = [{u.participant for u in f.utterances} for f in self._files]
         if by_files:
@@ -434,11 +442,11 @@ class Reader:
 
         Returns
         -------
-        Set[str] if by_files is False, otherwise List[List[str]]
-            When by_files is True, the ordering of languages given by the list
+        Set[str] if ``by_files`` is ``False``, otherwise List[List[str]]
+            When ``by_files`` is ``True``, the ordering of languages given by the list
             indicates language dominance. Such ordering would not make sense when
-            by_files is False, in which case the returned object is a set instead of
-            a list.
+            ``by_files`` is ``False``, in which case the returned object is a set
+            instead of a list.
         """
         result_by_files = [f.header.get("Languages", []) for f in self._files]
         if by_files:
@@ -457,7 +465,8 @@ class Reader:
 
         Returns
         -------
-        Set[datetime.date] if by_files is False, otherwise List[Set[datetime.date]]]
+        Set[datetime.date] if ``by_files`` is ``False``,
+        otherwise List[Set[datetime.date]]]
         """
         result_by_files = [f.header["Date"] for f in self._files]
         if by_files:
@@ -465,7 +474,9 @@ class Reader:
         else:
             return self._flatten(set, result_by_files)
 
-    def ages(self, participant="CHI", months=False):
+    def ages(
+        self, participant="CHI", months=False
+    ) -> Union[List[Tuple[int, int, int]], List[float]]:
         """Return the ages of the given participant in the data.
 
         Parameters
@@ -474,14 +485,14 @@ class Reader:
             Participant of interest, which defaults to the typical use case of ``"CHI"``
             for the target child.
         months : bool, optional
-            If False (the default), age is represented as a tuple of
-            (years, months, days), e.g., "1;06.00" in CHAT becomes `(1, 6, 0)`.
-            If True, age is a float for the number of months,
-            e.g., "1;06.00" in CHAT becomes `18.0` for 18 months.
+            If ``False`` (the default), age is represented as a tuple of
+            (years, months, days), e.g., "1;06.00" in CHAT becomes ``(1, 6, 0)``.
+            If ``True``, age is a float for the number of months,
+            e.g., "1;06.00" in CHAT becomes ``18.0`` for 18 months.
 
         Returns
         -------
-        List[Tuple[int, int, int]] if months is False, otherwise List[float]
+        List[Tuple[int, int, int]] if months is ``False``, otherwise List[float]
         """
         result_by_files = []
         for f in self._files:
@@ -510,12 +521,17 @@ class Reader:
     ) -> Union[List[List[Token]], List[List[List[Token]]]]:
         """Return the tagged sents.
 
+        .. deprecated:: 0.13.0
+            Please use :func:`~pylangacq.Reader.tokens` with ``by_utterances=True``
+            instead.
+
         Parameters
         ----------
 
         Returns
         -------
-        List[List[Token]] if by_files is False, otherwise List[List[List[Token]]]
+        List[List[Token]] if ``by_files`` is ``False``,
+        otherwise List[List[List[Token]]]
         """
         _deprecate_warning(
             "tagged_sents",
@@ -535,12 +551,16 @@ class Reader:
     ) -> Union[List[Token], List[List[Token]]]:
         """Return the tagged words.
 
+        .. deprecated:: 0.13.0
+            Please use :func:`~pylangacq.Reader.tokens` with ``by_utterances=False``
+            instead.
+
         Parameters
         ----------
 
         Returns
         -------
-        List[Token] if by_files is False, otherwise List[List[Token]]
+        List[Token] if ``by_files`` is ``False``, otherwise List[List[Token]]
         """
         _deprecate_warning(
             "tagged_words", "0.13.0", "the `.tokens()` method with by_utterances=False"
@@ -558,12 +578,16 @@ class Reader:
     ) -> Union[List[List[str]], List[List[List[str]]]]:
         """Return the sents.
 
+        .. deprecated:: 0.13.0
+            Please use :func:`~pylangacq.Reader.words` with ``by_utterances=True``
+            instead.
+
         Parameters
         ----------
 
         Returns
         -------
-        List[List[str]] if by_files is False, otherwise List[List[List[str]]]
+        List[List[str]] if ``by_files`` is ``False``, otherwise List[List[List[str]]]
         """
         _deprecate_warning(
             "words", "0.13.0", "the `.words()` method with by_utterances=True"
@@ -595,9 +619,9 @@ class Reader:
         )
 
     def mlu(self, participant="CHI") -> List[float]:
-        """Return the mean lengths of utterance.
+        """Return the mean lengths of utterance (MLU).
 
-        This method is equivalent to ``.mlum()``.
+        This method is equivalent to :func:`~pylangacq.Reader.mlum`.
 
         Parameters
         ----------
@@ -633,6 +657,11 @@ class Reader:
 
         Parameters
         ----------
+        keep_case : bool, optional
+            If ``True``, case distinctions are kept, e.g.,
+            word tokens like "the" and "The" are treated as distinct.
+            If ``False`` (the default), all word tokens are forced to be in lowercase
+            as a preprocessing step.
         participant : str, optional
             Participant of interest, which defaults to the typical use case of ``"CHI"``
             for the target child.
@@ -675,7 +704,8 @@ class Reader:
 
         Returns
         -------
-        collections.Counter if by_files is False, otherwise List[collections.Counter]
+        collections.Counter if ``by_files`` is ``False``,
+        otherwise List[collections.Counter]
         """
 
         err_msg = f"n must be a positive integer: {n}"
@@ -718,7 +748,8 @@ class Reader:
 
         Returns
         -------
-        collections.Counter if by_files is False, otherwise List[collections.Counter]
+        collections.Counter if ``by_files`` is ``False``,
+        otherwise List[collections.Counter]
         """
         result_by_files = self.word_ngrams(
             1,
@@ -737,7 +768,7 @@ class Reader:
             return self._flatten(collections.Counter, result_by_files)
 
     @classmethod
-    def from_strs(cls, strs: List[str], ids: List[str] = None):
+    def from_strs(cls, strs: List[str], ids: List[str] = None) -> "Reader":
         """Instantiate a ``Reader`` object from in-memory CHAT data strings.
 
         Parameters
@@ -779,7 +810,7 @@ class Reader:
         match: str = None,
         exclude: str = None,
         encoding: str = _ENCODING,
-    ):
+    ) -> "Reader":
         """Instantiate a ``Reader`` object from local CHAT data files.
 
         Parameters
@@ -824,7 +855,7 @@ class Reader:
         exclude: str = None,
         extension: str = _CHAT_EXTENSION,
         encoding: str = _ENCODING,
-    ):
+    ) -> "Reader":
         """Instantiate a ``Reader`` object from a local directory with CHAT data files.
 
         Parameters
@@ -867,7 +898,7 @@ class Reader:
         exclude: str = None,
         extension: str = _CHAT_EXTENSION,
         encoding: str = _ENCODING,
-    ):
+    ) -> "Reader":
         """Instantiate a ``Reader`` object from a local or remote ZIP file.
 
         Parameters
@@ -1044,7 +1075,7 @@ class Reader:
             return None
 
     @staticmethod
-    def _get_gra(raw_gra: Union[str, None]) -> Union[Gra, None]:
+    def _get_gra(raw_gra: Optional[str]) -> Union[Gra, None]:
         if raw_gra is None:
             return None
         try:
@@ -1220,7 +1251,7 @@ class Reader:
         return lines
 
 
-@_params_in_docstring("match", "exclude", "encoding", "cls")
+@_params_in_docstring("match", "exclude", "encoding", "cls", class_method=False)
 def read_chat(
     path: str,
     match: str = None,
@@ -1234,6 +1265,7 @@ def read_chat(
     ----------
     path : str
         A path that points to one of the following:
+
         - ZIP file. Either a local file path or a URL (one that begins with
           ``"https://"`` or ``"http://"``).
           Example of a URL: ``"https://childes.talkbank.org/data/Eng-NA/Brown.zip"``
@@ -1242,7 +1274,7 @@ def read_chat(
 
     Returns
     -------
-    Reader
+    :class:`~pylangacq.Reader`
     """
     if cls != Reader and not issubclass(cls, Reader):
         raise TypeError(f"Only a Reader class or its child class is allowed: {cls}")
@@ -1268,7 +1300,7 @@ def _clean_utterance(utterance, phon=False):
     utterance : str
         The utterance as a str
     phon : bool, optional
-        whether we are handling PhonBank data; defaults to False.
+        whether we are handling PhonBank data; defaults to ``False``.
         If ``True``, words like "xxx" and "yyy" won't be removed.
 
     Returns

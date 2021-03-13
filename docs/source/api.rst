@@ -3,5 +3,7 @@
 API Reference
 =============
 
-.. autoclass:: pylangacq.chat.Reader
+.. autofunction:: pylangacq.read_chat
+
+.. autoclass:: pylangacq.Reader
    :members:

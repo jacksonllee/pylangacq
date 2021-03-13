@@ -3,9 +3,6 @@
 Quickstart
 ==========
 
-This page introduces the basic functionality of PyLangAcq and points to
-relevant pages of the library documentation for more advanced usage.
-
 To start, import the package ``pylangacq`` in your Python code:
 
 .. code-block:: python
@@ -22,7 +19,9 @@ The function ``read_chat`` asks for a data source and returns a CHAT data reader
 The data source can either be local on your computer,
 or a remote source as a ZIP archive file containing `.cha` files.
 A prototypical example for the latter is a dataset from CHILDES.
-To illustrate, let's use Eve's data from the Brown corpus of American English:
+To illustrate, let's use Eve's data from the
+`Brown <https://childes.talkbank.org/access/Eng-NA/Brown.html>`_
+corpus of American English:
 
 .. code-block:: python
 
@@ -31,8 +30,8 @@ To illustrate, let's use Eve's data from the Brown corpus of American English:
     >>> len(eve)
     20
 
-``eve`` is a ``Reader`` instance.
-It has Eve's 20 CHAT data files all parsed and ready at your disposal.
+``eve`` is a :class:`~pycantonese.Reader` instance.
+It has Eve's 20 CHAT data files all parsed and ready for your analysis.
 ``eve`` has various methods through which you can access different information
 with Pythonic data structures.
 
@@ -42,13 +41,12 @@ Header Information
 ------------------
 
 CHAT transcript files store metadata in the header with lines beginning with ``@``.
-Among other things, we can find the ages (if available from the header)
-of the target child when the recordings were made:
+Among other things, ``eve`` has the age information of Eve when the recordings were made,
+which is from 1 year and 6 months old to 2 years and 3 months old:
 
 .. code-block:: python
 
-    >>> from pprint import pprint
-    >>> pprint(eve.ages())
+    >>> eve.ages()
     [(1, 6, 0),
      (1, 6, 0),
      (1, 7, 0),
@@ -70,23 +68,12 @@ of the target child when the recordings were made:
      (2, 3, 0),
      (2, 3, 0)]
 
-In this example, we can see the age information of Eve's 20 recording sessions,
-from 1 year and 6 months old to 2 years and 3 months old.
-
 More on :ref:`headers`.
 
-Transcript Data
----------------
+Transcriptions and Annotations
+------------------------------
 
-Transcriptions as well as annotations from the ``%mor`` and ``%gra`` tiers
-(for morphology, part-of-speech tags, and grammatical relations)
-are accessible via NLTK-like
-corpus access methods such as ``words()``, ``tagged_words()``, ``sents()``,
-and ``tagged_sents()``.
-
-By default, these methods each return a flat list of results from all the files.
-If we are interested in the results for individual files,
-these methods take the optional boolean parameter ``by_files``:
+``words()`` is the basic method to access the transcriptions:
 
 .. code-block:: python
 
@@ -95,6 +82,13 @@ these methods take the optional boolean parameter ``by_files``:
     119972
     >>> words[:8]
     ['more', 'cookie', '.', 'you', '0v', 'more', 'cookies', '?']
+
+By default, ``words()`` returns a flat list of results from all the files.
+If we are interested in the results for individual files,
+the method has the optional boolean parameter ``by_files``:
+
+.. code-block:: python
+
     >>> words_by_files = eve.words(by_files=True)  # list of lists of strings, each inner list for one file
     >>> len(words_by_files)  # expects 20 -- that's the number of files of ``eve``
     20
@@ -122,104 +116,110 @@ these methods take the optional boolean parameter ``by_files``:
     6903
     5612
 
+Apart from transcriptions, CHAT data has rich annotations for linguistic
+and extra-linguistic information.
+Such annotations are accessible through the methods ``tokens()`` and ``utterances()``.
 
-
-``words()`` and other methods can optionally take the argument *participant*.
-For instance, ``eve.words(participant='CHI')`` gets words by the target
-child instead of all participants in the data.
-(For more on the *participant* parameter, see :ref:`cds`.)
-
-The "tagged" methods represent a word as a tuple of
-(*word*, *pos*, *mor*, *rel*)
-where *pos* is the part-of-speech tag, *mor* is the
-morphological information (for the lemma and inflectional affix, for instance),
-and *rel* is the dependency and grammatical relation:
+Many CHAT datasets on CHILDES have the ``%mor`` and ``%gra`` tiers
+for morphological information and grammatical relations, respectively.
+A reader such as ``eve`` from above has all this information readily available
+to you via the ``tokens()`` method -- think of ``tokens()`` as ``words()`` with annotations:
 
 .. code-block:: python
 
-    >>> mother_tagged_words = eve.tagged_words(participant='MOT')
-    >>> for tagged_word in mother_tagged_words[:20]:
-    ...     print(tagged_word)
+    >>> some_tokens = eve.tokens()[:5]
+    >>> some_tokens
+    [Token(word='more', pos='qn', mor='more', gra=Gra(source=1, target=2, rel='QUANT')),
+     Token(word='cookie', pos='n', mor='cookie', gra=Gra(source=2, target=0, rel='INCROOT')),
+     Token(word='.', pos='.', mor='', gra=Gra(source=3, target=2, rel='PUNCT')),
+     Token(word='you', pos='pro:per', mor='you', gra=Gra(source=1, target=2, rel='SUBJ')),
+     Token(word='0v', pos='0v', mor='v', gra=Gra(source=2, target=0, rel='ROOT'))]
+    >>>
+    >>> # The Token class is a dataclass. A Token instance has attributes as shown above.
+    >>> for token in some_tokens:
+    ...     print(token.word, token.pos)
     ...
-    ('you', 'PRO:PER', 'you', (1, 2, 'SUBJ'))
-    ('0v', '0V', 'v', (2, 0, 'ROOT'))
-    ('more', 'QN', 'more', (3, 4, 'QUANT'))
-    ('cookies', 'N', 'cookie-PL', (4, 2, 'OBJ'))
-    ('?', '?', '', (5, 2, 'PUNCT'))
-    ('how_about', 'PRO:INT', 'how_about', (1, 3, 'LINK'))
-    ('another', 'QN', 'another', (2, 3, 'QUANT'))
-    ('grahamcracker', 'N', '+n|graham+n|cracker', (3, 0, 'INCROOT'))
-    ('?', '?', '', (4, 3, 'PUNCT'))
-    ('would', 'MOD', 'will&COND', (1, 3, 'AUX'))
-    ('that', 'PRO:DEM', 'that', (2, 3, 'SUBJ'))
-    ('do', 'V', 'do', (3, 0, 'ROOT'))
-    ('just', 'ADV', 'just', (4, 5, 'JCT'))
-    ('as_well', 'ADV', 'as_well', (5, 3, 'JCT'))
-    ('?', '?', '', (6, 3, 'PUNCT'))
-    ('here', 'ADV', 'here', (1, 0, 'INCROOT'))
-    ('.', '.', '', (2, 1, 'PUNCT'))
-    ('here', 'ADV', 'here', (1, 3, 'JCT'))
-    ('you', 'PRO:PER', 'you', (2, 3, 'SUBJ'))
-    ('go', 'V', 'go', (3, 0, 'ROOT'))
+    more qn
+    cookie n
+    . .
+    you pro:per
+    0v 0v
+
+Beyond the ``%mor`` and ``%gra`` tiers,
+an utterance has yet more information from the original CHAT data file.
+If you need information such as the unsegmented transcription, time marks,
+or any unparsed tiers, the method ``utterances()`` is what you need:
+
+.. code-block:: python
+
+    >>> eve.utterances()[0]
+    Utterance(participant='CHI',
+              tokens=[Token(word='more', pos='qn', mor='more', gra=Gra(source=1, target=2, rel='QUANT')),
+                      Token(word='cookie', pos='n', mor='cookie', gra=Gra(source=2, target=0, rel='INCROOT')),
+                      Token(word='.', pos='.', mor='', gra=Gra(source=3, target=2, rel='PUNCT'))],
+              time_marks=None,
+              tiers={'CHI': 'more cookie . [+ IMP]',
+                     '%mor': 'qn|more n|cookie .',
+                     '%gra': '1|2|QUANT 2|0|INCROOT 3|2|PUNCT',
+                     '%int': 'distinctive , loud'})
 
 More on :ref:`transcriptions`.
 
-.. _use_dev_measures:
-
-Developmental measures
+Developmental Measures
 ----------------------
 
-To get the mean length of utterance (MLU) in morphemes, use ``MLUm()``:
+To get the mean length of utterance (MLU), use the method ``mlu()``:
 
 .. code-block:: python
 
-    >>> for filename, mlum in sorted(eve.MLUm().items()):
-    ...     print(os.path.basename(filename), mlum)
-    ...
-    010600a.cha 2.267022696929239
-    010600b.cha 2.4508196721311477
-    010700a.cha 2.7628458498023716
-    010700b.cha 2.571186440677966
-    010800.cha 2.8528995756718527
-    010900a.cha 3.1734317343173433
-    010900b.cha 3.1268939393939394
-    010900c.cha 3.380604796663191
-    011000a.cha 3.8214971209213053
-    011000b.cha 3.8062157221206583
-    011100a.cha 3.87248322147651
-    011100b.cha 4.157407407407407
-    020000a.cha 4.247826086956522
-    020000b.cha 3.9684873949579833
-    020100a.cha 4.448895027624309
-    020100b.cha 4.416536661466458
-    020200a.cha 4.476769911504425
-    020200b.cha 4.286978508217446
-    020300a.cha 4.346094946401225
-    020300b.cha 3.165120593692022
+    >>> eve.mlu()
+    [2.316421895861148,
+     2.5163934426229506,
+     2.8063241106719365,
+     2.611864406779661,
+     2.8854314002828856,
+     3.195571955719557,
+     3.1818181818181817,
+     3.4171011470281543,
+     3.840690978886756,
+     3.822669104204753,
+     3.883668903803132,
+     4.165123456790123,
+     4.269565217391304,
+     3.976890756302521,
+     4.457182320441989,
+     4.422776911076443,
+     4.495575221238938,
+     4.292035398230088,
+     4.3813169984686064,
+     3.320964749536178]
 
-Other language developmental measures, such as type-token ratio (TTR) and
-Index of Productive Syntax (IPSyn), are also implemented.
-More on :ref:`devmeasures`
+The result is the MLU for each CHAT file.
+As this is a list of floats, they can be readily piped into
+other packages for making plots, for example.
 
+The other language developmental measures implemented so far are
+``ttr()`` for the type-token ratio (TTR) and
+``ipsyn()`` for the index of productive syntax (IPSyn).
 
-.. _use_word_freq:
+More on :ref:`measures`.
 
-Word frequency info, ngrams, search, and concordance
-----------------------------------------------------
+Word Frequencies and Ngrams
+---------------------------
 
-For word combinatorics, use ``word_frequency()`` and ``word_ngrams()``:
+For word combinatorics, check out ``word_frequencies()`` and ``word_ngrams()``:
 
 .. code-block:: python
 
-    >>> word_freq = eve.word_frequency()
+    >>> word_freq = eve.word_frequencies()  # a collections.Counter object
     >>> word_freq.most_common(5)
     [('.', 20130), ('?', 6358), ('you', 3695), ('the', 2524), ('it', 2365)]
 
-    >>> bigrams = eve.word_ngrams(2)
+    >>> bigrams = eve.word_ngrams(2)  # a collections.Counter object
     >>> bigrams.most_common(5)
     [(('it', '.'), 705), (('that', '?'), 619), (('what', '?'), 560), (('yeah', '.'), 510), (('there', '.'), 471)]
 
-More on :ref:`freq`.
+More on :ref:`frequencies`.
 
 Questions? Issues?
 ------------------

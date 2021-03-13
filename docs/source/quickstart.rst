@@ -15,7 +15,8 @@ Reading CHAT data
 -----------------
 
 First off, we need some CHAT data to work with.
-The function ``read_chat`` asks for a data source and returns a CHAT data reader.
+The function :func:`~pylangacq.read_chat`
+asks for a data source and returns a CHAT data reader.
 The data source can either be local on your computer,
 or a remote source as a ZIP archive file containing `.cha` files.
 A prototypical example for the latter is a dataset from CHILDES.
@@ -30,7 +31,7 @@ corpus of American English:
     >>> len(eve)
     20
 
-``eve`` is a :class:`~pycantonese.Reader` instance.
+``eve`` is a :class:`~pylangacq.Reader` instance.
 It has Eve's 20 CHAT data files all parsed and ready for your analysis.
 ``eve`` has various methods through which you can access different information
 with Pythonic data structures.
@@ -73,7 +74,7 @@ More on :ref:`headers`.
 Transcriptions and Annotations
 ------------------------------
 
-``words()`` is the basic method to access the transcriptions:
+:func:`~pylangacq.Reader.words` is the basic method to access the transcriptions:
 
 .. code-block:: python
 
@@ -83,7 +84,8 @@ Transcriptions and Annotations
     >>> words[:8]
     ['more', 'cookie', '.', 'you', '0v', 'more', 'cookies', '?']
 
-By default, ``words()`` returns a flat list of results from all the files.
+By default, :func:`~pylangacq.Reader.words`
+returns a flat list of results from all the files.
 If we are interested in the results for individual files,
 the method has the optional boolean parameter ``by_files``:
 
@@ -118,12 +120,16 @@ the method has the optional boolean parameter ``by_files``:
 
 Apart from transcriptions, CHAT data has rich annotations for linguistic
 and extra-linguistic information.
-Such annotations are accessible through the methods ``tokens()`` and ``utterances()``.
+Such annotations are accessible through the methods
+:func:`~pylangacq.Reader.tokens`
+and :func:`~pylangacq.Reader.utterances`.
 
 Many CHAT datasets on CHILDES have the ``%mor`` and ``%gra`` tiers
 for morphological information and grammatical relations, respectively.
 A reader such as ``eve`` from above has all this information readily available
-to you via the ``tokens()`` method -- think of ``tokens()`` as ``words()`` with annotations:
+to you via :func:`~pylangacq.Reader.tokens`
+-- think of :func:`~pylangacq.Reader.tokens`
+as :func:`~pylangacq.Reader.words` with annotations:
 
 .. code-block:: python
 
@@ -148,7 +154,7 @@ to you via the ``tokens()`` method -- think of ``tokens()`` as ``words()`` with 
 Beyond the ``%mor`` and ``%gra`` tiers,
 an utterance has yet more information from the original CHAT data file.
 If you need information such as the unsegmented transcription, time marks,
-or any unparsed tiers, the method ``utterances()`` is what you need:
+or any unparsed tiers, :func:`~pylangacq.Reader.utterances` is what you need:
 
 .. code-block:: python
 
@@ -168,7 +174,7 @@ More on :ref:`transcriptions`.
 Developmental Measures
 ----------------------
 
-To get the mean length of utterance (MLU), use the method ``mlu()``:
+To get the mean length of utterance (MLU), use :func:`~pylangacq.Reader.mlu`:
 
 .. code-block:: python
 
@@ -199,15 +205,17 @@ As this is a list of floats, they can be readily piped into
 other packages for making plots, for example.
 
 The other language developmental measures implemented so far are
-``ttr()`` for the type-token ratio (TTR) and
-``ipsyn()`` for the index of productive syntax (IPSyn).
+:func:`~pylangacq.Reader.ttr` for the type-token ratio (TTR) and
+:func:`~pylangacq.Reader.ipsyn` for the index of productive syntax (IPSyn).
 
 More on :ref:`measures`.
 
 Word Frequencies and Ngrams
 ---------------------------
 
-For word combinatorics, check out ``word_frequencies()`` and ``word_ngrams()``:
+For word combinatorics, check out
+:func:`~pylangacq.Reader.word_frequencies`
+and :func:`~pylangacq.Reader.word_ngrams`:
 
 .. code-block:: python
 

@@ -237,8 +237,8 @@ and :func:`~pylangacq.Reader.word_ngrams`:
 
 More on :ref:`frequencies`.
 
-Questions? Issues?
-------------------
+Questions?
+----------
 
 If you have any questions, comments, bug reports etc, please open `issues
 at the GitHub repository <https://github.com/jacksonllee/pylangacq/issues>`_, or

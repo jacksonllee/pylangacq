@@ -105,7 +105,7 @@ def _params_in_docstring(*params, class_method=True):
             (by regular expression matching) are read and parsed.
             For example, to work with the American English dataset Brown (containing
             data for the children Adam, Eve, and Sarah),
-            you can pass in ``"Eve"`` here to only handle the data for Eve since
+            you can pass in ``"Eve"`` here to only handle the data for Eve, since
             the unzipped Brown data from CHILDES is in a directory structure of
             ``Brown/Eve/xxx.cha`` for Eve's data.
             If this parameter is not specified or ``None`` is passed in (the default),
@@ -492,7 +492,7 @@ class Reader:
 
         Returns
         -------
-        List[Tuple[int, int, int]] if months is ``False``, otherwise List[float]
+        List[Tuple[int, int, int]] if ``months`` is ``False``, otherwise List[float]
         """
         result_by_files = []
         for f in self._files:

@@ -10,6 +10,7 @@ import re
 import shutil
 import tempfile
 import uuid
+import warnings
 import zipfile
 from typing import Collection, Dict, Iterable, List, Set, Tuple, Union
 
@@ -39,6 +40,18 @@ _SUBDIR_SUFFIX = "suffix_pla"
 _SUBDIR_REGEX = re.compile(r"prefix_pla[a-z0-9_]+suffix_pla")
 
 
+_File = collections.namedtuple("_File", "file_path header utterances")
+_File.__doc__ = """
+A CHAT file (or string).
+
+Attributes
+----------
+file_path : str
+header : dict
+utterances : List[Utterance]
+"""
+
+
 def _params_in_docstring(*params):
     docstring = ""
 
@@ -61,6 +74,14 @@ def _params_in_docstring(*params):
             participants are excluded.
             If you pass in ``None`` (the default), no participants are excluded.
             This parameter cannot be used together with ``participants``."""
+
+    if "by_utterances" in params:
+        docstring += """
+        by_utterances : bool, optional
+            If ``True``, the resulting objects are wrapped as a list at the utterance
+            level.
+            If ``False`` (the default), such utterance-level list structure
+            does not exist."""
 
     if "by_files" in params:
         docstring += """
@@ -125,16 +146,26 @@ def _params_in_docstring(*params):
     return real_decorator
 
 
-_File = collections.namedtuple("_File", "file_path header utterances")
-_File.__doc__ = """
-A CHAT file (or string).
+def _deprecate_warning(what, since_version, use_instead):
+    """Throws a FutureWarning for deprecation.
 
-Attributes
-----------
-file_path : str
-header : dict
-utterances : List[Utterance]
-"""
+    FutureWarning is used instead of DeprecationWarning, because Python
+    does not show DeprecationWarning by default.
+
+    Parameters
+    ----------
+    what : str
+        What to deprecate.
+    since_version : str
+        Version "x.y.z" since which the deprecation is in effect.
+    use_instead : str
+        Use this instead.
+    """
+    warnings.warn(
+        f"'{what}' has been deprecated since PyLangAcq v{since_version}. "
+        f"Please use {use_instead} instead.",
+        FutureWarning,
+    )
 
 
 class Reader:
@@ -234,6 +265,7 @@ class Reader:
         else:
             return self._flatten(int, result_by_files)
 
+    @_params_in_docstring("participants", "exclude", "by_files")
     def utterances(
         self, participants=None, exclude=None, by_files=False
     ) -> Union[List[Utterance], List[List[Utterance]]]:
@@ -251,6 +283,71 @@ class Reader:
             return result_by_files
         else:
             return self._flatten(list, result_by_files)
+
+    @_params_in_docstring("participants", "exclude", "by_utterances", "by_files")
+    def tokens(
+        self, participants=None, exclude=None, by_utterances=False, by_files=False
+    ) -> Union[List[Token], List[List[Token]], List[List[List[Token]]]]:
+        """Return the tokens.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        List[List[List[Token]]] if both by_utterances and by_files are True
+        List[List[Token]] if by_utterances is True and by_files is False
+        List[List[Token]] if by_utterances is False and by_files is True
+        List[Token] if both by_utterances and by_files are False
+        """
+        utterances = self.utterances(
+            participants=participants, exclude=exclude, by_files=True
+        )
+        result = [[u.tokens for u in us] for us in utterances]
+        if by_files and by_utterances:
+            pass
+        elif by_files and not by_utterances:
+            result = [self._flatten(list, f) for f in result]
+        elif not by_files and by_utterances:
+            result = self._flatten(list, result)
+        else:
+            # not by_files and not by_utterances
+            result = self._flatten(list, (self._flatten(list, f) for f in result))
+        return result
+
+    @_params_in_docstring("participants", "exclude", "by_utterances", "by_files")
+    def words(
+        self, participants=None, exclude=None, by_utterances=False, by_files=False
+    ) -> Union[List[str], List[List[str]], List[List[List[str]]]]:
+        """Return the words.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        List[List[List[str]]] if both by_utterances and by_files are True
+        List[List[str]] if by_utterances is True and by_files is False
+        List[List[str]] if by_utterances is False and by_files is True
+        List[str] if both by_utterances and by_files are False
+        """
+        tokens = self.tokens(
+            participants=participants,
+            exclude=exclude,
+            by_utterances=True,
+            by_files=True,
+        )
+        result = [[[t.word for t in ts] for ts in tss] for tss in tokens]
+        if by_files and by_utterances:
+            pass
+        elif by_files and not by_utterances:
+            result = [self._flatten(list, f) for f in result]
+        elif not by_files and by_utterances:
+            result = self._flatten(list, result)
+        else:
+            # not by_files and not by_utterances
+            result = self._flatten(list, (self._flatten(list, f) for f in result))
+        return result
 
     def _filter_utterances_by_participants(
         self, participants, exclude
@@ -417,13 +514,6 @@ class Reader:
     ) -> Union[List[List[Token]], List[List[List[Token]]]]:
         """Return the tagged sents.
 
-        The "tagged sents/words" terminology comes from NLTK, where a sent (= sentence)
-        is the equivalent unit of an ``Utterance`` object in this package.
-        A sent is tagged in the sense that the individual words
-        (= the ``Token`` objects) in the sent have information beyond the word form,
-        such as a part-of-speech tag, morphological information,
-        and grammatical relation.
-
         Parameters
         ----------
 
@@ -431,6 +521,11 @@ class Reader:
         -------
         List[List[Token]] if by_files is False, otherwise List[List[List[Token]]]
         """
+        _deprecate_warning(
+            "tagged_sents",
+            "0.13.0",
+            "the `.tokens()` method with by_utterances=True",
+        )
         utterances = self._filter_utterances_by_participants(participants, exclude)
         result_by_files = [[u.tokens for u in us] for us in utterances]
         if by_files:
@@ -444,12 +539,6 @@ class Reader:
     ) -> Union[List[Token], List[List[Token]]]:
         """Return the tagged words.
 
-        The "tagged sents/words" terminology comes from NLTK, where a sent (= sentence)
-        is the equivalent unit of an ``Utterance`` object in this package.
-        A word is tagged in the sense that it has information beyond the word form,
-        such as a part-of-speech tag, morphological information, and grammatical
-        relation. A tagged word is represented as a ``Token`` object in this package.
-
         Parameters
         ----------
 
@@ -457,6 +546,9 @@ class Reader:
         -------
         List[Token] if by_files is False, otherwise List[List[Token]]
         """
+        _deprecate_warning(
+            "tagged_words", "0.13.0", "the `.tokens()` method with by_utterances=False"
+        )
         utterances = self._filter_utterances_by_participants(participants, exclude)
         result_by_files = [[word for u in us for word in u.tokens] for us in utterances]
         if by_files:
@@ -470,10 +562,6 @@ class Reader:
     ) -> Union[List[List[str]], List[List[List[str]]]]:
         """Return the sents.
 
-        The "sents" terminology comes from NLTK, where a sent (= sentence)
-        is the equivalent unit of an ``Utterance`` object in this package.
-        The sents are in contrast with ``.tagged_sents``.
-
         Parameters
         ----------
 
@@ -481,30 +569,13 @@ class Reader:
         -------
         List[List[str]] if by_files is False, otherwise List[List[List[str]]]
         """
+        _deprecate_warning(
+            "words", "0.13.0", "the `.words()` method with by_utterances=True"
+        )
         utterances = self._filter_utterances_by_participants(participants, exclude)
         result_by_files = [
             [[t.word for t in u.tokens] for u in us] for us in utterances
         ]
-        if by_files:
-            return result_by_files
-        else:
-            return self._flatten(list, result_by_files)
-
-    @_params_in_docstring("participants", "exclude", "by_files")
-    def words(
-        self, participants=None, exclude=None, by_files=False
-    ) -> Union[List[str], List[List[str]]]:
-        """Return the words.
-
-        Parameters
-        ----------
-
-        Returns
-        -------
-        List[str] if by_files is False, otherwise List[List[str]]
-        """
-        utterances = self._filter_utterances_by_participants(participants, exclude)
-        result_by_files = [[t.word for u in us for t in u.tokens] for us in utterances]
         if by_files:
             return result_by_files
         else:
@@ -523,7 +594,9 @@ class Reader:
         -------
         List[float]
         """
-        return _get_mlum(self.tagged_sents(participants=participant, by_files=True))
+        return _get_mlum(
+            self.tokens(participants=participant, by_utterances=True, by_files=True)
+        )
 
     def mlu(self, participant="CHI") -> List[float]:
         """Return the mean lengths of utterance.
@@ -555,7 +628,9 @@ class Reader:
         -------
         List[float]
         """
-        return _get_mluw(self.sents(participants=participant, by_files=True))
+        return _get_mluw(
+            self.words(participants=participant, by_utterances=True, by_files=True)
+        )
 
     def ttr(self, keep_case=False, participant="CHI") -> List[float]:
         """Return the type-token ratios.
@@ -589,7 +664,9 @@ class Reader:
         -------
         List[float]
         """
-        return _get_ipsyn(self.tagged_sents(participants=participant, by_files=True))
+        return _get_ipsyn(
+            self.tokens(participants=participant, by_utterances=True, by_files=True)
+        )
 
     @_params_in_docstring("keep_case", "participants", "exclude", "by_files")
     def word_ngrams(
@@ -613,8 +690,11 @@ class Reader:
 
         result_by_files = []
 
-        for sents_in_file in self.sents(
-            participants=participants, exclude=exclude, by_files=True
+        for sents_in_file in self.words(
+            participants=participants,
+            exclude=exclude,
+            by_utterances=True,
+            by_files=True,
         ):
             result_for_file = collections.Counter()
             for sent in sents_in_file:

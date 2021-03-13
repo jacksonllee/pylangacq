@@ -237,8 +237,8 @@ def test_ages():
     assert _EVE.ages(months=True) == [18.0]
 
 
-def test_tagged_sents():
-    assert _EVE.tagged_sents()[0] == [
+def test_tokens_by_utterances():
+    assert _EVE.tokens(by_utterances=True)[0] == [
         Token(
             word="more", pos="qn", mor="more", gra=Gra(source=1, target=2, rel="QUANT")
         ),
@@ -252,8 +252,8 @@ def test_tagged_sents():
     ]
 
 
-def test_tagged_words():
-    assert _EVE.tagged_words()[:5] == [
+def test_tokens():
+    assert _EVE.tokens()[:5] == [
         Token(
             word="more", pos="qn", mor="more", gra=Gra(source=1, target=2, rel="QUANT")
         ),
@@ -274,8 +274,8 @@ def test_tagged_words():
     ]
 
 
-def test_sents():
-    assert _EVE.sents()[:2] == [
+def test_words_by_utterances():
+    assert _EVE.words(by_utterances=True)[:2] == [
         ["more", "cookie", "."],
         ["you", "0v", "more", "cookies", "?"],
     ]

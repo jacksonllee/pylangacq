@@ -1,5 +1,44 @@
 .. _headers:
 
+A CHAT transcript file (typically with the extension name ``.cha``, though not
+strictly required) provides metadata headers using lines starting with ``@``.
+Among the many possible headers,
+``@Participants`` and ``@ID`` are of particular interest::
+
+    @Participants: Code1 Name1 Role1 , Code2 Name2 Role2
+    @ID: ||Code1|1;6.||||Role1|||
+    @ID: ||Code2|||||Role2|||
+
+The ``@Participants`` header states the participants of the transcript. In this
+hypothetical example shown just above, there are two participants.
+Each participant has a participant code (e.g., ``Code1``), a participant name
+(e.g., ``Name1``), and a participant role (e.g., ``Role1``).
+The participant code must be an alphanumeric three-character string
+which begins with a letter, and all letters must be in uppercase.
+The participant code must come first, immediately
+followed by a space, and then by the participant name, and in turn by
+another space and then the participant role. A comma separates
+information between two participants.
+
+If there are ``@ID`` headers, they must appear after, but not before, the
+``@Participants`` header.
+The number of ``@ID`` headers is equal to the number of participants.
+An ``@ID`` header contains detailed information about a
+participant::
+
+    language|corpus|participant_code|age|sex|group|SES|participant_role|education|custom|
+
+Within ``@ID``, the fields ``participant_code`` and ``participant_role``
+must match the information of the relevant participant in the ``@Participants``
+header.
+Often of interest in language acquisition research is the age of the
+participant (e.g., the target child). For instance, the age of
+participant ``Code1`` is 1 year and 6 months, as given by ``1;6.``.
+Fields are left empty if no information is available.
+
+While all other ``@`` headers are optional, PyLangAcq has built-in functions
+specifically for ``@Languages`` and ``@Date`` for potential usage.
+
 Accessing Headers
 =================
 

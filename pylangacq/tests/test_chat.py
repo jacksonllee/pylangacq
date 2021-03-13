@@ -45,12 +45,12 @@ def test_from_zip_remote_url():
     eve_path = "Brown/Eve/010600a.cha"
 
     r = Reader.from_zip(REMOTE_BROWN_URL)
-    assert len(r) == 214
+    assert r.n_files() == 214
     assert sarah_path in r.file_paths()
     assert eve_path in r.file_paths()
 
     r = Reader.from_zip(REMOTE_BROWN_URL, "Eve")
-    assert len(r) == 20
+    assert r.n_files() == 20
     assert sarah_path not in r.file_paths()
     assert eve_path in r.file_paths()
 
@@ -58,25 +58,21 @@ def test_from_zip_remote_url():
 def test_from_dir():
     download_and_extract_brown()
     r = Reader.from_dir(REMOTE_EVE_DIR)
-    assert len(r) == 20
+    assert r.n_files() == 20
 
 
 def test_clear():
     eve_copy = copy.deepcopy(_EVE)
     eve_copy.clear()
-    assert len(eve_copy) == 0
+    assert eve_copy.n_files() == 0
 
 
 def test_append_remove():
     eve_copy = copy.deepcopy(_EVE)
     eve_copy.append(_EVE, ignore_repeats=False)
-    assert len(eve_copy) == 2
+    assert eve_copy.n_files() == 2
     eve_copy.remove("eve")
-    assert len(eve_copy) == 0
-
-
-def test_n_utterances():
-    assert _EVE.n_utterances() == 1601
+    assert eve_copy.n_files() == 0
 
 
 def test_utterances():
@@ -214,7 +210,7 @@ def test_headers():
 
 
 def test_n_files():
-    assert _EVE.n_files() == len(_EVE) == 1
+    assert _EVE.n_files() == 1
 
 
 def test_participants():

@@ -101,10 +101,14 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Reading CHAT Data</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#the-chat-transcription-format">The CHAT transcription format</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#initializing-a-reader-instance">Initializing a Reader instance</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#reader-methods">Reader methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#adding-and-removing-transcripts-in-a-reader">Adding and removing transcripts in a reader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#initializing-a-reader-instance">Initializing a <code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code> Instance</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#read-chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#from-a-zip-file-or-local-directory">From a ZIP File or Local Directory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#from-specific-chat-data-files">From Specific CHAT Data Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#from-in-memory-strings">From In-Memory Strings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-and-removing-data-in-a-reader">Adding and Removing Data in a <code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="headers.html">Accessing Headers</a></li>
@@ -190,271 +194,173 @@
             
   <div class="section" id="reading-chat-data">
 <span id="read"></span><h1>Reading CHAT Data<a class="headerlink" href="#reading-chat-data" title="Permalink to this headline">¶</a></h1>
-<p>This page provides details of the CHAT data format that PyLangAcq assumes and
-explains how CHAT data files are read.</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#chat-format"><span class="std std-ref">The CHAT transcription format</span></a></p></li>
-<li><p><a class="reference internal" href="#initialize-reader"><span class="std std-ref">Initializing a Reader instance</span></a></p></li>
-<li><p><a class="reference internal" href="#reader-properties"><span class="std std-ref">Reader methods</span></a></p></li>
-<li><p><a class="reference internal" href="#add-remove-transcripts"><span class="std std-ref">Adding and removing transcripts in a reader</span></a></p></li>
-</ul>
-<div class="section" id="the-chat-transcription-format">
-<span id="chat-format"></span><h2>The CHAT transcription format<a class="headerlink" href="#the-chat-transcription-format" title="Permalink to this headline">¶</a></h2>
-<p>PyLangAcq is designed to handle the CHAT transcription format as used in the
-CHILDES database for language acquisition research.
-The bare minimum of what PyLangAcq assumes about CHAT is explained here.
-(As of January 2016, PyLangAcq conforms to the latest
-<a class="reference external" href="https://talkbank.org/manuals/CHAT.pdf">CHAT manual</a>
-dated September 22, 2015.)</p>
-<p><strong>Headers</strong></p>
-<p>A CHAT transcript file (typically with the extension name <code class="docutils literal notranslate"><span class="pre">.cha</span></code>, though not
-strictly required) provides metadata headers using lines starting with <code class="docutils literal notranslate"><span class="pre">&#64;</span></code>.
-Among the many possible headers,
-<code class="docutils literal notranslate"><span class="pre">&#64;Participants</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;ID</span></code> are of particular interest:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@Participants</span><span class="p">:</span> <span class="n">Code1</span> <span class="n">Name1</span> <span class="n">Role1</span> <span class="p">,</span> <span class="n">Code2</span> <span class="n">Name2</span> <span class="n">Role2</span>
-<span class="nd">@ID</span><span class="p">:</span> <span class="o">||</span><span class="n">Code1</span><span class="o">|</span><span class="mi">1</span><span class="p">;</span><span class="mf">6.</span><span class="o">||||</span><span class="n">Role1</span><span class="o">|||</span>
-<span class="nd">@ID</span><span class="p">:</span> <span class="o">||</span><span class="n">Code2</span><span class="o">|||||</span><span class="n">Role2</span><span class="o">|||</span>
-</pre></div>
-</div>
-<p>The <code class="docutils literal notranslate"><span class="pre">&#64;Participants</span></code> header states the participants of the transcript. In this
-hypothetical example shown just above, there are two participants.
-Each participant has a participant code (e.g., <code class="docutils literal notranslate"><span class="pre">Code1</span></code>), a participant name
-(e.g., <code class="docutils literal notranslate"><span class="pre">Name1</span></code>), and a participant role (e.g., <code class="docutils literal notranslate"><span class="pre">Role1</span></code>).
-The participant code must be an alphanumeric three-character string
-which begins with a letter, and all letters must be in uppercase.
-The participant code must come first, immediately
-followed by a space, and then by the participant name, and in turn by
-another space and then the participant role. A comma separates
-information between two participants.</p>
-<p>If there are <code class="docutils literal notranslate"><span class="pre">&#64;ID</span></code> headers, they must appear after, but not before, the
-<code class="docutils literal notranslate"><span class="pre">&#64;Participants</span></code> header.
-The number of <code class="docutils literal notranslate"><span class="pre">&#64;ID</span></code> headers is equal to the number of participants.
-An <code class="docutils literal notranslate"><span class="pre">&#64;ID</span></code> header contains detailed information about a
-participant:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">language</span><span class="o">|</span><span class="n">corpus</span><span class="o">|</span><span class="n">participant_code</span><span class="o">|</span><span class="n">age</span><span class="o">|</span><span class="n">sex</span><span class="o">|</span><span class="n">group</span><span class="o">|</span><span class="n">SES</span><span class="o">|</span><span class="n">participant_role</span><span class="o">|</span><span class="n">education</span><span class="o">|</span><span class="n">custom</span><span class="o">|</span>
-</pre></div>
-</div>
-<p>Within <code class="docutils literal notranslate"><span class="pre">&#64;ID</span></code>, the fields <code class="docutils literal notranslate"><span class="pre">participant_code</span></code> and <code class="docutils literal notranslate"><span class="pre">participant_role</span></code>
-must match the information of the relevant participant in the <code class="docutils literal notranslate"><span class="pre">&#64;Participants</span></code>
-header.
-Often of interest in language acquisition research is the age of the
-participant (e.g., the target child). For instance, the age of
-participant <code class="docutils literal notranslate"><span class="pre">Code1</span></code> is 1 year and 6 months, as given by <code class="docutils literal notranslate"><span class="pre">1;6.</span></code>.
-Fields are left empty if no information is available.</p>
-<p>While all other <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> headers are optional, PyLangAcq has built-in functions
-specifically for <code class="docutils literal notranslate"><span class="pre">&#64;Languages</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;Date</span></code> for potential usage.</p>
-<p><strong>Transcriptions</strong></p>
-<p>After the headers come the transcriptions. All transcriptions are signaled by
-<code class="docutils literal notranslate"><span class="pre">*</span></code> at the beginning of the line:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">Code1</span><span class="p">:</span> <span class="n">good</span> <span class="n">morning</span> <span class="o">.</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">*</span></code> is immediately followed by the participant code (e.g., <code class="docutils literal notranslate"><span class="pre">Code1</span></code>), and then
-by a colon <code class="docutils literal notranslate"><span class="pre">:</span></code> and a space (or tab). Then the transcribed line follows.</p>
-<p>For research purposes, many CHAT transcripts have additional tiers signaled by
-<code class="docutils literal notranslate"><span class="pre">%mor</span></code> (for morphological information such as part-of-speech tag and lemma),
-<code class="docutils literal notranslate"><span class="pre">%gra</span></code> (for dependency and grammatical relations), and other <code class="docutils literal notranslate"><span class="pre">%</span></code> tiers.
-Much of what PyLangAcq can do relies on the annotations in these tiers with
-rich linguistic information.</p>
-<p><strong>Line continuations</strong></p>
-<p>For any header and transcription lines that are too long, line continuations
-are allowed in CHAT files with a tab character (denoted by <code class="docutils literal notranslate"><span class="pre">&lt;TAB&gt;</span></code> below), from:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">Code1</span><span class="p">:</span> <span class="n">this</span> <span class="n">line</span> <span class="ow">is</span> <span class="n">to</span> <span class="n">demonstrate</span> <span class="n">how</span> <span class="n">line</span> <span class="n">continuations</span> <span class="n">are</span> <span class="n">done</span> <span class="ow">in</span> <span class="n">CHAT</span> <span class="o">.</span>
-</pre></div>
-</div>
-<p>to:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">Code1</span><span class="p">:</span> <span class="n">this</span> <span class="n">line</span> <span class="ow">is</span> <span class="n">to</span> <span class="n">demonstrate</span> <span class="n">how</span> <span class="n">line</span> <span class="n">continuations</span>
-<span class="o">&lt;</span><span class="n">TAB</span><span class="o">&gt;</span><span class="n">are</span> <span class="n">done</span> <span class="ow">in</span> <span class="n">CHAT</span> <span class="o">.</span>
-</pre></div>
-</div>
-<p>This implies that all lines in a CHAT file must begin with any of the following
-characters only: <code class="docutils literal notranslate"><span class="pre">&#64;</span></code>, <code class="docutils literal notranslate"><span class="pre">*</span></code>, <code class="docutils literal notranslate"><span class="pre">%</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;TAB&gt;</span></code>.</p>
-</div>
+<p>PyLangAcq is designed to handle conversational data represented in the CHAT format
+as used in the CHILDES database for language acquisition research;
+CHAT is documented in its <a class="reference external" href="https://talkbank.org/manuals/CHAT.pdf">official manual</a>.
+This page describes the ways CHAT data can be read by the <code class="docutils literal notranslate"><span class="pre">pylangacq</span></code> package.</p>
 <div class="section" id="initializing-a-reader-instance">
-<span id="initialize-reader"></span><h2>Initializing a Reader instance<a class="headerlink" href="#initializing-a-reader-instance" title="Permalink to this headline">¶</a></h2>
-<p>Assuming that the CHAT transcripts for the Brown portion of CHILDES
-(i.e., <code class="docutils literal notranslate"><span class="pre">eve01.cha</span></code>, <code class="docutils literal notranslate"><span class="pre">eve02.cha</span></code> etc.)
-are at the current directory:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span> <span class="kn">as</span> <span class="nn">pla</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pla</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="s1">&#39;Brown/Eve/*.cha&#39;</span><span class="p">)</span>
+<h2>Initializing a <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> Instance<a class="headerlink" href="#initializing-a-reader-instance" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="read-chat">
+<h3><a class="reference internal" href="api.html#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a><a class="headerlink" href="#read-chat" title="Permalink to this headline">¶</a></h3>
+<p>Reading CHAT data in PyLangAcq is all about creating a <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> object.
+The most convenient way to do it is to use the <a class="reference internal" href="api.html#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a> function,
+which asks for a data source and several optional arguments.
+As an example, let’s use the <a class="reference external" href="https://childes.talkbank.org/access/Eng-NA/Brown.html">Brown</a>
+dataset of American English on CHILDES:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://childes.talkbank.org/data/Eng-NA/Brown.zip&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">brown</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The UTF-8 encoding is assumed for all CHAT files.
-If your data files are encoded differently (e.g., in Latin-1 instead),
-<code class="docutils literal notranslate"><span class="pre">read_chat</span></code> takes the keyword argument <code class="docutils literal notranslate"><span class="pre">'encoding'</span></code>. For instance,
-you can read in data like this:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">pla</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="s1">&#39;path/to/data/files&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;latin1&#39;</span><span class="p">)</span>
+<p>If your data source is a URL pointing to a ZIP archive file, like the Brown
+example here or many others from CHILDES,
+<a class="reference internal" href="api.html#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a> automatically handles everything behind the scenes for you,
+from downloading the ZIP file, unzipping it, traversing through the CHAT files found,
+as well as parsing the files.
+If the ZIP file has a fair amount of data
+(the Brown dataset has over 200 CHAT data files, with over 180,000 utterances),
+a <a class="reference internal" href="api.html#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a> call like this typically takes a couple seconds.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">brown</span><span class="o">.</span><span class="n">n_files</span><span class="p">()</span>
+<span class="go">214</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">brown</span><span class="o">.</span><span class="n">utterances</span><span class="p">())</span>
+<span class="go">184758</span>
 </pre></div>
 </div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">read_chat()</span></code> can take one or multiple filenames.
-These filenames can be either relative paths to the current directory
-(as exemplified here) or
-absolute paths. Filename pattern matching with <code class="docutils literal notranslate"><span class="pre">*</span></code>
-(wildcard for zero or more characters) and <code class="docutils literal notranslate"><span class="pre">?</span></code> (wildcard for one or more
-characters) can be used. In this example with Eve’s files, <code class="docutils literal notranslate"><span class="pre">*</span></code> matches all
-the 20 CHAT
-files in the subdirectory <code class="docutils literal notranslate"><span class="pre">Brown/Eve/</span></code> relative to the current directory.</p>
-<p><code class="docutils literal notranslate"><span class="pre">read_chat()</span></code> returns an instance of the
-<code class="docutils literal notranslate"><span class="pre">pylangacq.chat.Reader</span></code>
-class. For example, <code class="docutils literal notranslate"><span class="pre">eve</span></code> is a <code class="docutils literal notranslate"><span class="pre">pylangacq.chat.Reader</span></code> instance,
-or simply <code class="docutils literal notranslate"><span class="pre">Reader</span></code> instance for short.
-Most of the functionality of PyLangAcq is accessed via methods of <code class="docutils literal notranslate"><span class="pre">Reader</span></code>
-instances, in the form of <code class="docutils literal notranslate"><span class="pre">reader_instance.method_name()</span></code>.</p>
-<p>If your CHAT data comes as an in-memory string (a string of what a single
-CHAT data file would look like), a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> instance can be created by
-the <code class="docutils literal notranslate"><span class="pre">from_chat_str</span></code> class method:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span> <span class="kn">as</span> <span class="nn">pla</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">chat_data_str</span> <span class="o">=</span> <span class="s2">&quot;*CHI:</span><span class="se">\t</span><span class="s2">more cookie .</span><span class="se">\n</span><span class="s2">*MOT:</span><span class="se">\t</span><span class="s2">you want more cookies ?&quot;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span> <span class="o">=</span> <span class="n">pla</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">from_chat_str</span><span class="p">(</span><span class="n">chat_data_str</span><span class="p">)</span>
+<p>In practice, you likely only need a subset of the data at a time, e.g.,
+focusing on a particular child. The Brown dataset contains data for the three children
+Adam, Eve, and Sarah. Suppose you need Eve’s data only.
+<a class="reference internal" href="api.html#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a> takes the optional argument <code class="docutils literal notranslate"><span class="pre">match</span></code> which, if specified,
+matches the file paths and only handles the matching data files.
+To know what the file paths look like and therefore determine what the <code class="docutils literal notranslate"><span class="pre">match</span></code> argument should be,
+either you independently have the unzipped files on your system
+and see the subdirectory structure, or the <code class="docutils literal notranslate"><span class="pre">brown</span></code> <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> object
+from the code snippets above can tell you that via <a class="reference internal" href="api.html#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">brown</span><span class="o">.</span><span class="n">file_paths</span><span class="p">()</span>
+<span class="go">[&#39;Brown/Adam/020304.cha&#39;,</span>
+<span class="go"> &#39;Brown/Adam/020318.cha&#39;,</span>
+<span class="go"> ...</span>
+<span class="go"> &#39;Brown/Eve/010600a.cha&#39;,</span>
+<span class="go"> &#39;Brown/Eve/010600b.cha&#39;,</span>
+<span class="go"> ...</span>
+<span class="go"> &#39;Brown/Sarah/020305.cha&#39;,</span>
+<span class="go"> &#39;Brown/Sarah/020307.cha&#39;,</span>
+<span class="go"> ...</span>
+<span class="go"> &#39;Brown/Sarah/050106.cha&#39;]</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="reader-methods">
-<span id="reader-properties"></span><h2>Reader methods<a class="headerlink" href="#reader-methods" title="Permalink to this headline">¶</a></h2>
-<p>Basic information of a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> instance such as <code class="docutils literal notranslate"><span class="pre">eve</span></code> can be accessed
-as follows:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">number_of_files</span><span class="p">()</span>  <span class="c1"># from eve01.cha through eve20.cha</span>
+<p>It looks like all and only Eve’s data is inside the subdirectory called <code class="docutils literal notranslate"><span class="pre">&quot;Eve&quot;</span></code>.
+If we pass <code class="docutils literal notranslate"><span class="pre">&quot;Eve&quot;</span></code> to <code class="docutils literal notranslate"><span class="pre">match</span></code>, we should be getting only Eve’s data this time
+(and the function should run and finish noticeably faster due to the much smaller
+data amount):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">match</span><span class="o">=</span><span class="s2">&quot;Eve&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">n_files</span><span class="p">()</span>
 <span class="go">20</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">eve</span><span class="p">)</span>  <span class="c1"># same as number_of_files()</span>
-<span class="go">20</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">number_of_utterances</span><span class="p">()</span>  <span class="c1"># across all 20 files and all participants</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">utterances</span><span class="p">())</span>
 <span class="go">26979</span>
 </pre></div>
 </div>
-<p>The bulk of the library documentation is about the various <code class="docutils literal notranslate"><span class="pre">Reader</span></code> methods.
-The full API details can be found in <a class="reference internal" href="chat.html#reader-api"><span class="std std-ref">The Reader class API</span></a>.</p>
-<p>For the method <code class="docutils literal notranslate"><span class="pre">number_of_utterances()</span></code>, an utterance is a transcription line that
-begins with <code class="docutils literal notranslate"><span class="pre">*</span></code> in the CHAT transcripts.</p>
-<p>Many methods of <code class="docutils literal notranslate"><span class="pre">Reader</span></code> have a dual structure in terms of the return object.
-It depends on whether or not you are interested in an return object that
-organizes contents by the individual source files.
-These methods have the optional parameter <code class="docutils literal notranslate"><span class="pre">by_files</span></code> (default: <code class="docutils literal notranslate"><span class="pre">False</span></code>).
-For a given method <code class="docutils literal notranslate"><span class="pre">some_method()</span></code> called for a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> instance named <code class="docutils literal notranslate"><span class="pre">reader_instance</span></code>:</p>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 30%" />
-<col style="width: 70%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Method</p></th>
-<th class="head"><p>Return object</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">reader_instance.some_method()</span></code></p></td>
-<td><p>whatever <code class="docutils literal notranslate"><span class="pre">some_method()</span></code> is for all files in <code class="docutils literal notranslate"><span class="pre">reader_instance</span></code>, with no knowledge of the file structure</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">reader_instance.some_method(by_files=True)</span></code></p></td>
-<td><p>dict(absolute-path filename: <code class="docutils literal notranslate"><span class="pre">some_method()</span></code> for that file)</p></td>
-</tr>
-</tbody>
-</table>
-<p><code class="docutils literal notranslate"><span class="pre">number_of_utterances()</span></code> is one of the methods with <code class="docutils literal notranslate"><span class="pre">by_files</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">number_of_utterances</span><span class="p">()</span>  <span class="c1"># by_files is False by default</span>
-<span class="go">26979</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">counts_by_files</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">number_of_utterances</span><span class="p">(</span><span class="n">by_files</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># dict(filename: num of utterances)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">abs_filename</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">counts_by_files</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">abs_filename</span><span class="p">),</span> <span class="n">n</span><span class="p">)</span>
-<span class="gp">...</span>
-<span class="go">010600a.cha 1601</span>
-<span class="go">010600b.cha 1304</span>
-<span class="go">010700a.cha 618</span>
-<span class="go">010700b.cha 1456</span>
-<span class="go">010800.cha 1479</span>
-<span class="go">010900a.cha 1075</span>
-<span class="go">010900b.cha 1277</span>
-<span class="go">010900c.cha 2058</span>
-<span class="go">011000a.cha 1024</span>
-<span class="go">011000b.cha 1060</span>
-<span class="go">011100a.cha 952</span>
-<span class="go">011100b.cha 1339</span>
-<span class="go">020000a.cha 959</span>
-<span class="go">020000b.cha 1094</span>
-<span class="go">020100a.cha 1651</span>
-<span class="go">020100b.cha 1500</span>
-<span class="go">020200a.cha 2156</span>
-<span class="go">020200b.cha 1760</span>
-<span class="go">020300a.cha 1348</span>
-<span class="go">020300b.cha 1268</span>
+<p>So far, we’ve seen how <a class="reference internal" href="api.html#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a> works with a URL that points
+to a ZIP file. Other data sources that this function is designed for are:</p>
+<ol class="arabic">
+<li><p>A ZIP file on your local system:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="s2">&quot;path/to/your/local/data.zip&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>(Many data access methods have the parameter <code class="docutils literal notranslate"><span class="pre">by_files</span></code>
-for the dual possibilities of return objects;
-see <a class="reference internal" href="transcriptions.html#transcriptions"><span class="std std-ref">Transcriptions and Annotations</span></a>.)</p>
-<p>We are often interested in what concerns specific participants in the data,
-e.g., the target child whose participant code is <code class="docutils literal notranslate"><span class="pre">'CHI'</span></code>.
-Many
-methods accept an optional argument to specify the parameter <code class="docutils literal notranslate"><span class="pre">participant</span></code>
-(see also <a class="reference internal" href="transcriptions.html#cds"><span class="std std-ref">Child speech versus child directed speech</span></a>):</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">abs_filename</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">number_of_utterances</span><span class="p">(</span><span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">abs_filename</span><span class="p">),</span> <span class="n">n</span><span class="p">)</span>
-<span class="gp">...</span>
-<span class="go">010600a.cha 749</span>
-<span class="go">010600b.cha 488</span>
-<span class="go">010700a.cha 253</span>
-<span class="go">010700b.cha 590</span>
-<span class="go">010800.cha 707</span>
-<span class="go">010900a.cha 542</span>
-<span class="go">010900b.cha 528</span>
-<span class="go">010900c.cha 959</span>
-<span class="go">011000a.cha 521</span>
-<span class="go">011000b.cha 547</span>
-<span class="go">011100a.cha 447</span>
-<span class="go">011100b.cha 648</span>
-<span class="go">020000a.cha 460</span>
-<span class="go">020000b.cha 476</span>
-<span class="go">020100a.cha 724</span>
-<span class="go">020100b.cha 641</span>
-<span class="go">020200a.cha 904</span>
-<span class="go">020200b.cha 791</span>
-<span class="go">020300a.cha 653</span>
-<span class="go">020300b.cha 539</span>
+</div></blockquote>
+</li>
+<li><p>A directory (i.e., folder) on your local system, where CHAT data files are found immediately or recursively in subdirectories:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="s2">&quot;path/to/your/local/directory/&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="adding-and-removing-transcripts-in-a-reader">
-<span id="add-remove-transcripts"></span><h2>Adding and removing transcripts in a reader<a class="headerlink" href="#adding-and-removing-transcripts-in-a-reader" title="Permalink to this headline">¶</a></h2>
-<p>It is possible to add or remove transcripts in a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> instance;
-this is important where dynamic data handling is needed.
-Three methods are available:
-<code class="docutils literal notranslate"><span class="pre">add()</span></code>, <code class="docutils literal notranslate"><span class="pre">remove()</span></code>, <code class="docutils literal notranslate"><span class="pre">update()</span></code>, and <code class="docutils literal notranslate"><span class="pre">clear()</span></code>.</p>
-<p>To illustrate, we initialize <code class="docutils literal notranslate"><span class="pre">corpus</span></code> as an empty <code class="docutils literal notranslate"><span class="pre">Reader</span></code> instance:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span> <span class="o">=</span> <span class="n">pla</span><span class="o">.</span><span class="n">read_chat</span><span class="p">()</span>  <span class="c1"># empty, no filenames given</span>
+</div></blockquote>
+</li>
+<li><p>A single CHAT file on your system:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="s2">&quot;path/to/your/local/data.cha&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>To add transcripts, use <code class="docutils literal notranslate"><span class="pre">add()</span></code> which takes one or more filenames
-as arguments:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;Brown/Eve/01*.cha&#39;</span><span class="p">)</span>  <span class="c1"># all data prior to 2;0. (files are conveniently named by age)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">number_of_files</span><span class="p">()</span>
-<span class="go">12</span>
+</div></blockquote>
+</li>
+</ol>
+<p><a class="reference internal" href="api.html#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a> is designed to cover the common use cases of reading in CHAT data.
+Under the hood, it is a wrapper of several classmethods of <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a>,
+some of which aren’t available from <a class="reference internal" href="api.html#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a>.</p>
+</div>
+<div class="section" id="from-a-zip-file-or-local-directory">
+<h3>From a ZIP File or Local Directory<a class="headerlink" href="#from-a-zip-file-or-local-directory" title="Permalink to this headline">¶</a></h3>
+<p>Perhaps you don’t want <a class="reference internal" href="api.html#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a> to do the guess work of
+what type of your data source is, or you want more fine-grained control
+of what counts as CHAT data files or not in your data source.
+While <a class="reference internal" href="api.html#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a> already handles a ZIP archive file and
+a local directory, the <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> classmethods
+<a class="reference internal" href="api.html#pylangacq.Reader.from_zip" title="pylangacq.Reader.from_zip"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_zip()</span></code></a> and <a class="reference internal" href="api.html#pylangacq.Reader.from_dir" title="pylangacq.Reader.from_dir"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_dir()</span></code></a>
+allow more optional arguments for customization.
+Here’s sample code for using these classmethods in the base case:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">from_zip</span><span class="p">(</span><span class="s2">&quot;path/to/your/local/data.zip&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">from_dir</span><span class="p">(</span><span class="s2">&quot;path/to/your/local/directory/&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>To remove transcripts with <code class="docutils literal notranslate"><span class="pre">remove()</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;Brown/Eve/010*.cha&#39;</span><span class="p">)</span>  <span class="c1"># remove data files prior to 1;10.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">number_of_files</span><span class="p">()</span>
-<span class="go">4</span>
+</div></blockquote>
+</div>
+<div class="section" id="from-specific-chat-data-files">
+<h3>From Specific CHAT Data Files<a class="headerlink" href="#from-specific-chat-data-files" title="Permalink to this headline">¶</a></h3>
+<p>If you’d like to target specific files, the <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> classmethod
+<a class="reference internal" href="api.html#pylangacq.Reader.from_files" title="pylangacq.Reader.from_files"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_files()</span></code></a> takes a list of file paths:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">path1</span> <span class="o">=</span> <span class="s2">&quot;path/to/one/data/file.cha&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">path2</span> <span class="o">=</span> <span class="s2">&quot;path/to/another/data/file.cha&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">from_files</span><span class="p">([</span><span class="n">path1</span><span class="p">,</span> <span class="n">path2</span><span class="p">])</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">update()</span></code> takes a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> instance and updates the current one:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">new_corpus</span> <span class="o">=</span> <span class="n">pla</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="s1">&#39;Brown/Eve/02*.cha&#39;</span><span class="p">)</span>  <span class="c1"># all data from 2;0.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">new_corpus</span><span class="o">.</span><span class="n">number_of_files</span><span class="p">()</span>
-<span class="go">8</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_corpus</span><span class="p">)</span>  <span class="c1"># use &quot;update&quot; to combine new_corpus into corpus</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">number_of_files</span><span class="p">()</span>
-<span class="go">12</span>
+</div></blockquote>
+</div>
+<div class="section" id="from-in-memory-strings">
+<h3>From In-Memory Strings<a class="headerlink" href="#from-in-memory-strings" title="Permalink to this headline">¶</a></h3>
+<p>If your CHAT data comes from in-memory strings,
+the <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> classmethod
+<a class="reference internal" href="api.html#pylangacq.Reader.from_strs" title="pylangacq.Reader.from_strs"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_strs()</span></code></a> takes a list of strings,
+where each string is assumed to conform to the
+<a class="reference external" href="https://talkbank.org/manuals/CHAT.pdf">CHAT data format</a>:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Let&#39;s create some minimal CHAT data as a string.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;*CHI:</span><span class="se">\t</span><span class="s2">I want cookie .</span><span class="se">\n</span><span class="s2">*MOT:</span><span class="se">\t</span><span class="s2">okay .&quot;</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># We should see two utterances.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">*CHI:       I want cookie .</span>
+<span class="go">*MOT:       okay .</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">from_strs</span><span class="p">([</span><span class="n">data</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">reader</span><span class="o">.</span><span class="n">utterances</span><span class="p">())</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span><span class="o">.</span><span class="n">utterances</span><span class="p">()</span>
+<span class="go">[Utterance(participant=&#39;CHI&#39;,</span>
+<span class="go">           tokens=[Token(word=&#39;I&#39;, pos=None, mor=None, gra=None),</span>
+<span class="go">                   Token(word=&#39;want&#39;, pos=None, mor=None, gra=None),</span>
+<span class="go">                   Token(word=&#39;cookie&#39;, pos=None, mor=None, gra=None),</span>
+<span class="go">                   Token(word=&#39;.&#39;, pos=None, mor=None, gra=None)],</span>
+<span class="go">           time_marks=None,</span>
+<span class="go">           tiers={&#39;CHI&#39;: &#39;I want cookie .&#39;}),</span>
+<span class="go"> Utterance(participant=&#39;MOT&#39;,</span>
+<span class="go">           tokens=[Token(word=&#39;okay&#39;, pos=None, mor=None, gra=None),</span>
+<span class="go">                   Token(word=&#39;.&#39;, pos=None, mor=None, gra=None)],</span>
+<span class="go">           time_marks=None,</span>
+<span class="go">           tiers={&#39;MOT&#39;: &#39;okay .&#39;})]</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">clear()</span></code> applies to a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> instance to clear everything and reset it
-as an empty <code class="docutils literal notranslate"><span class="pre">Reader</span></code> instance:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">number_of_files</span><span class="p">()</span>
-<span class="go">0</span>
-</pre></div>
+</div></blockquote>
+<p>We are getting ahead of ourselves by showing the result
+of the <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> classmethod <a class="reference internal" href="api.html#pylangacq.Reader.utterances" title="pylangacq.Reader.utterances"><code class="xref py py-func docutils literal notranslate"><span class="pre">utterances()</span></code></a>.
+We are going to drill down to this and many other functions
+in the upcoming parts of the documentation,
+but this quick example gives you a glimpse of how PyLangAcq represents CHAT data.</p>
 </div>
+</div>
+<div class="section" id="adding-and-removing-data-in-a-reader">
+<h2>Adding and Removing Data in a <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a><a class="headerlink" href="#adding-and-removing-data-in-a-reader" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 

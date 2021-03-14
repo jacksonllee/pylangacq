@@ -106,7 +106,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#from-a-zip-file-or-local-directory">From a ZIP File or Local Directory</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#from-specific-chat-data-files">From Specific CHAT Data Files</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#from-in-memory-strings">From In-Memory Strings</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#creating-an-empty-reader">Creating an Empty <code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-an-empty-reader">Creating an Empty Reader</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#adding-and-removing-data">Adding and Removing Data</a></li>
@@ -287,7 +287,8 @@ to a ZIP file. Other data sources that this function is designed for are:</p>
 </ol>
 <p><a class="reference internal" href="api.html#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a> is designed to cover the common use cases of reading in CHAT data.
 Under the hood, it is a wrapper of several classmethods of <a class="reference internal" href="chat.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a>,
-some of which aren’t available from <a class="reference internal" href="api.html#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a>.</p>
+some of which aren’t available from <a class="reference internal" href="api.html#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a>.
+These classmethods are introduced in the following.</p>
 </div>
 <div class="section" id="from-a-zip-file-or-local-directory">
 <h3>From a ZIP File or Local Directory<a class="headerlink" href="#from-a-zip-file-or-local-directory" title="Permalink to this headline">¶</a></h3>
@@ -366,15 +367,15 @@ in the upcoming parts of the documentation,
 but this quick example gives you a glimpse of how PyLangAcq represents CHAT data.</p>
 </div>
 <div class="section" id="creating-an-empty-reader">
-<h3>Creating an Empty <a class="reference internal" href="chat.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a><a class="headerlink" href="#creating-an-empty-reader" title="Permalink to this headline">¶</a></h3>
+<h3>Creating an Empty Reader<a class="headerlink" href="#creating-an-empty-reader" title="Permalink to this headline">¶</a></h3>
 <p>Calling <a class="reference internal" href="chat.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> itself initializes an empty reader:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">Reader</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span><span class="o">.</span><span class="n">n_files</span><span class="p">()</span>
 <span class="go">0</span>
 </pre></div>
 </div>
-<p>An empty reader is useful when you’d like a reader to start with no data
-and “grow” by having data added.
+<p>An empty reader is useful when you’d like to start with no data
+and “grow” the reader by having data added.
 The section below discusses how to manipulate data in a reader.</p>
 </div>
 </div>
@@ -419,7 +420,7 @@ from a reader:</p>
 <td><p>Drop the first file from the reader and return it as a reader.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.clear" title="pylangacq.Reader.clear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear</span></code></a>()</p></td>
-<td><p>Removing all data from this reader.</p></td>
+<td><p>Remove all data from this reader.</p></td>
 </tr>
 </tbody>
 </table>

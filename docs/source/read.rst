@@ -110,6 +110,7 @@ to a ZIP file. Other data sources that this function is designed for are:
 :func:`~pylangacq.read_chat` is designed to cover the common use cases of reading in CHAT data.
 Under the hood, it is a wrapper of several classmethods of :class:`~pylangacq.Reader`,
 some of which aren't available from :func:`~pylangacq.read_chat`.
+These classmethods are introduced in the following.
 
 
 From a ZIP File or Local Directory
@@ -211,8 +212,8 @@ Calling :class:`~pylangacq.Reader` itself initializes an empty reader:
     >>> reader.n_files()
     0
 
-An empty reader is useful when you'd like a reader to start with no data
-and "grow" by having data added.
+An empty reader is useful when you'd like to start with no data
+and "grow" the reader by having data added.
 The section below discusses how to manipulate data in a reader.
 
 

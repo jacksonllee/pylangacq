@@ -3,6 +3,7 @@
 import collections
 import concurrent.futures as cf
 import contextlib
+import dataclasses
 import datetime
 import functools
 import os
@@ -28,28 +29,7 @@ _ENCODING = "utf-8"
 
 _CHAT_EXTENSION = ".cha"
 
-
 _TIMER_MARKS_REGEX = re.compile(r"\x15-?(\d+)_(\d+)-?\x15")
-
-# These prefix and suffix are part of the subdirectory (under _TEMPDIR)
-# in which to locate temporary files (from a zip or for a downloaded file).
-# The subdirectory part (together with _TEMPDIR) is removed (via regex matching)
-# from the Reader object's file paths.
-_SUBDIR_PREFIX = "prefix_pla"
-_SUBDIR_SUFFIX = "suffix_pla"
-_SUBDIR_REGEX = re.compile(r"prefix_pla[a-z0-9_]+suffix_pla")
-
-
-_File = collections.namedtuple("_File", "file_path header utterances")
-_File.__doc__ = """
-A CHAT file (or string).
-
-Attributes
-----------
-file_path : str
-header : dict
-utterances : List[Utterance]
-"""
 
 
 def _params_in_docstring(*params, class_method=True):
@@ -182,6 +162,24 @@ def _deprecate_warning(what, since_version, use_instead):
     )
 
 
+@dataclasses.dataclass
+class _File:
+    """A CHAT file (or string).
+
+    Attributes
+    ----------
+    file_path : str
+    header : dict
+    utterances : List[Utterance]
+    """
+
+    __slots__ = ("file_path", "header", "utterances")
+
+    file_path: str
+    header: Dict
+    utterances: List[Utterance]
+
+
 class Reader:
     """A reader that handles CHAT data."""
 
@@ -203,7 +201,7 @@ class Reader:
         )
 
     def clear(self) -> None:
-        """Removing all data from this reader."""
+        """Remove all data from this reader."""
         self._files = collections.deque()
 
     def _append(self, left_or_right, reader: "Reader") -> None:
@@ -840,13 +838,6 @@ class Reader:
         reader._parse_chat_strs(strs, ids)
         return reader
 
-    @staticmethod
-    def _remove_tempdir(path: str) -> str:
-        path = path.replace(tempfile.gettempdir(), "")
-        path = _SUBDIR_REGEX.sub("", path)
-        path = path.lstrip(os.sep)
-        return path
-
     @classmethod
     @_params_in_docstring("match", "exclude", "encoding")
     def from_files(
@@ -886,9 +877,6 @@ class Reader:
 
         with cf.ThreadPoolExecutor() as executor:
             strs = list(executor.map(_open_file, paths))
-
-        # Unzipped files from `.from_zip` have the unwieldy temp dir in the file path.
-        paths = [cls._remove_tempdir(path) for path in paths]
 
         return cls.from_strs(strs, paths)
 
@@ -962,9 +950,7 @@ class Reader:
         Reader
         """
         with contextlib.ExitStack() as stack:
-            temp_dir = stack.enter_context(
-                tempfile.TemporaryDirectory(_SUBDIR_SUFFIX, _SUBDIR_PREFIX)
-            )
+            temp_dir = stack.enter_context(tempfile.TemporaryDirectory())
             is_url = path.startswith("https://") or path.startswith("http://")
 
             if allow_remote and is_url:
@@ -979,13 +965,19 @@ class Reader:
             if allow_remote and is_url:
                 os.remove(zip_path)
 
-            return cls.from_dir(
+            reader = cls.from_dir(
                 temp_dir,
                 match=match,
                 exclude=exclude,
                 extension=extension,
                 encoding=encoding,
             )
+
+        # Unzipped files from `.from_zip` have the unwieldy temp dir in the file path.
+        for f in reader._files:
+            f.file_path = f.file_path.replace(temp_dir, "").lstrip(os.sep)
+
+        return reader
 
     def _parse_chat_str(self, chat_str, file_path) -> _File:
         lines = self._get_lines(chat_str)

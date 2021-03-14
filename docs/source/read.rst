@@ -49,8 +49,8 @@ Adam, Eve, and Sarah. Suppose you need Eve's data only.
 matches the file paths and only handles the matching data files.
 To know what the file paths look like and therefore determine what the ``match`` argument should be,
 either you independently have the unzipped files on your system
-and see the subdirectory structure, or the ``brown`` :class:`~pylangacq.Reader` object
-from the code snippets above can tell you that via :func:`~pylangacq.Reader.file_paths`:
+and see the subdirectory structure, or the ``brown`` reader we've just created
+can tell you that via :func:`~pylangacq.Reader.file_paths`:
 
 .. code-block:: python
 
@@ -213,7 +213,7 @@ Calling :class:`~pylangacq.Reader` itself initializes an empty reader:
     0
 
 An empty reader is useful when you'd like to start with no data
-and "grow" the reader by having data added.
+and "grow" the reader by having data added as necessary.
 The section below discusses how to manipulate data in a reader.
 
 
@@ -248,3 +248,32 @@ from a reader:
     pop
     pop_left
     clear
+
+A :class:`~pylangacq.Reader` can be iterated upon
+(e.g., ``for reader_one_file in reader: ...``),
+where the element in each iteration is a :class:`~pylangacq.Reader` for one data file.
+Slicing (``reader[:5]``, ``reader[3:6]``, etc) is also supported,
+which gives you a :class:`~pylangacq.Reader` object (which is iterable)
+for the specified data files.
+To inspect what data files are in a reader and their ordering
+(as well as extract their indices, if necessary),
+:func:`~pylangacq.Reader.file_paths` gives you the list of file paths.
+
+The following example illustrates how to build a reader of Eve's utterances
+starting from an empty one and adding data to it one file at a time.
+
+.. code-block:: python
+
+    >>> reader = pylangacq.Reader()  # an empty reader
+    >>> for eve_one_file in eve[:5]:
+    ...     reader.append(eve_one_file)
+    ...     print(
+    ...         "Number of Eve's utterances in the reader so far:",
+    ...         len(reader.utterances(participants='CHI'))
+    ...     )
+    ...
+    Number of Eve's utterances in the reader so far: 749
+    Number of Eve's utterances in the reader so far: 1237
+    Number of Eve's utterances in the reader so far: 1490
+    Number of Eve's utterances in the reader so far: 2080
+    Number of Eve's utterances in the reader so far: 2787

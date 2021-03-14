@@ -1,200 +1,253 @@
 .. _headers:
 
-A CHAT transcript file (typically with the extension name ``.cha``, though not
-strictly required) provides metadata headers using lines starting with ``@``.
-Among the many possible headers,
-``@Participants`` and ``@ID`` are of particular interest::
-
-    @Participants: Code1 Name1 Role1 , Code2 Name2 Role2
-    @ID: ||Code1|1;6.||||Role1|||
-    @ID: ||Code2|||||Role2|||
-
-The ``@Participants`` header states the participants of the transcript. In this
-hypothetical example shown just above, there are two participants.
-Each participant has a participant code (e.g., ``Code1``), a participant name
-(e.g., ``Name1``), and a participant role (e.g., ``Role1``).
-The participant code must be an alphanumeric three-character string
-which begins with a letter, and all letters must be in uppercase.
-The participant code must come first, immediately
-followed by a space, and then by the participant name, and in turn by
-another space and then the participant role. A comma separates
-information between two participants.
-
-If there are ``@ID`` headers, they must appear after, but not before, the
-``@Participants`` header.
-The number of ``@ID`` headers is equal to the number of participants.
-An ``@ID`` header contains detailed information about a
-participant::
-
-    language|corpus|participant_code|age|sex|group|SES|participant_role|education|custom|
-
-Within ``@ID``, the fields ``participant_code`` and ``participant_role``
-must match the information of the relevant participant in the ``@Participants``
-header.
-Often of interest in language acquisition research is the age of the
-participant (e.g., the target child). For instance, the age of
-participant ``Code1`` is 1 year and 6 months, as given by ``1;6.``.
-Fields are left empty if no information is available.
-
-While all other ``@`` headers are optional, PyLangAcq has built-in functions
-specifically for ``@Languages`` and ``@Date`` for potential usage.
-
 Accessing Headers
 =================
 
-A ``Reader`` object has an array of methods for accessing metadata
-(based on headers given by the ``@`` lines) and data
-(the transcriptions with ``*`` and dependent tiers with ``%``).
-This page introduces the metadata methods.
-For data methods, see :ref:`transcriptions`.
-For details of the ``Reader`` class, see :ref:`reader_api`.
+CHAT data files record metadata such as the participants' demographic information
+in a header section, which has lines starting with the ``@`` character
+and is typically found at the top of a data file.
+The following is the header section of ``Brown/Eve/010600a.cha`` from CHILDES:
 
-Metadata methods for handling information from the ``@`` headers:
+.. skip: start
 
-========================  =========================================================================================
-Method                    Return object
-========================  =========================================================================================
-``participant_codes()``   set of participant codes across all files; if ``by_file`` is ``True``, then dict(filename: set of participant codes) instead
-``participants()``        dict(filename: dict(participant code: dict of the ``@ID`` information for that participant))
-``age()``                 dict(filename: tuple of (*years*, *months*, *days*))
-``languages()``           dict(filename: list of languages based on the ``@Languages`` header)
-``dates_of_recording()``  dict(filename: list(tuple of (*year*, *month*, *day*)))
-``headers()``             dict(filename: dict(header name: the content of that header))
-========================  =========================================================================================
-
-Among these methods, only ``participant_codes()`` has the optional parameter
-``by_files``.
-
-To illustrate metadata access methods, it is helpful to be familiar with what
-the headers (= the lines beginning with ``@``) look like in a CHAT transcript
-such as ``eve01.cha``::
+.. code-block::
 
     @UTF8
     @PID:	11312/c-00034743-1
     @Begin
     @Languages:	eng
     @Participants:	CHI Eve Target_Child , MOT Sue Mother , COL Colin Investigator , RIC Richard Investigator
-    @ID:	eng|Brown|CHI|1;6.|female|||Target_Child|||
-    @ID:	eng|Brown|MOT|||||Mother|||
+    @ID:	eng|Brown|CHI|1;06.00|female|||Target_Child|||
+    @ID:	eng|Brown|MOT||female|||Mother|||
     @ID:	eng|Brown|COL|||||Investigator|||
     @ID:	eng|Brown|RIC|||||Investigator|||
     @Date:	15-OCT-1962
-    @Time Duration:	10:00-11:00
 
-Using the metadata access methods:
+.. skip: end
 
-.. code-block:: python
+:class:`~pylangacq.Reader` has the following methods
+to access the commonly needed information from the headers:
 
-    >>> from pprint import pprint
-    >>> import pylangacq as pla
-    >>> eve = pla.read_chat('Brown/Eve/*.cha')
-    >>> eve01_filename = eve.abspath('010600a.cha')  # get the absolute path of Eve's first data file
-    >>> sorted(eve.participant_codes())  # across all 20 files
-    ['CHI', 'COL', 'FAT', 'GLO', 'MOT', 'RIC', 'URS']
-    >>> sorted(eve.participant_codes(by_files=True)[eve01_filename])  # only for 010600a.cha
-    ['CHI', 'COL', 'MOT', 'RIC']
-    >>> pprint(eve.participants()[eve01_filename])
-    {'CHI': {'SES': '',
-             'age': '1;06.00',
-             'corpus': 'Brown',
-             'custom': '',
-             'education': '',
-             'group': '',
-             'language': 'eng',
-             'participant_name': 'Eve',
-             'participant_role': 'Target_Child',
-             'sex': 'female'},
-     'COL': {'SES': '',
-             'age': '',
-             'corpus': 'Brown',
-             'custom': '',
-             'education': '',
-             'group': '',
-             'language': 'eng',
-             'participant_name': 'Colin',
-             'participant_role': 'Investigator',
-             'sex': ''},
-     'MOT': {'SES': '',
-             'age': '',
-             'corpus': 'Brown',
-             'custom': '',
-             'education': '',
-             'group': '',
-             'language': 'eng',
-             'participant_name': 'Sue',
-             'participant_role': 'Mother',
-             'sex': 'female'},
-     'RIC': {'SES': '',
-             'age': '',
-             'corpus': 'Brown',
-             'custom': '',
-             'education': '',
-             'group': '',
-             'language': 'eng',
-             'participant_name': 'Richard',
-             'participant_role': 'Investigator',
-             'sex': ''}}
-    >>> eve.age()[eve01_filename]  # defaults to the target child's age; (years, months, days)
-    (1, 6, 0)
-    >>> eve.age(months=True)[eve01_filename]  # target child's age in months
-    18.0
-    >>> eve.age(participant='MOT')[eve01_filename]  # no age info for MOT
-    (0, 0, 0)
-    >>> eve.languages()[eve01_filename]  # list but not set; ordering matters in bi/multilingualism
-    ['eng']
-    >>> eve.dates_of_recording()[eve01_filename]  # some CHAT files have multiple dates
-    [(1962, 10, 15), (1962, 10, 17)]
+.. currentmodule:: pylangacq.Reader
 
-If the CHAT file has headers that are not covered by specific built-in
-methods illustrated above, they are always accessible with ``headers()``:
+.. autosummary::
+
+    ages
+    dates_of_recording
+    headers
+    languages
+    participants
+
+
+Let's use Eve's data to see these methods in action.
 
 .. code-block:: python
 
-    >>> pprint(eve.headers()[eve01_filename])
-    {'Date': ['15-OCT-1962', '17-OCT-1962'],
-     'Languages': 'eng',
+    >>> import pylangacq
+    >>> url = "https://childes.talkbank.org/data/Eng-NA/Brown.zip"
+    >>> eve = pylangacq.read_chat(url, "Eve")
+
+Ages
+----
+
+:func:`~pylangacq.Reader.ages` returns the age information of the participant ``"CHI"``
+(the target child) by default, since CHAT is by far most commonly used
+in language acquisition and development research, and that typically only the age of the
+target child is available. The only argument ``participant`` can be passed in
+if your use case is not the target child.
+
+:func:`~pylangacq.Reader.ages` understands the age format that looks like ``1;06.00``
+and gives you a tuple of three integers
+such as ``(1, 6, 0)`` for one year, six months, and zero days old.
+
+.. code-block:: python
+
+    >>> eve.ages()
+    [(1, 6, 0),
+     (1, 6, 0),
+     (1, 7, 0),
+     (1, 7, 0),
+     (1, 8, 0),
+     (1, 9, 0),
+     (1, 9, 0),
+     (1, 9, 0),
+     (1, 10, 0),
+     (1, 10, 0),
+     (1, 11, 0),
+     (1, 11, 0),
+     (2, 0, 0),
+     (2, 0, 0),
+     (2, 1, 0),
+     (2, 1, 0),
+     (2, 2, 0),
+     (2, 2, 0),
+     (2, 3, 0),
+     (2, 3, 0)]
+
+Passing in ``months=True`` converts the ages into months:
+
+.. code-block:: python
+
+    >>> eve.ages(months=True)
+    [18.0,
+     18.0,
+     19.0,
+     19.0,
+     20.0,
+     21.0,
+     21.0,
+     21.0,
+     22.0,
+     22.0,
+     23.0,
+     23.0,
+     24.0,
+     24.0,
+     25.0,
+     25.0,
+     26.0,
+     26.0,
+     27.0,
+     27.0]
+
+
+Dates of Recording
+------------------
+
+:func:`~pylangacq.Reader.dates_of_recording` returns the dates of recording
+as a set of :class:`~datetime.date` objects
+for all the date files.
+
+Some files have the same dates, as multiple recording sessions were conducted
+on the same day. To have the dates by data files,
+passing in ``by_files=True`` gives you a list of sets of :class:`~datetime.date`s,
+where each set is for one file:
+
+.. skip: start
+
+.. code-block:: python
+
+    >>> eve.dates_of_recording(by_files=True)
+    [{datetime.date(1962, 10, 15), datetime.date(1962, 10, 17)},
+     {datetime.date(1962, 10, 31), datetime.date(1962, 10, 29)},
+     {datetime.date(1962, 11, 12)},
+     {datetime.date(1962, 11, 28), datetime.date(1962, 11, 26)},
+     {datetime.date(1962, 12, 10), datetime.date(1962, 12, 12)},
+     {datetime.date(1963, 1, 2), datetime.date(1962, 12, 31)},
+     {datetime.date(1963, 1, 14), datetime.date(1963, 1, 16)},
+     {datetime.date(1963, 1, 28)},
+     {datetime.date(1963, 2, 11), datetime.date(1963, 2, 13)},
+     {datetime.date(1963, 2, 25), datetime.date(1963, 2, 27)},
+     {datetime.date(1963, 3, 11), datetime.date(1963, 3, 13)},
+     {datetime.date(1963, 3, 25),
+      datetime.date(1963, 3, 26),
+      datetime.date(1963, 3, 27)},
+     {datetime.date(1963, 4, 15)},
+     {datetime.date(1963, 5, 1), datetime.date(1963, 4, 29)},
+     {datetime.date(1963, 5, 15), datetime.date(1963, 5, 13)},
+     {datetime.date(1963, 5, 27), datetime.date(1963, 5, 28)},
+     {datetime.date(1963, 6, 10), datetime.date(1963, 6, 11)},
+     {datetime.date(1963, 6, 26), datetime.date(1963, 6, 24)},
+     {datetime.date(1963, 7, 3), datetime.date(1963, 7, 12)},
+     {datetime.date(1963, 7, 23)}]
+
+.. skip: end
+
+Languages
+---------
+
+:func:`~pylangacq.Reader.languages` returns the language information.
+Eve's data is naturally in English.
+In datasets with more than one language (bi-/multilingualism),
+the ``by_files=True`` flag would indicate the languages in individual files according to
+the headers.
+
+.. code-block:: python
+
+    >>> eve.languages()
+    {'eng'}
+
+
+Participants
+------------
+
+:func:`~pylangacq.Reader.participants` returns the participants (e.g., ``"CHI"``, ``"MOT"``)
+in the reader. ``by_files=True`` is also available if you need the information
+by individual files.
+
+.. skip: start
+
+.. code-block:: python
+
+    >>> eve.participants()
+    {'URS', 'CHI', 'MOT', 'FAT', 'RIC', 'COL', 'GLO'}
+
+.. skip: end
+
+The more detailed information for each participant
+(e.g., gender, role in recording) can be retrieved from :func:`~pylangacq.Reader.headers`,
+which is illustrated next.
+
+Other Header Information
+------------------------
+
+For any header information not given by one of the implemented methods above,
+:func:`~pylangacq.Reader.headers` gives a list of headers,
+where each header is a generic Python dictionary for each data file,
+and you can walk through the dict for information you need.
+
+.. skip: start
+
+.. code-block:: python
+
+    >>> headers = eve.headers()  # a list of dicts
+    >>> headers[0]  # show the header of Brown/Eve/010600a.cha
+    {'Date': {datetime.date(1962, 10, 15), datetime.date(1962, 10, 17)},
+     'Languages': ['eng'],
      'PID': '11312/c-00034743-1',
-     'Participants': {'CHI': {'SES': '',
-                              'age': '1;06.00',
+     'Participants': {'CHI': {'age': '1;06.00',
                               'corpus': 'Brown',
                               'custom': '',
                               'education': '',
                               'group': '',
                               'language': 'eng',
-                              'participant_name': 'Eve',
-                              'participant_role': 'Target_Child',
+                              'name': 'Eve',
+                              'role': 'Target_Child',
+                              'ses': '',
                               'sex': 'female'},
-                      'COL': {'SES': '',
-                              'age': '',
+                      'COL': {'age': '',
                               'corpus': 'Brown',
                               'custom': '',
                               'education': '',
                               'group': '',
                               'language': 'eng',
-                              'participant_name': 'Colin',
-                              'participant_role': 'Investigator',
+                              'name': 'Colin',
+                              'role': 'Investigator',
+                              'ses': '',
                               'sex': ''},
-                      'MOT': {'SES': '',
-                              'age': '',
+                      'MOT': {'age': '',
                               'corpus': 'Brown',
                               'custom': '',
                               'education': '',
                               'group': '',
                               'language': 'eng',
-                              'participant_name': 'Sue',
-                              'participant_role': 'Mother',
+                              'name': 'Sue',
+                              'role': 'Mother',
+                              'ses': '',
                               'sex': 'female'},
-                      'RIC': {'SES': '',
-                              'age': '',
+                      'RIC': {'age': '',
                               'corpus': 'Brown',
                               'custom': '',
                               'education': '',
                               'group': '',
                               'language': 'eng',
-                              'participant_name': 'Richard',
-                              'participant_role': 'Investigator',
+                              'name': 'Richard',
+                              'role': 'Investigator',
+                              'ses': '',
                               'sex': ''}},
      'Tape Location': '850',
      'Time Duration': '11:30-12:00',
      'Types': 'long, toyplay, TD',
      'UTF8': ''}
+
+.. skip: end

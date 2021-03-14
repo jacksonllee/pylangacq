@@ -41,6 +41,7 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.viewcode',
     'sphinx.ext.autosummary',
+    'sphinx.ext.intersphinx',
     'numpydoc.numpydoc',
     "sphinx_rtd_theme",
 ]

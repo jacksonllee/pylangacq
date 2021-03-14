@@ -101,14 +101,15 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Reading CHAT Data</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#initializing-a-reader-instance">Initializing a <code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code> Instance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#initializing-a-reader">Initializing a Reader</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#read-chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#from-a-zip-file-or-local-directory">From a ZIP File or Local Directory</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#from-specific-chat-data-files">From Specific CHAT Data Files</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#from-in-memory-strings">From In-Memory Strings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-an-empty-reader">Creating an Empty <code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#adding-and-removing-data-in-a-reader">Adding and Removing Data in a <code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-and-removing-data">Adding and Removing Data</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="headers.html">Accessing Headers</a></li>
@@ -198,11 +199,11 @@
 as used in the CHILDES database for language acquisition research;
 CHAT is documented in its <a class="reference external" href="https://talkbank.org/manuals/CHAT.pdf">official manual</a>.
 This page describes the ways CHAT data can be read by the <code class="docutils literal notranslate"><span class="pre">pylangacq</span></code> package.</p>
-<div class="section" id="initializing-a-reader-instance">
-<h2>Initializing a <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> Instance<a class="headerlink" href="#initializing-a-reader-instance" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="initializing-a-reader">
+<h2>Initializing a Reader<a class="headerlink" href="#initializing-a-reader" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="read-chat">
 <h3><a class="reference internal" href="api.html#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a><a class="headerlink" href="#read-chat" title="Permalink to this headline">¶</a></h3>
-<p>Reading CHAT data in PyLangAcq is all about creating a <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> object.
+<p>Reading CHAT data in PyLangAcq is all about creating a <a class="reference internal" href="chat.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> object.
 The most convenient way to do it is to use the <a class="reference internal" href="api.html#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a> function,
 which asks for a data source and several optional arguments.
 As an example, let’s use the <a class="reference external" href="https://childes.talkbank.org/access/Eng-NA/Brown.html">Brown</a>
@@ -233,8 +234,8 @@ Adam, Eve, and Sarah. Suppose you need Eve’s data only.
 matches the file paths and only handles the matching data files.
 To know what the file paths look like and therefore determine what the <code class="docutils literal notranslate"><span class="pre">match</span></code> argument should be,
 either you independently have the unzipped files on your system
-and see the subdirectory structure, or the <code class="docutils literal notranslate"><span class="pre">brown</span></code> <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> object
-from the code snippets above can tell you that via <a class="reference internal" href="api.html#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>:</p>
+and see the subdirectory structure, or the <code class="docutils literal notranslate"><span class="pre">brown</span></code> <a class="reference internal" href="chat.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> object
+from the code snippets above can tell you that via <a class="reference internal" href="chat.html#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">brown</span><span class="o">.</span><span class="n">file_paths</span><span class="p">()</span>
 <span class="go">[&#39;Brown/Adam/020304.cha&#39;,</span>
 <span class="go"> &#39;Brown/Adam/020318.cha&#39;,</span>
@@ -285,7 +286,7 @@ to a ZIP file. Other data sources that this function is designed for are:</p>
 </li>
 </ol>
 <p><a class="reference internal" href="api.html#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a> is designed to cover the common use cases of reading in CHAT data.
-Under the hood, it is a wrapper of several classmethods of <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a>,
+Under the hood, it is a wrapper of several classmethods of <a class="reference internal" href="chat.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a>,
 some of which aren’t available from <a class="reference internal" href="api.html#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a>.</p>
 </div>
 <div class="section" id="from-a-zip-file-or-local-directory">
@@ -294,8 +295,8 @@ some of which aren’t available from <a class="reference internal" href="api.ht
 what type of your data source is, or you want more fine-grained control
 of what counts as CHAT data files or not in your data source.
 While <a class="reference internal" href="api.html#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a> already handles a ZIP archive file and
-a local directory, the <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> classmethods
-<a class="reference internal" href="api.html#pylangacq.Reader.from_zip" title="pylangacq.Reader.from_zip"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_zip()</span></code></a> and <a class="reference internal" href="api.html#pylangacq.Reader.from_dir" title="pylangacq.Reader.from_dir"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_dir()</span></code></a>
+a local directory, the <a class="reference internal" href="chat.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> classmethods
+<a class="reference internal" href="chat.html#pylangacq.Reader.from_zip" title="pylangacq.Reader.from_zip"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_zip()</span></code></a> and <a class="reference internal" href="chat.html#pylangacq.Reader.from_dir" title="pylangacq.Reader.from_dir"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_dir()</span></code></a>
 allow more optional arguments for customization.
 Here’s sample code for using these classmethods in the base case:</p>
 <blockquote>
@@ -307,8 +308,8 @@ Here’s sample code for using these classmethods in the base case:</p>
 </div>
 <div class="section" id="from-specific-chat-data-files">
 <h3>From Specific CHAT Data Files<a class="headerlink" href="#from-specific-chat-data-files" title="Permalink to this headline">¶</a></h3>
-<p>If you’d like to target specific files, the <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> classmethod
-<a class="reference internal" href="api.html#pylangacq.Reader.from_files" title="pylangacq.Reader.from_files"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_files()</span></code></a> takes a list of file paths:</p>
+<p>If you’d like to target specific files, the <a class="reference internal" href="chat.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> classmethod
+<a class="reference internal" href="chat.html#pylangacq.Reader.from_files" title="pylangacq.Reader.from_files"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_files()</span></code></a> takes a list of file paths:</p>
 <blockquote>
 <div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">path1</span> <span class="o">=</span> <span class="s2">&quot;path/to/one/data/file.cha&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">path2</span> <span class="o">=</span> <span class="s2">&quot;path/to/another/data/file.cha&quot;</span>
@@ -320,8 +321,8 @@ Here’s sample code for using these classmethods in the base case:</p>
 <div class="section" id="from-in-memory-strings">
 <h3>From In-Memory Strings<a class="headerlink" href="#from-in-memory-strings" title="Permalink to this headline">¶</a></h3>
 <p>If your CHAT data comes from in-memory strings,
-the <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> classmethod
-<a class="reference internal" href="api.html#pylangacq.Reader.from_strs" title="pylangacq.Reader.from_strs"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_strs()</span></code></a> takes a list of strings,
+the <a class="reference internal" href="chat.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> classmethod
+<a class="reference internal" href="chat.html#pylangacq.Reader.from_strs" title="pylangacq.Reader.from_strs"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_strs()</span></code></a> takes a list of strings,
 where each string is assumed to conform to the
 <a class="reference external" href="https://talkbank.org/manuals/CHAT.pdf">CHAT data format</a>:</p>
 <blockquote>
@@ -336,6 +337,12 @@ where each string is assumed to conform to the
 <span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">from_strs</span><span class="p">([</span><span class="n">data</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">reader</span><span class="o">.</span><span class="n">utterances</span><span class="p">())</span>
 <span class="go">2</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># All &quot;file&quot; terminology still applies.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Each CHAT data string you pass in is treated as one &quot;file&quot;.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span><span class="o">.</span><span class="n">n_files</span><span class="p">()</span>
+<span class="go">1</span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span><span class="o">.</span><span class="n">utterances</span><span class="p">()</span>
 <span class="go">[Utterance(participant=&#39;CHI&#39;,</span>
 <span class="go">           tokens=[Token(word=&#39;I&#39;, pos=None, mor=None, gra=None),</span>
@@ -353,14 +360,69 @@ where each string is assumed to conform to the
 </div>
 </div></blockquote>
 <p>We are getting ahead of ourselves by showing the result
-of the <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> classmethod <a class="reference internal" href="api.html#pylangacq.Reader.utterances" title="pylangacq.Reader.utterances"><code class="xref py py-func docutils literal notranslate"><span class="pre">utterances()</span></code></a>.
+of the <a class="reference internal" href="chat.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> classmethod <a class="reference internal" href="chat.html#pylangacq.Reader.utterances" title="pylangacq.Reader.utterances"><code class="xref py py-func docutils literal notranslate"><span class="pre">utterances()</span></code></a>.
 We are going to drill down to this and many other functions
 in the upcoming parts of the documentation,
 but this quick example gives you a glimpse of how PyLangAcq represents CHAT data.</p>
 </div>
+<div class="section" id="creating-an-empty-reader">
+<h3>Creating an Empty <a class="reference internal" href="chat.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a><a class="headerlink" href="#creating-an-empty-reader" title="Permalink to this headline">¶</a></h3>
+<p>Calling <a class="reference internal" href="chat.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> itself initializes an empty reader:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">Reader</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span><span class="o">.</span><span class="n">n_files</span><span class="p">()</span>
+<span class="go">0</span>
+</pre></div>
 </div>
-<div class="section" id="adding-and-removing-data-in-a-reader">
-<h2>Adding and Removing Data in a <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a><a class="headerlink" href="#adding-and-removing-data-in-a-reader" title="Permalink to this headline">¶</a></h2>
+<p>An empty reader is useful when you’d like a reader to start with no data
+and “grow” by having data added.
+The section below discusses how to manipulate data in a reader.</p>
+</div>
+</div>
+<div class="section" id="adding-and-removing-data">
+<h2>Adding and Removing Data<a class="headerlink" href="#adding-and-removing-data" title="Permalink to this headline">¶</a></h2>
+<p>A <a class="reference internal" href="chat.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> keeps the linear ordering of CHAT data
+by the ordering of the source data files.
+CHAT data typically comes as data files that each represent a recording session.
+There is, therefore, a natural ordering of the files by time,
+for when the recordings were made.
+The ordering is also commonly reflected by the way CHAT data files are named.
+For this reason, if your input data source is a ZIP file or local directory,
+the resulting reader has the data automatically sorted based on file paths.</p>
+<p>With the knowledge that data is ordered by files in a <a class="reference internal" href="chat.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a>,
+it is reasonable for a <a class="reference internal" href="chat.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> to append or drop data,
+and to do so from either end for modeling purposes.
+Think of a CHAT data reader more or less like a <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.deque" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">deque</span></code></a>.</p>
+<p>The following <a class="reference internal" href="chat.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> methods support adding and removing data
+from a reader:</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.append" title="pylangacq.Reader.append"><code class="xref py py-obj docutils literal notranslate"><span class="pre">append</span></code></a>(reader)</p></td>
+<td><p>Append data from another reader.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.append_left" title="pylangacq.Reader.append_left"><code class="xref py py-obj docutils literal notranslate"><span class="pre">append_left</span></code></a>(reader)</p></td>
+<td><p>Left-append data from another reader.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.extend" title="pylangacq.Reader.extend"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extend</span></code></a>(readers)</p></td>
+<td><p>Extend data from other readers.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.extend_left" title="pylangacq.Reader.extend_left"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extend_left</span></code></a>(readers)</p></td>
+<td><p>Left-extend data from other readers.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.pop" title="pylangacq.Reader.pop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pop</span></code></a>()</p></td>
+<td><p>Drop the last data file from the reader and return it as a reader.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.pop_left" title="pylangacq.Reader.pop_left"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pop_left</span></code></a>()</p></td>
+<td><p>Drop the first file from the reader and return it as a reader.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.clear" title="pylangacq.Reader.clear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear</span></code></a>()</p></td>
+<td><p>Removing all data from this reader.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 
@@ -378,7 +440,7 @@ but this quick example gives you a glimpse of how PyLangAcq represents CHAT data
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2015-2021, Jackson L. Lee | PyLangAcq 0.12.0 | Documentation last updated on March 13, 2021.
+        &#169; Copyright 2015-2021, Jackson L. Lee | PyLangAcq 0.12.0 | Documentation last updated on March 14, 2021.
 
     </p>
   </div>

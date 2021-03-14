@@ -67,12 +67,17 @@ def test_clear():
     assert eve_copy.n_files() == 0
 
 
-def test_append_remove():
+def test_append():
     eve_copy = copy.deepcopy(_EVE)
-    eve_copy.append(_EVE, ignore_repeats=False)
+    eve_copy.append(_EVE)
     assert eve_copy.n_files() == 2
-    eve_copy.remove("eve")
-    assert eve_copy.n_files() == 0
+
+
+# TODO append_left
+# TODO extend
+# TODO extend_left
+# TODO pop
+# TODO pop_left
 
 
 def test_utterances():

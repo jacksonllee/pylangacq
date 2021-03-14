@@ -234,8 +234,8 @@ Adam, Eve, and Sarah. Suppose you need Eve’s data only.
 matches the file paths and only handles the matching data files.
 To know what the file paths look like and therefore determine what the <code class="docutils literal notranslate"><span class="pre">match</span></code> argument should be,
 either you independently have the unzipped files on your system
-and see the subdirectory structure, or the <code class="docutils literal notranslate"><span class="pre">brown</span></code> <a class="reference internal" href="chat.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> object
-from the code snippets above can tell you that via <a class="reference internal" href="chat.html#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>:</p>
+and see the subdirectory structure, or the <code class="docutils literal notranslate"><span class="pre">brown</span></code> reader we’ve just created
+can tell you that via <a class="reference internal" href="chat.html#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">brown</span><span class="o">.</span><span class="n">file_paths</span><span class="p">()</span>
 <span class="go">[&#39;Brown/Adam/020304.cha&#39;,</span>
 <span class="go"> &#39;Brown/Adam/020318.cha&#39;,</span>
@@ -375,7 +375,7 @@ but this quick example gives you a glimpse of how PyLangAcq represents CHAT data
 </pre></div>
 </div>
 <p>An empty reader is useful when you’d like to start with no data
-and “grow” the reader by having data added.
+and “grow” the reader by having data added as necessary.
 The section below discusses how to manipulate data in a reader.</p>
 </div>
 </div>
@@ -417,13 +417,39 @@ from a reader:</p>
 <td><p>Drop the last data file from the reader and return it as a reader.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.pop_left" title="pylangacq.Reader.pop_left"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pop_left</span></code></a>()</p></td>
-<td><p>Drop the first file from the reader and return it as a reader.</p></td>
+<td><p>Drop the first data file from the reader and return it as a reader.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.clear" title="pylangacq.Reader.clear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear</span></code></a>()</p></td>
 <td><p>Remove all data from this reader.</p></td>
 </tr>
 </tbody>
 </table>
+<p>A <a class="reference internal" href="chat.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> can be iterated upon
+(e.g., <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">reader_one_file</span> <span class="pre">in</span> <span class="pre">reader:</span> <span class="pre">...</span></code>),
+where the element in each iteration is a <a class="reference internal" href="chat.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> for one data file.
+Slicing (<code class="docutils literal notranslate"><span class="pre">reader[:5]</span></code>, <code class="docutils literal notranslate"><span class="pre">reader[3:6]</span></code>, etc) is also supported,
+which gives you a <a class="reference internal" href="chat.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> object (which is iterable)
+for the specified data files.
+To inspect what data files are in a reader and their ordering
+(as well as extract their indices, if necessary),
+<a class="reference internal" href="chat.html#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a> gives you the list of file paths.</p>
+<p>The following example illustrates how to build a reader of Eve’s utterances
+starting from an empty one and adding data to it one file at a time.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">Reader</span><span class="p">()</span>  <span class="c1"># an empty reader</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">eve_one_file</span> <span class="ow">in</span> <span class="n">eve</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>
+<span class="gp">... </span>    <span class="n">reader</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">eve_one_file</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="s2">&quot;Number of Eve&#39;s utterances in the reader so far:&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="nb">len</span><span class="p">(</span><span class="n">reader</span><span class="o">.</span><span class="n">utterances</span><span class="p">(</span><span class="n">participants</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">Number of Eve&#39;s utterances in the reader so far: 749</span>
+<span class="go">Number of Eve&#39;s utterances in the reader so far: 1237</span>
+<span class="go">Number of Eve&#39;s utterances in the reader so far: 1490</span>
+<span class="go">Number of Eve&#39;s utterances in the reader so far: 2080</span>
+<span class="go">Number of Eve&#39;s utterances in the reader so far: 2787</span>
+</pre></div>
+</div>
 </div>
 </div>
 

@@ -6,6 +6,7 @@ import contextlib
 import dataclasses
 import datetime
 import functools
+import itertools
 import os
 import re
 import shutil
@@ -200,6 +201,36 @@ class Reader:
             "Number of files in this reader? Utterances? Words? Something else?"
         )
 
+    def _get_reader_from_files(self, files: Iterable[_File]):
+        reader = self.__class__()
+        reader._files = collections.deque(files)
+        return reader
+
+    def __iter__(self):
+        yield from (self._get_reader_from_files([f]) for f in self._files)
+
+    def __getitem__(self, item):
+        if type(item) == int:
+            return self._get_reader_from_files([self._files[item]])
+        elif type(item) == slice:
+            start, stop, step = item.indices(len(self._files))
+            # Slicing of a list etc would give us a _shallow_ copy of the container,
+            # and so we follow the shallow copying practice here for the files.
+            return self._get_reader_from_files(
+                itertools.islice(self._files.copy(), start, stop, step)
+            )
+        else:
+            raise TypeError(
+                f"Reader indices must be integers or slices, not {type(item)}"
+            )
+
+    def __setitem__(self, key, value):
+        raise NotImplementedError(
+            "Mutating the CHAT reader by targeting the individual files through "
+            "indices is not supported. Please use the implemented Reader object "
+            "methods to add or remove data."
+        )
+
     def clear(self) -> None:
         """Remove all data from this reader."""
         self._files = collections.deque()
@@ -278,9 +309,7 @@ class Reader:
     def _pop(self, left_or_right) -> "Reader":
         func = "popleft" if left_or_right == "left" else "pop"
         file_ = getattr(self._files, func)()
-        reader = self.__class__()
-        reader._files = collections.deque([file_])
-        return reader
+        return self._get_reader_from_files([file_])
 
     def pop(self) -> "Reader":
         """Drop the last data file from the reader and return it as a reader.
@@ -292,7 +321,7 @@ class Reader:
         return self._pop("right")
 
     def pop_left(self) -> "Reader":
-        """Drop the first file from the reader and return it as a reader.
+        """Drop the first data file from the reader and return it as a reader.
 
         Returns
         -------

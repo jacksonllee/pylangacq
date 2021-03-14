@@ -3,23 +3,6 @@
 ``chat`` --- Reading and parsing CHAT transcripts
 =================================================
 
-The ``chat`` module defines two classes
-for reading and parsing CHAT transcripts:
-
-.. currentmodule:: pylangacq.chat
-
-.. autosummary::
-
-   Reader
-   SingleReader
-
-The user does not usually need to call or create objects
-directly with ``Reader`` or ``SingleReader`` in their code.
-Under most circumstances, ``pylangchat.read_chat()`` is sufficient;
-underlyingly, this function returns a ``Reader`` object
-which relies on ``SingleReader`` for handling individual
-data files.
-
 Most of the methods of interest are those of the ``Reader`` class.
 Many of them have the optional parameter ``by_files``.
 By default, ``by_files`` is
@@ -36,7 +19,7 @@ The ``Reader`` methods are categorized into
 Metadata methods
 ----------------
 
-.. currentmodule:: pylangacq.chat.Reader
+.. currentmodule:: pylangacq.Reader
 
 .. autosummary::
 
@@ -56,7 +39,7 @@ Metadata methods
 Data methods
 ------------
 
-.. currentmodule:: pylangacq.chat.Reader
+.. currentmodule:: pylangacq.Reader
 
 .. autosummary::
 
@@ -86,5 +69,5 @@ Data methods
 The ``Reader`` class API
 ------------------------
 
-.. autoclass:: pylangacq.chat.Reader
+.. autoclass:: pylangacq.Reader
    :members:

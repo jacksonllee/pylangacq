@@ -99,14 +99,15 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../read.html">Reading CHAT Data</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../read.html#initializing-a-reader-instance">Initializing a <code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code> Instance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../read.html#initializing-a-reader">Initializing a Reader</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../read.html#read-chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../read.html#from-a-zip-file-or-local-directory">From a ZIP File or Local Directory</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../read.html#from-specific-chat-data-files">From Specific CHAT Data Files</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../read.html#from-in-memory-strings">From In-Memory Strings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../read.html#creating-an-empty-reader">Creating an Empty <code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../read.html#adding-and-removing-data-in-a-reader">Adding and Removing Data in a <code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../read.html#adding-and-removing-data">Adding and Removing Data</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../headers.html">Accessing Headers</a></li>
@@ -205,7 +206,7 @@
 <span class="kn">import</span> <span class="nn">uuid</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">zipfile</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">from</span> <span class="nn">requests.adapters</span> <span class="k">import</span> <span class="n">HTTPAdapter</span>
@@ -378,19 +379,15 @@
 <div class="viewcode-block" id="Reader"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader">[docs]</a><span class="k">class</span> <span class="nc">Reader</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;A reader that handles CHAT data.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strs</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">file_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize an empty reader.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_files</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">deque</span><span class="p">()</span>
 
-        <span class="n">strs</span> <span class="o">=</span> <span class="n">strs</span> <span class="ow">or</span> <span class="p">[]</span>
-        <span class="n">file_paths</span> <span class="o">=</span> <span class="n">file_paths</span> <span class="ow">or</span> <span class="p">[]</span>
-
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">strs</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">file_paths</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;strs and file_paths must have the same size: &quot;</span>
-                <span class="n">f</span><span class="s2">&quot;{len(strs)} and {len(file_paths)}&quot;</span>
-            <span class="p">)</span>
-
+    <span class="k">def</span> <span class="nf">_parse_chat_strs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">file_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">cf</span><span class="o">.</span><span class="n">ProcessPoolExecutor</span><span class="p">()</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">executor</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parse_chat_str</span><span class="p">,</span> <span class="n">strs</span><span class="p">,</span> <span class="n">file_paths</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_files</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">deque</span><span class="p">(</span>
+                <span class="n">executor</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parse_chat_str</span><span class="p">,</span> <span class="n">strs</span><span class="p">,</span> <span class="n">file_paths</span><span class="p">)</span>
+            <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
@@ -400,47 +397,104 @@
         <span class="p">)</span>
 
 <div class="viewcode-block" id="Reader.clear"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Turn it into an empty reader by removing all parsed CHAT data.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_files</span> <span class="o">=</span> <span class="p">[]</span></div>
+        <span class="sd">&quot;&quot;&quot;Removing all data from this reader.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_files</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">deque</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Reader.append"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.append">[docs]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">readers</span><span class="p">,</span> <span class="n">ignore_repeats</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Append data from other readers.</span>
+    <span class="k">def</span> <span class="nf">_append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">left_or_right</span><span class="p">,</span> <span class="n">reader</span><span class="p">:</span> <span class="s2">&quot;Reader&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="s2">&quot;extendleft&quot;</span> <span class="k">if</span> <span class="n">left_or_right</span> <span class="o">==</span> <span class="s2">&quot;left&quot;</span> <span class="k">else</span> <span class="s2">&quot;extend&quot;</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">reader</span><span class="p">)</span> <span class="o">!=</span> <span class="n">Reader</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;not a Reader object: {type(reader)}&quot;</span><span class="p">)</span>
+        <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_files</span><span class="p">,</span> <span class="n">func</span><span class="p">)(</span><span class="n">reader</span><span class="o">.</span><span class="n">_files</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Reader.append"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.append">[docs]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reader</span><span class="p">:</span> <span class="s2">&quot;Reader&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Append data from another reader.</span>
+
+<span class="sd">        New data is appended as-is with no filtering of any sort,</span>
+<span class="sd">        even for files whose file paths duplicate those already in the current reader.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        *readers : Reader</span>
-<span class="sd">            One or more ``Reader`` objects to append data from</span>
-<span class="sd">        ignore_repeats : bool, optional</span>
-<span class="sd">            If ``True`` (the default), data from the given ``Reader`` objects is</span>
-<span class="sd">            appended to the current ``Reader`` no matter whether there are any repeats</span>
-<span class="sd">            of file paths.</span>
+<span class="sd">        reader : Reader</span>
+<span class="sd">            A reader from which to append data</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">reader</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">readers</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
-            <span class="n">file_paths</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_paths</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_append</span><span class="p">(</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">reader</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Reader.append_left"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.append_left">[docs]</a>    <span class="k">def</span> <span class="nf">append_left</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reader</span><span class="p">:</span> <span class="s2">&quot;Reader&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Left-append data from another reader.</span>
+
+<span class="sd">        New data is appended as-is with no filtering of any sort,</span>
+<span class="sd">        even for files whose file paths duplicate those already in the current reader.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        reader : Reader</span>
+<span class="sd">            A reader from which to left-append data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_append</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">reader</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">left_or_right</span><span class="p">,</span> <span class="n">readers</span><span class="p">:</span> <span class="s2">&quot;Iterable[Reader]&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Loop through each object in ``readers`` explicitly, so that we have</span>
+        <span class="c1"># a chance to check that the object is indeed a Reader instance.</span>
+        <span class="n">new_files</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">reader</span> <span class="ow">in</span> <span class="n">readers</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">reader</span><span class="p">)</span> <span class="o">!=</span> <span class="n">Reader</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{i}</span><span class="s2">-th reader is not a Reader object: {type(reader)}&quot;</span><span class="p">)</span>
-            <span class="n">new_file_paths</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">reader</span><span class="o">.</span><span class="n">file_paths</span><span class="p">())</span>
-            <span class="n">repeats</span> <span class="o">=</span> <span class="n">file_paths</span> <span class="o">&amp;</span> <span class="n">new_file_paths</span>
-            <span class="k">if</span> <span class="n">ignore_repeats</span> <span class="ow">and</span> <span class="n">repeats</span><span class="p">:</span>
-                <span class="n">new_file_paths</span> <span class="o">=</span> <span class="n">new_file_paths</span> <span class="o">-</span> <span class="n">repeats</span>
-            <span class="n">files_to_add</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">reader</span><span class="o">.</span><span class="n">_files</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">file_path</span> <span class="ow">in</span> <span class="n">new_file_paths</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_files</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">files_to_add</span><span class="p">)</span></div>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;not a Reader object: {type(reader)}&quot;</span><span class="p">)</span>
+            <span class="n">new_files</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">reader</span><span class="o">.</span><span class="n">_files</span><span class="p">)</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="s2">&quot;extendleft&quot;</span> <span class="k">if</span> <span class="n">left_or_right</span> <span class="o">==</span> <span class="s2">&quot;left&quot;</span> <span class="k">else</span> <span class="s2">&quot;extend&quot;</span>
+        <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_files</span><span class="p">,</span> <span class="n">func</span><span class="p">)(</span><span class="n">new_files</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Reader.remove"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">file_paths</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Remove data from the given file paths.</span>
+<div class="viewcode-block" id="Reader.extend"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.extend">[docs]</a>    <span class="k">def</span> <span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">readers</span><span class="p">:</span> <span class="s2">&quot;Iterable[Reader]&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Extend data from other readers.</span>
+
+<span class="sd">        New data is appended as-is with no filtering of any sort,</span>
+<span class="sd">        even for files whose file paths duplicate those already in the current reader.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        *file_paths : str</span>
-<span class="sd">            One or more file paths for which data is to be dropped from this reader.</span>
-<span class="sd">            Regular expression matching is supported, e.g., you can provide a partial</span>
-<span class="sd">            file path to match multiple file paths in the reader.</span>
+<span class="sd">        readers : Iterable[Reader]</span>
+<span class="sd">            Readers from which to extend data</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_files</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">f</span>
-            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_files</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">file_path</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">file_paths</span><span class="p">)</span>
-        <span class="p">]</span></div>
+        <span class="c1"># Loop through each object in ``readers`` explicitly, so that we have</span>
+        <span class="c1"># a chance to check that the object is indeed a Reader instance.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_extend</span><span class="p">(</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">readers</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Reader.extend_left"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.extend_left">[docs]</a>    <span class="k">def</span> <span class="nf">extend_left</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">readers</span><span class="p">:</span> <span class="s2">&quot;Iterable[Reader]&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Left-extend data from other readers.</span>
+
+<span class="sd">        New data is appended as-is with no filtering of any sort,</span>
+<span class="sd">        even for files whose file paths duplicate those already in the current reader.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        readers : Iterable[Reader]</span>
+<span class="sd">            Readers from which to extend data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_extend</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">readers</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">left_or_right</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Reader&quot;</span><span class="p">:</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="s2">&quot;popleft&quot;</span> <span class="k">if</span> <span class="n">left_or_right</span> <span class="o">==</span> <span class="s2">&quot;left&quot;</span> <span class="k">else</span> <span class="s2">&quot;pop&quot;</span>
+        <span class="n">file_</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_files</span><span class="p">,</span> <span class="n">func</span><span class="p">)()</span>
+        <span class="n">reader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">()</span>
+        <span class="n">reader</span><span class="o">.</span><span class="n">_files</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">deque</span><span class="p">([</span><span class="n">file_</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">reader</span>
+
+<div class="viewcode-block" id="Reader.pop"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.pop">[docs]</a>    <span class="k">def</span> <span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Reader&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Drop the last data file from the reader and return it as a reader.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Reader</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pop</span><span class="p">(</span><span class="s2">&quot;right&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Reader.pop_left"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.pop_left">[docs]</a>    <span class="k">def</span> <span class="nf">pop_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Reader&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Drop the first file from the reader and return it as a reader.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Reader</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pop</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">)</span></div>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_flatten</span><span class="p">(</span><span class="n">item_type</span><span class="p">,</span> <span class="n">nested</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">Set</span><span class="p">]:</span>
@@ -956,7 +1010,8 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        strs : List[str]</span>
-<span class="sd">            List of CHAT data strings</span>
+<span class="sd">            List of CHAT data strings. The ordering of the strings determines</span>
+<span class="sd">            that of the parsed CHAT data in the resulting reader.</span>
 <span class="sd">        ids : List[str], optional</span>
 <span class="sd">            List of identifiers. If not provided, UUID random strings are used.</span>
 <span class="sd">            When file paths are referred to in other parts of this package, they</span>
@@ -975,7 +1030,9 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="n">f</span><span class="s2">&quot;strs and ids must have the same size: {len(strs)} and {len(ids)}&quot;</span>
             <span class="p">)</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">strs</span><span class="p">,</span> <span class="n">ids</span><span class="p">)</span></div>
+        <span class="n">reader</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">reader</span><span class="o">.</span><span class="n">_parse_chat_strs</span><span class="p">(</span><span class="n">strs</span><span class="p">,</span> <span class="n">ids</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">reader</span></div>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_remove_tempdir</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -998,7 +1055,8 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        paths : List[str]</span>
-<span class="sd">            List of local file paths of the CHAT data</span>
+<span class="sd">            List of local file paths of the CHAT data. The ordering of the paths</span>
+<span class="sd">            determines that of the parsed CHAT data in the resulting reader.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1814,7 +1872,7 @@
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2015-2021, Jackson L. Lee | PyLangAcq 0.12.0 | Documentation last updated on March 13, 2021.
+        &#169; Copyright 2015-2021, Jackson L. Lee | PyLangAcq 0.12.0 | Documentation last updated on March 14, 2021.
 
     </p>
   </div>

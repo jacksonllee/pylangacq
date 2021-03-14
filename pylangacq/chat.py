@@ -12,7 +12,7 @@ import tempfile
 import uuid
 import warnings
 import zipfile
-from typing import Collection, Dict, Iterable, List, Optional, Set, Tuple, Union
+from typing import Dict, Iterable, List, Optional, Set, Tuple, Union
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -185,19 +185,15 @@ def _deprecate_warning(what, since_version, use_instead):
 class Reader:
     """A reader that handles CHAT data."""
 
-    def __init__(self, strs: Collection[str] = None, file_paths: List[str] = None):
+    def __init__(self):
+        """Initialize an empty reader."""
+        self._files = collections.deque()
 
-        strs = strs or []
-        file_paths = file_paths or []
-
-        if len(strs) != len(file_paths):
-            raise ValueError(
-                "strs and file_paths must have the same size: "
-                f"{len(strs)} and {len(file_paths)}"
-            )
-
+    def _parse_chat_strs(self, strs: List[str], file_paths: List[str]) -> None:
         with cf.ProcessPoolExecutor() as executor:
-            self._files = list(executor.map(self._parse_chat_str, strs, file_paths))
+            self._files = collections.deque(
+                executor.map(self._parse_chat_str, strs, file_paths)
+            )
 
     def __len__(self):
         raise NotImplementedError(
@@ -207,47 +203,104 @@ class Reader:
         )
 
     def clear(self) -> None:
-        """Turn it into an empty reader by removing all parsed CHAT data."""
-        self._files = []
+        """Removing all data from this reader."""
+        self._files = collections.deque()
 
-    def append(self, *readers, ignore_repeats=True) -> None:
-        """Append data from other readers.
+    def _append(self, left_or_right, reader: "Reader") -> None:
+        func = "extendleft" if left_or_right == "left" else "extend"
+        if type(reader) != Reader:
+            raise TypeError(f"not a Reader object: {type(reader)}")
+        getattr(self._files, func)(reader._files)
+
+    def append(self, reader: "Reader") -> None:
+        """Append data from another reader.
+
+        New data is appended as-is with no filtering of any sort,
+        even for files whose file paths duplicate those already in the current reader.
 
         Parameters
         ----------
-        *readers : Reader
-            One or more ``Reader`` objects to append data from
-        ignore_repeats : bool, optional
-            If ``True`` (the default), data from the given ``Reader`` objects is
-            appended to the current ``Reader`` no matter whether there are any repeats
-            of file paths.
+        reader : Reader
+            A reader from which to append data
         """
-        for i, reader in enumerate(readers, 1):
-            file_paths = set(self.file_paths())
+        self._append("right", reader)
+
+    def append_left(self, reader: "Reader") -> None:
+        """Left-append data from another reader.
+
+        New data is appended as-is with no filtering of any sort,
+        even for files whose file paths duplicate those already in the current reader.
+
+        Parameters
+        ----------
+        reader : Reader
+            A reader from which to left-append data
+        """
+        self._append("left", reader)
+
+    def _extend(self, left_or_right, readers: "Iterable[Reader]") -> None:
+        # Loop through each object in ``readers`` explicitly, so that we have
+        # a chance to check that the object is indeed a Reader instance.
+        new_files = []
+        for reader in readers:
             if type(reader) != Reader:
-                raise TypeError(f"{i}-th reader is not a Reader object: {type(reader)}")
-            new_file_paths = set(reader.file_paths())
-            repeats = file_paths & new_file_paths
-            if ignore_repeats and repeats:
-                new_file_paths = new_file_paths - repeats
-            files_to_add = [f for f in reader._files if f.file_path in new_file_paths]
-            self._files.extend(files_to_add)
+                raise TypeError(f"not a Reader object: {type(reader)}")
+            new_files.extend(reader._files)
+        func = "extendleft" if left_or_right == "left" else "extend"
+        getattr(self._files, func)(new_files)
 
-    def remove(self, *file_paths) -> None:
-        """Remove data from the given file paths.
+    def extend(self, readers: "Iterable[Reader]") -> None:
+        """Extend data from other readers.
+
+        New data is appended as-is with no filtering of any sort,
+        even for files whose file paths duplicate those already in the current reader.
 
         Parameters
         ----------
-        *file_paths : str
-            One or more file paths for which data is to be dropped from this reader.
-            Regular expression matching is supported, e.g., you can provide a partial
-            file path to match multiple file paths in the reader.
+        readers : Iterable[Reader]
+            Readers from which to extend data
         """
-        self._files = [
-            f
-            for f in self._files
-            if not any(re.search(p, f.file_path) for p in file_paths)
-        ]
+        # Loop through each object in ``readers`` explicitly, so that we have
+        # a chance to check that the object is indeed a Reader instance.
+        self._extend("right", readers)
+
+    def extend_left(self, readers: "Iterable[Reader]") -> None:
+        """Left-extend data from other readers.
+
+        New data is appended as-is with no filtering of any sort,
+        even for files whose file paths duplicate those already in the current reader.
+
+        Parameters
+        ----------
+        readers : Iterable[Reader]
+            Readers from which to extend data
+        """
+        self._extend("left", readers)
+
+    def _pop(self, left_or_right) -> "Reader":
+        func = "popleft" if left_or_right == "left" else "pop"
+        file_ = getattr(self._files, func)()
+        reader = self.__class__()
+        reader._files = collections.deque([file_])
+        return reader
+
+    def pop(self) -> "Reader":
+        """Drop the last data file from the reader and return it as a reader.
+
+        Returns
+        -------
+        Reader
+        """
+        return self._pop("right")
+
+    def pop_left(self) -> "Reader":
+        """Drop the first file from the reader and return it as a reader.
+
+        Returns
+        -------
+        Reader
+        """
+        return self._pop("left")
 
     @staticmethod
     def _flatten(item_type, nested) -> Union[List, Set]:
@@ -763,7 +816,8 @@ class Reader:
         Parameters
         ----------
         strs : List[str]
-            List of CHAT data strings
+            List of CHAT data strings. The ordering of the strings determines
+            that of the parsed CHAT data in the resulting reader.
         ids : List[str], optional
             List of identifiers. If not provided, UUID random strings are used.
             When file paths are referred to in other parts of this package, they
@@ -782,7 +836,9 @@ class Reader:
             raise ValueError(
                 f"strs and ids must have the same size: {len(strs)} and {len(ids)}"
             )
-        return cls(strs, ids)
+        reader = cls()
+        reader._parse_chat_strs(strs, ids)
+        return reader
 
     @staticmethod
     def _remove_tempdir(path: str) -> str:
@@ -805,7 +861,8 @@ class Reader:
         Parameters
         ----------
         paths : List[str]
-            List of local file paths of the CHAT data
+            List of local file paths of the CHAT data. The ordering of the paths
+            determines that of the parsed CHAT data in the resulting reader.
 
         Returns
         -------

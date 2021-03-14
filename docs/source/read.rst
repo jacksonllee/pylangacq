@@ -8,8 +8,8 @@ as used in the CHILDES database for language acquisition research;
 CHAT is documented in its `official manual <https://talkbank.org/manuals/CHAT.pdf>`_.
 This page describes the ways CHAT data can be read by the ``pylangacq`` package.
 
-Initializing a :class:`~pylangacq.Reader` Instance
---------------------------------------------------
+Initializing a Reader
+---------------------
 
 :func:`~pylangacq.read_chat`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -173,6 +173,12 @@ where each string is assumed to conform to the
         >>> reader = pylangacq.Reader.from_strs([data])
         >>> len(reader.utterances())
         2
+        >>>
+        >>> # All "file" terminology still applies.
+        >>> # Each CHAT data string you pass in is treated as one "file".
+        >>> reader.n_files()
+        1
+        >>>
         >>> reader.utterances()
         [Utterance(participant='CHI',
                    tokens=[Token(word='I', pos=None, mor=None, gra=None),
@@ -193,5 +199,51 @@ We are going to drill down to this and many other functions
 in the upcoming parts of the documentation,
 but this quick example gives you a glimpse of how PyLangAcq represents CHAT data.
 
-Adding and Removing Data in a :class:`~pylangacq.Reader`
---------------------------------------------------------
+
+Creating an Empty Reader
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Calling :class:`~pylangacq.Reader` itself initializes an empty reader:
+
+.. code-block:: python
+
+    >>> reader = pylangacq.Reader()
+    >>> reader.n_files()
+    0
+
+An empty reader is useful when you'd like a reader to start with no data
+and "grow" by having data added.
+The section below discusses how to manipulate data in a reader.
+
+
+Adding and Removing Data
+------------------------
+
+A :class:`~pylangacq.Reader` keeps the linear ordering of CHAT data
+by the ordering of the source data files.
+CHAT data typically comes as data files that each represent a recording session.
+There is, therefore, a natural ordering of the files by time,
+for when the recordings were made.
+The ordering is also commonly reflected by the way CHAT data files are named.
+For this reason, if your input data source is a ZIP file or local directory,
+the resulting reader has the data automatically sorted based on file paths.
+
+With the knowledge that data is ordered by files in a :class:`~pylangacq.Reader`,
+it is reasonable for a :class:`~pylangacq.Reader` to append or drop data,
+and to do so from either end for modeling purposes.
+Think of a CHAT data reader more or less like a :class:`~collections.deque`.
+
+The following :class:`~pylangacq.Reader` methods support adding and removing data
+from a reader:
+
+.. currentmodule:: pylangacq.Reader
+
+.. autosummary::
+
+    append
+    append_left
+    extend
+    extend_left
+    pop
+    pop_left
+    clear

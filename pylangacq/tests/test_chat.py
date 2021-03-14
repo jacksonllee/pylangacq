@@ -21,10 +21,9 @@ from pylangacq.tests.test_data import (
 )
 
 
-_EVE = Reader.from_files([LOCAL_EVE_PATH])
-
-# This module depends on downloaded data.
 download_and_extract_brown()
+_EVE_LOCAL = Reader.from_files([LOCAL_EVE_PATH])
+_EVE_REMOTE = Reader.from_files([REMOTE_EVE_FILE_PATH])
 
 
 def test_if_childes_has_updated_data():
@@ -35,7 +34,7 @@ def test_from_strs_same_as_from_files():
     with open(LOCAL_EVE_PATH, encoding="utf-8") as f:
         from_strs = Reader.from_strs([f.read()])
     file_from_strs = from_strs._files[0]
-    file_from_files = _EVE._files[0]
+    file_from_files = _EVE_LOCAL._files[0]
     assert file_from_strs.utterances == file_from_files.utterances
     assert file_from_strs.header == file_from_files.header
 
@@ -56,32 +55,56 @@ def test_from_zip_remote_url():
 
 
 def test_from_dir():
-    download_and_extract_brown()
     r = Reader.from_dir(REMOTE_EVE_DIR)
     assert r.n_files() == 20
 
 
 def test_clear():
-    eve_copy = copy.deepcopy(_EVE)
+    eve_copy = copy.deepcopy(_EVE_LOCAL)
     eve_copy.clear()
     assert eve_copy.n_files() == 0
 
 
-def test_append():
-    eve_copy = copy.deepcopy(_EVE)
-    eve_copy.append(_EVE)
-    assert eve_copy.n_files() == 2
+def test_append_and_append_left():
+    eve_copy = copy.deepcopy(_EVE_LOCAL)
+    eve_copy.append(_EVE_REMOTE)
+    assert eve_copy.file_paths() == [LOCAL_EVE_PATH, REMOTE_EVE_FILE_PATH]
+    eve_copy.append_left(_EVE_REMOTE)
+    assert eve_copy.file_paths() == [
+        REMOTE_EVE_FILE_PATH,
+        LOCAL_EVE_PATH,
+        REMOTE_EVE_FILE_PATH,
+    ]
 
 
-# TODO append_left
-# TODO extend
-# TODO extend_left
-# TODO pop
-# TODO pop_left
+def test_extend_and_extend_left():
+    eve_copy = copy.deepcopy(_EVE_LOCAL)
+    eve_copy.extend([_EVE_REMOTE])
+    assert eve_copy.file_paths() == [LOCAL_EVE_PATH, REMOTE_EVE_FILE_PATH]
+    eve_copy.extend_left([_EVE_REMOTE])
+    assert eve_copy.file_paths() == [
+        REMOTE_EVE_FILE_PATH,
+        LOCAL_EVE_PATH,
+        REMOTE_EVE_FILE_PATH,
+    ]
+
+
+def test_pop_and_pop_left():
+    eve = Reader.from_dir(REMOTE_EVE_DIR)
+    eve_path_last = eve.file_paths()[-1]
+    eve_path_first = eve.file_paths()[0]
+
+    eve_last = eve.pop()
+    assert eve_last.file_paths() == [eve_path_last]
+    assert eve.file_paths()[-1] != eve_path_last
+
+    eve_first = eve.pop_left()
+    assert eve_first.file_paths() == [eve_path_first]
+    assert eve.file_paths()[0] != eve_path_first
 
 
 def test_utterances():
-    assert _EVE.utterances()[:2] == [
+    assert _EVE_LOCAL.utterances()[:2] == [
         Utterance(
             participant="CHI",
             tokens=[
@@ -151,7 +174,7 @@ def test_utterances():
 
 
 def test_headers():
-    assert _EVE.headers() == [
+    assert _EVE_LOCAL.headers() == [
         {
             "Date": {datetime.date(1962, 10, 15), datetime.date(1962, 10, 17)},
             "Participants": {
@@ -215,31 +238,31 @@ def test_headers():
 
 
 def test_n_files():
-    assert _EVE.n_files() == 1
+    assert _EVE_LOCAL.n_files() == 1
 
 
 def test_participants():
-    assert _EVE.participants() == {"CHI", "MOT", "COL", "RIC"}
+    assert _EVE_LOCAL.participants() == {"CHI", "MOT", "COL", "RIC"}
 
 
 def test_languages():
-    assert _EVE.languages() == {"eng"}
+    assert _EVE_LOCAL.languages() == {"eng"}
 
 
 def test_dates_of_recording():
-    assert _EVE.dates_of_recording() == {
+    assert _EVE_LOCAL.dates_of_recording() == {
         datetime.date(1962, 10, 15),
         datetime.date(1962, 10, 17),
     }
 
 
 def test_ages():
-    assert _EVE.ages() == [(1, 6, 0)]
-    assert _EVE.ages(months=True) == [18.0]
+    assert _EVE_LOCAL.ages() == [(1, 6, 0)]
+    assert _EVE_LOCAL.ages(months=True) == [18.0]
 
 
 def test_tokens_by_utterances():
-    assert _EVE.tokens(by_utterances=True)[0] == [
+    assert _EVE_LOCAL.tokens(by_utterances=True)[0] == [
         Token(
             word="more", pos="qn", mor="more", gra=Gra(source=1, target=2, rel="QUANT")
         ),
@@ -254,7 +277,7 @@ def test_tokens_by_utterances():
 
 
 def test_tokens():
-    assert _EVE.tokens()[:5] == [
+    assert _EVE_LOCAL.tokens()[:5] == [
         Token(
             word="more", pos="qn", mor="more", gra=Gra(source=1, target=2, rel="QUANT")
         ),
@@ -276,45 +299,45 @@ def test_tokens():
 
 
 def test_words_by_utterances():
-    assert _EVE.words(by_utterances=True)[:2] == [
+    assert _EVE_LOCAL.words(by_utterances=True)[:2] == [
         ["more", "cookie", "."],
         ["you", "0v", "more", "cookies", "?"],
     ]
 
 
 def test_words():
-    assert _EVE.words()[:5] == ["more", "cookie", ".", "you", "0v"]
+    assert _EVE_LOCAL.words()[:5] == ["more", "cookie", ".", "you", "0v"]
 
 
 def test_mlum():
-    assert pytest.approx(_EVE.mlum(), abs=0.1) == [2.267022696929239]
+    assert pytest.approx(_EVE_LOCAL.mlum(), abs=0.1) == [2.267022696929239]
 
 
 def test_mlu():
-    assert pytest.approx(_EVE.mlu(), abs=0.1) == [2.267022696929239]
+    assert pytest.approx(_EVE_LOCAL.mlu(), abs=0.1) == [2.267022696929239]
 
 
 def test_mluw():
-    assert pytest.approx(_EVE.mluw(), abs=0.1) == [1.4459279038718291]
+    assert pytest.approx(_EVE_LOCAL.mluw(), abs=0.1) == [1.4459279038718291]
 
 
 def test_ttr():
-    assert pytest.approx(_EVE.ttr(), abs=0.01) == [0.17543859649122806]
+    assert pytest.approx(_EVE_LOCAL.ttr(), abs=0.01) == [0.17543859649122806]
 
 
 def test_ipsyn():
-    assert _EVE.ipsyn() == [29]
+    assert _EVE_LOCAL.ipsyn() == [29]
 
 
 def test_word_ngrams():
-    assert _EVE.word_ngrams(1).most_common(5) == [
+    assert _EVE_LOCAL.word_ngrams(1).most_common(5) == [
         ((".",), 1134),
         (("?",), 455),
         (("you",), 197),
         (("that",), 151),
         (("the",), 132),
     ]
-    assert _EVE.word_ngrams(2).most_common(5) == [
+    assert _EVE_LOCAL.word_ngrams(2).most_common(5) == [
         (("that", "?"), 101),
         (("it", "."), 65),
         (("what", "?"), 54),
@@ -324,7 +347,7 @@ def test_word_ngrams():
 
 
 def test_word_frequency():
-    assert _EVE.word_frequencies().most_common(5) == [
+    assert _EVE_LOCAL.word_frequencies().most_common(5) == [
         (".", 1134),
         ("?", 455),
         ("you", 197),

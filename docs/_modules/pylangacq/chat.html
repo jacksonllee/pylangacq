@@ -104,7 +104,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../read.html#from-a-zip-file-or-local-directory">From a ZIP File or Local Directory</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../read.html#from-specific-chat-data-files">From Specific CHAT Data Files</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../read.html#from-in-memory-strings">From In-Memory Strings</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../read.html#creating-an-empty-reader">Creating an Empty <code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../read.html#creating-an-empty-reader">Creating an Empty Reader</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../read.html#adding-and-removing-data">Adding and Removing Data</a></li>
@@ -197,6 +197,7 @@
 <span class="kn">import</span> <span class="nn">collections</span>
 <span class="kn">import</span> <span class="nn">concurrent.futures</span> <span class="k">as</span> <span class="nn">cf</span>
 <span class="kn">import</span> <span class="nn">contextlib</span>
+<span class="kn">import</span> <span class="nn">dataclasses</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -222,28 +223,7 @@
 
 <span class="n">_CHAT_EXTENSION</span> <span class="o">=</span> <span class="s2">&quot;.cha&quot;</span>
 
-
 <span class="n">_TIMER_MARKS_REGEX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\x15-?(\d+)_(\d+)-?\x15&quot;</span><span class="p">)</span>
-
-<span class="c1"># These prefix and suffix are part of the subdirectory (under _TEMPDIR)</span>
-<span class="c1"># in which to locate temporary files (from a zip or for a downloaded file).</span>
-<span class="c1"># The subdirectory part (together with _TEMPDIR) is removed (via regex matching)</span>
-<span class="c1"># from the Reader object&#39;s file paths.</span>
-<span class="n">_SUBDIR_PREFIX</span> <span class="o">=</span> <span class="s2">&quot;prefix_pla&quot;</span>
-<span class="n">_SUBDIR_SUFFIX</span> <span class="o">=</span> <span class="s2">&quot;suffix_pla&quot;</span>
-<span class="n">_SUBDIR_REGEX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;prefix_pla[a-z0-9_]+suffix_pla&quot;</span><span class="p">)</span>
-
-
-<span class="n">_File</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;_File&quot;</span><span class="p">,</span> <span class="s2">&quot;file_path header utterances&quot;</span><span class="p">)</span>
-<span class="n">_File</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">A CHAT file (or string).</span>
-
-<span class="s2">Attributes</span>
-<span class="s2">----------</span>
-<span class="s2">file_path : str</span>
-<span class="s2">header : dict</span>
-<span class="s2">utterances : List[Utterance]</span>
-<span class="s2">&quot;&quot;&quot;</span>
 
 
 <span class="k">def</span> <span class="nf">_params_in_docstring</span><span class="p">(</span><span class="o">*</span><span class="n">params</span><span class="p">,</span> <span class="n">class_method</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -376,6 +356,24 @@
     <span class="p">)</span>
 
 
+<span class="nd">@dataclasses</span><span class="o">.</span><span class="n">dataclass</span>
+<span class="k">class</span> <span class="nc">_File</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A CHAT file (or string).</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    file_path : str</span>
+<span class="sd">    header : dict</span>
+<span class="sd">    utterances : List[Utterance]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;file_path&quot;</span><span class="p">,</span> <span class="s2">&quot;header&quot;</span><span class="p">,</span> <span class="s2">&quot;utterances&quot;</span><span class="p">)</span>
+
+    <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">header</span><span class="p">:</span> <span class="n">Dict</span>
+    <span class="n">utterances</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Utterance</span><span class="p">]</span>
+
+
 <div class="viewcode-block" id="Reader"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader">[docs]</a><span class="k">class</span> <span class="nc">Reader</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;A reader that handles CHAT data.&quot;&quot;&quot;</span>
 
@@ -397,7 +395,7 @@
         <span class="p">)</span>
 
 <div class="viewcode-block" id="Reader.clear"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Removing all data from this reader.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Remove all data from this reader.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_files</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">deque</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">_append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">left_or_right</span><span class="p">,</span> <span class="n">reader</span><span class="p">:</span> <span class="s2">&quot;Reader&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -1034,13 +1032,6 @@
         <span class="n">reader</span><span class="o">.</span><span class="n">_parse_chat_strs</span><span class="p">(</span><span class="n">strs</span><span class="p">,</span> <span class="n">ids</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">reader</span></div>
 
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_remove_tempdir</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">gettempdir</span><span class="p">(),</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="n">_SUBDIR_REGEX</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">path</span>
-
 <div class="viewcode-block" id="Reader.from_files"><a class="viewcode-back" href="../../chat.html#pylangacq.Reader.from_files">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;match&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;encoding&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">from_files</span><span class="p">(</span>
@@ -1080,9 +1071,6 @@
 
         <span class="k">with</span> <span class="n">cf</span><span class="o">.</span><span class="n">ThreadPoolExecutor</span><span class="p">()</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
             <span class="n">strs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">executor</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">_open_file</span><span class="p">,</span> <span class="n">paths</span><span class="p">))</span>
-
-        <span class="c1"># Unzipped files from `.from_zip` have the unwieldy temp dir in the file path.</span>
-        <span class="n">paths</span> <span class="o">=</span> <span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">_remove_tempdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_strs</span><span class="p">(</span><span class="n">strs</span><span class="p">,</span> <span class="n">paths</span><span class="p">)</span></div>
 
@@ -1156,9 +1144,7 @@
 <span class="sd">        Reader</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">ExitStack</span><span class="p">()</span> <span class="k">as</span> <span class="n">stack</span><span class="p">:</span>
-            <span class="n">temp_dir</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">enter_context</span><span class="p">(</span>
-                <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">(</span><span class="n">_SUBDIR_SUFFIX</span><span class="p">,</span> <span class="n">_SUBDIR_PREFIX</span><span class="p">)</span>
-            <span class="p">)</span>
+            <span class="n">temp_dir</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">enter_context</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">())</span>
             <span class="n">is_url</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http://&quot;</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">allow_remote</span> <span class="ow">and</span> <span class="n">is_url</span><span class="p">:</span>
@@ -1173,13 +1159,19 @@
             <span class="k">if</span> <span class="n">allow_remote</span> <span class="ow">and</span> <span class="n">is_url</span><span class="p">:</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">zip_path</span><span class="p">)</span>
 
-            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_dir</span><span class="p">(</span>
+            <span class="n">reader</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_dir</span><span class="p">(</span>
                 <span class="n">temp_dir</span><span class="p">,</span>
                 <span class="n">match</span><span class="o">=</span><span class="n">match</span><span class="p">,</span>
                 <span class="n">exclude</span><span class="o">=</span><span class="n">exclude</span><span class="p">,</span>
                 <span class="n">extension</span><span class="o">=</span><span class="n">extension</span><span class="p">,</span>
                 <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">,</span>
-            <span class="p">)</span></div>
+            <span class="p">)</span>
+
+        <span class="c1"># Unzipped files from `.from_zip` have the unwieldy temp dir in the file path.</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">reader</span><span class="o">.</span><span class="n">_files</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">file_path</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">file_path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">reader</span></div>
 
     <span class="k">def</span> <span class="nf">_parse_chat_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chat_str</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_File</span><span class="p">:</span>
         <span class="n">lines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_lines</span><span class="p">(</span><span class="n">chat_str</span><span class="p">)</span>

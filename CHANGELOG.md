@@ -7,21 +7,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Breaking changes:
+The `Reader` class has been completely rewritten.
+A couple methods have been removed, while others have been renamed.
+For methods that remain (renamed or not),
+their behavior for output data structure and arguments allowed has been changed.
+The details are in the following.
+
 ### Added
-* Reader instantiation:
+* New classmethods of `Reader` for reader instantiation:
   - `from_zip`
-  - `from_strs`
-  - `from_files`
   - `from_dir`
-* Each participant's info in a header dictionary:
-   - Added the key `"dob"` for date of birth (if the info is available in the CHAT header).
-     The corresponding value is a `datetime.date` object
+* New classes to better structure CHAT data:
+  - `Utterance`
+  - `Token`
+  - `Gra`
+* New Reader methods:
+  - `append_left`, `extend`, `extend_left`, `pop`, `pop_left`
+  - `tokens` (which gives `Token` objects, essentially the "tagged words" from before)
+* In the header dictionary, each participant's info has the new key `"dob"`
+  for date of birth (if the info is available in the CHAT header).
+  The corresponding value is a `datetime.date` object.
+  (The same info was previously exposed as the `Reader` method `date_of_birth`,
+   now removed.)
 * The test suite now covers code snippets in both the docstrings and `.rst` doc files.
 
 ### Changed
-* `by_files` as True gives you a list of results for each file, no longer a dict.
-* The following methods of the `Reader` class have been renamed as indicated:
-   - `add` -> `append`
+* CHAT parsing in `Reader` instantiation has been completely rewritten.
+  The previous private class `_SingleReader` has been removed.
+  This private class duplicated a lot of the `Reader` code,
+  which made it hard to make changes.
+* The `Reader` rewrite has also greatly sped up the reading and parsing of CHAT data.
+* The `by_files` argument, which many `Reader` methods has,
+  now gives you a simpler list of results for each data file,
+  no longer the previous output of a dict that mapped a file path to the file's
+  result.
+* The following `Reader` methods have been renamed as indicated,
+  some for stylistic or Pythonic reasons, others for reasons as given:
    - `age` -> `ages`
    - `number_of_utterances` -> `n_utterances`
    - `number_of_files` -> `n_files`
@@ -32,31 +54,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
    - `TTR` -> `ttr`
    - `IPSyn` -> `ipsyn`
    - `word_frequency` -> `word_frequencies`
+   - `from_chat_str` -> `from_strs`
+   - `from_chat_files` -> `from_files`
+   - `add` -> `append`.
+     Since the data files in a `Reader` have a natural ordering (by time of
+     recording sessions, and therefore commonly by file paths as well),
+     a reader is list-like rather than an unordered set of data files,
+     which `add` would suggest.
    - `participant_codes` -> `participants`.
      Before this version, the methods `participant_codes` (for CHI, MOT, etc) and
      `participants` (for, say, Eve, Mother, Investigator, etc) co-existed,
      but in practice we mostly only care about CHI, MOT, etc.
      So the method `participants` for Eve etc has been removed,
-     and `participant_codes` has been renamed as `participants` instead.
-* Each participant's info in a header dictionary:
+     and `participant_codes` has been renamed as `participants`.
+* Each participant's info in a header dictionary has these keys renamed:
    - `participant_name` -> `name`
    - `participant_role` -> `role`
-   - `SES` -> `ses`
+   - `SES` -> `ses` (socioeconomic status)
 * Switched to sphinx-rtd-theme as the documentation theme.
 * Switched to CircleCI orbs; update dev requirements' versions.
 
 ### Deprecated
-* `tagged_sents`, `tagged_words`, and `sents`
+* The following Reader methods have been deprecated:
+  - `tagged_sents` (use `tokens` with `by_utterances=True` instead)
+  - `tagged_words` (use `tokens` with `by_utterances=False` instead)
+  - `sents` (use `words` with `by_utterances=True` instead)
 
 ### Removed
 * The following methods of the `Reader` class have been removed:
-   - `abspath`
-   - `index_to_tiers`
-   - `participant_codes` (renamed as `participants`, another method now removed; see "Changed" above)
+   - `abspath`. Use `file_paths` instead.
+   - `index_to_tiers`. All the unparsed tiers are now available from `utterances`.
+   - `participant_codes`. It's been renamed as `participants`, another method now removed; see "Changed" above.
    - `part_of_speech_tags`
-   - `update`
-   - `search`
-   - `concordance`
+   - `update` and `remove`. A reader is a list-like collection of CHAT data files,
+     not a set (which `update` and `remove` would suggest). 
+   - `search` and `concordance`. To search, use one of
+     the `words`, `tokens`, and `utterances` methods to walk through a reader's CHAT data
+     and keep track of elements of interest.
+   - `date_of_birth`. The info is now available under `headers`, in each participant's
+     `"dob"` key.
 
 ### Fixed
 * Handled `[/-]` in cleaning utterances.

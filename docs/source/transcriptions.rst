@@ -232,3 +232,58 @@ and ``rel`` (relation).
 
 Utterances
 ----------
+
+The :func:`~pylangacq.Reader.utterances` method gives you information
+beyond :func:`~pylangacq.Reader.tokens`:
+
+.. code-block:: python
+
+    >>> reader.utterances(participants="CHI")
+    [Utterance(participant='CHI',
+               tokens=[Token(word='more', pos='qn', mor='more', gra=Gra(dep=1, head=2, rel='QUANT')),
+                       Token(word='cookie', pos='n', mor='cookie', gra=Gra(dep=2, head=0, rel='INCROOT')),
+                       Token(word='.', pos='.', mor='', gra=Gra(dep=3, head=2, rel='PUNCT'))],
+               time_marks=None,
+               tiers={'CHI': 'more cookie . [+ IMP]',
+                      '%mor': 'qn|more n|cookie .',
+                      '%gra': '1|2|QUANT 2|0|INCROOT 3|2|PUNCT',
+                      '%int': 'distinctive , loud'})]
+
+:func:`~pylangacq.Reader.utterances` has the same optional arguments
+``participants``, ``exclude``, and ``by_files``
+as :func:`~pylangacq.Reader.words` and :func:`~pylangacq.Reader.tokens` do.
+
+Each utterance from :func:`~pylangacq.Reader.utterances` is
+an :class:`~pylangacq.chat.Utterance` object,
+which has the attributes
+``participant``, ``tokens``, ``time_marks``, and ``tiers``
+as shown in the code snippet just above.
+Accessing CHAT data using :func:`~pylangacq.Reader.utterances`
+is useful when you need to, say, tie participant information to
+the transcriptions and/or annotations.
+
+
+Time Marks
+^^^^^^^^^^
+
+Many of the more recent CHILDES datasets (especially starting from the 1990s)
+come with digitized audio and video data associated with the text-based CHAT data files.
+In these datasets, an utterance in the CHAT file has time marks to indicate
+its start and end time (in milliseconds) in the corresponding audio and/or video data.
+If the information is available, the ``time_marks`` attribute of an
+:class:`~pylangacq.chat.Utterance` object is a tuple of two integers,
+e.g., ``(0, 1073)``, for ``·0_1073·`` found at the end of the CHAT transcription line.
+
+
+Tiers
+^^^^^
+
+You may sometimes need the original, unparsed transcription lines,
+because they contain information, e.g., annotations for pauses, that is dropped
+when :class:`~pylangacq.chat.Token` objects are constructed
+using the cleaned-up words aligned with ``%mor`` and ``%gra``.
+Or you may need access to the other ``%`` tiers not readily handled by PyLangAcq,
+e.g., ``%int`` for intonation in the Eve example above.
+In these cases, the ``tiers`` attribute of the :class:`~pylangacq.chat.Utterance` object
+gives your a dictionary of all the original tiers of the utterance
+for your custom needs.

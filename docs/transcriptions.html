@@ -128,7 +128,11 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#tokens">Tokens</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#utterances">Utterances</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#utterances">Utterances</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#time-marks">Time Marks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tiers">Tiers</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="frequencies.html">Word Frequencies and Ngrams</a></li>
@@ -409,6 +413,53 @@ and <code class="docutils literal notranslate"><span class="pre">rel</span></cod
 </div>
 <div class="section" id="utterances">
 <h2>Utterances<a class="headerlink" href="#utterances" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="api.html#pylangacq.Reader.utterances" title="pylangacq.Reader.utterances"><code class="xref py py-func docutils literal notranslate"><span class="pre">utterances()</span></code></a> method gives you information
+beyond <a class="reference internal" href="api.html#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span><span class="o">.</span><span class="n">utterances</span><span class="p">(</span><span class="n">participants</span><span class="o">=</span><span class="s2">&quot;CHI&quot;</span><span class="p">)</span>
+<span class="go">[Utterance(participant=&#39;CHI&#39;,</span>
+<span class="go">           tokens=[Token(word=&#39;more&#39;, pos=&#39;qn&#39;, mor=&#39;more&#39;, gra=Gra(dep=1, head=2, rel=&#39;QUANT&#39;)),</span>
+<span class="go">                   Token(word=&#39;cookie&#39;, pos=&#39;n&#39;, mor=&#39;cookie&#39;, gra=Gra(dep=2, head=0, rel=&#39;INCROOT&#39;)),</span>
+<span class="go">                   Token(word=&#39;.&#39;, pos=&#39;.&#39;, mor=&#39;&#39;, gra=Gra(dep=3, head=2, rel=&#39;PUNCT&#39;))],</span>
+<span class="go">           time_marks=None,</span>
+<span class="go">           tiers={&#39;CHI&#39;: &#39;more cookie . [+ IMP]&#39;,</span>
+<span class="go">                  &#39;%mor&#39;: &#39;qn|more n|cookie .&#39;,</span>
+<span class="go">                  &#39;%gra&#39;: &#39;1|2|QUANT 2|0|INCROOT 3|2|PUNCT&#39;,</span>
+<span class="go">                  &#39;%int&#39;: &#39;distinctive , loud&#39;})]</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="api.html#pylangacq.Reader.utterances" title="pylangacq.Reader.utterances"><code class="xref py py-func docutils literal notranslate"><span class="pre">utterances()</span></code></a> has the same optional arguments
+<code class="docutils literal notranslate"><span class="pre">participants</span></code>, <code class="docutils literal notranslate"><span class="pre">exclude</span></code>, and <code class="docutils literal notranslate"><span class="pre">by_files</span></code>
+as <a class="reference internal" href="api.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a> and <a class="reference internal" href="api.html#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code></a> do.</p>
+<p>Each utterance from <a class="reference internal" href="api.html#pylangacq.Reader.utterances" title="pylangacq.Reader.utterances"><code class="xref py py-func docutils literal notranslate"><span class="pre">utterances()</span></code></a> is
+an <a class="reference internal" href="api.html#pylangacq.chat.Utterance" title="pylangacq.chat.Utterance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Utterance</span></code></a> object,
+which has the attributes
+<code class="docutils literal notranslate"><span class="pre">participant</span></code>, <code class="docutils literal notranslate"><span class="pre">tokens</span></code>, <code class="docutils literal notranslate"><span class="pre">time_marks</span></code>, and <code class="docutils literal notranslate"><span class="pre">tiers</span></code>
+as shown in the code snippet just above.
+Accessing CHAT data using <a class="reference internal" href="api.html#pylangacq.Reader.utterances" title="pylangacq.Reader.utterances"><code class="xref py py-func docutils literal notranslate"><span class="pre">utterances()</span></code></a>
+is useful when you need to, say, tie participant information to
+the transcriptions and/or annotations.</p>
+<div class="section" id="time-marks">
+<h3>Time Marks<a class="headerlink" href="#time-marks" title="Permalink to this headline">¶</a></h3>
+<p>Many of the more recent CHILDES datasets (especially starting from the 1990s)
+come with digitized audio and video data associated with the text-based CHAT data files.
+In these datasets, an utterance in the CHAT file has time marks to indicate
+its start and end time (in milliseconds) in the corresponding audio and/or video data.
+If the information is available, the <code class="docutils literal notranslate"><span class="pre">time_marks</span></code> attribute of an
+<a class="reference internal" href="api.html#pylangacq.chat.Utterance" title="pylangacq.chat.Utterance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Utterance</span></code></a> object is a tuple of two integers,
+e.g., <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">1073)</span></code>, for <code class="docutils literal notranslate"><span class="pre">·0_1073·</span></code> found at the end of the CHAT transcription line.</p>
+</div>
+<div class="section" id="tiers">
+<h3>Tiers<a class="headerlink" href="#tiers" title="Permalink to this headline">¶</a></h3>
+<p>You may sometimes need the original, unparsed transcription lines,
+because they contain information, e.g., annotations for pauses, that is dropped
+when <a class="reference internal" href="api.html#pylangacq.chat.Token" title="pylangacq.chat.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a> objects are constructed
+using the cleaned-up words aligned with <code class="docutils literal notranslate"><span class="pre">%mor</span></code> and <code class="docutils literal notranslate"><span class="pre">%gra</span></code>.
+Or you may need access to the other <code class="docutils literal notranslate"><span class="pre">%</span></code> tiers not readily handled by PyLangAcq,
+e.g., <code class="docutils literal notranslate"><span class="pre">%int</span></code> for intonation in the Eve example above.
+In these cases, the <code class="docutils literal notranslate"><span class="pre">tiers</span></code> attribute of the <a class="reference internal" href="api.html#pylangacq.chat.Utterance" title="pylangacq.chat.Utterance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Utterance</span></code></a> object
+gives your a dictionary of all the original tiers of the utterance
+for your custom needs.</p>
+</div>
 </div>
 </div>
 

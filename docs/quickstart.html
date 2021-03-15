@@ -19,10 +19,9 @@
 
   
   
-    <link rel="canonical" href="https://pylangacq.org/quickstart.html"/>
-  
 
   
+    <link rel="canonical" href="https://pylangacq.org/quickstart.html" />
 
   
   <!--[if lt IE 9]>
@@ -143,6 +142,38 @@
 <li class="toctree-l2"><a class="reference internal" href="api.html#token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#gra"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gra</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#utterance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Utterance</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">[Unreleased]</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#added">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#removed">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#fixed">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#security">Security</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">[0.12.0] - 2020-10-11</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id3">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id4">[0.11.0] - 2020-07-02</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id7">Removed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id8">[0.10.0] - 2017-11-02</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id9">[0.9.0] - 2017-10-25</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id10">[0.8] - 2016-01-30</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id11">[0.7] - 2016-01-06</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id12">[0.6] - 2015-12-27</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id13">[0.5] - 2015-12-16</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id14">[0.4] - 2015-12-13</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id15">[0.3] - 2015-12-09</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id16">[0.2] - 2015-12-05</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id17">[0.1] - 2015-12-04</a></li>
 </ul>
 </li>
 </ul>
@@ -276,7 +307,7 @@ which is from 1 year and 6 months old to 2 years and 3 months old:</p>
 <p><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code> is the basic method to access the transcriptions:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">words</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">words</span><span class="p">()</span>  <span class="c1"># list of strings, for all the words across all 20 files</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>  <span class="c1"># total word count</span>
-<span class="go">119972</span>
+<span class="go">119799</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">words</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span>
 <span class="go">[&#39;more&#39;, &#39;cookie&#39;, &#39;.&#39;, &#39;you&#39;, &#39;0v&#39;, &#39;more&#39;, &#39;cookies&#39;, &#39;?&#39;]</span>
 </pre></div>
@@ -291,23 +322,23 @@ the method has the optional boolean parameter <code class="docutils literal notr
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">words_one_file</span> <span class="ow">in</span> <span class="n">words_by_files</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">words_one_file</span><span class="p">))</span>
 <span class="gp">...</span>
-<span class="go">5840</span>
-<span class="go">5309</span>
+<span class="go">5810</span>
+<span class="go">5258</span>
 <span class="go">2493</span>
-<span class="go">5753</span>
-<span class="go">5709</span>
-<span class="go">4350</span>
-<span class="go">5314</span>
+<span class="go">5742</span>
+<span class="go">5707</span>
+<span class="go">4338</span>
+<span class="go">5298</span>
 <span class="go">8901</span>
-<span class="go">4462</span>
+<span class="go">4454</span>
 <span class="go">4535</span>
 <span class="go">4196</span>
-<span class="go">6214</span>
-<span class="go">4464</span>
+<span class="go">6193</span>
+<span class="go">4444</span>
 <span class="go">5202</span>
 <span class="go">8075</span>
 <span class="go">7361</span>
-<span class="go">10872</span>
+<span class="go">10870</span>
 <span class="go">8407</span>
 <span class="go">6903</span>
 <span class="go">5612</span>
@@ -368,15 +399,15 @@ or any unparsed tiers, <code class="xref py py-func docutils literal notranslate
 and <code class="xref py py-func docutils literal notranslate"><span class="pre">word_ngrams()</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_frequencies</span><span class="p">()</span>  <span class="c1"># a collections.Counter object</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<span class="go">[(&#39;.&#39;, 20130),</span>
+<span class="go">[(&#39;.&#39;, 20071),</span>
 <span class="go"> (&#39;?&#39;, 6358),</span>
 <span class="go"> (&#39;you&#39;, 3695),</span>
 <span class="go"> (&#39;the&#39;, 2524),</span>
-<span class="go"> (&#39;it&#39;, 2365)]</span>
+<span class="go"> (&#39;it&#39;, 2363)]</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bigrams</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_ngrams</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># a collections.Counter object</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bigrams</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<span class="go">[((&#39;it&#39;, &#39;.&#39;), 705),</span>
+<span class="go">[((&#39;it&#39;, &#39;.&#39;), 703),</span>
 <span class="go"> ((&#39;that&#39;, &#39;?&#39;), 619),</span>
 <span class="go"> ((&#39;what&#39;, &#39;?&#39;), 560),</span>
 <span class="go"> ((&#39;yeah&#39;, &#39;.&#39;), 510),</span>
@@ -389,23 +420,23 @@ and <code class="xref py py-func docutils literal notranslate"><span class="pre"
 <h2>Developmental Measures<a class="headerlink" href="#developmental-measures" title="Permalink to this headline">¶</a></h2>
 <p>To get the mean length of utterance (MLU), use <code class="xref py py-func docutils literal notranslate"><span class="pre">mlu()</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">mlu</span><span class="p">()</span>
-<span class="go">[2.316421895861148,</span>
-<span class="go"> 2.5163934426229506,</span>
+<span class="go">[2.309041835357625,</span>
+<span class="go"> 2.488372093023256,</span>
 <span class="go"> 2.8063241106719365,</span>
-<span class="go"> 2.611864406779661,</span>
-<span class="go"> 2.8854314002828856,</span>
-<span class="go"> 3.195571955719557,</span>
-<span class="go"> 3.1818181818181817,</span>
+<span class="go"> 2.6153846153846154,</span>
+<span class="go"> 2.8866855524079322,</span>
+<span class="go"> 3.208955223880597,</span>
+<span class="go"> 3.179732313575526,</span>
 <span class="go"> 3.4171011470281543,</span>
-<span class="go"> 3.840690978886756,</span>
+<span class="go"> 3.840077071290944,</span>
 <span class="go"> 3.822669104204753,</span>
 <span class="go"> 3.883668903803132,</span>
-<span class="go"> 4.165123456790123,</span>
-<span class="go"> 4.269565217391304,</span>
+<span class="go"> 4.177847113884555,</span>
+<span class="go"> 4.2631578947368425,</span>
 <span class="go"> 3.976890756302521,</span>
 <span class="go"> 4.457182320441989,</span>
 <span class="go"> 4.422776911076443,</span>
-<span class="go"> 4.495575221238938,</span>
+<span class="go"> 4.498338870431894,</span>
 <span class="go"> 4.292035398230088,</span>
 <span class="go"> 4.3813169984686064,</span>
 <span class="go"> 3.320964749536178]</span>

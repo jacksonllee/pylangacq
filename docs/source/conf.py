@@ -44,7 +44,12 @@ extensions = [
     'sphinx.ext.intersphinx',
     'numpydoc.numpydoc',
     "sphinx_rtd_theme",
+    "sphinx_sitemap",
 ]
+
+# See https://pypi.org/project/sphinx-sitemap/2.2.0/
+html_baseurl = "https://pylangacq.org/"
+sitemap_url_scheme = "{link}"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

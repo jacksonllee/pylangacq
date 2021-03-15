@@ -19,10 +19,9 @@
 
   
   
-    <link rel="canonical" href="https://pylangacq.org/_modules/pylangacq/chat.html"/>
-  
 
   
+    <link rel="canonical" href="https://pylangacq.org/_modules/pylangacq/chat.html" />
 
   
   <!--[if lt IE 9]>
@@ -141,6 +140,38 @@
 <li class="toctree-l2"><a class="reference internal" href="../../api.html#token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../api.html#gra"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gra</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../api.html#utterance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Utterance</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#unreleased">[Unreleased]</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#added">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#removed">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#fixed">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#security">Security</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id2">[0.12.0] - 2020-10-11</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id3">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id4">[0.11.0] - 2020-07-02</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id5">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id6">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id7">Removed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id8">[0.10.0] - 2017-11-02</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id9">[0.9.0] - 2017-10-25</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id10">[0.8] - 2016-01-30</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id11">[0.7] - 2016-01-06</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id12">[0.6] - 2015-12-27</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id13">[0.5] - 2015-12-16</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id14">[0.4] - 2015-12-13</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id15">[0.3] - 2015-12-09</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id16">[0.2] - 2015-12-05</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id17">[0.1] - 2015-12-04</a></li>
 </ul>
 </li>
 </ul>
@@ -905,7 +936,7 @@
 <div class="viewcode-block" id="Reader.mlu"><a class="viewcode-back" href="../../api.html#pylangacq.Reader.mlu">[docs]</a>    <span class="k">def</span> <span class="nf">mlu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s2">&quot;CHI&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Return the mean lengths of utterance (MLU).</span>
 
-<span class="sd">        This method is equivalent to :func:`~pylangacq.Reader.mlum`.</span>
+<span class="sd">        This method is equivalent to :func:`~pylangacq.chat.Reader.mlum`.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1236,7 +1267,7 @@
                 <span class="k">return</span> <span class="n">tier_marker</span>
         <span class="k">return</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="nf">_get_utterances</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">all_tiers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Utterance</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">_get_utterances</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">all_tiers</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Utterance</span><span class="p">]:</span>
         <span class="n">result_list</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">tiermarker_to_line</span> <span class="ow">in</span> <span class="n">all_tiers</span><span class="p">:</span>
@@ -1370,8 +1401,8 @@
         <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="nf">_get_all_tiers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
-        <span class="n">result_with_collapses</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">def</span> <span class="nf">_get_all_tiers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+        <span class="n">index_to_tiers</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">index_</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># utterance index (1st utterance is index 0)</span>
         <span class="n">utterance</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -1385,34 +1416,13 @@
                 <span class="n">index_</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="n">participant_code</span> <span class="o">=</span> <span class="n">line_split</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
                 <span class="n">utterance</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line_split</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
-                <span class="n">result_with_collapses</span><span class="p">[</span><span class="n">index_</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">participant_code</span><span class="p">:</span> <span class="n">utterance</span><span class="p">}</span>
+                <span class="n">index_to_tiers</span><span class="p">[</span><span class="n">index_</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">participant_code</span><span class="p">:</span> <span class="n">utterance</span><span class="p">}</span>
 
             <span class="k">elif</span> <span class="n">utterance</span> <span class="ow">and</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;%&quot;</span><span class="p">):</span>
                 <span class="n">tier_marker</span> <span class="o">=</span> <span class="n">line_split</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
-                <span class="n">result_with_collapses</span><span class="p">[</span><span class="n">index_</span><span class="p">][</span><span class="n">tier_marker</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line_split</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+                <span class="n">index_to_tiers</span><span class="p">[</span><span class="n">index_</span><span class="p">][</span><span class="n">tier_marker</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line_split</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
 
-        <span class="c1"># handle collapses such as [x 4]</span>
-        <span class="n">result_without_collapses</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">new_index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># utterance index (1st utterance is index 0)</span>
-        <span class="n">collapse_pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[x \d+?\]&quot;</span><span class="p">)</span>  <span class="c1"># e.g., &quot;[x &lt;number(s)&gt;]&quot;</span>
-        <span class="n">number_regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\d+&quot;</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">old_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">result_with_collapses</span><span class="p">)):</span>
-            <span class="n">tier_dict</span> <span class="o">=</span> <span class="n">result_with_collapses</span><span class="p">[</span><span class="n">old_index</span><span class="p">]</span>
-            <span class="n">participant_code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_participant_code</span><span class="p">(</span><span class="n">tier_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-            <span class="n">utterance</span> <span class="o">=</span> <span class="n">tier_dict</span><span class="p">[</span><span class="n">participant_code</span><span class="p">]</span>
-
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">collapse_str</span> <span class="o">=</span> <span class="n">collapse_pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">utterance</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">()</span>
-                <span class="n">collapse_number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">number_regex</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">collapse_str</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
-                <span class="n">collapse_number</span> <span class="o">=</span> <span class="mi">1</span>
-
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">collapse_number</span><span class="p">):</span>
-                <span class="n">new_index</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="n">result_without_collapses</span><span class="p">[</span><span class="n">new_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">tier_dict</span>
-
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">result_without_collapses</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">index_to_tiers</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_get_header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
         <span class="n">headname_to_entry</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Date&quot;</span><span class="p">:</span> <span class="nb">set</span><span class="p">(),</span> <span class="s2">&quot;Participants&quot;</span><span class="p">:</span> <span class="p">{}}</span>

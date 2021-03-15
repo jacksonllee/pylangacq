@@ -19,10 +19,9 @@
 
   
   
-    <link rel="canonical" href="https://pylangacq.org/read.html"/>
-  
 
   
+    <link rel="canonical" href="https://pylangacq.org/read.html" />
 
   
   <!--[if lt IE 9]>
@@ -145,6 +144,38 @@
 <li class="toctree-l2"><a class="reference internal" href="api.html#utterance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Utterance</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">[Unreleased]</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#added">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#removed">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#fixed">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#security">Security</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">[0.12.0] - 2020-10-11</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id3">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id4">[0.11.0] - 2020-07-02</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id7">Removed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id8">[0.10.0] - 2017-11-02</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id9">[0.9.0] - 2017-10-25</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id10">[0.8] - 2016-01-30</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id11">[0.7] - 2016-01-06</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id12">[0.6] - 2015-12-27</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id13">[0.5] - 2015-12-16</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id14">[0.4] - 2015-12-13</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id15">[0.3] - 2015-12-09</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id16">[0.2] - 2015-12-05</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id17">[0.1] - 2015-12-04</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -241,7 +272,7 @@ a <a class="reference internal" href="api.html#pylangacq.read_chat" title="pylan
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">brown</span><span class="o">.</span><span class="n">n_files</span><span class="p">()</span>
 <span class="go">214</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">brown</span><span class="o">.</span><span class="n">utterances</span><span class="p">())</span>
-<span class="go">184758</span>
+<span class="go">184639</span>
 </pre></div>
 </div>
 <p>In practice, you likely only need a subset of the data at a time, e.g.,
@@ -274,7 +305,7 @@ data amount):</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">n_files</span><span class="p">()</span>
 <span class="go">20</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">utterances</span><span class="p">())</span>
-<span class="go">26979</span>
+<span class="go">26920</span>
 </pre></div>
 </div>
 <p>So far, we’ve seen how <a class="reference internal" href="api.html#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a> works with a URL that points
@@ -460,11 +491,11 @@ starting from an empty one and adding data to it one file at a time.</p>
 <span class="gp">... </span>        <span class="nb">len</span><span class="p">(</span><span class="n">reader</span><span class="o">.</span><span class="n">utterances</span><span class="p">(</span><span class="n">participants</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">))</span>
 <span class="gp">... </span>    <span class="p">)</span>
 <span class="gp">...</span>
-<span class="go">Number of Eve&#39;s utterances in the reader so far: 749</span>
-<span class="go">Number of Eve&#39;s utterances in the reader so far: 1237</span>
-<span class="go">Number of Eve&#39;s utterances in the reader so far: 1490</span>
-<span class="go">Number of Eve&#39;s utterances in the reader so far: 2080</span>
-<span class="go">Number of Eve&#39;s utterances in the reader so far: 2787</span>
+<span class="go">Number of Eve&#39;s utterances in the reader so far: 741</span>
+<span class="go">Number of Eve&#39;s utterances in the reader so far: 1214</span>
+<span class="go">Number of Eve&#39;s utterances in the reader so far: 1467</span>
+<span class="go">Number of Eve&#39;s utterances in the reader so far: 2052</span>
+<span class="go">Number of Eve&#39;s utterances in the reader so far: 2758</span>
 </pre></div>
 </div>
 </div>

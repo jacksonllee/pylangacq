@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Breaking changes:
+**API-breaking changes:**
 The `Reader` class has been completely rewritten.
 A couple methods have been removed, while others have been renamed.
 For methods that remain (renamed or not),
@@ -29,7 +29,7 @@ The details are in the following.
   for date of birth (if the info is available in the CHAT header).
   The corresponding value is a `datetime.date` object.
   (The same info was previously exposed as the `Reader` method `date_of_birth`,
-   now removed.)
+  now removed.)
 * The test suite now covers code snippets in both the docstrings and `.rst` doc files.
 
 ### Changed
@@ -96,6 +96,8 @@ The details are in the following.
 
 ### Fixed
 * Handled `[/-]` in cleaning utterances.
+* `[x <number>]` means a repetition of the previous word/item, not repetition
+  of the entire utterance.
 
 ### Security
 

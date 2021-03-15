@@ -1148,10 +1148,10 @@ class Reader:
         if raw_gra is None:
             return None
         try:
-            source, target, rel = raw_gra.strip().split("|", 2)
-            source = int(source)
-            target = int(target)
-            return Gra(source, target, rel)
+            dep, head, rel = raw_gra.strip().split("|", 2)
+            dep = int(dep)
+            head = int(head)
+            return Gra(dep, head, rel)
         except (ValueError, TypeError):
             return None
 

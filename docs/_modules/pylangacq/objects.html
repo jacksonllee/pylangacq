@@ -1,0 +1,336 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pylangacq.objects &mdash; PyLangAcq 0.12.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+    <link rel="canonical" href="https://pylangacq.org/_modules/pylangacq/objects.html"/>
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> PyLangAcq
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.12.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#reading-chat-data">Reading CHAT data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#header-information">Header Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#transcriptions-and-annotations">Transcriptions and Annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#word-frequencies-and-ngrams">Word Frequencies and Ngrams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#developmental-measures">Developmental Measures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#questions">Questions?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../read.html">Reading CHAT Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../read.html#initializing-a-reader">Initializing a Reader</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../read.html#read-chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../read.html#from-a-zip-file-or-local-directory">From a ZIP File or Local Directory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../read.html#from-specific-chat-data-files">From Specific CHAT Data Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../read.html#from-in-memory-strings">From In-Memory Strings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../read.html#creating-an-empty-reader">Creating an Empty Reader</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../read.html#adding-and-removing-data">Adding and Removing Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../headers.html">Accessing Headers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../headers.html#ages">Ages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../headers.html#dates-of-recording">Dates of Recording</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../headers.html#languages">Languages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../headers.html#participants">Participants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../headers.html#other-header-information">Other Header Information</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../transcriptions.html">Transcriptions and Annotations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../transcriptions.html#chat-format">CHAT Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../transcriptions.html#words">Words</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../transcriptions.html#output-by-utterances-or-files">Output by Utterances or Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../transcriptions.html#filter-by-participants">Filter by Participants</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../transcriptions.html#tokens">Tokens</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../transcriptions.html#utterances">Utterances</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../frequencies.html">Word Frequencies and Ngrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../measures.html">Developmental Measures</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../measures.html#type-token-ratio-ttr">Type-token Ratio (TTR)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../measures.html#mean-length-of-utterance-mlu">Mean Length of Utterance (MLU)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../measures.html#index-of-productive-syntax-ipsyn">Index of Productive Syntax (IPSyn)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#read-chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#gra"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gra</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#utterance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Utterance</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PyLangAcq</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pylangacq.objects</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pylangacq.objects</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">dataclasses</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+
+<div class="viewcode-block" id="Gra"><a class="viewcode-back" href="../../api.html#pylangacq.chat.Gra">[docs]</a><span class="nd">@dataclasses</span><span class="o">.</span><span class="n">dataclass</span>
+<span class="k">class</span> <span class="nc">Gra</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Grammatical relation of a word in an utterance.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dep : int</span>
+<span class="sd">        The position of the dependent (i.e., the word itself) in the utterance</span>
+<span class="sd">    head : int</span>
+<span class="sd">        The position of the head in the utterance</span>
+<span class="sd">    rel : str</span>
+<span class="sd">        Grammatical relation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;dep&quot;</span><span class="p">,</span> <span class="s2">&quot;head&quot;</span><span class="p">,</span> <span class="s2">&quot;rel&quot;</span><span class="p">)</span>
+
+    <span class="n">dep</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">head</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">rel</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="Token"><a class="viewcode-back" href="../../api.html#pylangacq.chat.Token">[docs]</a><span class="nd">@dataclasses</span><span class="o">.</span><span class="n">dataclass</span>
+<span class="k">class</span> <span class="nc">Token</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Token with attributes as parsed from a CHAT utterance.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    word : str</span>
+<span class="sd">        Word form of the token</span>
+<span class="sd">    pos : str</span>
+<span class="sd">        Part-of-speech tag</span>
+<span class="sd">    mor : str</span>
+<span class="sd">        Morphological information</span>
+<span class="sd">    gra : Gra</span>
+<span class="sd">        Grammatical relation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;word&quot;</span><span class="p">,</span> <span class="s2">&quot;pos&quot;</span><span class="p">,</span> <span class="s2">&quot;mor&quot;</span><span class="p">,</span> <span class="s2">&quot;gra&quot;</span><span class="p">)</span>
+
+    <span class="n">word</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">pos</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="n">mor</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="n">gra</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Gra</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Utterance"><a class="viewcode-back" href="../../api.html#pylangacq.chat.Utterance">[docs]</a><span class="nd">@dataclasses</span><span class="o">.</span><span class="n">dataclass</span>
+<span class="k">class</span> <span class="nc">Utterance</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Utterance in a CHAT transcript data.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    participant : str</span>
+<span class="sd">        Participant of the utterance, e.g., ``&quot;CHI&quot;``, ``&quot;MOT&quot;``</span>
+<span class="sd">    tokens : List[Token]</span>
+<span class="sd">        List of tokens of the utterance</span>
+<span class="sd">    time_marks : Tuple[int, int]</span>
+<span class="sd">        If available from the CHAT data, these are the start and end times</span>
+<span class="sd">        (in milliseconds) for a segment in a digitized video or audio file,</span>
+<span class="sd">        e.g., ``(0, 1073)``, extracted from ``&quot;·0_1073·&quot;`` in the CHAT data.</span>
+<span class="sd">        ``&quot;·&quot;`` is ASCII code 21 (0x15), for NAK (Negative Acknowledgment).</span>
+<span class="sd">    tiers : Dict[str, str]</span>
+<span class="sd">        This dictionary contains all the original, unparsed data from the utterance,</span>
+<span class="sd">        including the transcribed utterance (signaled by ``*CHI:``, ``*MOT:`` etc</span>
+<span class="sd">        in CHAT), common tiers such as %mor and %gra, as well as all other tiers</span>
+<span class="sd">        associated with the utterance. This dictionary is useful to retrieve</span>
+<span class="sd">        whatever information not readily handled by this package.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;participant&quot;</span><span class="p">,</span> <span class="s2">&quot;tokens&quot;</span><span class="p">,</span> <span class="s2">&quot;time_marks&quot;</span><span class="p">,</span> <span class="s2">&quot;tiers&quot;</span><span class="p">)</span>
+
+    <span class="n">participant</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">tokens</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Token</span><span class="p">]</span>
+    <span class="n">time_marks</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="n">tiers</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2015-2021, Jackson L. Lee | PyLangAcq 0.12.0 | Documentation last updated on March 14, 2021.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -5,7 +5,7 @@ from typing import List
 from pylangacq.objects import Gra, Token
 
 
-class DependencyGraph:
+class _DependencyGraph:
     """A DependencyGraph instance represents a sentence in dependency grammar.
 
     Attributes
@@ -81,8 +81,8 @@ class DependencyGraph:
             mor = token.mor
             gra = token.gra
             if type(gra) == Gra and gra is not None:
-                node1 = gra.source
-                node2 = gra.target
+                node1 = gra.dep
+                node2 = gra.head
                 relation = gra.rel
             else:
                 node1 = -1

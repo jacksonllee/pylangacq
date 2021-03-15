@@ -93,8 +93,8 @@
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#reading-chat-data">Reading CHAT data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#header-information">Header Information</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#transcriptions-and-annotations">Transcriptions and Annotations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart.html#developmental-measures">Developmental Measures</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#word-frequencies-and-ngrams">Word Frequencies and Ngrams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#developmental-measures">Developmental Measures</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#questions">Questions?</a></li>
 </ul>
 </li>
@@ -119,10 +119,14 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="transcriptions.html">Transcriptions and Annotations</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#child-speech-versus-child-directed-speech">Child speech versus child directed speech</a></li>
-<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#the-representation-of-words">The representation of “words”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#chat-format">CHAT Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#words">Words</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcriptions.html#output-by-utterances-or-files">Output by Utterances or Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transcriptions.html#filter-by-participants">Filter by Participants</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#tokens">Tokens</a></li>
 <li class="toctree-l2"><a class="reference internal" href="transcriptions.html#utterances">Utterances</a></li>
-<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#advanced-usage">Advanced usage</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="frequencies.html">Word Frequencies and Ngrams</a></li>
@@ -132,7 +136,14 @@
 <li class="toctree-l2"><a class="reference internal" href="measures.html#index-of-productive-syntax-ipsyn">Index of Productive Syntax (IPSyn)</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#read-chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#gra"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gra</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#utterance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Utterance</span></code></a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -207,6 +218,7 @@
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
+ | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#L"><strong>L</strong></a>
@@ -223,15 +235,13 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="dependency.html#pylangacq.dependency.DependencyGraph.add_edge">add_edge() (pylangacq.dependency.DependencyGraph method)</a>
-</li>
-      <li><a href="api.html#pylangacq.Reader.ages">ages() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.ages">[1]</a>
+      <li><a href="api.html#pylangacq.Reader.ages">ages() (pylangacq.Reader method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pylangacq.Reader.append">append() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.append">[1]</a>
+      <li><a href="api.html#pylangacq.Reader.append">append() (pylangacq.Reader method)</a>
 </li>
-      <li><a href="api.html#pylangacq.Reader.append_left">append_left() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.append_left">[1]</a>
+      <li><a href="api.html#pylangacq.Reader.append_left">append_left() (pylangacq.Reader method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -239,7 +249,7 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pylangacq.Reader.clear">clear() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.clear">[1]</a>
+      <li><a href="api.html#pylangacq.Reader.clear">clear() (pylangacq.Reader method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -247,11 +257,7 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pylangacq.Reader.dates_of_recording">dates_of_recording() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.dates_of_recording">[1]</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="dependency.html#pylangacq.dependency.DependencyGraph">DependencyGraph (class in pylangacq.dependency)</a>
+      <li><a href="api.html#pylangacq.Reader.dates_of_recording">dates_of_recording() (pylangacq.Reader method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -259,13 +265,11 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="dependency.html#pylangacq.dependency.DependencyGraph.edges">edges() (pylangacq.dependency.DependencyGraph method)</a>
+      <li><a href="api.html#pylangacq.Reader.extend">extend() (pylangacq.Reader method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pylangacq.Reader.extend">extend() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.extend">[1]</a>
-</li>
-      <li><a href="api.html#pylangacq.Reader.extend_left">extend_left() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.extend_left">[1]</a>
+      <li><a href="api.html#pylangacq.Reader.extend_left">extend_left() (pylangacq.Reader method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -273,19 +277,25 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="dependency.html#pylangacq.dependency.DependencyGraph.faulty">faulty() (pylangacq.dependency.DependencyGraph property)</a>
+      <li><a href="api.html#pylangacq.Reader.file_paths">file_paths() (pylangacq.Reader method)</a>
 </li>
-      <li><a href="api.html#pylangacq.Reader.file_paths">file_paths() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.file_paths">[1]</a>
-</li>
-      <li><a href="api.html#pylangacq.Reader.from_dir">from_dir() (pylangacq.Reader class method)</a>, <a href="chat.html#pylangacq.Reader.from_dir">[1]</a>
+      <li><a href="api.html#pylangacq.Reader.from_dir">from_dir() (pylangacq.Reader class method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pylangacq.Reader.from_files">from_files() (pylangacq.Reader class method)</a>, <a href="chat.html#pylangacq.Reader.from_files">[1]</a>
+      <li><a href="api.html#pylangacq.Reader.from_files">from_files() (pylangacq.Reader class method)</a>
 </li>
-      <li><a href="api.html#pylangacq.Reader.from_strs">from_strs() (pylangacq.Reader class method)</a>, <a href="chat.html#pylangacq.Reader.from_strs">[1]</a>
+      <li><a href="api.html#pylangacq.Reader.from_strs">from_strs() (pylangacq.Reader class method)</a>
 </li>
-      <li><a href="api.html#pylangacq.Reader.from_zip">from_zip() (pylangacq.Reader class method)</a>, <a href="chat.html#pylangacq.Reader.from_zip">[1]</a>
+      <li><a href="api.html#pylangacq.Reader.from_zip">from_zip() (pylangacq.Reader class method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#pylangacq.chat.Gra">Gra (class in pylangacq.chat)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -293,7 +303,7 @@
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pylangacq.Reader.headers">headers() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.headers">[1]</a>
+      <li><a href="api.html#pylangacq.Reader.headers">headers() (pylangacq.Reader method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -301,7 +311,7 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pylangacq.Reader.ipsyn">ipsyn() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.ipsyn">[1]</a>
+      <li><a href="api.html#pylangacq.Reader.ipsyn">ipsyn() (pylangacq.Reader method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -309,7 +319,7 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pylangacq.Reader.languages">languages() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.languages">[1]</a>
+      <li><a href="api.html#pylangacq.Reader.languages">languages() (pylangacq.Reader method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -317,32 +327,21 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pylangacq.Reader.mlu">mlu() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.mlu">[1]</a>
-</li>
-      <li><a href="api.html#pylangacq.Reader.mlum">mlum() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.mlum">[1]</a>
+      <li><a href="api.html#pylangacq.Reader.mlu">mlu() (pylangacq.Reader method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pylangacq.Reader.mluw">mluw() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.mluw">[1]</a>
+      <li><a href="api.html#pylangacq.Reader.mlum">mlum() (pylangacq.Reader method)</a>
 </li>
-      <li>
-    module
-
-      <ul>
-        <li><a href="dependency.html#module-pylangacq.dependency">pylangacq.dependency</a>
+      <li><a href="api.html#pylangacq.Reader.mluw">mluw() (pylangacq.Reader method)</a>
 </li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pylangacq.Reader.n_files">n_files() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.n_files">[1]</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="dependency.html#pylangacq.dependency.DependencyGraph.n_nodes">n_nodes() (pylangacq.dependency.DependencyGraph method)</a>
+      <li><a href="api.html#pylangacq.Reader.n_files">n_files() (pylangacq.Reader method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -350,21 +349,14 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pylangacq.Reader.participants">participants() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.participants">[1]</a>
-</li>
-      <li><a href="api.html#pylangacq.Reader.pop">pop() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.pop">[1]</a>
+      <li><a href="api.html#pylangacq.Reader.participants">participants() (pylangacq.Reader method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pylangacq.Reader.pop_left">pop_left() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.pop_left">[1]</a>
+      <li><a href="api.html#pylangacq.Reader.pop">pop() (pylangacq.Reader method)</a>
 </li>
-      <li>
-    pylangacq.dependency
-
-      <ul>
-        <li><a href="dependency.html#module-pylangacq.dependency">module</a>
+      <li><a href="api.html#pylangacq.Reader.pop_left">pop_left() (pylangacq.Reader method)</a>
 </li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -375,7 +367,7 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pylangacq.Reader">Reader (class in pylangacq)</a>, <a href="chat.html#pylangacq.Reader">[1]</a>
+      <li><a href="api.html#pylangacq.Reader">Reader (class in pylangacq)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -383,7 +375,7 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pylangacq.Reader.sents">sents() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.sents">[1]</a>
+      <li><a href="api.html#pylangacq.Reader.sents">sents() (pylangacq.Reader method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -391,19 +383,17 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pylangacq.Reader.tagged_sents">tagged_sents() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.tagged_sents">[1]</a>
+      <li><a href="api.html#pylangacq.Reader.tagged_sents">tagged_sents() (pylangacq.Reader method)</a>
 </li>
-      <li><a href="api.html#pylangacq.Reader.tagged_words">tagged_words() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.tagged_words">[1]</a>
-</li>
-      <li><a href="dependency.html#pylangacq.dependency.DependencyGraph.to_conll">to_conll() (pylangacq.dependency.DependencyGraph method)</a>
+      <li><a href="api.html#pylangacq.Reader.tagged_words">tagged_words() (pylangacq.Reader method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="dependency.html#pylangacq.dependency.DependencyGraph.to_tikz">to_tikz() (pylangacq.dependency.DependencyGraph method)</a>
+      <li><a href="api.html#pylangacq.chat.Token">Token (class in pylangacq.chat)</a>
 </li>
-      <li><a href="api.html#pylangacq.Reader.tokens">tokens() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.tokens">[1]</a>
+      <li><a href="api.html#pylangacq.Reader.tokens">tokens() (pylangacq.Reader method)</a>
 </li>
-      <li><a href="api.html#pylangacq.Reader.ttr">ttr() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.ttr">[1]</a>
+      <li><a href="api.html#pylangacq.Reader.ttr">ttr() (pylangacq.Reader method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -411,7 +401,11 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pylangacq.Reader.utterances">utterances() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.utterances">[1]</a>
+      <li><a href="api.html#pylangacq.chat.Utterance">Utterance (class in pylangacq.chat)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#pylangacq.Reader.utterances">utterances() (pylangacq.Reader method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -419,13 +413,13 @@
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pylangacq.Reader.word_frequencies">word_frequencies() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.word_frequencies">[1]</a>
+      <li><a href="api.html#pylangacq.Reader.word_frequencies">word_frequencies() (pylangacq.Reader method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pylangacq.Reader.word_ngrams">word_ngrams() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.word_ngrams">[1]</a>
+      <li><a href="api.html#pylangacq.Reader.word_ngrams">word_ngrams() (pylangacq.Reader method)</a>
 </li>
-      <li><a href="api.html#pylangacq.Reader.words">words() (pylangacq.Reader method)</a>, <a href="chat.html#pylangacq.Reader.words">[1]</a>
+      <li><a href="api.html#pylangacq.Reader.words">words() (pylangacq.Reader method)</a>
 </li>
   </ul></td>
 </tr></table>

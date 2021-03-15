@@ -3,7 +3,8 @@
 Quickstart
 ==========
 
-To start, import the package ``pylangacq`` in your Python code:
+After you have downloaded and installed PyLangAcq (see :ref:`download_install`),
+import the package ``pylangacq`` in your Python interpreter:
 
 .. code-block:: python
 
@@ -28,13 +29,13 @@ corpus of American English:
 
     >>> url = "https://childes.talkbank.org/data/Eng-NA/Brown.zip"
     >>> eve = pylangacq.read_chat(url, "Eve")
-    >>> len(eve)
+    >>> eve.n_files()
     20
 
 ``eve`` is a :class:`~pylangacq.Reader` instance.
 It has Eve's 20 CHAT data files all parsed and ready for your analysis.
 ``eve`` has various methods through which you can access different information
-with Pythonic data structures.
+with Python data structures.
 
 More on :ref:`read`.
 
@@ -135,11 +136,11 @@ as :func:`~pylangacq.Reader.words` with annotations:
 
     >>> some_tokens = eve.tokens()[:5]
     >>> some_tokens
-    [Token(word='more', pos='qn', mor='more', gra=Gra(source=1, target=2, rel='QUANT')),
-     Token(word='cookie', pos='n', mor='cookie', gra=Gra(source=2, target=0, rel='INCROOT')),
-     Token(word='.', pos='.', mor='', gra=Gra(source=3, target=2, rel='PUNCT')),
-     Token(word='you', pos='pro:per', mor='you', gra=Gra(source=1, target=2, rel='SUBJ')),
-     Token(word='0v', pos='0v', mor='v', gra=Gra(source=2, target=0, rel='ROOT'))]
+    [Token(word='more', pos='qn', mor='more', gra=Gra(dep=1, head=2, rel='QUANT')),
+     Token(word='cookie', pos='n', mor='cookie', gra=Gra(dep=2, head=0, rel='INCROOT')),
+     Token(word='.', pos='.', mor='', gra=Gra(dep=3, head=2, rel='PUNCT')),
+     Token(word='you', pos='pro:per', mor='you', gra=Gra(dep=1, head=2, rel='SUBJ')),
+     Token(word='0v', pos='0v', mor='v', gra=Gra(dep=2, head=0, rel='ROOT'))]
     >>>
     >>> # The Token class is a dataclass. A Token instance has attributes as shown above.
     >>> for token in some_tokens:
@@ -160,9 +161,9 @@ or any unparsed tiers, :func:`~pylangacq.Reader.utterances` is what you need:
 
     >>> eve.utterances()[0]
     Utterance(participant='CHI',
-              tokens=[Token(word='more', pos='qn', mor='more', gra=Gra(source=1, target=2, rel='QUANT')),
-                      Token(word='cookie', pos='n', mor='cookie', gra=Gra(source=2, target=0, rel='INCROOT')),
-                      Token(word='.', pos='.', mor='', gra=Gra(source=3, target=2, rel='PUNCT'))],
+              tokens=[Token(word='more', pos='qn', mor='more', gra=Gra(dep=1, head=2, rel='QUANT')),
+                      Token(word='cookie', pos='n', mor='cookie', gra=Gra(dep=2, head=0, rel='INCROOT')),
+                      Token(word='.', pos='.', mor='', gra=Gra(dep=3, head=2, rel='PUNCT'))],
               time_marks=None,
               tiers={'CHI': 'more cookie . [+ IMP]',
                      '%mor': 'qn|more n|cookie .',
@@ -170,6 +171,35 @@ or any unparsed tiers, :func:`~pylangacq.Reader.utterances` is what you need:
                      '%int': 'distinctive , loud'})
 
 More on :ref:`transcriptions`.
+
+
+Word Frequencies and Ngrams
+---------------------------
+
+For word combinatorics, check out
+:func:`~pylangacq.Reader.word_frequencies`
+and :func:`~pylangacq.Reader.word_ngrams`:
+
+.. code-block:: python
+
+    >>> word_freq = eve.word_frequencies()  # a collections.Counter object
+    >>> word_freq.most_common(5)
+    [('.', 20130),
+     ('?', 6358),
+     ('you', 3695),
+     ('the', 2524),
+     ('it', 2365)]
+
+    >>> bigrams = eve.word_ngrams(2)  # a collections.Counter object
+    >>> bigrams.most_common(5)
+    [(('it', '.'), 705),
+     (('that', '?'), 619),
+     (('what', '?'), 560),
+     (('yeah', '.'), 510),
+     (('there', '.'), 471)]
+
+More on :ref:`frequencies`.
+
 
 Developmental Measures
 ----------------------
@@ -209,33 +239,6 @@ The other language developmental measures implemented so far are
 :func:`~pylangacq.Reader.ipsyn` for the index of productive syntax (IPSyn).
 
 More on :ref:`measures`.
-
-Word Frequencies and Ngrams
----------------------------
-
-For word combinatorics, check out
-:func:`~pylangacq.Reader.word_frequencies`
-and :func:`~pylangacq.Reader.word_ngrams`:
-
-.. code-block:: python
-
-    >>> word_freq = eve.word_frequencies()  # a collections.Counter object
-    >>> word_freq.most_common(5)
-    [('.', 20130),
-     ('?', 6358),
-     ('you', 3695),
-     ('the', 2524),
-     ('it', 2365)]
-
-    >>> bigrams = eve.word_ngrams(2)  # a collections.Counter object
-    >>> bigrams.most_common(5)
-    [(('it', '.'), 705),
-     (('that', '?'), 619),
-     (('what', '?'), 560),
-     (('yeah', '.'), 510),
-     (('there', '.'), 471)]
-
-More on :ref:`frequencies`.
 
 Questions?
 ----------

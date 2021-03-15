@@ -95,8 +95,8 @@
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#reading-chat-data">Reading CHAT data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#header-information">Header Information</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#transcriptions-and-annotations">Transcriptions and Annotations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart.html#developmental-measures">Developmental Measures</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#word-frequencies-and-ngrams">Word Frequencies and Ngrams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#developmental-measures">Developmental Measures</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#questions">Questions?</a></li>
 </ul>
 </li>
@@ -121,10 +121,14 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Transcriptions and Annotations</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#child-speech-versus-child-directed-speech">Child speech versus child directed speech</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#the-representation-of-words">The representation of “words”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#chat-format">CHAT Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#words">Words</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#output-by-utterances-or-files">Output by Utterances or Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#filter-by-participants">Filter by Participants</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#tokens">Tokens</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#utterances">Utterances</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#advanced-usage">Advanced usage</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="frequencies.html">Word Frequencies and Ngrams</a></li>
@@ -134,7 +138,14 @@
 <li class="toctree-l2"><a class="reference internal" href="measures.html#index-of-productive-syntax-ipsyn">Index of Productive Syntax (IPSyn)</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#read-chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#gra"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gra</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#utterance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Utterance</span></code></a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -200,204 +211,204 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <p id="transcriptions">After the headers come the transcriptions. All transcriptions are signaled by
-<code class="docutils literal notranslate"><span class="pre">*</span></code> at the beginning of the line:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">Code1</span><span class="p">:</span> <span class="n">good</span> <span class="n">morning</span> <span class="o">.</span>
+  <div class="section" id="transcriptions-and-annotations">
+<span id="transcriptions"></span><h1>Transcriptions and Annotations<a class="headerlink" href="#transcriptions-and-annotations" title="Permalink to this headline">¶</a></h1>
+<p>Conversational data formatted in CHAT provides transcriptions with rich
+annotations for both linguistic and extra-linguistic information.
+PyLangAcq is designed to extract data and annotations in CHAT and expose them
+in Python data structures for flexible modeling work.
+This page explains how PyLangAcq represents CHAT data and annotations.</p>
+<div class="section" id="chat-format">
+<h2>CHAT Format<a class="headerlink" href="#chat-format" title="Permalink to this headline">¶</a></h2>
+<p>To see how the CHAT format translates to PyLangAcq, let’s look at the very first
+two utterances in Eve’s data in the American English
+<a class="reference external" href="https://childes.talkbank.org/access/Eng-NA/Brown.html">Brown</a>
+dataset on CHILDES (data file: <code class="docutils literal notranslate"><span class="pre">Brown/Eve/010600a.cha</span></code>),
+where apparently Eve demands cookies in the first utterance
+and her mother responds with a question for confirmation in the second utterance:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>*CHI:       more cookie . [+ IMP]
+%mor:       qn|more n|cookie .
+%gra:       1|2|QUANT 2|0|INCROOT 3|2|PUNCT
+%int:       distinctive , loud
+*MOT:       you 0v more cookies ?
+%mor:       pro:per|you 0v|v qn|more n|cookie-PL ?
+%gra:       1|2|SUBJ 2|0|ROOT 3|4|QUANT 4|2|OBJ 5|2|PUNCT
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">*</span></code> is immediately followed by the participant code (e.g., <code class="docutils literal notranslate"><span class="pre">Code1</span></code>), and then
-by a colon <code class="docutils literal notranslate"><span class="pre">:</span></code> and a space (or tab). Then the transcribed line follows.</p>
-<p>For research purposes, many CHAT transcripts have additional tiers signaled by
-<code class="docutils literal notranslate"><span class="pre">%mor</span></code> (for morphological information such as part-of-speech tag and lemma),
-<code class="docutils literal notranslate"><span class="pre">%gra</span></code> (for dependency and grammatical relations), and other <code class="docutils literal notranslate"><span class="pre">%</span></code> tiers.
-Much of what PyLangAcq can do relies on the annotations in these tiers with
-rich linguistic information.</p>
-<div class="section" id="transcriptions-and-annotations">
-<h1>Transcriptions and Annotations<a class="headerlink" href="#transcriptions-and-annotations" title="Permalink to this headline">¶</a></h1>
-<p>This page introduces the data methods of <code class="docutils literal notranslate"><span class="pre">Reader</span></code> objects for transcriptions
-and annotations.
-For metadata access, see <a class="reference external" href="https://docs.python.org/3/library/importlib.metadata.html#metadata" title="(in Python v3.9)"><span>Distribution metadata</span></a>.
-For details of the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> class, see <a class="reference internal" href="chat.html#reader-api"><span class="std std-ref">The Reader class API</span></a>.</p>
+<p>PyLangAcq handles CHAT data by paying attention to the following:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#cds"><span class="std std-ref">Child speech versus child directed speech</span></a></p></li>
-<li><p><a class="reference internal" href="#word"><span class="std std-ref">The representation of “words”</span></a></p></li>
-<li><p><a class="reference internal" href="#utterances"><span class="std std-ref">Utterances</span></a></p></li>
-<li><p><a class="reference internal" href="#transcriptions-advanced"><span class="std std-ref">Advanced usage</span></a></p></li>
+<li><p><strong>Participants:</strong>
+The two participants are <code class="docutils literal notranslate"><span class="pre">CHI</span></code> and <code class="docutils literal notranslate"><span class="pre">MOT</span></code>.
+In CHILDES, it is customary to denote the target child (i.e., Eve in this example)
+by <code class="docutils literal notranslate"><span class="pre">CHI</span></code> and the child’s mother by <code class="docutils literal notranslate"><span class="pre">MOT</span></code>.
+The asterisk <code class="docutils literal notranslate"><span class="pre">*</span></code> that comes just before the participant code signals
+a transcription line. Each utterance must begin with the transcription line.</p></li>
+<li><p><strong>Transcriptions:</strong>
+The two transcription lines are <code class="docutils literal notranslate"><span class="pre">more</span> <span class="pre">cookie</span> <span class="pre">.</span> <span class="pre">[+</span> <span class="pre">IMP]</span></code> from Eve
+and <code class="docutils literal notranslate"><span class="pre">you</span> <span class="pre">0v</span> <span class="pre">more</span> <span class="pre">cookies</span> <span class="pre">?</span></code> from her mother.
+The transcriptions are word-segmented by spaces
+(even for languages that don’t have such orthographic conventions as English does).
+Punctuation marks are also treated as “words”.
+Annotations such as <code class="docutils literal notranslate"><span class="pre">[+</span> <span class="pre">IMP]</span></code> and <code class="docutils literal notranslate"><span class="pre">0v</span></code> here can be found in transcriptions.</p></li>
+<li><p><strong>Dependent tiers:</strong>
+Between one transcription line and the next one, there are often what’s known
+as dependent tiers, signed by <code class="docutils literal notranslate"><span class="pre">%</span></code>,
+associated with the transcription line just immediately above;
+Eve’s utterance has the dependent tiers <code class="docutils literal notranslate"><span class="pre">%mor</span></code>
+(morphological information), <code class="docutils literal notranslate"><span class="pre">%gra</span></code> (grammatical relations),
+and <code class="docutils literal notranslate"><span class="pre">%int</span></code> (intonation),
+whereas Eve’s mother’s has only <code class="docutils literal notranslate"><span class="pre">%mor</span></code> and <code class="docutils literal notranslate"><span class="pre">%gra</span></code>.
+Although certain dependent tiers are more standardized and more commonly found
+in CHILDES datasets (especially <code class="docutils literal notranslate"><span class="pre">%mor</span></code> and <code class="docutils literal notranslate"><span class="pre">%gra</span></code>),
+none of the dependent tiers are obligatory in a CHAT utterance.</p></li>
+<li><p><strong>The %mor tier:</strong>
+The morphological information aligns one-to-one to the segmented words
+(including punctuation marks) in the transcription line;
+annotations in the transcription line are ignored.
+In each item of <code class="docutils literal notranslate"><span class="pre">%mor</span></code>, the part-of-speech tag is on the left of the pipe <code class="docutils literal notranslate"><span class="pre">|</span></code>,
+e.g., <code class="docutils literal notranslate"><span class="pre">qn</span></code> for a nominal quantifier in <code class="docutils literal notranslate"><span class="pre">qn|more</span></code> aligned to <code class="docutils literal notranslate"><span class="pre">more</span></code> in Eve’s line.
+Inflectional and derivational information is on the right of <code class="docutils literal notranslate"><span class="pre">|</span></code>,
+e.g., <code class="docutils literal notranslate"><span class="pre">cookie-PL</span></code> for the plural form of “cookie” in <code class="docutils literal notranslate"><span class="pre">n|cookie-PL</span></code>
+aligned to <code class="docutils literal notranslate"><span class="pre">cookies</span></code> in Eve’s mother’s line.</p></li>
+<li><p><strong>The %gra tier:</strong>
+CHAT represents grammatical relations in terms of heads and dependents in
+dependency grammar.
+Every item on the <code class="docutils literal notranslate"><span class="pre">%gra</span></code> tier corresponds one-to-one to the segmented words
+in the transcription (and therefore one-to-one to the <code class="docutils literal notranslate"><span class="pre">%mor</span></code> items as well).
+In Eve’s mother’s <code class="docutils literal notranslate"><span class="pre">%gra</span></code>, <code class="docutils literal notranslate"><span class="pre">3|4|QUANT</span></code> means <code class="docutils literal notranslate"><span class="pre">more</span></code> at position 3 of the utterance
+is a dependent of the word <code class="docutils literal notranslate"><span class="pre">cookies</span></code> at position 4 as the head,
+and that the relation is one of quantification.</p></li>
+<li><p><strong>Other tiers:</strong>
+Apart from <code class="docutils literal notranslate"><span class="pre">%mor</span></code> and <code class="docutils literal notranslate"><span class="pre">%gra</span></code>, other dependent tiers may appear in CHAT data files.
+Some of them contain more linguistic information, e.g., <code class="docutils literal notranslate"><span class="pre">%int</span></code> for intonation
+in Eve’s utterance here, and others contain contextual information about the
+utterance or recording session.
+Many of these tiers are used only as needed (<code class="docutils literal notranslate"><span class="pre">%int</span></code> not used in Eve’s mother’s
+utterance in this example).</p></li>
 </ul>
-<div class="section" id="child-speech-versus-child-directed-speech">
-<span id="cds"></span><h2>Child speech versus child directed speech<a class="headerlink" href="#child-speech-versus-child-directed-speech" title="Permalink to this headline">¶</a></h2>
-<p>The distinction between child speech and child directed speech is important in
-language acquisition research. Many data and metadata access methods in
-PyLangAcq make this distinction possible by two optional arguments:
-<em>participant</em> and <em>exclude</em>.
-The <em>participant</em> parameter accepts a string
-of a participant code (e.g., <code class="docutils literal notranslate"><span class="pre">'CHI'</span></code>, <code class="docutils literal notranslate"><span class="pre">'MOT'</span></code>) or a sequence of
-participant codes (e.g., the set <code class="docutils literal notranslate"><span class="pre">{'CHI',</span> <span class="pre">'MOT'}</span></code> to include both
-participants).
-Similarly, the <em>exclude</em> parameter can be either a string or a sequence of
-strings, for excluding the specified participant codes.</p>
-<p>To get child speech, set <em>participant</em> as <code class="docutils literal notranslate"><span class="pre">'CHI'</span></code>.
-To get child directed speech, set <em>exclude</em> as <code class="docutils literal notranslate"><span class="pre">'CHI'</span></code> to
-exclude all participant codes except <code class="docutils literal notranslate"><span class="pre">'CHI'</span></code>. Examples:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span> <span class="kn">as</span> <span class="nn">pla</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pla</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="s1">&#39;Brown/Eve/*.cha&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">number_of_utterances</span><span class="p">()</span>  <span class="c1"># default: include all participants</span>
-<span class="go">26979</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">number_of_utterances</span><span class="p">(</span><span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">)</span>  <span class="c1"># only the target child, for child speech</span>
-<span class="go">12167</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">number_of_utterances</span><span class="p">(</span><span class="n">exclude</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">)</span>  <span class="c1"># excludes the target child, for child-directed speech</span>
-<span class="go">14812</span>
+<p>Once you have a <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> object with CHAT data,
+several methods are available for accessing the transcriptions and annotations.
+Which method suits your need best depends on which level of information you need.
+The following sections introduce these <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> methods,
+using a reader created by <a class="reference internal" href="api.html#pylangacq.Reader.from_strs" title="pylangacq.Reader.from_strs"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_strs()</span></code></a> with the two CHAT
+utterances between Eve and her mother we’ve looked at.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="gp">... </span><span class="s2">    *CHI:   more cookie . [+ IMP]</span>
+<span class="gp">... </span><span class="s2">    %mor:   qn|more n|cookie .</span>
+<span class="gp">... </span><span class="s2">    </span><span class="si">%g</span><span class="s2">ra:   1|2|QUANT 2|0|INCROOT 3|2|PUNCT</span>
+<span class="gp">... </span><span class="s2">    </span><span class="si">%i</span><span class="s2">nt:   distinctive , loud</span>
+<span class="gp">... </span><span class="s2">    *MOT:   you 0v more cookies ?</span>
+<span class="gp">... </span><span class="s2">    %mor:   pro:per|you 0v|v qn|more n|cookie-PL ?</span>
+<span class="gp">... </span><span class="s2">    </span><span class="si">%g</span><span class="s2">ra:   1|2|SUBJ 2|0|ROOT 3|4|QUANT 4|2|OBJ 5|2|PUNCT</span>
+<span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">from_strs</span><span class="p">([</span><span class="n">data</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>Most methods default <em>participant</em> to be all participants, like
-<code class="docutils literal notranslate"><span class="pre">number_of_utterances()</span></code> just illustrated above
-(as well as all methods in <a class="reference internal" href="#utterances"><span class="std std-ref">Utterances</span></a> below).
-Certain methods, such as
-<code class="docutils literal notranslate"><span class="pre">age()</span></code> and developmental measures,
-are most often concerned with the target child only, and therefore
-have <em>participant</em> set to be <code class="docutils literal notranslate"><span class="pre">'CHI'</span></code> instead by default.</p>
-<p>To check if a method has the optional argument <em>participant</em>,
-please see the complete
-list of methods for the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> class in <a class="reference internal" href="chat.html"><span class="doc">chat — Reading and parsing CHAT transcripts</span></a>.</p>
 </div>
-<div class="section" id="the-representation-of-words">
-<span id="word"></span><h2>The representation of “words”<a class="headerlink" href="#the-representation-of-words" title="Permalink to this headline">¶</a></h2>
-<p>The representation of “words” in PyLangAcq comes in two flavors
-(similar to NLTK):</p>
-<ol class="arabic">
-<li><p>The “simple” representation as a <strong>string</strong>,
-which is what appears as a word token in a transcription line
-starting with <code class="docutils literal notranslate"><span class="pre">*</span></code> in the CHAT transcript.</p></li>
-<li><p>The “tagged” representation as a <strong>tuple</strong> of (<em>word</em>, <em>pos</em>, <em>mor</em>, <em>rel</em>),
-which contains information from the transcription line and its <code class="docutils literal notranslate"><span class="pre">%</span></code>-tiers:</p>
-<p><em>word</em> (str) – word token string</p>
-<p><em>pos</em> (str) – part-of-speech tag</p>
-<p><em>mor</em> (str) – morphology for lemma and inflectional information, if any</p>
-<p><em>rel</em> (tuple(int, int, str)) – dependency and grammatical relation</p>
-</li>
-</ol>
-<p>To illustrate, let us consider the following CHAT utterance with its <code class="docutils literal notranslate"><span class="pre">%mor</span></code>
-and <code class="docutils literal notranslate"><span class="pre">%gra</span></code> tiers (extracted from <code class="docutils literal notranslate"><span class="pre">eve01.cha</span></code>):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">MOT</span><span class="p">:</span> <span class="n">but</span> <span class="n">I</span> <span class="n">thought</span> <span class="n">you</span> <span class="n">wanted</span> <span class="n">me</span> <span class="n">to</span> <span class="n">turn</span> <span class="n">it</span> <span class="o">.</span>
-<span class="o">%</span><span class="n">mor</span><span class="p">:</span> <span class="n">conj</span><span class="o">|</span><span class="n">but</span> <span class="n">pro</span><span class="p">:</span><span class="n">sub</span><span class="o">|</span><span class="n">I</span> <span class="n">v</span><span class="o">|</span><span class="n">think</span><span class="o">&amp;</span><span class="n">PAST</span> <span class="n">pro</span><span class="o">|</span><span class="n">you</span> <span class="n">v</span><span class="o">|</span><span class="n">want</span><span class="o">-</span><span class="n">PAST</span> <span class="n">pro</span><span class="p">:</span><span class="n">obj</span><span class="o">|</span><span class="n">me</span> <span class="n">inf</span><span class="o">|</span><span class="n">to</span> <span class="n">v</span><span class="o">|</span><span class="n">turn</span> <span class="n">pro</span><span class="o">|</span><span class="n">it</span> <span class="o">.</span>
-<span class="o">%</span><span class="n">gra</span><span class="p">:</span> <span class="mi">1</span><span class="o">|</span><span class="mi">3</span><span class="o">|</span><span class="n">LINK</span> <span class="mi">2</span><span class="o">|</span><span class="mi">3</span><span class="o">|</span><span class="n">SUBJ</span> <span class="mi">3</span><span class="o">|</span><span class="mi">0</span><span class="o">|</span><span class="n">ROOT</span> <span class="mi">4</span><span class="o">|</span><span class="mi">3</span><span class="o">|</span><span class="n">OBJ</span> <span class="mi">5</span><span class="o">|</span><span class="mi">3</span><span class="o">|</span><span class="n">JCT</span> <span class="mi">6</span><span class="o">|</span><span class="mi">5</span><span class="o">|</span><span class="n">POBJ</span> <span class="mi">7</span><span class="o">|</span><span class="mi">8</span><span class="o">|</span><span class="n">INF</span> <span class="mi">8</span><span class="o">|</span><span class="mi">3</span><span class="o">|</span><span class="n">XCOMP</span> <span class="mi">9</span><span class="o">|</span><span class="mi">8</span><span class="o">|</span><span class="n">OBJ</span> <span class="mi">10</span><span class="o">|</span><span class="mi">3</span><span class="o">|</span><span class="n">PUNCT</span>
+<div class="section" id="words">
+<h2>Words<a class="headerlink" href="#words" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> method <a class="reference internal" href="api.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a>
+returns the transcriptions as segmented words.
+Calling <a class="reference internal" href="api.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a> with no arguments gives a
+flat list of the words:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span><span class="o">.</span><span class="n">words</span><span class="p">()</span>
+<span class="go">[&#39;more&#39;, &#39;cookie&#39;, &#39;.&#39;, &#39;you&#39;, &#39;0v&#39;, &#39;more&#39;, &#39;cookies&#39;, &#39;?&#39;]</span>
 </pre></div>
 </div>
-<p>The list of “simple” words from this utterance are the list of word token
-strings:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;but&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;thought&#39;</span><span class="p">,</span> <span class="s1">&#39;you&#39;</span><span class="p">,</span> <span class="s1">&#39;wanted&#39;</span><span class="p">,</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="s1">&#39;to&#39;</span><span class="p">,</span> <span class="s1">&#39;turn&#39;</span><span class="p">,</span> <span class="s1">&#39;it&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">]</span>
+<div class="section" id="output-by-utterances-or-files">
+<h3>Output by Utterances or Files<a class="headerlink" href="#output-by-utterances-or-files" title="Permalink to this headline">¶</a></h3>
+<p>To preserve the utterance-level structure, pass in <code class="docutils literal notranslate"><span class="pre">by_utterances=True</span></code>
+so that an inner list is created around the words from each utterance:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="n">by_utterances</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">[[&#39;more&#39;, &#39;cookie&#39;, &#39;.&#39;],</span>
+<span class="go"> [&#39;you&#39;, &#39;0v&#39;, &#39;more&#39;, &#39;cookies&#39;, &#39;?&#39;]]</span>
 </pre></div>
 </div>
-<p>The list of “tagged” words from this utterance are a list of 4-tuples:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[(</span><span class="s1">&#39;but&#39;</span><span class="p">,</span> <span class="s1">&#39;CONJ&#39;</span><span class="p">,</span> <span class="s1">&#39;but&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;LINK&#39;</span><span class="p">)),</span>
- <span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;PRO:SUB&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;SUBJ&#39;</span><span class="p">)),</span>
- <span class="p">(</span><span class="s1">&#39;thought&#39;</span><span class="p">,</span> <span class="s1">&#39;V&#39;</span><span class="p">,</span> <span class="s1">&#39;think&amp;PAST&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;CJCT&#39;</span><span class="p">)),</span>
- <span class="p">(</span><span class="s1">&#39;you&#39;</span><span class="p">,</span> <span class="s1">&#39;PRO:PER&#39;</span><span class="p">,</span> <span class="s1">&#39;you&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;SUBJ&#39;</span><span class="p">)),</span>
- <span class="p">(</span><span class="s1">&#39;wanted&#39;</span><span class="p">,</span> <span class="s1">&#39;V&#39;</span><span class="p">,</span> <span class="s1">&#39;want-PAST&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;ROOT&#39;</span><span class="p">)),</span>
- <span class="p">(</span><span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="s1">&#39;PRO:OBJ&#39;</span><span class="p">,</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;OBJ&#39;</span><span class="p">)),</span>
- <span class="p">(</span><span class="s1">&#39;to&#39;</span><span class="p">,</span> <span class="s1">&#39;INF&#39;</span><span class="p">,</span> <span class="s1">&#39;to&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;INF&#39;</span><span class="p">)),</span>
- <span class="p">(</span><span class="s1">&#39;turn&#39;</span><span class="p">,</span> <span class="s1">&#39;V&#39;</span><span class="p">,</span> <span class="s1">&#39;turn&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;XCOMP&#39;</span><span class="p">)),</span>
- <span class="p">(</span><span class="s1">&#39;it&#39;</span><span class="p">,</span> <span class="s1">&#39;PRO:PER&#39;</span><span class="p">,</span> <span class="s1">&#39;it&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;OBJ&#39;</span><span class="p">)),</span>
- <span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;PUNCT&#39;</span><span class="p">)),</span>
-<span class="p">]</span>
+<p>Because this example reader was created by a single in-memory string above,
+internally the string was treated as if it were one single “file”.
+If the reader had data from multiple CHAT data files (or strings),
+you might need the file-level structure in order to distinguish data from one file
+to another.
+Compared to the code snippet just above,
+adding <code class="docutils literal notranslate"><span class="pre">by_files=True</span></code> captures the two utterances (= two lists of strings)
+in an inner list, before the outermost list wraps up all the data:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="n">by_utterances</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">[[[&#39;more&#39;, &#39;cookie&#39;, &#39;.&#39;],</span>
+<span class="go">  [&#39;you&#39;, &#39;0v&#39;, &#39;more&#39;, &#39;cookies&#39;, &#39;?&#39;]]]</span>
 </pre></div>
 </div>
-<p>The distinction of “simple” versus “tagged” words is reflected in the data
-access methods introduced in <a class="reference internal" href="#utterances"><span class="std std-ref">Utterances</span></a> below.</p>
+</div>
+<div class="section" id="filter-by-participants">
+<h3>Filter by Participants<a class="headerlink" href="#filter-by-participants" title="Permalink to this headline">¶</a></h3>
+<p>Besides controlling the output for its structure,
+you can also specify which participants’ data to return.
+The optional arguments <code class="docutils literal notranslate"><span class="pre">participants</span></code> and <code class="docutils literal notranslate"><span class="pre">exclude</span></code> are available for this purpose.
+<code class="docutils literal notranslate"><span class="pre">participants</span></code> takes a string (e.g., <code class="docutils literal notranslate"><span class="pre">&quot;CHI&quot;</span></code>) or an iterable of strings
+(e.g., <code class="docutils literal notranslate"><span class="pre">{&quot;CHI&quot;,</span> <span class="pre">&quot;MOT&quot;}</span></code>) to include only the specified participants in the output.
+If specifying who to exclude is easier, use <code class="docutils literal notranslate"><span class="pre">exclude</span></code> instead.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="n">participants</span><span class="o">=</span><span class="s2">&quot;CHI&quot;</span><span class="p">,</span> <span class="n">by_utterances</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">[[&#39;more&#39;, &#39;cookie&#39;, &#39;.&#39;]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="n">exclude</span><span class="o">=</span><span class="s2">&quot;MOT&quot;</span><span class="p">,</span> <span class="n">by_utterances</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">[[&#39;more&#39;, &#39;cookie&#39;, &#39;.&#39;]]</span>
+</pre></div>
+</div>
+<p>Examples of use cases:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">participants=&quot;CHI&quot;</span></code> for child speech</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exclude=&quot;CHI&quot;</span></code> for child-directed speech</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">participants={&quot;CHI&quot;,</span> <span class="pre">&quot;MOT&quot;,</span> <span class="pre">&quot;FAT&quot;}</span></code> for parent-child interactions</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="tokens">
+<h2>Tokens<a class="headerlink" href="#tokens" title="Permalink to this headline">¶</a></h2>
+<p>Beyond the transcriptions from <a class="reference internal" href="api.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a>,
+<a class="reference internal" href="api.html#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code></a> gives you the word-based
+annotations from the CHAT data.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve_tokens</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">tokens</span><span class="p">(</span><span class="n">participants</span><span class="o">=</span><span class="s2">&quot;CHI&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve_tokens</span>
+<span class="go">[Token(word=&#39;more&#39;, pos=&#39;qn&#39;, mor=&#39;more&#39;, gra=Gra(dep=1, head=2, rel=&#39;QUANT&#39;)),</span>
+<span class="go"> Token(word=&#39;cookie&#39;, pos=&#39;n&#39;, mor=&#39;cookie&#39;, gra=Gra(dep=2, head=0, rel=&#39;INCROOT&#39;)),</span>
+<span class="go"> Token(word=&#39;.&#39;, pos=&#39;.&#39;, mor=&#39;&#39;, gra=Gra(dep=3, head=2, rel=&#39;PUNCT&#39;))]</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="api.html#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code></a> has the same optional arguments
+<code class="docutils literal notranslate"><span class="pre">participants</span></code>, <code class="docutils literal notranslate"><span class="pre">exclude</span></code>, <code class="docutils literal notranslate"><span class="pre">by_utterances</span></code>, and <code class="docutils literal notranslate"><span class="pre">by_files</span></code>
+as <a class="reference internal" href="api.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a> does.</p>
+<p>While <a class="reference internal" href="api.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a> represents a word by the built-in string type,
+<a class="reference internal" href="api.html#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code></a> bundles the <code class="docutils literal notranslate"><span class="pre">%mor</span></code> and <code class="docutils literal notranslate"><span class="pre">%gra</span></code> annotations
+of a word into a <a class="reference internal" href="api.html#pylangacq.chat.Token" title="pylangacq.chat.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a> object.
+A <a class="reference internal" href="api.html#pylangacq.chat.Token" title="pylangacq.chat.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a>’s information can be accessed via its attributes
+<code class="docutils literal notranslate"><span class="pre">word</span></code>, <code class="docutils literal notranslate"><span class="pre">pos</span></code>, <code class="docutils literal notranslate"><span class="pre">mor</span></code>, and <code class="docutils literal notranslate"><span class="pre">gra</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">eve_tokens</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;word:&quot;</span><span class="p">,</span> <span class="n">token</span><span class="o">.</span><span class="n">word</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;part-of-speech tag:&quot;</span><span class="p">,</span> <span class="n">token</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;morphological information:&quot;</span><span class="p">,</span> <span class="n">token</span><span class="o">.</span><span class="n">mor</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;grammatical relation:&quot;</span><span class="p">,</span> <span class="n">token</span><span class="o">.</span><span class="n">gra</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">word: more</span>
+<span class="go">part-of-speech tag: qn</span>
+<span class="go">morphological information: more</span>
+<span class="go">grammatical relation: Gra(dep=1, head=2, rel=&#39;QUANT&#39;)</span>
+<span class="go">word: cookie</span>
+<span class="go">part-of-speech tag: n</span>
+<span class="go">morphological information: cookie</span>
+<span class="go">grammatical relation: Gra(dep=2, head=0, rel=&#39;INCROOT&#39;)</span>
+<span class="go">word: .</span>
+<span class="go">part-of-speech tag: .</span>
+<span class="go">morphological information:</span>
+<span class="go">grammatical relation: Gra(dep=3, head=2, rel=&#39;PUNCT&#39;)</span>
+</pre></div>
+</div>
+<p>A grammatical relation is further represented by a <a class="reference internal" href="api.html#pylangacq.chat.Gra" title="pylangacq.chat.Gra"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gra</span></code></a> object,
+with the attributes
+<code class="docutils literal notranslate"><span class="pre">dep</span></code> (the position of the dependent, i.e., the word itself, in the utterance),
+<code class="docutils literal notranslate"><span class="pre">head</span></code> (head’s position),
+and <code class="docutils literal notranslate"><span class="pre">rel</span></code> (relation).</p>
 </div>
 <div class="section" id="utterances">
-<span id="id1"></span><h2>Utterances<a class="headerlink" href="#utterances" title="Permalink to this headline">¶</a></h2>
-<p>To access the utterances in a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object, various methods are available:</p>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 19%" />
-<col style="width: 37%" />
-<col style="width: 44%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Method</p></th>
-<th class="head"><p>Return type</p></th>
-<th class="head"><p>Return object</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">words()</span></code></p></td>
-<td><p>list of str</p></td>
-<td><p>list of word strings</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tagged_words()</span></code></p></td>
-<td><p>list of (str, str, str, (int, int, str))</p></td>
-<td><p>list of (<em>word</em>, <em>pos</em>, <em>mor</em>, <em>rel</em>)</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sents()</span></code></p></td>
-<td><p>list of [list of str]</p></td>
-<td><p>list of utterances as lists of word strings</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tagged_sents()</span></code></p></td>
-<td><p>list of [list of (str, str, str, (int, int, str))]</p></td>
-<td><p>list of utterances as lists of (<em>word</em>, <em>pos</em>, <em>mor</em>, <em>rel</em>)</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">utterances()</span></code></p></td>
-<td><p>list of (str, str)</p></td>
-<td><p>list of (participant code, utterance)</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">part_of_speech_tags()</span></code></p></td>
-<td><p>set of str</p></td>
-<td><p>set of part-of-speech tags</p></td>
-</tr>
-</tbody>
-</table>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span> <span class="kn">as</span> <span class="nn">pla</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pla</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="s1">&#39;Brown/Eve/*.cha&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">words</span><span class="p">())</span>  <span class="c1"># total number of words in Eve&#39;s data</span>
-<span class="go">119972</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">words</span><span class="p">()[:</span><span class="mi">5</span><span class="p">]</span>  <span class="c1"># first five words</span>
-<span class="go">[&#39;more&#39;, &#39;cookie&#39;, &#39;.&#39;, &#39;you&#39;, &#39;0v&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">tagged_words</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># first two tagged words</span>
-<span class="go">[(&#39;more&#39;, &#39;QN&#39;, &#39;more&#39;, (1, 2, &#39;QUANT&#39;)), (&#39;cookie&#39;, &#39;N&#39;, &#39;cookie&#39;, (2, 0, &#39;INCROOT&#39;))]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">sents</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># first two sentences</span>
-<span class="go">[[&#39;more&#39;, &#39;cookie&#39;, &#39;.&#39;], [&#39;you&#39;, &#39;0v&#39;, &#39;more&#39;, &#39;cookies&#39;, &#39;?&#39;]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">tagged_sents</span><span class="p">()[:</span><span class="mi">2</span><span class="p">])</span>  <span class="c1"># first two tagged sentences</span>
-<span class="go">[[(&#39;more&#39;, &#39;QN&#39;, &#39;more&#39;, (1, 2, &#39;QUANT&#39;)),</span>
-<span class="go">  (&#39;cookie&#39;, &#39;N&#39;, &#39;cookie&#39;, (2, 0, &#39;INCROOT&#39;)),</span>
-<span class="go">  (&#39;.&#39;, &#39;.&#39;, &#39;&#39;, (3, 2, &#39;PUNCT&#39;))],</span>
-<span class="go"> [(&#39;you&#39;, &#39;PRO:PER&#39;, &#39;you&#39;, (1, 2, &#39;SUBJ&#39;)),</span>
-<span class="go">  (&#39;0v&#39;, &#39;0V&#39;, &#39;v&#39;, (2, 0, &#39;ROOT&#39;)),</span>
-<span class="go">  (&#39;more&#39;, &#39;QN&#39;, &#39;more&#39;, (3, 4, &#39;QUANT&#39;)),</span>
-<span class="go">  (&#39;cookies&#39;, &#39;N&#39;, &#39;cookie-PL&#39;, (4, 2, &#39;OBJ&#39;)),</span>
-<span class="go">  (&#39;?&#39;, &#39;?&#39;, &#39;&#39;, (5, 2, &#39;PUNCT&#39;))]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">utterances</span><span class="p">()[:</span><span class="mi">5</span><span class="p">])</span>  <span class="c1"># first five utterances (compare this output with &quot;sents&quot; above)</span>
-<span class="go">[(&#39;CHI&#39;, &#39;more cookie .&#39;),</span>
-<span class="go"> (&#39;MOT&#39;, &#39;you 0v more cookies ?&#39;),</span>
-<span class="go"> (&#39;MOT&#39;, &#39;how_about another graham+cracker ?&#39;),</span>
-<span class="go"> (&#39;MOT&#39;, &#39;would that do just as_well ?&#39;),</span>
-<span class="go"> (&#39;MOT&#39;, &#39;here .&#39;)]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">part_of_speech_tags</span><span class="p">())</span>  <span class="c1"># total number of distinct part-of-speech tags</span>
-<span class="go">62</span>
-</pre></div>
-</div>
-<p>The terminology of “words” and “sents” (= sentences, equivalent to utterances
-here) follows NLTK, and so does “tagged” as explained in <a class="reference internal" href="#word"><span class="std std-ref">The representation of “words”</span></a> above.</p>
-<p>All the “words” and “sents” methods respect the order by which the elements
-appear in the individual CHAT transcripts, which in turn are ordered
-alphabetically by filenames.</p>
-<p>All of these data access methods have the optional parameter <code class="docutils literal notranslate"><span class="pre">by_files</span></code> for
-whether a return object X or dict(filename: X) is desired;
-see <span class="xref std std-ref">reader_properties</span>.</p>
-</div>
-<div class="section" id="advanced-usage">
-<span id="transcriptions-advanced"></span><h2>Advanced usage<a class="headerlink" href="#advanced-usage" title="Permalink to this headline">¶</a></h2>
-<p>The data access methods introduced above expose the CHAT transcriptions and
-annotations with intuitive Python data structures. This allows flexible
-strategies in all kinds of research involving CHAT data files.
-PyLangAcq also provides additional functionalities built on top of these
-methods, and they are described in other parts of the
-documentation:</p>
-<ul class="simple">
-<li><p><span class="xref std std-ref">devmeasures</span></p></li>
-<li><p><span class="xref std std-ref">freq</span></p></li>
-</ul>
+<h2>Utterances<a class="headerlink" href="#utterances" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 

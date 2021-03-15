@@ -1,4 +1,4 @@
-from pylangacq.dependency import DependencyGraph
+from pylangacq.dependency import _DependencyGraph
 from pylangacq.objects import Gra, Token
 
 
@@ -17,7 +17,7 @@ _CHAT_GRAPH_DATA = [
 
 
 def test_dep_graph_to_tikz():
-    graph = DependencyGraph(_CHAT_GRAPH_DATA)
+    graph = _DependencyGraph(_CHAT_GRAPH_DATA)
     assert (
         graph.to_tikz()
         == """
@@ -42,7 +42,7 @@ def test_dep_graph_to_tikz():
 
 
 def test_dep_graph_to_conll():
-    graph = DependencyGraph(_CHAT_GRAPH_DATA)
+    graph = _DependencyGraph(_CHAT_GRAPH_DATA)
     assert (
         graph.to_conll()
         == """

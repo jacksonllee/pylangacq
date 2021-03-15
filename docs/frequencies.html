@@ -95,8 +95,8 @@
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#reading-chat-data">Reading CHAT data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#header-information">Header Information</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#transcriptions-and-annotations">Transcriptions and Annotations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart.html#developmental-measures">Developmental Measures</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#word-frequencies-and-ngrams">Word Frequencies and Ngrams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#developmental-measures">Developmental Measures</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#questions">Questions?</a></li>
 </ul>
 </li>
@@ -121,10 +121,14 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="transcriptions.html">Transcriptions and Annotations</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#child-speech-versus-child-directed-speech">Child speech versus child directed speech</a></li>
-<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#the-representation-of-words">The representation of “words”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#chat-format">CHAT Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#words">Words</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcriptions.html#output-by-utterances-or-files">Output by Utterances or Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transcriptions.html#filter-by-participants">Filter by Participants</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#tokens">Tokens</a></li>
 <li class="toctree-l2"><a class="reference internal" href="transcriptions.html#utterances">Utterances</a></li>
-<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#advanced-usage">Advanced usage</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Word Frequencies and Ngrams</a></li>
@@ -134,7 +138,14 @@
 <li class="toctree-l2"><a class="reference internal" href="measures.html#index-of-productive-syntax-ipsyn">Index of Productive Syntax (IPSyn)</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#read-chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#gra"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gra</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#utterance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Utterance</span></code></a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -233,7 +244,7 @@ the return objects of these methods.</p>
 <p><code class="docutils literal notranslate"><span class="pre">word_frequency()</span></code> and <code class="docutils literal notranslate"><span class="pre">word_ngrams(n)</span></code> (with the obligatory parameter
 <em>n</em>) share the following optional parameters:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">participant</span></code>: see <a class="reference internal" href="transcriptions.html#cds"><span class="std std-ref">Child speech versus child directed speech</span></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">participant</span></code>: see <span class="xref std std-ref">cds</span></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">by_files</span></code>: see <span class="xref std std-ref">reader_properties</span></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">keep_case</span></code>: whether case distinction such as “Rocky” and “rocky” is kept;
 defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>. If “Rocky” and “rocky” are treated as distinct, then

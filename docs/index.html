@@ -96,8 +96,8 @@
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#reading-chat-data">Reading CHAT data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#header-information">Header Information</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#transcriptions-and-annotations">Transcriptions and Annotations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart.html#developmental-measures">Developmental Measures</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#word-frequencies-and-ngrams">Word Frequencies and Ngrams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#developmental-measures">Developmental Measures</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#questions">Questions?</a></li>
 </ul>
 </li>
@@ -122,10 +122,14 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="transcriptions.html">Transcriptions and Annotations</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#child-speech-versus-child-directed-speech">Child speech versus child directed speech</a></li>
-<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#the-representation-of-words">The representation of “words”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#chat-format">CHAT Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#words">Words</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcriptions.html#output-by-utterances-or-files">Output by Utterances or Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transcriptions.html#filter-by-participants">Filter by Participants</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#tokens">Tokens</a></li>
 <li class="toctree-l2"><a class="reference internal" href="transcriptions.html#utterances">Utterances</a></li>
-<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#advanced-usage">Advanced usage</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="frequencies.html">Word Frequencies and Ngrams</a></li>
@@ -135,7 +139,14 @@
 <li class="toctree-l2"><a class="reference internal" href="measures.html#index-of-productive-syntax-ipsyn">Index of Productive Syntax (IPSyn)</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#read-chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#gra"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gra</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#utterance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Utterance</span></code></a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -203,7 +214,7 @@
             
   <div class="section" id="pylangacq-language-acquisition-research-in-python">
 <span id="index"></span><h1>PyLangAcq: Language Acquisition Research in Python<a class="headerlink" href="#pylangacq-language-acquisition-research-in-python" title="Permalink to this headline">¶</a></h1>
-<p>PyLangAcq is a Python library for language acquisition research. Features:</p>
+<p>PyLangAcq is a Python library for language acquisition research.</p>
 <ul class="simple">
 <li><p>Comprehensive capabilities of handling CHAT transcripts as used in CHILDES</p></li>
 <li><p>Intuitive Python data structures for flexible data access and manipulation for modeling work</p></li>
@@ -214,7 +225,7 @@ for computational modeling and machine learning</p></li>
 <li><p>Powerful extensions for research with conversational data in general</p></li>
 </ul>
 <div class="section" id="download-and-install">
-<h2>Download and Install<a class="headerlink" href="#download-and-install" title="Permalink to this headline">¶</a></h2>
+<span id="download-install"></span><h2>Download and Install<a class="headerlink" href="#download-and-install" title="Permalink to this headline">¶</a></h2>
 <p>To download and install the most recent version:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install --upgrade pylangacq
 </pre></div>
@@ -269,8 +280,8 @@ license instead; please also see
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#reading-chat-data">Reading CHAT data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#header-information">Header Information</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#transcriptions-and-annotations">Transcriptions and Annotations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart.html#developmental-measures">Developmental Measures</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#word-frequencies-and-ngrams">Word Frequencies and Ngrams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#developmental-measures">Developmental Measures</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#questions">Questions?</a></li>
 </ul>
 </li>
@@ -288,10 +299,10 @@ license instead; please also see
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="transcriptions.html">Transcriptions and Annotations</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#child-speech-versus-child-directed-speech">Child speech versus child directed speech</a></li>
-<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#the-representation-of-words">The representation of “words”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#chat-format">CHAT Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#words">Words</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#tokens">Tokens</a></li>
 <li class="toctree-l2"><a class="reference internal" href="transcriptions.html#utterances">Utterances</a></li>
-<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#advanced-usage">Advanced usage</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="frequencies.html">Word Frequencies and Ngrams</a></li>
@@ -301,7 +312,14 @@ license instead; please also see
 <li class="toctree-l2"><a class="reference internal" href="measures.html#index-of-productive-syntax-ipsyn">Index of Productive Syntax (IPSyn)</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#read-chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#gra"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gra</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#utterance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Utterance</span></code></a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>

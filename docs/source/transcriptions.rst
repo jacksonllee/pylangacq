@@ -1,205 +1,234 @@
 .. _transcriptions:
 
-After the headers come the transcriptions. All transcriptions are signaled by
-``*`` at the beginning of the line::
-
-    *Code1: good morning .
-
-``*`` is immediately followed by the participant code (e.g., ``Code1``), and then
-by a colon ``:`` and a space (or tab). Then the transcribed line follows.
-
-For research purposes, many CHAT transcripts have additional tiers signaled by
-``%mor`` (for morphological information such as part-of-speech tag and lemma),
-``%gra`` (for dependency and grammatical relations), and other ``%`` tiers.
-Much of what PyLangAcq can do relies on the annotations in these tiers with
-rich linguistic information.
-
 Transcriptions and Annotations
 ==============================
 
-This page introduces the data methods of ``Reader`` objects for transcriptions
-and annotations.
-For metadata access, see :ref:`metadata`.
-For details of the ``Reader`` class, see :ref:`reader_api`.
+Conversational data formatted in CHAT provides transcriptions with rich
+annotations for both linguistic and extra-linguistic information.
+PyLangAcq is designed to extract data and annotations in CHAT and expose them
+in Python data structures for flexible modeling work.
+This page explains how PyLangAcq represents CHAT data and annotations.
 
-* :ref:`cds`
-* :ref:`word`
-* :ref:`utterances`
-* :ref:`transcriptions_advanced`
+CHAT Format
+-----------
+
+To see how the CHAT format translates to PyLangAcq, let's look at the very first
+two utterances in Eve's data in the American English
+`Brown <https://childes.talkbank.org/access/Eng-NA/Brown.html>`_
+dataset on CHILDES (data file: ``Brown/Eve/010600a.cha``),
+where apparently Eve demands cookies in the first utterance
+and her mother responds with a question for confirmation in the second utterance:
+
+.. skip: start
+
+.. code-block::
+
+    *CHI:	more cookie . [+ IMP]
+    %mor:	qn|more n|cookie .
+    %gra:	1|2|QUANT 2|0|INCROOT 3|2|PUNCT
+    %int:	distinctive , loud
+    *MOT:	you 0v more cookies ?
+    %mor:	pro:per|you 0v|v qn|more n|cookie-PL ?
+    %gra:	1|2|SUBJ 2|0|ROOT 3|4|QUANT 4|2|OBJ 5|2|PUNCT
+
+.. skip: end
+
+PyLangAcq handles CHAT data by paying attention to the following:
+
+* **Participants:**
+  The two participants are ``CHI`` and ``MOT``.
+  In CHILDES, it is customary to denote the target child (i.e., Eve in this example)
+  by ``CHI`` and the child's mother by ``MOT``.
+  The asterisk ``*`` that comes just before the participant code signals
+  a transcription line. Each utterance must begin with the transcription line.
+
+* **Transcriptions:**
+  The two transcription lines are ``more cookie . [+ IMP]`` from Eve
+  and ``you 0v more cookies ?`` from her mother.
+  The transcriptions are word-segmented by spaces
+  (even for languages that don't have such orthographic conventions as English does).
+  Punctuation marks are also treated as "words".
+  Annotations such as ``[+ IMP]`` and ``0v`` here can be found in transcriptions.
+
+* **Dependent tiers:**
+  Between one transcription line and the next one, there are often what's known
+  as dependent tiers, signed by ``%``,
+  associated with the transcription line just immediately above;
+  Eve's utterance has the dependent tiers ``%mor``
+  (morphological information), ``%gra`` (grammatical relations),
+  and ``%int`` (intonation),
+  whereas Eve's mother's has only ``%mor`` and ``%gra``.
+  Although certain dependent tiers are more standardized and more commonly found
+  in CHILDES datasets (especially ``%mor`` and ``%gra``),
+  none of the dependent tiers are obligatory in a CHAT utterance.
+
+* **The %mor tier:**
+  The morphological information aligns one-to-one to the segmented words
+  (including punctuation marks) in the transcription line;
+  annotations in the transcription line are ignored.
+  In each item of ``%mor``, the part-of-speech tag is on the left of the pipe ``|``,
+  e.g., ``qn`` for a nominal quantifier in ``qn|more`` aligned to ``more`` in Eve's line.
+  Inflectional and derivational information is on the right of ``|``,
+  e.g., ``cookie-PL`` for the plural form of "cookie" in ``n|cookie-PL``
+  aligned to ``cookies`` in Eve's mother's line.
+
+* **The %gra tier:**
+  CHAT represents grammatical relations in terms of heads and dependents in
+  dependency grammar.
+  Every item on the ``%gra`` tier corresponds one-to-one to the segmented words
+  in the transcription (and therefore one-to-one to the ``%mor`` items as well).
+  In Eve's mother's ``%gra``, ``3|4|QUANT`` means ``more`` at position 3 of the utterance
+  is a dependent of the word ``cookies`` at position 4 as the head,
+  and that the relation is one of quantification.
+
+* **Other tiers:**
+  Apart from ``%mor`` and ``%gra``, other dependent tiers may appear in CHAT data files.
+  Some of them contain more linguistic information, e.g., ``%int`` for intonation
+  in Eve's utterance here, and others contain contextual information about the
+  utterance or recording session.
+  Many of these tiers are used only as needed (``%int`` not used in Eve's mother's
+  utterance in this example).
 
 
-.. _cds:
-
-Child speech versus child directed speech
------------------------------------------
-
-The distinction between child speech and child directed speech is important in
-language acquisition research. Many data and metadata access methods in
-PyLangAcq make this distinction possible by two optional arguments:
-*participant* and *exclude*.
-The *participant* parameter accepts a string
-of a participant code (e.g., ``'CHI'``, ``'MOT'``) or a sequence of
-participant codes (e.g., the set ``{'CHI', 'MOT'}`` to include both
-participants).
-Similarly, the *exclude* parameter can be either a string or a sequence of
-strings, for excluding the specified participant codes.
-
-To get child speech, set *participant* as ``'CHI'``.
-To get child directed speech, set *exclude* as ``'CHI'`` to
-exclude all participant codes except ``'CHI'``. Examples:
+Once you have a :class:`~pylangacq.Reader` object with CHAT data,
+several methods are available for accessing the transcriptions and annotations.
+Which method suits your need best depends on which level of information you need.
+The following sections introduce these :class:`~pylangacq.Reader` methods,
+using a reader created by :func:`~pylangacq.Reader.from_strs` with the two CHAT
+utterances between Eve and her mother we've looked at.
 
 .. code-block:: python
 
-    >>> import pylangacq as pla
-    >>> eve = pla.read_chat('Brown/Eve/*.cha')
-    >>> eve.number_of_utterances()  # default: include all participants
-    26979
-    >>> eve.number_of_utterances(participant='CHI')  # only the target child, for child speech
-    12167
-    >>> eve.number_of_utterances(exclude='CHI')  # excludes the target child, for child-directed speech
-    14812
-
-Most methods default *participant* to be all participants, like
-``number_of_utterances()`` just illustrated above
-(as well as all methods in :ref:`utterances` below).
-Certain methods, such as
-``age()`` and developmental measures,
-are most often concerned with the target child only, and therefore
-have *participant* set to be ``'CHI'`` instead by default.
-
-To check if a method has the optional argument *participant*,
-please see the complete
-list of methods for the ``Reader`` class in :doc:`chat`.
-
-.. _word:
-
-The representation of "words"
------------------------------
-
-The representation of "words" in PyLangAcq comes in two flavors
-(similar to NLTK):
-
-1. The "simple" representation as a **string**,
-   which is what appears as a word token in a transcription line
-   starting with ``*`` in the CHAT transcript.
-
-2. The "tagged" representation as a **tuple** of (*word*, *pos*, *mor*, *rel*),
-   which contains information from the transcription line and its ``%``-tiers:
-
-   *word* (str) -- word token string
-
-   *pos* (str) -- part-of-speech tag
-
-   *mor* (str) -- morphology for lemma and inflectional information, if any
-
-   *rel* (tuple(int, int, str)) -- dependency and grammatical relation
-
-To illustrate, let us consider the following CHAT utterance with its ``%mor``
-and ``%gra`` tiers (extracted from ``eve01.cha``)::
-
-    *MOT: but I thought you wanted me to turn it .
-    %mor: conj|but pro:sub|I v|think&PAST pro|you v|want-PAST pro:obj|me inf|to v|turn pro|it .
-    %gra: 1|3|LINK 2|3|SUBJ 3|0|ROOT 4|3|OBJ 5|3|JCT 6|5|POBJ 7|8|INF 8|3|XCOMP 9|8|OBJ 10|3|PUNCT
+    >>> import pylangacq
+    >>> data = """
+    ...     *CHI:   more cookie . [+ IMP]
+    ...     %mor:   qn|more n|cookie .
+    ...     %gra:   1|2|QUANT 2|0|INCROOT 3|2|PUNCT
+    ...     %int:   distinctive , loud
+    ...     *MOT:   you 0v more cookies ?
+    ...     %mor:   pro:per|you 0v|v qn|more n|cookie-PL ?
+    ...     %gra:   1|2|SUBJ 2|0|ROOT 3|4|QUANT 4|2|OBJ 5|2|PUNCT
+    ... """
+    >>> reader = pylangacq.Reader.from_strs([data])
 
 
-The list of "simple" words from this utterance are the list of word token
-strings:
+Words
+-----
+
+The :class:`~pylangacq.Reader` method :func:`~pylangacq.Reader.words`
+returns the transcriptions as segmented words.
+Calling :func:`~pylangacq.Reader.words` with no arguments gives a
+flat list of the words:
 
 .. code-block:: python
 
-    ['but', 'I', 'thought', 'you', 'wanted', 'me', 'to', 'turn', 'it', '.']
+    >>> reader.words()
+    ['more', 'cookie', '.', 'you', '0v', 'more', 'cookies', '?']
 
-The list of "tagged" words from this utterance are a list of 4-tuples:
+
+Output by Utterances or Files
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To preserve the utterance-level structure, pass in ``by_utterances=True``
+so that an inner list is created around the words from each utterance:
 
 .. code-block:: python
 
-    [('but', 'CONJ', 'but', (1, 3, 'LINK')),
-     ('I', 'PRO:SUB', 'I', (2, 3, 'SUBJ')),
-     ('thought', 'V', 'think&PAST', (3, 5, 'CJCT')),
-     ('you', 'PRO:PER', 'you', (4, 5, 'SUBJ')),
-     ('wanted', 'V', 'want-PAST', (5, 0, 'ROOT')),
-     ('me', 'PRO:OBJ', 'me', (6, 5, 'OBJ')),
-     ('to', 'INF', 'to', (7, 8, 'INF')),
-     ('turn', 'V', 'turn', (8, 5, 'XCOMP')),
-     ('it', 'PRO:PER', 'it', (9, 8, 'OBJ')),
-     ('.', '.', '', (10, 5, 'PUNCT')),
-    ]
+    >>> reader.words(by_utterances=True)
+    [['more', 'cookie', '.'],
+     ['you', '0v', 'more', 'cookies', '?']]
 
-The distinction of "simple" versus "tagged" words is reflected in the data
-access methods introduced in :ref:`utterances` below.
+Because this example reader was created by a single in-memory string above,
+internally the string was treated as if it were one single "file".
+If the reader had data from multiple CHAT data files (or strings),
+you might need the file-level structure in order to distinguish data from one file
+to another.
+Compared to the code snippet just above,
+adding ``by_files=True`` captures the two utterances (= two lists of strings)
+in an inner list, before the outermost list wraps up all the data:
+
+.. code-block:: python
+
+    >>> reader.words(by_utterances=True, by_files=True)
+    [[['more', 'cookie', '.'],
+      ['you', '0v', 'more', 'cookies', '?']]]
 
 
-.. _utterances:
+Filter by Participants
+^^^^^^^^^^^^^^^^^^^^^^
+
+Besides controlling the output for its structure,
+you can also specify which participants' data to return.
+The optional arguments ``participants`` and ``exclude`` are available for this purpose.
+``participants`` takes a string (e.g., ``"CHI"``) or an iterable of strings
+(e.g., ``{"CHI", "MOT"}``) to include only the specified participants in the output.
+If specifying who to exclude is easier, use ``exclude`` instead.
+
+.. code-block:: python
+
+    >>> reader.words(participants="CHI", by_utterances=True)
+    [['more', 'cookie', '.']]
+    >>> reader.words(exclude="MOT", by_utterances=True)
+    [['more', 'cookie', '.']]
+
+Examples of use cases:
+
+* ``participants="CHI"`` for child speech
+* ``exclude="CHI"`` for child-directed speech
+* ``participants={"CHI", "MOT", "FAT"}`` for parent-child interactions
+
+Tokens
+------
+
+Beyond the transcriptions from :func:`~pylangacq.Reader.words`,
+:func:`~pylangacq.Reader.tokens` gives you the word-based
+annotations from the CHAT data.
+
+.. code-block:: python
+
+    >>> eve_tokens = reader.tokens(participants="CHI")
+    >>> eve_tokens
+    [Token(word='more', pos='qn', mor='more', gra=Gra(dep=1, head=2, rel='QUANT')),
+     Token(word='cookie', pos='n', mor='cookie', gra=Gra(dep=2, head=0, rel='INCROOT')),
+     Token(word='.', pos='.', mor='', gra=Gra(dep=3, head=2, rel='PUNCT'))]
+
+:func:`~pylangacq.Reader.tokens` has the same optional arguments
+``participants``, ``exclude``, ``by_utterances``, and ``by_files``
+as :func:`~pylangacq.Reader.words` does.
+
+While :func:`~pylangacq.Reader.words` represents a word by the built-in string type,
+:func:`~pylangacq.Reader.tokens` bundles the ``%mor`` and ``%gra`` annotations
+of a word into a :class:`~pylangacq.chat.Token` object.
+A :class:`~pylangacq.chat.Token`'s information can be accessed via its attributes
+``word``, ``pos``, ``mor``, and ``gra``:
+
+.. code-block:: python
+
+    >>> for token in eve_tokens:
+    ...     print("word:", token.word)
+    ...     print("part-of-speech tag:", token.pos)
+    ...     print("morphological information:", token.mor)
+    ...     print("grammatical relation:", token.gra)
+    ...
+    word: more
+    part-of-speech tag: qn
+    morphological information: more
+    grammatical relation: Gra(dep=1, head=2, rel='QUANT')
+    word: cookie
+    part-of-speech tag: n
+    morphological information: cookie
+    grammatical relation: Gra(dep=2, head=0, rel='INCROOT')
+    word: .
+    part-of-speech tag: .
+    morphological information:
+    grammatical relation: Gra(dep=3, head=2, rel='PUNCT')
+
+A grammatical relation is further represented by a :class:`~pylangacq.chat.Gra` object,
+with the attributes
+``dep`` (the position of the dependent, i.e., the word itself, in the utterance),
+``head`` (head's position),
+and ``rel`` (relation).
+
 
 Utterances
 ----------
-
-To access the utterances in a ``Reader`` object, various methods are available:
-
-=========================  ==================================================  ============================================================
-Method                     Return type                                         Return object
-=========================  ==================================================  ============================================================
-``words()``                list of str                                         list of word strings
-``tagged_words()``         list of (str, str, str, (int, int, str))            list of (*word*, *pos*, *mor*, *rel*)
-``sents()``                list of [list of str]                               list of utterances as lists of word strings
-``tagged_sents()``         list of [list of (str, str, str, (int, int, str))]  list of utterances as lists of (*word*, *pos*, *mor*, *rel*)
-``utterances()``           list of (str, str)                                  list of (participant code, utterance)
-``part_of_speech_tags()``  set of str                                          set of part-of-speech tags
-=========================  ==================================================  ============================================================
-
-.. code-block:: python
-
-    >>> from pprint import pprint
-    >>> import pylangacq as pla
-    >>> eve = pla.read_chat('Brown/Eve/*.cha')
-    >>> len(eve.words())  # total number of words in Eve's data
-    119972
-    >>> eve.words()[:5]  # first five words
-    ['more', 'cookie', '.', 'you', '0v']
-    >>> eve.tagged_words()[:2]  # first two tagged words
-    [('more', 'QN', 'more', (1, 2, 'QUANT')), ('cookie', 'N', 'cookie', (2, 0, 'INCROOT'))]
-    >>> eve.sents()[:2]  # first two sentences
-    [['more', 'cookie', '.'], ['you', '0v', 'more', 'cookies', '?']]
-    >>> pprint(eve.tagged_sents()[:2])  # first two tagged sentences
-    [[('more', 'QN', 'more', (1, 2, 'QUANT')),
-      ('cookie', 'N', 'cookie', (2, 0, 'INCROOT')),
-      ('.', '.', '', (3, 2, 'PUNCT'))],
-     [('you', 'PRO:PER', 'you', (1, 2, 'SUBJ')),
-      ('0v', '0V', 'v', (2, 0, 'ROOT')),
-      ('more', 'QN', 'more', (3, 4, 'QUANT')),
-      ('cookies', 'N', 'cookie-PL', (4, 2, 'OBJ')),
-      ('?', '?', '', (5, 2, 'PUNCT'))]]
-    >>> pprint(eve.utterances()[:5])  # first five utterances (compare this output with "sents" above)
-    [('CHI', 'more cookie .'),
-     ('MOT', 'you 0v more cookies ?'),
-     ('MOT', 'how_about another graham+cracker ?'),
-     ('MOT', 'would that do just as_well ?'),
-     ('MOT', 'here .')]
-    >>> len(eve.part_of_speech_tags())  # total number of distinct part-of-speech tags
-    62
-
-The terminology of "words" and "sents" (= sentences, equivalent to utterances
-here) follows NLTK, and so does "tagged" as explained in :ref:`word` above.
-
-All the "words" and "sents" methods respect the order by which the elements
-appear in the individual CHAT transcripts, which in turn are ordered
-alphabetically by filenames.
-
-All of these data access methods have the optional parameter ``by_files`` for
-whether a return object X or dict(filename: X) is desired;
-see :ref:`reader_properties`.
-
-.. _transcriptions_advanced:
-
-Advanced usage
---------------
-
-The data access methods introduced above expose the CHAT transcriptions and
-annotations with intuitive Python data structures. This allows flexible
-strategies in all kinds of research involving CHAT data files.
-PyLangAcq also provides additional functionalities built on top of these
-methods, and they are described in other parts of the
-documentation:
-
-* :ref:`devmeasures`
-* :ref:`freq`

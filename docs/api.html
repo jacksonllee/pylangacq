@@ -94,8 +94,8 @@
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#reading-chat-data">Reading CHAT data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#header-information">Header Information</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#transcriptions-and-annotations">Transcriptions and Annotations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart.html#developmental-measures">Developmental Measures</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#word-frequencies-and-ngrams">Word Frequencies and Ngrams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#developmental-measures">Developmental Measures</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#questions">Questions?</a></li>
 </ul>
 </li>
@@ -120,10 +120,14 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="transcriptions.html">Transcriptions and Annotations</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#child-speech-versus-child-directed-speech">Child speech versus child directed speech</a></li>
-<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#the-representation-of-words">The representation of “words”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#chat-format">CHAT Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#words">Words</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcriptions.html#output-by-utterances-or-files">Output by Utterances or Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transcriptions.html#filter-by-participants">Filter by Participants</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#tokens">Tokens</a></li>
 <li class="toctree-l2"><a class="reference internal" href="transcriptions.html#utterances">Utterances</a></li>
-<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#advanced-usage">Advanced usage</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="frequencies.html">Word Frequencies and Ngrams</a></li>
@@ -133,7 +137,14 @@
 <li class="toctree-l2"><a class="reference internal" href="measures.html#index-of-productive-syntax-ipsyn">Index of Productive Syntax (IPSyn)</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#read-chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gra"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gra</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#utterance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Utterance</span></code></a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -201,6 +212,8 @@
             
   <div class="section" id="api-reference">
 <span id="api"></span><h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="read-chat">
+<h2><a class="reference internal" href="#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a><a class="headerlink" href="#read-chat" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt id="pylangacq.read_chat">
 <code class="sig-prename descclassname">pylangacq.</code><code class="sig-name descname">read_chat</code><span class="sig-paren">(</span><em class="sig-param">path: str</em>, <em class="sig-param">match: str = None</em>, <em class="sig-param">exclude: str = None</em>, <em class="sig-param">encoding: str = 'utf-8'</em>, <em class="sig-param">cls: type = &lt;class 'pylangacq.chat.Reader'&gt;</em><span class="sig-paren">)</span> &#x2192; pylangacq.chat.Reader<a class="reference internal" href="_modules/pylangacq/chat.html#read_chat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.read_chat" title="Permalink to this definition">¶</a></dt>
@@ -233,23 +246,26 @@ matching) are excluded for reading and parsing.</p>
 <dt><strong>encoding</strong><span class="classifier">str, optional</span></dt><dd><p>Text encoding to parse the CHAT data. The default value is <code class="docutils literal notranslate"><span class="pre">&quot;utf-8&quot;</span></code>
 for Unicode UTF-8.</p>
 </dd>
-<dt><strong>cls</strong><span class="classifier">type, optional</span></dt><dd><p>Either <a class="reference internal" href="chat.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> (the default),
+<dt><strong>cls</strong><span class="classifier">type, optional</span></dt><dd><p>Either <a class="reference internal" href="#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> (the default),
 or a subclass from it that expects the same arguments for the methods
-<a class="reference internal" href="chat.html#pylangacq.Reader.from_zip" title="pylangacq.Reader.from_zip"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_zip()</span></code></a>, <a class="reference internal" href="chat.html#pylangacq.Reader.from_dir" title="pylangacq.Reader.from_dir"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_dir()</span></code></a>,
-and <a class="reference internal" href="chat.html#pylangacq.Reader.from_files" title="pylangacq.Reader.from_files"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_files()</span></code></a>.
-Pass in your own <a class="reference internal" href="chat.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> subclass
+<a class="reference internal" href="#pylangacq.Reader.from_zip" title="pylangacq.Reader.from_zip"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_zip()</span></code></a>, <a class="reference internal" href="#pylangacq.Reader.from_dir" title="pylangacq.Reader.from_dir"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_dir()</span></code></a>,
+and <a class="reference internal" href="#pylangacq.Reader.from_files" title="pylangacq.Reader.from_files"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_files()</span></code></a>.
+Pass in your own <a class="reference internal" href="#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> subclass
 for new or modified behavior of the returned reader object.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt><a class="reference internal" href="chat.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a></dt><dd></dd>
+<dt><a class="reference internal" href="#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a></dt><dd></dd>
 </dl>
 </dd>
 </dl>
 </dd></dl>
 
+</div>
+<div class="section" id="reader">
+<h2><a class="reference internal" href="#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a><a class="headerlink" href="#reader" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pylangacq.Reader">
 <em class="property">class </em><code class="sig-prename descclassname">pylangacq.</code><code class="sig-name descname">Reader</code><a class="reference internal" href="_modules/pylangacq/chat.html#Reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader" title="Permalink to this definition">¶</a></dt>
@@ -261,97 +277,97 @@ for new or modified behavior of the returned reader object.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.ages" title="pylangacq.Reader.ages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ages</span></code></a>([participant, months])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.Reader.ages" title="pylangacq.Reader.ages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ages</span></code></a>([participant, months])</p></td>
 <td><p>Return the ages of the given participant in the data.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.append" title="pylangacq.Reader.append"><code class="xref py py-obj docutils literal notranslate"><span class="pre">append</span></code></a>(reader)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.Reader.append" title="pylangacq.Reader.append"><code class="xref py py-obj docutils literal notranslate"><span class="pre">append</span></code></a>(reader)</p></td>
 <td><p>Append data from another reader.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.append_left" title="pylangacq.Reader.append_left"><code class="xref py py-obj docutils literal notranslate"><span class="pre">append_left</span></code></a>(reader)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.Reader.append_left" title="pylangacq.Reader.append_left"><code class="xref py py-obj docutils literal notranslate"><span class="pre">append_left</span></code></a>(reader)</p></td>
 <td><p>Left-append data from another reader.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.clear" title="pylangacq.Reader.clear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.Reader.clear" title="pylangacq.Reader.clear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear</span></code></a>()</p></td>
 <td><p>Remove all data from this reader.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.dates_of_recording" title="pylangacq.Reader.dates_of_recording"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dates_of_recording</span></code></a>([by_files])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.Reader.dates_of_recording" title="pylangacq.Reader.dates_of_recording"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dates_of_recording</span></code></a>([by_files])</p></td>
 <td><p>Return the dates of recording.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.extend" title="pylangacq.Reader.extend"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extend</span></code></a>(readers)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.Reader.extend" title="pylangacq.Reader.extend"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extend</span></code></a>(readers)</p></td>
 <td><p>Extend data from other readers.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.extend_left" title="pylangacq.Reader.extend_left"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extend_left</span></code></a>(readers)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.Reader.extend_left" title="pylangacq.Reader.extend_left"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extend_left</span></code></a>(readers)</p></td>
 <td><p>Left-extend data from other readers.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">file_paths</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">file_paths</span></code></a>()</p></td>
 <td><p>Return the file paths.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.from_dir" title="pylangacq.Reader.from_dir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_dir</span></code></a>(path[, match, exclude, extension, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.Reader.from_dir" title="pylangacq.Reader.from_dir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_dir</span></code></a>(path[, match, exclude, extension, …])</p></td>
 <td><p>Instantiate a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object from a local directory with CHAT data files.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.from_files" title="pylangacq.Reader.from_files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_files</span></code></a>(paths[, match, exclude, encoding])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.Reader.from_files" title="pylangacq.Reader.from_files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_files</span></code></a>(paths[, match, exclude, encoding])</p></td>
 <td><p>Instantiate a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object from local CHAT data files.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.from_strs" title="pylangacq.Reader.from_strs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_strs</span></code></a>(strs[, ids])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.Reader.from_strs" title="pylangacq.Reader.from_strs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_strs</span></code></a>(strs[, ids])</p></td>
 <td><p>Instantiate a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object from in-memory CHAT data strings.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.from_zip" title="pylangacq.Reader.from_zip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_zip</span></code></a>(path[, match, exclude, extension, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.Reader.from_zip" title="pylangacq.Reader.from_zip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_zip</span></code></a>(path[, match, exclude, extension, …])</p></td>
 <td><p>Instantiate a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object from a local or remote ZIP file.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.headers" title="pylangacq.Reader.headers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">headers</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.Reader.headers" title="pylangacq.Reader.headers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">headers</span></code></a>()</p></td>
 <td><p>Return the headers.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.ipsyn" title="pylangacq.Reader.ipsyn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ipsyn</span></code></a>([participant])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.Reader.ipsyn" title="pylangacq.Reader.ipsyn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ipsyn</span></code></a>([participant])</p></td>
 <td><p>Return the indexes of productive syntax (IPSyn).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.languages" title="pylangacq.Reader.languages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">languages</span></code></a>([by_files])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.Reader.languages" title="pylangacq.Reader.languages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">languages</span></code></a>([by_files])</p></td>
 <td><p>Return the languages in the data.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.mlu" title="pylangacq.Reader.mlu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mlu</span></code></a>([participant])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.Reader.mlu" title="pylangacq.Reader.mlu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mlu</span></code></a>([participant])</p></td>
 <td><p>Return the mean lengths of utterance (MLU).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.mlum" title="pylangacq.Reader.mlum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mlum</span></code></a>([participant])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.Reader.mlum" title="pylangacq.Reader.mlum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mlum</span></code></a>([participant])</p></td>
 <td><p>Return the mean lengths of utterance by morphemes.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.mluw" title="pylangacq.Reader.mluw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mluw</span></code></a>([participant])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.Reader.mluw" title="pylangacq.Reader.mluw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mluw</span></code></a>([participant])</p></td>
 <td><p>Return the mean lengths of utterance by words.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.n_files" title="pylangacq.Reader.n_files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_files</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.Reader.n_files" title="pylangacq.Reader.n_files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_files</span></code></a>()</p></td>
 <td><p>Return the number of files.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.participants" title="pylangacq.Reader.participants"><code class="xref py py-obj docutils literal notranslate"><span class="pre">participants</span></code></a>([by_files])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.Reader.participants" title="pylangacq.Reader.participants"><code class="xref py py-obj docutils literal notranslate"><span class="pre">participants</span></code></a>([by_files])</p></td>
 <td><p>Return the participants (e.g., CHI, MOT).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.pop" title="pylangacq.Reader.pop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pop</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.Reader.pop" title="pylangacq.Reader.pop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pop</span></code></a>()</p></td>
 <td><p>Drop the last data file from the reader and return it as a reader.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.pop_left" title="pylangacq.Reader.pop_left"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pop_left</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.Reader.pop_left" title="pylangacq.Reader.pop_left"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pop_left</span></code></a>()</p></td>
 <td><p>Drop the first data file from the reader and return it as a reader.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.sents" title="pylangacq.Reader.sents"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sents</span></code></a>([participants, exclude, by_files])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.Reader.sents" title="pylangacq.Reader.sents"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sents</span></code></a>([participants, exclude, by_files])</p></td>
 <td><p>Return the sents.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.tagged_sents" title="pylangacq.Reader.tagged_sents"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tagged_sents</span></code></a>([participants, exclude, by_files])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.Reader.tagged_sents" title="pylangacq.Reader.tagged_sents"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tagged_sents</span></code></a>([participants, exclude, by_files])</p></td>
 <td><p>Return the tagged sents.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.tagged_words" title="pylangacq.Reader.tagged_words"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tagged_words</span></code></a>([participants, exclude, by_files])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.Reader.tagged_words" title="pylangacq.Reader.tagged_words"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tagged_words</span></code></a>([participants, exclude, by_files])</p></td>
 <td><p>Return the tagged words.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tokens</span></code></a>([participants, exclude, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tokens</span></code></a>([participants, exclude, …])</p></td>
 <td><p>Return the tokens.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.ttr" title="pylangacq.Reader.ttr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ttr</span></code></a>([keep_case, participant])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.Reader.ttr" title="pylangacq.Reader.ttr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ttr</span></code></a>([keep_case, participant])</p></td>
 <td><p>Return the type-token ratios.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.utterances" title="pylangacq.Reader.utterances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utterances</span></code></a>([participants, exclude, by_files])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.Reader.utterances" title="pylangacq.Reader.utterances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utterances</span></code></a>([participants, exclude, by_files])</p></td>
 <td><p>Return the utterances.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.word_frequencies" title="pylangacq.Reader.word_frequencies"><code class="xref py py-obj docutils literal notranslate"><span class="pre">word_frequencies</span></code></a>([keep_case, participants, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.Reader.word_frequencies" title="pylangacq.Reader.word_frequencies"><code class="xref py py-obj docutils literal notranslate"><span class="pre">word_frequencies</span></code></a>([keep_case, participants, …])</p></td>
 <td><p>Return word frequencies.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.word_ngrams" title="pylangacq.Reader.word_ngrams"><code class="xref py py-obj docutils literal notranslate"><span class="pre">word_ngrams</span></code></a>(n[, keep_case, participants, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.Reader.word_ngrams" title="pylangacq.Reader.word_ngrams"><code class="xref py py-obj docutils literal notranslate"><span class="pre">word_ngrams</span></code></a>(n[, keep_case, participants, …])</p></td>
 <td><p>Return word ngrams.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="chat.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-obj docutils literal notranslate"><span class="pre">words</span></code></a>([participants, exclude, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-obj docutils literal notranslate"><span class="pre">words</span></code></a>([participants, exclude, …])</p></td>
 <td><p>Return the words.</p></td>
 </tr>
 </tbody>
@@ -429,7 +445,7 @@ even for files whose file paths duplicate those already in the current reader.</
 <dt><strong>by_files</strong><span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, return a list X of results, where len(X) is the number of
 files in the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object, and each element in X is the result for one
 file; the ordering of X corresponds to that of the file paths from
-<a class="reference internal" href="chat.html#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>.
+<a class="reference internal" href="#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>.
 If <code class="docutils literal notranslate"><span class="pre">False</span></code> (the default), return the result that collapses the file
 distinction just described for when <code class="docutils literal notranslate"><span class="pre">by_files</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
@@ -677,7 +693,7 @@ for the target child.</p>
 <dt><strong>by_files</strong><span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, return a list X of results, where len(X) is the number of
 files in the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object, and each element in X is the result for one
 file; the ordering of X corresponds to that of the file paths from
-<a class="reference internal" href="chat.html#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>.
+<a class="reference internal" href="#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>.
 If <code class="docutils literal notranslate"><span class="pre">False</span></code> (the default), return the result that collapses the file
 distinction just described for when <code class="docutils literal notranslate"><span class="pre">by_files</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
@@ -699,7 +715,7 @@ instead of a list.</p>
 <dt id="pylangacq.Reader.mlu">
 <code class="sig-name descname">mlu</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">participant</span><span class="o">=</span><span class="default_value">'CHI'</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.mlu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.mlu" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the mean lengths of utterance (MLU).</p>
-<p>This method is equivalent to <a class="reference internal" href="chat.html#pylangacq.Reader.mlum" title="pylangacq.Reader.mlum"><code class="xref py py-func docutils literal notranslate"><span class="pre">mlum()</span></code></a>.</p>
+<p>This method is equivalent to <a class="reference internal" href="#pylangacq.Reader.mlum" title="pylangacq.Reader.mlum"><code class="xref py py-func docutils literal notranslate"><span class="pre">mlum()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -772,7 +788,7 @@ for the target child.</p>
 <dt><strong>by_files</strong><span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, return a list X of results, where len(X) is the number of
 files in the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object, and each element in X is the result for one
 file; the ordering of X corresponds to that of the file paths from
-<a class="reference internal" href="chat.html#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>.
+<a class="reference internal" href="#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>.
 If <code class="docutils literal notranslate"><span class="pre">False</span></code> (the default), return the result that collapses the file
 distinction just described for when <code class="docutils literal notranslate"><span class="pre">by_files</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
@@ -817,7 +833,7 @@ distinction just described for when <code class="docutils literal notranslate"><
 <code class="sig-name descname">sents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">participants</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>List<span class="p">[</span>List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">]</span><span class="p">, </span>List<span class="p">[</span>List<span class="p">[</span>List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.sents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.sents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the sents.</p>
 <div class="deprecated">
-<p><span class="versionmodified deprecated">Deprecated since version 0.13.0: </span>Please use <a class="reference internal" href="chat.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a> with <code class="docutils literal notranslate"><span class="pre">by_utterances=True</span></code>
+<p><span class="versionmodified deprecated">Deprecated since version 0.13.0: </span>Please use <a class="reference internal" href="#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a> with <code class="docutils literal notranslate"><span class="pre">by_utterances=True</span></code>
 instead.</p>
 </div>
 <dl class="field-list simple">
@@ -840,7 +856,7 @@ This parameter cannot be used together with <code class="docutils literal notran
 <dt><strong>by_files</strong><span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, return a list X of results, where len(X) is the number of
 files in the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object, and each element in X is the result for one
 file; the ordering of X corresponds to that of the file paths from
-<a class="reference internal" href="chat.html#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>.
+<a class="reference internal" href="#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>.
 If <code class="docutils literal notranslate"><span class="pre">False</span></code> (the default), return the result that collapses the file
 distinction just described for when <code class="docutils literal notranslate"><span class="pre">by_files</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
@@ -859,7 +875,7 @@ distinction just described for when <code class="docutils literal notranslate"><
 <code class="sig-name descname">tagged_sents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">participants</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>List<span class="p">[</span>List<span class="p">[</span>pylangacq.objects.Token<span class="p">]</span><span class="p">]</span><span class="p">, </span>List<span class="p">[</span>List<span class="p">[</span>List<span class="p">[</span>pylangacq.objects.Token<span class="p">]</span><span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.tagged_sents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.tagged_sents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the tagged sents.</p>
 <div class="deprecated">
-<p><span class="versionmodified deprecated">Deprecated since version 0.13.0: </span>Please use <a class="reference internal" href="chat.html#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code></a> with <code class="docutils literal notranslate"><span class="pre">by_utterances=True</span></code>
+<p><span class="versionmodified deprecated">Deprecated since version 0.13.0: </span>Please use <a class="reference internal" href="#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code></a> with <code class="docutils literal notranslate"><span class="pre">by_utterances=True</span></code>
 instead.</p>
 </div>
 <dl class="field-list simple">
@@ -882,7 +898,7 @@ This parameter cannot be used together with <code class="docutils literal notran
 <dt><strong>by_files</strong><span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, return a list X of results, where len(X) is the number of
 files in the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object, and each element in X is the result for one
 file; the ordering of X corresponds to that of the file paths from
-<a class="reference internal" href="chat.html#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>.
+<a class="reference internal" href="#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>.
 If <code class="docutils literal notranslate"><span class="pre">False</span></code> (the default), return the result that collapses the file
 distinction just described for when <code class="docutils literal notranslate"><span class="pre">by_files</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
@@ -902,7 +918,7 @@ distinction just described for when <code class="docutils literal notranslate"><
 <code class="sig-name descname">tagged_words</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">participants</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>List<span class="p">[</span>pylangacq.objects.Token<span class="p">]</span><span class="p">, </span>List<span class="p">[</span>List<span class="p">[</span>pylangacq.objects.Token<span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.tagged_words"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.tagged_words" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the tagged words.</p>
 <div class="deprecated">
-<p><span class="versionmodified deprecated">Deprecated since version 0.13.0: </span>Please use <a class="reference internal" href="chat.html#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code></a> with <code class="docutils literal notranslate"><span class="pre">by_utterances=False</span></code>
+<p><span class="versionmodified deprecated">Deprecated since version 0.13.0: </span>Please use <a class="reference internal" href="#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code></a> with <code class="docutils literal notranslate"><span class="pre">by_utterances=False</span></code>
 instead.</p>
 </div>
 <dl class="field-list simple">
@@ -925,7 +941,7 @@ This parameter cannot be used together with <code class="docutils literal notran
 <dt><strong>by_files</strong><span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, return a list X of results, where len(X) is the number of
 files in the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object, and each element in X is the result for one
 file; the ordering of X corresponds to that of the file paths from
-<a class="reference internal" href="chat.html#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>.
+<a class="reference internal" href="#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>.
 If <code class="docutils literal notranslate"><span class="pre">False</span></code> (the default), return the result that collapses the file
 distinction just described for when <code class="docutils literal notranslate"><span class="pre">by_files</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
@@ -968,7 +984,7 @@ does not exist.</p>
 <dt><strong>by_files</strong><span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, return a list X of results, where len(X) is the number of
 files in the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object, and each element in X is the result for one
 file; the ordering of X corresponds to that of the file paths from
-<a class="reference internal" href="chat.html#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>.
+<a class="reference internal" href="#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>.
 If <code class="docutils literal notranslate"><span class="pre">False</span></code> (the default), return the result that collapses the file
 distinction just described for when <code class="docutils literal notranslate"><span class="pre">by_files</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
@@ -1034,7 +1050,7 @@ This parameter cannot be used together with <code class="docutils literal notran
 <dt><strong>by_files</strong><span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, return a list X of results, where len(X) is the number of
 files in the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object, and each element in X is the result for one
 file; the ordering of X corresponds to that of the file paths from
-<a class="reference internal" href="chat.html#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>.
+<a class="reference internal" href="#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>.
 If <code class="docutils literal notranslate"><span class="pre">False</span></code> (the default), return the result that collapses the file
 distinction just described for when <code class="docutils literal notranslate"><span class="pre">by_files</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
@@ -1072,7 +1088,7 @@ This parameter cannot be used together with <code class="docutils literal notran
 <dt><strong>by_files</strong><span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, return a list X of results, where len(X) is the number of
 files in the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object, and each element in X is the result for one
 file; the ordering of X corresponds to that of the file paths from
-<a class="reference internal" href="chat.html#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>.
+<a class="reference internal" href="#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>.
 If <code class="docutils literal notranslate"><span class="pre">False</span></code> (the default), return the result that collapses the file
 distinction just described for when <code class="docutils literal notranslate"><span class="pre">by_files</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
@@ -1116,7 +1132,7 @@ This parameter cannot be used together with <code class="docutils literal notran
 <dt><strong>by_files</strong><span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, return a list X of results, where len(X) is the number of
 files in the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object, and each element in X is the result for one
 file; the ordering of X corresponds to that of the file paths from
-<a class="reference internal" href="chat.html#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>.
+<a class="reference internal" href="#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>.
 If <code class="docutils literal notranslate"><span class="pre">False</span></code> (the default), return the result that collapses the file
 distinction just described for when <code class="docutils literal notranslate"><span class="pre">by_files</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
@@ -1165,7 +1181,7 @@ does not exist.</p>
 <dt><strong>by_files</strong><span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, return a list X of results, where len(X) is the number of
 files in the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object, and each element in X is the result for one
 file; the ordering of X corresponds to that of the file paths from
-<a class="reference internal" href="chat.html#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>.
+<a class="reference internal" href="#pylangacq.Reader.file_paths" title="pylangacq.Reader.file_paths"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_paths()</span></code></a>.
 If <code class="docutils literal notranslate"><span class="pre">False</span></code> (the default), return the result that collapses the file
 distinction just described for when <code class="docutils literal notranslate"><span class="pre">by_files</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
@@ -1184,6 +1200,81 @@ distinction just described for when <code class="docutils literal notranslate"><
 
 </dd></dl>
 
+</div>
+<div class="section" id="token">
+<h2><a class="reference internal" href="#pylangacq.chat.Token" title="pylangacq.chat.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a><a class="headerlink" href="#token" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pylangacq.chat.Token">
+<em class="property">class </em><code class="sig-prename descclassname">pylangacq.chat.</code><code class="sig-name descname">Token</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">pos</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">mor</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">gra</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>pylangacq.objects.Gra<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/objects.html#Token"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Token with attributes as parsed from a CHAT utterance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>word</strong><span class="classifier">str</span></dt><dd><p>Word form of the token</p>
+</dd>
+<dt><strong>pos</strong><span class="classifier">str</span></dt><dd><p>Part-of-speech tag</p>
+</dd>
+<dt><strong>mor</strong><span class="classifier">str</span></dt><dd><p>Morphological information</p>
+</dd>
+<dt><strong>gra</strong><span class="classifier">Gra</span></dt><dd><p>Grammatical relation</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="gra">
+<h2><a class="reference internal" href="#pylangacq.chat.Gra" title="pylangacq.chat.Gra"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gra</span></code></a><a class="headerlink" href="#gra" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pylangacq.chat.Gra">
+<em class="property">class </em><code class="sig-prename descclassname">pylangacq.chat.</code><code class="sig-name descname">Gra</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dep</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">head</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">rel</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/objects.html#Gra"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Gra" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grammatical relation of a word in an utterance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>dep</strong><span class="classifier">int</span></dt><dd><p>The position of the dependent (i.e., the word itself) in the utterance</p>
+</dd>
+<dt><strong>head</strong><span class="classifier">int</span></dt><dd><p>The position of the head in the utterance</p>
+</dd>
+<dt><strong>rel</strong><span class="classifier">str</span></dt><dd><p>Grammatical relation</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="utterance">
+<h2><a class="reference internal" href="#pylangacq.chat.Utterance" title="pylangacq.chat.Utterance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Utterance</span></code></a><a class="headerlink" href="#utterance" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pylangacq.chat.Utterance">
+<em class="property">class </em><code class="sig-prename descclassname">pylangacq.chat.</code><code class="sig-name descname">Utterance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">participant</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">tokens</span><span class="p">:</span> <span class="n">List<span class="p">[</span>pylangacq.objects.Token<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">time_marks</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">tiers</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/objects.html#Utterance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.Utterance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utterance in a CHAT transcript data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>participant</strong><span class="classifier">str</span></dt><dd><p>Participant of the utterance, e.g., <code class="docutils literal notranslate"><span class="pre">&quot;CHI&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;MOT&quot;</span></code></p>
+</dd>
+<dt><strong>tokens</strong><span class="classifier">List[Token]</span></dt><dd><p>List of tokens of the utterance</p>
+</dd>
+<dt><strong>time_marks</strong><span class="classifier">Tuple[int, int]</span></dt><dd><p>If available from the CHAT data, these are the start and end times
+(in milliseconds) for a segment in a digitized video or audio file,
+e.g., <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">1073)</span></code>, extracted from <code class="docutils literal notranslate"><span class="pre">&quot;·0_1073·&quot;</span></code> in the CHAT data.
+<code class="docutils literal notranslate"><span class="pre">&quot;·&quot;</span></code> is ASCII code 21 (0x15), for NAK (Negative Acknowledgment).</p>
+</dd>
+<dt><strong>tiers</strong><span class="classifier">Dict[str, str]</span></dt><dd><p>This dictionary contains all the original, unparsed data from the utterance,
+including the transcribed utterance (signaled by <code class="docutils literal notranslate"><span class="pre">*CHI:</span></code>, <code class="docutils literal notranslate"><span class="pre">*MOT:</span></code> etc
+in CHAT), common tiers such as %mor and %gra, as well as all other tiers
+associated with the utterance. This dictionary is useful to retrieve
+whatever information not readily handled by this package.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
 </div>
 
 

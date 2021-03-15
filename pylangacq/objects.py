@@ -8,18 +8,18 @@ class Gra:
 
     Attributes
     ----------
-    source : int
-        The current word's position in the utterance; counting starts from 1.
-    target : int
-        The target word's position in the utterance; counting starts from 1.
+    dep : int
+        The position of the dependent (i.e., the word itself) in the utterance
+    head : int
+        The position of the head in the utterance
     rel : str
         Grammatical relation
     """
 
-    __slots__ = ("source", "target", "rel")
+    __slots__ = ("dep", "head", "rel")
 
-    source: int
-    target: int
+    dep: int
+    head: int
     rel: str
 
 

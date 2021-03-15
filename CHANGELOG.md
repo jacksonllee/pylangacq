@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [0.13.0] - 2021-03-15
+
 **API-breaking changes:**
 The `Reader` class has been completely rewritten.
 A couple methods have been removed, while others have been renamed.
@@ -98,8 +112,6 @@ The details are in the following.
 * Handled `[/-]` in cleaning utterances.
 * `[x <number>]` means a repetition of the previous word/item, not repetition
   of the entire utterance.
-
-### Security
 
 ## [0.12.0] - 2020-10-11
 

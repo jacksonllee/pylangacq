@@ -3,6 +3,14 @@
 Word Frequencies and Ngrams
 ===========================
 
+.. currentmodule:: pylangacq.Reader
+
+.. autosummary::
+
+    word_frequencies
+    word_ngrams
+
+
 The way words combine in natural language data is of great interest in all areas
 of linguistic research.
 PyLangAcq provides several handy functionality for word combinatorics.

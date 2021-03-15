@@ -1,6 +1,6 @@
 from typing import List
 
-from pylangacq.dependency import DependencyGraph
+from pylangacq.dependency import _DependencyGraph
 
 
 _CLITIC = "CLITIC"
@@ -271,7 +271,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
             if scoring_board_stop[item]:
                 break
 
-            sent_graph = DependencyGraph(tagged_sent)
+            sent_graph = _DependencyGraph(tagged_sent)
             if sent_graph.faulty:
                 continue
 

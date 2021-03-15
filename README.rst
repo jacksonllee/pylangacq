@@ -21,7 +21,7 @@ Full documentation: https://pylangacq.org
 
 .. start-sphinx-website-index-page
 
-PyLangAcq is a Python library for language acquisition research. Features:
+PyLangAcq is a Python library for language acquisition research.
 
 - Comprehensive capabilities of handling CHAT transcripts as used in CHILDES
 - Intuitive Python data structures for flexible data access and manipulation for modeling work
@@ -30,6 +30,8 @@ PyLangAcq is a Python library for language acquisition research. Features:
 - More benefits from Python: Fast prototyping, numerous libraries
   for computational modeling and machine learning
 - Powerful extensions for research with conversational data in general
+
+.. _download_install:
 
 Download and Install
 --------------------

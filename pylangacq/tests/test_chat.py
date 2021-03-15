@@ -112,17 +112,15 @@ def test_utterances():
                     word="more",
                     pos="qn",
                     mor="more",
-                    gra=Gra(source=1, target=2, rel="QUANT"),
+                    gra=Gra(dep=1, head=2, rel="QUANT"),
                 ),
                 Token(
                     word="cookie",
                     pos="n",
                     mor="cookie",
-                    gra=Gra(source=2, target=0, rel="INCROOT"),
+                    gra=Gra(dep=2, head=0, rel="INCROOT"),
                 ),
-                Token(
-                    word=".", pos=".", mor="", gra=Gra(source=3, target=2, rel="PUNCT")
-                ),
+                Token(word=".", pos=".", mor="", gra=Gra(dep=3, head=2, rel="PUNCT")),
             ],
             time_marks=None,
             tiers={
@@ -139,29 +137,27 @@ def test_utterances():
                     word="you",
                     pos="pro:per",
                     mor="you",
-                    gra=Gra(source=1, target=2, rel="SUBJ"),
+                    gra=Gra(dep=1, head=2, rel="SUBJ"),
                 ),
                 Token(
                     word="0v",
                     pos="0v",
                     mor="v",
-                    gra=Gra(source=2, target=0, rel="ROOT"),
+                    gra=Gra(dep=2, head=0, rel="ROOT"),
                 ),
                 Token(
                     word="more",
                     pos="qn",
                     mor="more",
-                    gra=Gra(source=3, target=4, rel="QUANT"),
+                    gra=Gra(dep=3, head=4, rel="QUANT"),
                 ),
                 Token(
                     word="cookies",
                     pos="n",
                     mor="cookie-PL",
-                    gra=Gra(source=4, target=2, rel="OBJ"),
+                    gra=Gra(dep=4, head=2, rel="OBJ"),
                 ),
-                Token(
-                    word="?", pos="?", mor="", gra=Gra(source=5, target=2, rel="PUNCT")
-                ),
+                Token(word="?", pos="?", mor="", gra=Gra(dep=5, head=2, rel="PUNCT")),
             ],
             time_marks=None,
             tiers={
@@ -263,38 +259,34 @@ def test_ages():
 
 def test_tokens_by_utterances():
     assert _EVE_LOCAL.tokens(by_utterances=True)[0] == [
-        Token(
-            word="more", pos="qn", mor="more", gra=Gra(source=1, target=2, rel="QUANT")
-        ),
+        Token(word="more", pos="qn", mor="more", gra=Gra(dep=1, head=2, rel="QUANT")),
         Token(
             word="cookie",
             pos="n",
             mor="cookie",
-            gra=Gra(source=2, target=0, rel="INCROOT"),
+            gra=Gra(dep=2, head=0, rel="INCROOT"),
         ),
-        Token(word=".", pos=".", mor="", gra=Gra(source=3, target=2, rel="PUNCT")),
+        Token(word=".", pos=".", mor="", gra=Gra(dep=3, head=2, rel="PUNCT")),
     ]
 
 
 def test_tokens():
     assert _EVE_LOCAL.tokens()[:5] == [
-        Token(
-            word="more", pos="qn", mor="more", gra=Gra(source=1, target=2, rel="QUANT")
-        ),
+        Token(word="more", pos="qn", mor="more", gra=Gra(dep=1, head=2, rel="QUANT")),
         Token(
             word="cookie",
             pos="n",
             mor="cookie",
-            gra=Gra(source=2, target=0, rel="INCROOT"),
+            gra=Gra(dep=2, head=0, rel="INCROOT"),
         ),
-        Token(word=".", pos=".", mor="", gra=Gra(source=3, target=2, rel="PUNCT")),
+        Token(word=".", pos=".", mor="", gra=Gra(dep=3, head=2, rel="PUNCT")),
         Token(
             word="you",
             pos="pro:per",
             mor="you",
-            gra=Gra(source=1, target=2, rel="SUBJ"),
+            gra=Gra(dep=1, head=2, rel="SUBJ"),
         ),
-        Token(word="0v", pos="0v", mor="v", gra=Gra(source=2, target=0, rel="ROOT")),
+        Token(word="0v", pos="0v", mor="v", gra=Gra(dep=2, head=0, rel="ROOT")),
     ]
 
 

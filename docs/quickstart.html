@@ -95,8 +95,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#reading-chat-data">Reading CHAT data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#header-information">Header Information</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#transcriptions-and-annotations">Transcriptions and Annotations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#developmental-measures">Developmental Measures</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#word-frequencies-and-ngrams">Word Frequencies and Ngrams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#developmental-measures">Developmental Measures</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#questions">Questions?</a></li>
 </ul>
 </li>
@@ -121,10 +121,14 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="transcriptions.html">Transcriptions and Annotations</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#child-speech-versus-child-directed-speech">Child speech versus child directed speech</a></li>
-<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#the-representation-of-words">The representation of “words”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#chat-format">CHAT Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#words">Words</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcriptions.html#output-by-utterances-or-files">Output by Utterances or Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transcriptions.html#filter-by-participants">Filter by Participants</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#tokens">Tokens</a></li>
 <li class="toctree-l2"><a class="reference internal" href="transcriptions.html#utterances">Utterances</a></li>
-<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#advanced-usage">Advanced usage</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="frequencies.html">Word Frequencies and Ngrams</a></li>
@@ -134,7 +138,14 @@
 <li class="toctree-l2"><a class="reference internal" href="measures.html#index-of-productive-syntax-ipsyn">Index of Productive Syntax (IPSyn)</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#read-chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#gra"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gra</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#utterance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Utterance</span></code></a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -202,7 +213,8 @@
             
   <div class="section" id="quickstart">
 <span id="id1"></span><h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
-<p>To start, import the package <code class="docutils literal notranslate"><span class="pre">pylangacq</span></code> in your Python code:</p>
+<p>After you have downloaded and installed PyLangAcq (see <a class="reference internal" href="index.html#download-install"><span class="std std-ref">Download and Install</span></a>),
+import the package <code class="docutils literal notranslate"><span class="pre">pylangacq</span></code> in your Python interpreter:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span>
 </pre></div>
 </div>
@@ -220,14 +232,14 @@ To illustrate, let’s use Eve’s data from the
 corpus of American English:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://childes.talkbank.org/data/Eng-NA/Brown.zip&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;Eve&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">eve</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">n_files</span><span class="p">()</span>
 <span class="go">20</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">eve</span></code> is a <a class="reference internal" href="chat.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> instance.
+<p><code class="docutils literal notranslate"><span class="pre">eve</span></code> is a <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> instance.
 It has Eve’s 20 CHAT data files all parsed and ready for your analysis.
 <code class="docutils literal notranslate"><span class="pre">eve</span></code> has various methods through which you can access different information
-with Pythonic data structures.</p>
+with Python data structures.</p>
 <p>More on <a class="reference internal" href="read.html#read"><span class="std std-ref">Reading CHAT Data</span></a>.</p>
 </div>
 <div class="section" id="header-information">
@@ -262,7 +274,7 @@ which is from 1 year and 6 months old to 2 years and 3 months old:</p>
 </div>
 <div class="section" id="transcriptions-and-annotations">
 <h2>Transcriptions and Annotations<a class="headerlink" href="#transcriptions-and-annotations" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="chat.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a> is the basic method to access the transcriptions:</p>
+<p><a class="reference internal" href="api.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a> is the basic method to access the transcriptions:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">words</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">words</span><span class="p">()</span>  <span class="c1"># list of strings, for all the words across all 20 files</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>  <span class="c1"># total word count</span>
 <span class="go">119972</span>
@@ -270,7 +282,7 @@ which is from 1 year and 6 months old to 2 years and 3 months old:</p>
 <span class="go">[&#39;more&#39;, &#39;cookie&#39;, &#39;.&#39;, &#39;you&#39;, &#39;0v&#39;, &#39;more&#39;, &#39;cookies&#39;, &#39;?&#39;]</span>
 </pre></div>
 </div>
-<p>By default, <a class="reference internal" href="chat.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a>
+<p>By default, <a class="reference internal" href="api.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a>
 returns a flat list of results from all the files.
 If we are interested in the results for individual files,
 the method has the optional boolean parameter <code class="docutils literal notranslate"><span class="pre">by_files</span></code>:</p>
@@ -305,21 +317,21 @@ the method has the optional boolean parameter <code class="docutils literal notr
 <p>Apart from transcriptions, CHAT data has rich annotations for linguistic
 and extra-linguistic information.
 Such annotations are accessible through the methods
-<a class="reference internal" href="chat.html#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code></a>
-and <a class="reference internal" href="chat.html#pylangacq.Reader.utterances" title="pylangacq.Reader.utterances"><code class="xref py py-func docutils literal notranslate"><span class="pre">utterances()</span></code></a>.</p>
+<a class="reference internal" href="api.html#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code></a>
+and <a class="reference internal" href="api.html#pylangacq.Reader.utterances" title="pylangacq.Reader.utterances"><code class="xref py py-func docutils literal notranslate"><span class="pre">utterances()</span></code></a>.</p>
 <p>Many CHAT datasets on CHILDES have the <code class="docutils literal notranslate"><span class="pre">%mor</span></code> and <code class="docutils literal notranslate"><span class="pre">%gra</span></code> tiers
 for morphological information and grammatical relations, respectively.
 A reader such as <code class="docutils literal notranslate"><span class="pre">eve</span></code> from above has all this information readily available
-to you via <a class="reference internal" href="chat.html#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code></a>
-– think of <a class="reference internal" href="chat.html#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code></a>
-as <a class="reference internal" href="chat.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a> with annotations:</p>
+to you via <a class="reference internal" href="api.html#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code></a>
+– think of <a class="reference internal" href="api.html#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code></a>
+as <a class="reference internal" href="api.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a> with annotations:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">some_tokens</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">tokens</span><span class="p">()[:</span><span class="mi">5</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">some_tokens</span>
-<span class="go">[Token(word=&#39;more&#39;, pos=&#39;qn&#39;, mor=&#39;more&#39;, gra=Gra(source=1, target=2, rel=&#39;QUANT&#39;)),</span>
-<span class="go"> Token(word=&#39;cookie&#39;, pos=&#39;n&#39;, mor=&#39;cookie&#39;, gra=Gra(source=2, target=0, rel=&#39;INCROOT&#39;)),</span>
-<span class="go"> Token(word=&#39;.&#39;, pos=&#39;.&#39;, mor=&#39;&#39;, gra=Gra(source=3, target=2, rel=&#39;PUNCT&#39;)),</span>
-<span class="go"> Token(word=&#39;you&#39;, pos=&#39;pro:per&#39;, mor=&#39;you&#39;, gra=Gra(source=1, target=2, rel=&#39;SUBJ&#39;)),</span>
-<span class="go"> Token(word=&#39;0v&#39;, pos=&#39;0v&#39;, mor=&#39;v&#39;, gra=Gra(source=2, target=0, rel=&#39;ROOT&#39;))]</span>
+<span class="go">[Token(word=&#39;more&#39;, pos=&#39;qn&#39;, mor=&#39;more&#39;, gra=Gra(dep=1, head=2, rel=&#39;QUANT&#39;)),</span>
+<span class="go"> Token(word=&#39;cookie&#39;, pos=&#39;n&#39;, mor=&#39;cookie&#39;, gra=Gra(dep=2, head=0, rel=&#39;INCROOT&#39;)),</span>
+<span class="go"> Token(word=&#39;.&#39;, pos=&#39;.&#39;, mor=&#39;&#39;, gra=Gra(dep=3, head=2, rel=&#39;PUNCT&#39;)),</span>
+<span class="go"> Token(word=&#39;you&#39;, pos=&#39;pro:per&#39;, mor=&#39;you&#39;, gra=Gra(dep=1, head=2, rel=&#39;SUBJ&#39;)),</span>
+<span class="go"> Token(word=&#39;0v&#39;, pos=&#39;0v&#39;, mor=&#39;v&#39;, gra=Gra(dep=2, head=0, rel=&#39;ROOT&#39;))]</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># The Token class is a dataclass. A Token instance has attributes as shown above.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">some_tokens</span><span class="p">:</span>
@@ -335,12 +347,12 @@ as <a class="reference internal" href="chat.html#pylangacq.Reader.words" title="
 <p>Beyond the <code class="docutils literal notranslate"><span class="pre">%mor</span></code> and <code class="docutils literal notranslate"><span class="pre">%gra</span></code> tiers,
 an utterance has yet more information from the original CHAT data file.
 If you need information such as the unsegmented transcription, time marks,
-or any unparsed tiers, <a class="reference internal" href="chat.html#pylangacq.Reader.utterances" title="pylangacq.Reader.utterances"><code class="xref py py-func docutils literal notranslate"><span class="pre">utterances()</span></code></a> is what you need:</p>
+or any unparsed tiers, <a class="reference internal" href="api.html#pylangacq.Reader.utterances" title="pylangacq.Reader.utterances"><code class="xref py py-func docutils literal notranslate"><span class="pre">utterances()</span></code></a> is what you need:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">utterances</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 <span class="go">Utterance(participant=&#39;CHI&#39;,</span>
-<span class="go">          tokens=[Token(word=&#39;more&#39;, pos=&#39;qn&#39;, mor=&#39;more&#39;, gra=Gra(source=1, target=2, rel=&#39;QUANT&#39;)),</span>
-<span class="go">                  Token(word=&#39;cookie&#39;, pos=&#39;n&#39;, mor=&#39;cookie&#39;, gra=Gra(source=2, target=0, rel=&#39;INCROOT&#39;)),</span>
-<span class="go">                  Token(word=&#39;.&#39;, pos=&#39;.&#39;, mor=&#39;&#39;, gra=Gra(source=3, target=2, rel=&#39;PUNCT&#39;))],</span>
+<span class="go">          tokens=[Token(word=&#39;more&#39;, pos=&#39;qn&#39;, mor=&#39;more&#39;, gra=Gra(dep=1, head=2, rel=&#39;QUANT&#39;)),</span>
+<span class="go">                  Token(word=&#39;cookie&#39;, pos=&#39;n&#39;, mor=&#39;cookie&#39;, gra=Gra(dep=2, head=0, rel=&#39;INCROOT&#39;)),</span>
+<span class="go">                  Token(word=&#39;.&#39;, pos=&#39;.&#39;, mor=&#39;&#39;, gra=Gra(dep=3, head=2, rel=&#39;PUNCT&#39;))],</span>
 <span class="go">          time_marks=None,</span>
 <span class="go">          tiers={&#39;CHI&#39;: &#39;more cookie . [+ IMP]&#39;,</span>
 <span class="go">                 &#39;%mor&#39;: &#39;qn|more n|cookie .&#39;,</span>
@@ -348,11 +360,35 @@ or any unparsed tiers, <a class="reference internal" href="chat.html#pylangacq.R
 <span class="go">                 &#39;%int&#39;: &#39;distinctive , loud&#39;})</span>
 </pre></div>
 </div>
-<p>More on <span class="xref std std-ref">transcriptions</span>.</p>
+<p>More on <a class="reference internal" href="transcriptions.html#transcriptions"><span class="std std-ref">Transcriptions and Annotations</span></a>.</p>
+</div>
+<div class="section" id="word-frequencies-and-ngrams">
+<h2>Word Frequencies and Ngrams<a class="headerlink" href="#word-frequencies-and-ngrams" title="Permalink to this headline">¶</a></h2>
+<p>For word combinatorics, check out
+<a class="reference internal" href="api.html#pylangacq.Reader.word_frequencies" title="pylangacq.Reader.word_frequencies"><code class="xref py py-func docutils literal notranslate"><span class="pre">word_frequencies()</span></code></a>
+and <a class="reference internal" href="api.html#pylangacq.Reader.word_ngrams" title="pylangacq.Reader.word_ngrams"><code class="xref py py-func docutils literal notranslate"><span class="pre">word_ngrams()</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_frequencies</span><span class="p">()</span>  <span class="c1"># a collections.Counter object</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">[(&#39;.&#39;, 20130),</span>
+<span class="go"> (&#39;?&#39;, 6358),</span>
+<span class="go"> (&#39;you&#39;, 3695),</span>
+<span class="go"> (&#39;the&#39;, 2524),</span>
+<span class="go"> (&#39;it&#39;, 2365)]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bigrams</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_ngrams</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># a collections.Counter object</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bigrams</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">[((&#39;it&#39;, &#39;.&#39;), 705),</span>
+<span class="go"> ((&#39;that&#39;, &#39;?&#39;), 619),</span>
+<span class="go"> ((&#39;what&#39;, &#39;?&#39;), 560),</span>
+<span class="go"> ((&#39;yeah&#39;, &#39;.&#39;), 510),</span>
+<span class="go"> ((&#39;there&#39;, &#39;.&#39;), 471)]</span>
+</pre></div>
+</div>
+<p>More on <a class="reference internal" href="frequencies.html#frequencies"><span class="std std-ref">Word Frequencies and Ngrams</span></a>.</p>
 </div>
 <div class="section" id="developmental-measures">
 <h2>Developmental Measures<a class="headerlink" href="#developmental-measures" title="Permalink to this headline">¶</a></h2>
-<p>To get the mean length of utterance (MLU), use <a class="reference internal" href="chat.html#pylangacq.Reader.mlu" title="pylangacq.Reader.mlu"><code class="xref py py-func docutils literal notranslate"><span class="pre">mlu()</span></code></a>:</p>
+<p>To get the mean length of utterance (MLU), use <a class="reference internal" href="api.html#pylangacq.Reader.mlu" title="pylangacq.Reader.mlu"><code class="xref py py-func docutils literal notranslate"><span class="pre">mlu()</span></code></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">mlu</span><span class="p">()</span>
 <span class="go">[2.316421895861148,</span>
 <span class="go"> 2.5163934426229506,</span>
@@ -380,33 +416,9 @@ or any unparsed tiers, <a class="reference internal" href="chat.html#pylangacq.R
 As this is a list of floats, they can be readily piped into
 other packages for making plots, for example.</p>
 <p>The other language developmental measures implemented so far are
-<a class="reference internal" href="chat.html#pylangacq.Reader.ttr" title="pylangacq.Reader.ttr"><code class="xref py py-func docutils literal notranslate"><span class="pre">ttr()</span></code></a> for the type-token ratio (TTR) and
-<a class="reference internal" href="chat.html#pylangacq.Reader.ipsyn" title="pylangacq.Reader.ipsyn"><code class="xref py py-func docutils literal notranslate"><span class="pre">ipsyn()</span></code></a> for the index of productive syntax (IPSyn).</p>
+<a class="reference internal" href="api.html#pylangacq.Reader.ttr" title="pylangacq.Reader.ttr"><code class="xref py py-func docutils literal notranslate"><span class="pre">ttr()</span></code></a> for the type-token ratio (TTR) and
+<a class="reference internal" href="api.html#pylangacq.Reader.ipsyn" title="pylangacq.Reader.ipsyn"><code class="xref py py-func docutils literal notranslate"><span class="pre">ipsyn()</span></code></a> for the index of productive syntax (IPSyn).</p>
 <p>More on <a class="reference internal" href="measures.html#measures"><span class="std std-ref">Developmental Measures</span></a>.</p>
-</div>
-<div class="section" id="word-frequencies-and-ngrams">
-<h2>Word Frequencies and Ngrams<a class="headerlink" href="#word-frequencies-and-ngrams" title="Permalink to this headline">¶</a></h2>
-<p>For word combinatorics, check out
-<a class="reference internal" href="chat.html#pylangacq.Reader.word_frequencies" title="pylangacq.Reader.word_frequencies"><code class="xref py py-func docutils literal notranslate"><span class="pre">word_frequencies()</span></code></a>
-and <a class="reference internal" href="chat.html#pylangacq.Reader.word_ngrams" title="pylangacq.Reader.word_ngrams"><code class="xref py py-func docutils literal notranslate"><span class="pre">word_ngrams()</span></code></a>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_frequencies</span><span class="p">()</span>  <span class="c1"># a collections.Counter object</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<span class="go">[(&#39;.&#39;, 20130),</span>
-<span class="go"> (&#39;?&#39;, 6358),</span>
-<span class="go"> (&#39;you&#39;, 3695),</span>
-<span class="go"> (&#39;the&#39;, 2524),</span>
-<span class="go"> (&#39;it&#39;, 2365)]</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bigrams</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_ngrams</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># a collections.Counter object</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bigrams</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<span class="go">[((&#39;it&#39;, &#39;.&#39;), 705),</span>
-<span class="go"> ((&#39;that&#39;, &#39;?&#39;), 619),</span>
-<span class="go"> ((&#39;what&#39;, &#39;?&#39;), 560),</span>
-<span class="go"> ((&#39;yeah&#39;, &#39;.&#39;), 510),</span>
-<span class="go"> ((&#39;there&#39;, &#39;.&#39;), 471)]</span>
-</pre></div>
-</div>
-<p>More on <a class="reference internal" href="frequencies.html#frequencies"><span class="std std-ref">Word Frequencies and Ngrams</span></a>.</p>
 </div>
 <div class="section" id="questions">
 <h2>Questions?<a class="headerlink" href="#questions" title="Permalink to this headline">¶</a></h2>

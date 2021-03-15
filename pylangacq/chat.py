@@ -1025,7 +1025,7 @@ class Reader:
                 return tier_marker
         return None
 
-    def _get_utterances(self, all_tiers: List[Dict[str, str]]) -> List[Utterance]:
+    def _get_utterances(self, all_tiers: Iterable[Dict[str, str]]) -> List[Utterance]:
         result_list = []
 
         for tiermarker_to_line in all_tiers:
@@ -1159,8 +1159,8 @@ class Reader:
         except (ValueError, TypeError):
             return None
 
-    def _get_all_tiers(self, lines: List[str]) -> List[Dict[str, str]]:
-        result_with_collapses = {}
+    def _get_all_tiers(self, lines: List[str]) -> Iterable[Dict[str, str]]:
+        index_to_tiers: Dict[int, Dict[str, str]] = {}
         index_ = -1  # utterance index (1st utterance is index 0)
         utterance = None
 
@@ -1174,34 +1174,13 @@ class Reader:
                 index_ += 1
                 participant_code = line_split[0].lstrip("*").rstrip(":")
                 utterance = " ".join(line_split[1:])
-                result_with_collapses[index_] = {participant_code: utterance}
+                index_to_tiers[index_] = {participant_code: utterance}
 
             elif utterance and line.startswith("%"):
                 tier_marker = line_split[0].rstrip(":")
-                result_with_collapses[index_][tier_marker] = " ".join(line_split[1:])
+                index_to_tiers[index_][tier_marker] = " ".join(line_split[1:])
 
-        # handle collapses such as [x 4]
-        result_without_collapses = {}
-        new_index = -1  # utterance index (1st utterance is index 0)
-        collapse_pattern = re.compile(r"\[x \d+?\]")  # e.g., "[x <number(s)>]"
-        number_regex = re.compile(r"\d+")
-
-        for old_index in range(len(result_with_collapses)):
-            tier_dict = result_with_collapses[old_index]
-            participant_code = self._get_participant_code(tier_dict.keys())
-            utterance = tier_dict[participant_code]
-
-            try:
-                collapse_str = collapse_pattern.search(utterance).group()
-                collapse_number = int(number_regex.findall(collapse_str)[0])
-            except (AttributeError, ValueError):
-                collapse_number = 1
-
-            for i in range(collapse_number):
-                new_index += 1
-                result_without_collapses[new_index] = tier_dict
-
-        return list(result_without_collapses.values())
+        return index_to_tiers.values()
 
     def _get_header(self, lines: List[str]) -> Dict:
         headname_to_entry = {"Date": set(), "Participants": {}}

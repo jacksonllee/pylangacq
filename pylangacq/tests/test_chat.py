@@ -323,7 +323,7 @@ def test_ipsyn():
 
 def test_word_ngrams():
     assert _EVE_LOCAL.word_ngrams(1).most_common(5) == [
-        ((".",), 1134),
+        ((".",), 1121),
         (("?",), 455),
         (("you",), 197),
         (("that",), 151),
@@ -331,7 +331,7 @@ def test_word_ngrams():
     ]
     assert _EVE_LOCAL.word_ngrams(2).most_common(5) == [
         (("that", "?"), 101),
-        (("it", "."), 65),
+        (("it", "."), 63),
         (("what", "?"), 54),
         (("yes", "‡"), 45),
         (("it", "?"), 39),
@@ -340,7 +340,7 @@ def test_word_ngrams():
 
 def test_word_frequency():
     assert _EVE_LOCAL.word_frequencies().most_common(5) == [
-        (".", 1134),
+        (".", 1121),
         ("?", 455),
         ("you", 197),
         ("that", 151),

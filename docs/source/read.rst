@@ -40,7 +40,7 @@ a :func:`~pylangacq.read_chat` call like this typically takes a couple seconds.
     >>> brown.n_files()
     214
     >>> len(brown.utterances())
-    184758
+    184639
 
 In practice, you likely only need a subset of the data at a time, e.g.,
 focusing on a particular child. The Brown dataset contains data for the three children
@@ -77,7 +77,7 @@ data amount):
     >>> eve.n_files()
     20
     >>> len(eve.utterances())
-    26979
+    26920
 
 So far, we've seen how :func:`~pylangacq.read_chat` works with a URL that points
 to a ZIP file. Other data sources that this function is designed for are:
@@ -272,8 +272,8 @@ starting from an empty one and adding data to it one file at a time.
     ...         len(reader.utterances(participants='CHI'))
     ...     )
     ...
-    Number of Eve's utterances in the reader so far: 749
-    Number of Eve's utterances in the reader so far: 1237
-    Number of Eve's utterances in the reader so far: 1490
-    Number of Eve's utterances in the reader so far: 2080
-    Number of Eve's utterances in the reader so far: 2787
+    Number of Eve's utterances in the reader so far: 741
+    Number of Eve's utterances in the reader so far: 1214
+    Number of Eve's utterances in the reader so far: 1467
+    Number of Eve's utterances in the reader so far: 2052
+    Number of Eve's utterances in the reader so far: 2758

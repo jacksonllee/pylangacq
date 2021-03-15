@@ -3,7 +3,10 @@
 Word Frequencies and Ngrams
 ===========================
 
-.. currentmodule:: pylangacq.Reader
+Because word frequencies and combinatorics are useful for many purposes,
+the following :class:`~pylangacq.chat.Reader` methods are defined:
+
+.. currentmodule:: pylangacq.chat.Reader
 
 .. autosummary::
 
@@ -11,80 +14,58 @@ Word Frequencies and Ngrams
     word_ngrams
 
 
-The way words combine in natural language data is of great interest in all areas
-of linguistic research.
-PyLangAcq provides several handy functionality for word combinatorics.
+For both :func:`~pylangacq.Reader.word_frequencies` and :func:`~pylangacq.Reader.word_ngrams`:
 
-We are often interested in word frequency information and word ngrams:
+* They have the same optional arguments ``participants``, ``exclude``, and ``by_files``
+  as :func:`~pylangacq.Reader.words`, :func:`~pylangacq.Reader.tokens`,
+  :func:`~pylangacq.Reader.utterances` do.
 
-====================  =================================================
-Method                Return object
-====================  =================================================
-``word_frequency()``  Counter dict(word: word token count)
-``word_ngrams(n)``    Counter dict(ngram as a tuple: ngram token count)
-====================  =================================================
+* They have the optional argument ``keep_case``
+  to specify whether upper/lowercase distinction should be kept or collapsed
+  in counting words or ngrams.
 
-Both methods return
-`Counter dicts from collections <https://docs.python.org/3/library/collections.html#collections.Counter>`_
-in the Python standard
-library. As a result (and as an advantage!), all Counter methods apply to
-the return objects of these methods.
+* They return :class:`~collections.Counter` objects, which naturally represent
+  a mapping from words or ngrams to their counts, and have useful methods
+  for working with count data.
 
-``word_frequency()`` and ``word_ngrams(n)`` (with the obligatory parameter
-*n*) share the following optional parameters:
 
-* ``participant``: see :ref:`cds`
-* ``by_files``: see :ref:`reader_properties`
-* ``keep_case``: whether case distinction such as "Rocky" and "rocky" is kept;
-  defaults to ``True``. If "Rocky" and "rocky" are treated as distinct, then
-  they are two distinct word types and have separate key:value entries in the
-  return object.
-
-To illustrate, we set up a ``Reader`` instance ``eve``
-based on Eve's data from CHILDES Brown:
+For illustration, let's check out some of the word trigrams in Eve's data from Brown.
+To make it slightly more interesting,
+we are going to look at child speech and child-directed speech separately.
 
 .. code-block:: python
 
-    >>> import pylangacq as pla
-    >>> eve = pla.read_chat('Brown/Eve/*.cha')
-
-We use the ``participant`` parameter and the
-``most_common()`` method available for Counter dicts below.
-
-For ``word_frequency()``:
-
-.. code-block:: python
-
-    >>> word_freq = eve.word_frequency()  # all participants
-    >>> word_freq_CDS = eve.word_frequency(exclude='CHI')  # child-directed speech
-    >>> word_freq_child = eve.word_frequency(participant='CHI')  # child speech
-    >>> word_freq.most_common(5)
-    [('.', 20130), ('?', 6358), ('you', 3695), ('the', 2524), ('it', 2365)]
-    >>> word_freq_CDS.most_common(5)
-    [('.', 9687), ('?', 4909), ('you', 3061), ('the', 1966), ('it', 1563)]
-    >>> word_freq_child.most_common(5)
-    [('.', 10443), ('?', 1449), ('I', 1199), ('that', 1051), ('a', 968)]
-
-This tiny example already shows a key and expected difference ("you" versus "I")
-between child speech and
-child directed speech in terms of pronoun distribution.
-
-For ``word_ngrams(n)``:
-
-.. code-block:: python
-
-    >>> from pprint import pprint
-    >>> trigrams_CDS = eve.word_ngrams(3, exclude='CHI')  # 3 for trigrams; for child-directed speech
-    >>> trigrams_child = eve.word_ngrams(3, participant='CHI')  # child speech
-    >>> pprint(trigrams_CDS.most_common(5))  # lots of questions in child-directed speech!
-    [(("that's", 'right', '.'), 178),
-     (('what', 'are', 'you'), 149),
-     (('is', 'that', '?'), 124),
-     (('do', 'you', 'want'), 104),
-     (('what', 'is', 'that'), 99)]
-    >>> pprint(trigrams_child.most_common(5))
+    >>> import pylangacq
+    >>> url = "https://childes.talkbank.org/data/Eng-NA/Brown.zip"
+    >>> eve = pylangacq.read_chat(url, "Eve")
+    >>>
+    >>> trigrams_child_speech = eve.word_ngrams(3, participants="CHI")
+    >>> trigrams_child_speech.most_common(10)  # A collections.Counter object has the method ``most_common``.
     [(('grape', 'juice', '.'), 74),
      (('another', 'one', '.'), 55),
      (('what', 'that', '?'), 50),
      (('a', 'b', 'c'), 47),
-     (('right', 'there', '.'), 45)]
+     (('right', 'there', '.'), 45),
+     (('in', 'there', '.'), 43),
+     (('b', 'c', '.'), 42),
+     (('hi', 'Fraser', '.'), 39),
+     (('I', 'want', 'some'), 39),
+     (('a', 'minute', '.'), 35)]
+    >>>
+    >>> trigrams_child_directed_speech = eve.word_ngrams(3, exclude="CHI")
+    >>> trigrams_child_directed_speech.most_common(10)
+    [(("that's", 'right', '.'), 178),
+     (('what', 'are', 'you'), 149),
+     (('is', 'that', '?'), 124),
+     (('do', 'you', 'want'), 104),
+     (('what', 'is', 'that'), 99),
+     (('are', 'you', 'doing'), 94),
+     (("what's", 'that', '?'), 92),
+     (('would', 'you', 'like'), 89),
+     (('what', 'do', 'you'), 89),
+     (('is', 'it', '?'), 89)]
+
+Just this very brief result using word trigrams appears to show a contrast between
+various demands being frequent in child speech,
+versus the dominant usage of confirmation and attempts to get the child's
+attention using questions in child-directed speech.

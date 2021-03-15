@@ -90,10 +90,10 @@ PyLangAcq handles CHAT data by paying attention to the following:
   utterance in this example).
 
 
-Once you have a :class:`~pylangacq.Reader` object with CHAT data,
+Once you have a :class:`~pylangacq.chat.Reader` object with CHAT data,
 several methods are available for accessing the transcriptions and annotations.
 Which method suits your need best depends on which level of information you need.
-The following sections introduce these :class:`~pylangacq.Reader` methods,
+The following sections introduce these :class:`~pylangacq.chat.Reader` methods,
 using a reader created by :func:`~pylangacq.Reader.from_strs` with the two CHAT
 utterances between Eve and her mother we've looked at.
 
@@ -115,7 +115,7 @@ utterances between Eve and her mother we've looked at.
 Words
 -----
 
-The :class:`~pylangacq.Reader` method :func:`~pylangacq.Reader.words`
+The :class:`~pylangacq.chat.Reader` method :func:`~pylangacq.Reader.words`
 returns the transcriptions as segmented words.
 Calling :func:`~pylangacq.Reader.words` with no arguments gives a
 flat list of the words:
@@ -198,8 +198,8 @@ as :func:`~pylangacq.Reader.words` does.
 
 While :func:`~pylangacq.Reader.words` represents a word by the built-in string type,
 :func:`~pylangacq.Reader.tokens` bundles the ``%mor`` and ``%gra`` annotations
-of a word into a :class:`~pylangacq.chat.Token` object.
-A :class:`~pylangacq.chat.Token`'s information can be accessed via its attributes
+of a word into a :class:`~pylangacq.objects.Token` object.
+A :class:`~pylangacq.objects.Token`'s information can be accessed via its attributes
 ``word``, ``pos``, ``mor``, and ``gra``:
 
 .. code-block:: python
@@ -223,7 +223,7 @@ A :class:`~pylangacq.chat.Token`'s information can be accessed via its attribute
     morphological information:
     grammatical relation: Gra(dep=3, head=2, rel='PUNCT')
 
-A grammatical relation is further represented by a :class:`~pylangacq.chat.Gra` object,
+A grammatical relation is further represented by a :class:`~pylangacq.objects.Gra` object,
 with the attributes
 ``dep`` (the position of the dependent, i.e., the word itself, in the utterance),
 ``head`` (head's position),
@@ -254,7 +254,7 @@ beyond :func:`~pylangacq.Reader.tokens`:
 as :func:`~pylangacq.Reader.words` and :func:`~pylangacq.Reader.tokens` do.
 
 Each utterance from :func:`~pylangacq.Reader.utterances` is
-an :class:`~pylangacq.chat.Utterance` object,
+an :class:`~pylangacq.objects.Utterance` object,
 which has the attributes
 ``participant``, ``tokens``, ``time_marks``, and ``tiers``
 as shown in the code snippet just above.
@@ -271,7 +271,7 @@ come with digitized audio and video data associated with the text-based CHAT dat
 In these datasets, an utterance in the CHAT file has time marks to indicate
 its start and end time (in milliseconds) in the corresponding audio and/or video data.
 If the information is available, the ``time_marks`` attribute of an
-:class:`~pylangacq.chat.Utterance` object is a tuple of two integers,
+:class:`~pylangacq.objects.Utterance` object is a tuple of two integers,
 e.g., ``(0, 1073)``, for ``·0_1073·`` found at the end of the CHAT transcription line.
 
 
@@ -280,10 +280,10 @@ Tiers
 
 You may sometimes need the original, unparsed transcription lines,
 because they contain information, e.g., annotations for pauses, that is dropped
-when :class:`~pylangacq.chat.Token` objects are constructed
+when :class:`~pylangacq.objects.Token` objects are constructed
 using the cleaned-up words aligned with ``%mor`` and ``%gra``.
 Or you may need access to the other ``%`` tiers not readily handled by PyLangAcq,
 e.g., ``%int`` for intonation in the Eve example above.
-In these cases, the ``tiers`` attribute of the :class:`~pylangacq.chat.Utterance` object
+In these cases, the ``tiers`` attribute of the :class:`~pylangacq.objects.Utterance` object
 gives your a dictionary of all the original tiers of the utterance
 for your custom needs.

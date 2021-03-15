@@ -25,7 +25,7 @@ The following is the header section of ``Brown/Eve/010600a.cha`` from CHILDES:
 
 .. skip: end
 
-:class:`~pylangacq.Reader` has the following methods
+:class:`~pylangacq.chat.Reader` has the following methods
 to access the commonly needed information from the headers:
 
 .. currentmodule:: pylangacq.Reader

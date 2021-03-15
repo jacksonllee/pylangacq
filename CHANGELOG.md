@@ -42,8 +42,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
    - `participant_name` -> `name`
    - `participant_role` -> `role`
    - `SES` -> `ses`
-* The `keep_case` keyword argument of the `word_ngrams` and `word_frequency` methods
-  of the `Reader` class now has `False` as the default value (it used to be `True`).
 * Switched to sphinx-rtd-theme as the documentation theme.
 * Switched to CircleCI orbs; update dev requirements' versions.
 

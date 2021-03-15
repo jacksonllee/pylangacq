@@ -74,10 +74,14 @@ def _params_in_docstring(*params, class_method=True):
     if "keep_case" in params:
         docstring += """
         keep_case : bool, optional
-            If ``True``, case distinctions are kept, e.g.,
+            If ``True`` (the default), case distinctions are kept, e.g.,
             word tokens like "the" and "The" are treated as distinct.
-            If ``False`` (the default), all word tokens are forced to be in lowercase
-            as a preprocessing step."""
+            If ``False``, all word tokens are forced to be in lowercase
+            as a preprocessing step.
+            CHAT data from CHILDES intentionally does not follow the orthographic
+            convention of capitalizing the first letter of a sentence in the
+            transcriptions (as would have been done in many European languages),
+            and so leaving keep_case as True is appropriate in most cases."""
 
     if "match" in params:
         docstring += """
@@ -115,11 +119,11 @@ def _params_in_docstring(*params, class_method=True):
     if "cls" in params:
         docstring += """
         cls : type, optional
-            Either :class:`~pylangacq.Reader` (the default),
+            Either :class:`~pylangacq.chat.Reader` (the default),
             or a subclass from it that expects the same arguments for the methods
             :func:`~pylangacq.Reader.from_zip`, :func:`~pylangacq.Reader.from_dir`,
             and :func:`~pylangacq.Reader.from_files`.
-            Pass in your own :class:`~pylangacq.Reader` subclass
+            Pass in your own :class:`~pylangacq.chat.Reader` subclass
             for new or modified behavior of the returned reader object."""
 
     if not class_method:
@@ -721,7 +725,7 @@ class Reader:
             self.words(participants=participant, by_utterances=True, by_files=True)
         )
 
-    def ttr(self, keep_case=False, participant="CHI") -> List[float]:
+    def ttr(self, keep_case=True, participant="CHI") -> List[float]:
         """Return the type-token ratios.
 
         Parameters
@@ -764,7 +768,7 @@ class Reader:
 
     @_params_in_docstring("keep_case", "participants", "exclude", "by_files")
     def word_ngrams(
-        self, n, keep_case=False, participants=None, exclude=None, by_files=False
+        self, n, keep_case=True, participants=None, exclude=None, by_files=False
     ) -> Union[collections.Counter, List[collections.Counter]]:
         """Return word ngrams.
 
@@ -808,7 +812,7 @@ class Reader:
 
     @_params_in_docstring("keep_case", "participants", "exclude", "by_files")
     def word_frequencies(
-        self, keep_case=False, participants=None, exclude=None, by_files=False
+        self, keep_case=True, participants=None, exclude=None, by_files=False
     ) -> Union[collections.Counter, List[collections.Counter]]:
         """Return word frequencies.
 
@@ -838,7 +842,7 @@ class Reader:
 
     @classmethod
     def from_strs(cls, strs: List[str], ids: List[str] = None) -> "Reader":
-        """Instantiate a ``Reader`` object from in-memory CHAT data strings.
+        """Instantiate a reader from in-memory CHAT data strings.
 
         Parameters
         ----------
@@ -876,7 +880,7 @@ class Reader:
         exclude: str = None,
         encoding: str = _ENCODING,
     ) -> "Reader":
-        """Instantiate a ``Reader`` object from local CHAT data files.
+        """Instantiate a reader from local CHAT data files.
 
         Parameters
         ----------
@@ -919,7 +923,7 @@ class Reader:
         extension: str = _CHAT_EXTENSION,
         encoding: str = _ENCODING,
     ) -> "Reader":
-        """Instantiate a ``Reader`` object from a local directory with CHAT data files.
+        """Instantiate a reader from a local directory with CHAT data files.
 
         Parameters
         ----------
@@ -963,7 +967,7 @@ class Reader:
         allow_remote: bool = True,
         encoding: str = _ENCODING,
     ) -> "Reader":
-        """Instantiate a ``Reader`` object from a local or remote ZIP file.
+        """Instantiate a reader from a local or remote ZIP file.
 
         Parameters
         ----------
@@ -1343,7 +1347,7 @@ def read_chat(
 
     Returns
     -------
-    :class:`~pylangacq.Reader`
+    :class:`~pylangacq.chat.Reader`
     """
     if cls != Reader and not issubclass(cls, Reader):
         raise TypeError(f"Only a Reader class or its child class is allowed: {cls}")

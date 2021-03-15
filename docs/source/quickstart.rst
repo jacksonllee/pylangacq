@@ -81,7 +81,7 @@ Transcriptions and Annotations
 
     >>> words = eve.words()  # list of strings, for all the words across all 20 files
     >>> len(words)  # total word count
-    119972
+    119799
     >>> words[:8]
     ['more', 'cookie', '.', 'you', '0v', 'more', 'cookies', '?']
 
@@ -98,23 +98,23 @@ the method has the optional boolean parameter ``by_files``:
     >>> for words_one_file in words_by_files:
     ...     print(len(words_one_file))
     ...
-    5840
-    5309
+    5810
+    5258
     2493
-    5753
-    5709
-    4350
-    5314
+    5742
+    5707
+    4338
+    5298
     8901
-    4462
+    4454
     4535
     4196
-    6214
-    4464
+    6193
+    4444
     5202
     8075
     7361
-    10872
+    10870
     8407
     6903
     5612
@@ -184,15 +184,15 @@ and :func:`~pylangacq.Reader.word_ngrams`:
 
     >>> word_freq = eve.word_frequencies()  # a collections.Counter object
     >>> word_freq.most_common(5)
-    [('.', 20130),
+    [('.', 20071),
      ('?', 6358),
      ('you', 3695),
      ('the', 2524),
-     ('it', 2365)]
+     ('it', 2363)]
 
     >>> bigrams = eve.word_ngrams(2)  # a collections.Counter object
     >>> bigrams.most_common(5)
-    [(('it', '.'), 705),
+    [(('it', '.'), 703),
      (('that', '?'), 619),
      (('what', '?'), 560),
      (('yeah', '.'), 510),
@@ -209,23 +209,23 @@ To get the mean length of utterance (MLU), use :func:`~pylangacq.Reader.mlu`:
 .. code-block:: python
 
     >>> eve.mlu()
-    [2.316421895861148,
-     2.5163934426229506,
+    [2.309041835357625,
+     2.488372093023256,
      2.8063241106719365,
-     2.611864406779661,
-     2.8854314002828856,
-     3.195571955719557,
-     3.1818181818181817,
+     2.6153846153846154,
+     2.8866855524079322,
+     3.208955223880597,
+     3.179732313575526,
      3.4171011470281543,
-     3.840690978886756,
+     3.840077071290944,
      3.822669104204753,
      3.883668903803132,
-     4.165123456790123,
-     4.269565217391304,
+     4.177847113884555,
+     4.2631578947368425,
      3.976890756302521,
      4.457182320441989,
      4.422776911076443,
-     4.495575221238938,
+     4.498338870431894,
      4.292035398230088,
      4.3813169984686064,
      3.320964749536178]

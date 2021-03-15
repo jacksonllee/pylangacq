@@ -321,6 +321,11 @@ which made it hard to make changes.</p></li>
 now gives you a simpler list of results for each data file,
 no longer the previous output of a dict that mapped a file path to the file’s
 result.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">participant</span></code> argument, which many <code class="docutils literal notranslate"><span class="pre">Reader</span></code> methods has for specifying
+which participants’ data to include in the output, has been renamed as
+<code class="docutils literal notranslate"><span class="pre">participants</span></code> to avoid confusion. There is no change to its behavior of
+handling either a single string (e.g., <code class="docutils literal notranslate"><span class="pre">&quot;CHI&quot;</span></code>) or a collection of strings
+(e.g., <code class="docutils literal notranslate"><span class="pre">{&quot;CHI&quot;,</span> <span class="pre">&quot;MOT&quot;}</span></code>) .</p></li>
 <li><p>The following <code class="docutils literal notranslate"><span class="pre">Reader</span></code> methods have been renamed as indicated,
 some for stylistic or Pythonic reasons, others for reasons as given:</p>
 <ul>
@@ -356,6 +361,11 @@ and <code class="docutils literal notranslate"><span class="pre">participant_cod
 <li><p><code class="docutils literal notranslate"><span class="pre">SES</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">ses</span></code> (socioeconomic status)</p></li>
 </ul>
 </li>
+<li><p>The class <code class="docutils literal notranslate"><span class="pre">DependencyGraph</span></code> has been made private
+(i.e., now <code class="docutils literal notranslate"><span class="pre">_DependencyGraph</span></code> with a leading underscore).
+Its functionality hasn’t really changed (it’s used in the computation of IPSyn).
+It may be made more visible again in the future if more functionality
+related to grammatical relations is developed in the package.</p></li>
 <li><p>Switched to sphinx-rtd-theme as the documentation theme.</p></li>
 <li><p>Switched to CircleCI orbs; update dev requirements’ versions.</p></li>
 </ul>

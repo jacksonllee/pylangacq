@@ -1,0 +1,599 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Changelog &mdash; PyLangAcq 0.12.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+    <link rel="canonical" href="https://pylangacq.org/changelog.html" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="API Reference" href="api.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> PyLangAcq
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.12.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#reading-chat-data">Reading CHAT data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#header-information">Header Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#transcriptions-and-annotations">Transcriptions and Annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#word-frequencies-and-ngrams">Word Frequencies and Ngrams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#developmental-measures">Developmental Measures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#questions">Questions?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="read.html">Reading CHAT Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="read.html#initializing-a-reader">Initializing a Reader</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="read.html#read-chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="read.html#from-a-zip-file-or-local-directory">From a ZIP File or Local Directory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="read.html#from-specific-chat-data-files">From Specific CHAT Data Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="read.html#from-in-memory-strings">From In-Memory Strings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="read.html#creating-an-empty-reader">Creating an Empty Reader</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="read.html#adding-and-removing-data">Adding and Removing Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="headers.html">Accessing Headers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="headers.html#ages">Ages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="headers.html#dates-of-recording">Dates of Recording</a></li>
+<li class="toctree-l2"><a class="reference internal" href="headers.html#languages">Languages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="headers.html#participants">Participants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="headers.html#other-header-information">Other Header Information</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="transcriptions.html">Transcriptions and Annotations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#chat-format">CHAT Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#words">Words</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcriptions.html#output-by-utterances-or-files">Output by Utterances or Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transcriptions.html#filter-by-participants">Filter by Participants</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#tokens">Tokens</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#utterances">Utterances</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcriptions.html#time-marks">Time Marks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transcriptions.html#tiers">Tiers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="frequencies.html">Word Frequencies and Ngrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="measures.html">Developmental Measures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#read-chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#gra"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gra</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#utterance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Utterance</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#unreleased">[Unreleased]</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#added">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#removed">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fixed">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#security">Security</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">[0.12.0] - 2020-10-11</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">[0.11.0] - 2020-07-02</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">Removed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id8">[0.10.0] - 2017-11-02</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id9">[0.9.0] - 2017-10-25</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id10">[0.8] - 2016-01-30</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id11">[0.7] - 2016-01-06</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id12">[0.6] - 2015-12-27</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id13">[0.5] - 2015-12-16</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id14">[0.4] - 2015-12-13</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id15">[0.3] - 2015-12-09</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id16">[0.2] - 2015-12-05</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id17">[0.1] - 2015-12-04</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyLangAcq</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Changelog</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="changelog">
+<span id="id1"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="unreleased">
+<h2>[Unreleased]<a class="headerlink" href="#unreleased" title="Permalink to this headline">¶</a></h2>
+<p><strong>API-breaking changes:</strong>
+The <code class="docutils literal notranslate"><span class="pre">Reader</span></code> class has been completely rewritten.
+A couple methods have been removed, while others have been renamed.
+For methods that remain (renamed or not),
+their behavior for output data structure and arguments allowed has been changed.
+The details are in the following.</p>
+<div class="section" id="added">
+<h3>Added<a class="headerlink" href="#added" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>New classmethods of <code class="docutils literal notranslate"><span class="pre">Reader</span></code> for reader instantiation:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">from_zip</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">from_dir</span></code></p></li>
+</ul>
+</li>
+<li><p>New classes to better structure CHAT data:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">Utterance</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Token</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Gra</span></code></p></li>
+</ul>
+</li>
+<li><p>New Reader methods:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">append_left</span></code>, <code class="docutils literal notranslate"><span class="pre">extend</span></code>, <code class="docutils literal notranslate"><span class="pre">extend_left</span></code>, <code class="docutils literal notranslate"><span class="pre">pop</span></code>, <code class="docutils literal notranslate"><span class="pre">pop_left</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tokens</span></code> (which gives <code class="docutils literal notranslate"><span class="pre">Token</span></code> objects, essentially the “tagged words” from before)</p></li>
+</ul>
+</li>
+<li><p>In the header dictionary, each participant’s info has the new key <code class="docutils literal notranslate"><span class="pre">&quot;dob&quot;</span></code>
+for date of birth (if the info is available in the CHAT header).
+The corresponding value is a <code class="docutils literal notranslate"><span class="pre">datetime.date</span></code> object.
+(The same info was previously exposed as the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> method <code class="docutils literal notranslate"><span class="pre">date_of_birth</span></code>,
+now removed.)</p></li>
+<li><p>The test suite now covers code snippets in both the docstrings and <code class="docutils literal notranslate"><span class="pre">.rst</span></code> doc files.</p></li>
+</ul>
+</div>
+<div class="section" id="changed">
+<h3>Changed<a class="headerlink" href="#changed" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>CHAT parsing in <code class="docutils literal notranslate"><span class="pre">Reader</span></code> instantiation has been completely rewritten.
+The previous private class <code class="docutils literal notranslate"><span class="pre">_SingleReader</span></code> has been removed.
+This private class duplicated a lot of the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> code,
+which made it hard to make changes.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Reader</span></code> rewrite has also greatly sped up the reading and parsing of CHAT data.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">by_files</span></code> argument, which many <code class="docutils literal notranslate"><span class="pre">Reader</span></code> methods has,
+now gives you a simpler list of results for each data file,
+no longer the previous output of a dict that mapped a file path to the file’s
+result.</p></li>
+<li><p>The following <code class="docutils literal notranslate"><span class="pre">Reader</span></code> methods have been renamed as indicated,
+some for stylistic or Pythonic reasons, others for reasons as given:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">age</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">ages</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">number_of_utterances</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">n_utterances</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">number_of_files</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">n_files</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">filenames</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">file_paths</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MLU</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">mlu</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MLUm</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">mlum</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MLUw</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">mluw</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TTR</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">ttr</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IPSyn</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">ipsyn</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">word_frequency</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">word_frequencies</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">from_chat_str</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">from_strs</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">from_chat_files</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">from_files</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">add</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">append</span></code>.
+Since the data files in a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> have a natural ordering (by time of
+recording sessions, and therefore commonly by file paths as well),
+a reader is list-like rather than an unordered set of data files,
+which <code class="docutils literal notranslate"><span class="pre">add</span></code> would suggest.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">participant_codes</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">participants</span></code>.
+Before this version, the methods <code class="docutils literal notranslate"><span class="pre">participant_codes</span></code> (for CHI, MOT, etc) and
+<code class="docutils literal notranslate"><span class="pre">participants</span></code> (for, say, Eve, Mother, Investigator, etc) co-existed,
+but in practice we mostly only care about CHI, MOT, etc.
+So the method <code class="docutils literal notranslate"><span class="pre">participants</span></code> for Eve etc has been removed,
+and <code class="docutils literal notranslate"><span class="pre">participant_codes</span></code> has been renamed as <code class="docutils literal notranslate"><span class="pre">participants</span></code>.</p></li>
+</ul>
+</li>
+<li><p>Each participant’s info in a header dictionary has these keys renamed:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">participant_name</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">name</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">participant_role</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">role</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SES</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">ses</span></code> (socioeconomic status)</p></li>
+</ul>
+</li>
+<li><p>Switched to sphinx-rtd-theme as the documentation theme.</p></li>
+<li><p>Switched to CircleCI orbs; update dev requirements’ versions.</p></li>
+</ul>
+</div>
+<div class="section" id="deprecated">
+<h3>Deprecated<a class="headerlink" href="#deprecated" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>The following Reader methods have been deprecated:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">tagged_sents</span></code> (use <code class="docutils literal notranslate"><span class="pre">tokens</span></code> with <code class="docutils literal notranslate"><span class="pre">by_utterances=True</span></code> instead)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tagged_words</span></code> (use <code class="docutils literal notranslate"><span class="pre">tokens</span></code> with <code class="docutils literal notranslate"><span class="pre">by_utterances=False</span></code> instead)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sents</span></code> (use <code class="docutils literal notranslate"><span class="pre">words</span></code> with <code class="docutils literal notranslate"><span class="pre">by_utterances=True</span></code> instead)</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="removed">
+<h3>Removed<a class="headerlink" href="#removed" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>The following methods of the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> class have been removed:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">abspath</span></code>. Use <code class="docutils literal notranslate"><span class="pre">file_paths</span></code> instead.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">index_to_tiers</span></code>. All the unparsed tiers are now available from <code class="docutils literal notranslate"><span class="pre">utterances</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">participant_codes</span></code>. It’s been renamed as <code class="docutils literal notranslate"><span class="pre">participants</span></code>, another method now removed; see “Changed” above.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">part_of_speech_tags</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">update</span></code> and <code class="docutils literal notranslate"><span class="pre">remove</span></code>. A reader is a list-like collection of CHAT data files,
+not a set (which <code class="docutils literal notranslate"><span class="pre">update</span></code> and <code class="docutils literal notranslate"><span class="pre">remove</span></code> would suggest).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">search</span></code> and <code class="docutils literal notranslate"><span class="pre">concordance</span></code>. To search, use one of
+the <code class="docutils literal notranslate"><span class="pre">words</span></code>, <code class="docutils literal notranslate"><span class="pre">tokens</span></code>, and <code class="docutils literal notranslate"><span class="pre">utterances</span></code> methods to walk through a reader’s CHAT data
+and keep track of elements of interest.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">date_of_birth</span></code>. The info is now available under <code class="docutils literal notranslate"><span class="pre">headers</span></code>, in each participant’s
+<code class="docutils literal notranslate"><span class="pre">&quot;dob&quot;</span></code> key.</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="fixed">
+<h3>Fixed<a class="headerlink" href="#fixed" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Handled <code class="docutils literal notranslate"><span class="pre">[/-]</span></code> in cleaning utterances.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">[x</span> <span class="pre">&lt;number&gt;]</span></code> means a repetition of the previous word/item, not repetition
+of the entire utterance.</p></li>
+</ul>
+</div>
+<div class="section" id="security">
+<h3>Security<a class="headerlink" href="#security" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>[0.12.0] - 2020-10-11<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id3">
+<h3>Added<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Added support for Python 3.9.</p></li>
+<li><p>Enabled <code class="docutils literal notranslate"><span class="pre">black</span></code> to enforce styling consistency.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>[0.11.0] - 2020-07-02<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id5">
+<h3>Added<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Started testing Python 3.7 and 3.8 on continuous integration. (#9)</p></li>
+<li><p>Add time marker support (available at <code class="docutils literal notranslate"><span class="pre">_SingleReader</span></code>),
+originally contributed at #3 by &#64;hellolzc. (#8)</p></li>
+</ul>
+</div>
+<div class="section" id="id6">
+<h3>Changed<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Switched from Travis CI to CircleCI for autobuilds. (#9)</p></li>
+<li><p>Switched README from reStructuredText to Markdown. (#9)</p></li>
+<li><p>Removed conversational quotes in utterance processing; updated test CHAT file
+to match the latest CHILDES data. (#7)</p></li>
+</ul>
+</div>
+<div class="section" id="id7">
+<h3>Removed<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Dropped support for Python 2.7, 3.4, and 3.5.
+All code related to Python 2+3 cross compatibility was removed. (#9)</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="id8">
+<h2>[0.10.0] - 2017-11-02<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Fixed unicode handling across Python 2 and 3</p></li>
+<li><p>Renamed method <code class="docutils literal notranslate"><span class="pre">find_filename</span></code> of <code class="docutils literal notranslate"><span class="pre">Reader</span></code> as <code class="docutils literal notranslate"><span class="pre">abspath</span></code>.</p></li>
+<li><p>Fixed bug in <code class="docutils literal notranslate"><span class="pre">Reader</span></code> method decorators</p></li>
+<li><p>Handled multiple dates of recording in one CHAT file.
+The method <code class="docutils literal notranslate"><span class="pre">dates_of_recording</span></code> of a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> instance now returns a list
+of dates.</p></li>
+<li><p>Implemented the <code class="docutils literal notranslate"><span class="pre">exclude</span></code> parameter in various <code class="docutils literal notranslate"><span class="pre">Reader</span></code> methods for
+excluding specific participants.</p></li>
+<li><p>Fixed bug in IPSyn.</p></li>
+</ul>
+</div>
+<div class="section" id="id9">
+<h2>[0.9.0] - 2017-10-25<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Python 2 and 3 cross compatibility</p></li>
+<li><p>Renamed the <code class="docutils literal notranslate"><span class="pre">grammar.py</span></code> module as <code class="docutils literal notranslate"><span class="pre">dependency.py</span></code></p>
+<ul>
+<li><p>Rewrite the class <code class="docutils literal notranslate"><span class="pre">DependencyGraph</span></code>;
+do not subclass from networkx’s DiGraph anymore
+(and we remove networkx as a dependency of this library)</p></li>
+</ul>
+</li>
+<li><p>Removed multiprocessing in reading data files.
+Datasets are usually small enough that the performance gain, if any,
+wouldn’t be worth it for the potential issues w.r.t. spawning multiple
+processes)</p></li>
+<li><p>Developed capabilities to handle PhonBank data for
+handling <code class="docutils literal notranslate"><span class="pre">%pho</span></code> and <code class="docutils literal notranslate"><span class="pre">%mod</span></code> tiers</p></li>
+<li><p>Improved <code class="docutils literal notranslate"><span class="pre">clean_utterance()</span></code></p></li>
+<li><p>Added parameter <code class="docutils literal notranslate"><span class="pre">encoding</span></code> in <code class="docutils literal notranslate"><span class="pre">read_chat()</span></code></p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">get_lemma_from_mor()</span></code></p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">date_of_recording()</span></code> and <code class="docutils literal notranslate"><span class="pre">date_of_birth()</span></code>; remove <code class="docutils literal notranslate"><span class="pre">date()</span></code></p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">clean_word()</span></code></p></li>
+<li><p>Restricted <code class="docutils literal notranslate"><span class="pre">get_IPSyn()</span></code> to only the first 100 utterances</p></li>
+<li><p>Added tests</p></li>
+</ul>
+</div>
+<div class="section" id="id10">
+<h2>[0.8] - 2016-01-30<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Library now compatible only with Python 3.4 or above</p></li>
+<li><p>For class <code class="docutils literal notranslate"><span class="pre">Reader</span></code>:</p>
+<ul>
+<li><p>Defined <code class="docutils literal notranslate"><span class="pre">read_chat()</span></code> for initializing a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> object</p></li>
+<li><p>Added parameter <code class="docutils literal notranslate"><span class="pre">by_files</span></code> to various methods; remove the “<a href="#id18"><span class="problematic" id="id19">all_</span></a>” methods</p></li>
+<li><p>Added reader manipulation methods:
+<code class="docutils literal notranslate"><span class="pre">update()</span></code>, <code class="docutils literal notranslate"><span class="pre">add()</span></code>, <code class="docutils literal notranslate"><span class="pre">remove()</span></code>, <code class="docutils literal notranslate"><span class="pre">clear()</span></code></p></li>
+<li><p>Added parameter <code class="docutils literal notranslate"><span class="pre">sorted_by_age</span></code> in <code class="docutils literal notranslate"><span class="pre">filenames()</span></code></p></li>
+<li><p>Added parameter <code class="docutils literal notranslate"><span class="pre">month</span></code> in <code class="docutils literal notranslate"><span class="pre">age()</span></code></p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">word_ngrams()</span></code></p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">find_filename()</span></code></p></li>
+<li><p>Added language development measures: <code class="docutils literal notranslate"><span class="pre">MLUm()</span></code>, <code class="docutils literal notranslate"><span class="pre">MLUw()</span></code>, <code class="docutils literal notranslate"><span class="pre">TTR()</span></code>, <code class="docutils literal notranslate"><span class="pre">IPSyn()</span></code></p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">search()</span></code> and <code class="docutils literal notranslate"><span class="pre">concordance()</span></code></p></li>
+<li><p>Allowed regular expression matching for parameter <code class="docutils literal notranslate"><span class="pre">participant</span></code></p></li>
+<li><p>Added output formats for dependency graphs: <code class="docutils literal notranslate"><span class="pre">to_tikz()</span></code> and <code class="docutils literal notranslate"><span class="pre">to_conll()</span></code></p></li>
+<li><p>Distinguished <code class="docutils literal notranslate"><span class="pre">participant_name</span></code> and <code class="docutils literal notranslate"><span class="pre">participant_role</span></code> in metadata</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">&#64;Languages</span></code> header contents are treated as a list
+but not a set now for ordering in bi/multilingualism</p></li>
+<li><p>Undid collapses in transcriptions such as <code class="docutils literal notranslate"><span class="pre">[x</span> <span class="pre">4]</span></code></p></li>
+<li><p>Various bug fixes</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="id11">
+<h2>[0.7] - 2016-01-06<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">part_of_speech_tags()</span></code> in <code class="docutils literal notranslate"><span class="pre">SingleReader</span></code></p></li>
+<li><p>Added “all X” methods in <code class="docutils literal notranslate"><span class="pre">Reader</span></code></p></li>
+<li><p>Bug fixes: <code class="docutils literal notranslate"><span class="pre">clean_utterance()</span></code>, <code class="docutils literal notranslate"><span class="pre">DependencyGraph</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="id12">
+<h2>[0.6] - 2015-12-27<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cha_lines</span></code> optimized</p></li>
+<li><p>Methods added: <code class="docutils literal notranslate"><span class="pre">tagged_words()</span></code>, <code class="docutils literal notranslate"><span class="pre">words()</span></code>, <code class="docutils literal notranslate"><span class="pre">tagged_sents()</span></code>, <code class="docutils literal notranslate"><span class="pre">sents()</span></code></p></li>
+<li><p>Tier detection revamped. <code class="docutils literal notranslate"><span class="pre">tier_sniffer()</span></code> method removed,
+with <code class="docutils literal notranslate"><span class="pre">self.tier_markers</span></code> in <code class="docutils literal notranslate"><span class="pre">SingleReader</span></code>
+now being a set of %-tier markers.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">len()</span></code> for <code class="docutils literal notranslate"><span class="pre">SingleReader</span></code> added</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">word_frequency()</span></code> for <code class="docutils literal notranslate"><span class="pre">SingleReader</span></code> added</p></li>
+<li><p>Module <code class="docutils literal notranslate"><span class="pre">grammar</span></code> added, with class <code class="docutils literal notranslate"><span class="pre">DependencyGraph</span></code> being set up</p></li>
+<li><p>Static methods in classes pulled out</p></li>
+</ul>
+</div>
+<div class="section" id="id13">
+<h2>[0.5] - 2015-12-16<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>New <code class="docutils literal notranslate"><span class="pre">utterances()</span></code> method for extracting utterances from transcripts</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">_clean_utterance</span></code> method developed
+for filtering CHAT annotations away in utterances</p></li>
+<li><p>Standardizing terminology:
+use “participant(s)” consistently instead of “speaker(s)”</p></li>
+</ul>
+</div>
+<div class="section" id="id14">
+<h2>[0.4] - 2015-12-13<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>New <code class="docutils literal notranslate"><span class="pre">number_of_utterances()</span></code> method for both <code class="docutils literal notranslate"><span class="pre">Reader</span></code> and <code class="docutils literal notranslate"><span class="pre">SingleReader</span></code></p></li>
+<li><p>To avoid confusion, <code class="docutils literal notranslate"><span class="pre">metadata()</span></code> method is removed.</p></li>
+<li><p>Extraction of utterances and tiers with dict <code class="docutils literal notranslate"><span class="pre">index_to_tiers</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="id15">
+<h2>[0.3] - 2015-12-09<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Class <code class="docutils literal notranslate"><span class="pre">Reader</span></code> can read multiple <code class="docutils literal notranslate"><span class="pre">.cha</span></code> files.
+The methods associated with <code class="docutils literal notranslate"><span class="pre">Reader</span></code> are mostly a dict mapping
+from a absolute-path filename to something.
+<code class="docutils literal notranslate"><span class="pre">Reader</span></code> depends on the class <code class="docutils literal notranslate"><span class="pre">SingleReader</span></code> for a single CHAT file.</p></li>
+<li><p>Following the conventional CHILDES and CHAT terminology,
+the <code class="docutils literal notranslate"><span class="pre">metadata()</span></code> method in <code class="docutils literal notranslate"><span class="pre">Reader</span></code> is renamed <code class="docutils literal notranslate"><span class="pre">headers()</span></code>
+(though a “new” <code class="docutils literal notranslate"><span class="pre">metadata()</span></code> method is defined and points to
+<code class="docutils literal notranslate"><span class="pre">headers()</span></code> for convenience).</p></li>
+</ul>
+</div>
+<div class="section" id="id16">
+<h2>[0.2] - 2015-12-05<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>new methods for class <code class="docutils literal notranslate"><span class="pre">Reader</span></code>:
+<code class="docutils literal notranslate"><span class="pre">languages()</span></code>, <code class="docutils literal notranslate"><span class="pre">date()</span></code>, <code class="docutils literal notranslate"><span class="pre">participants()</span></code>, <code class="docutils literal notranslate"><span class="pre">participant_codes()</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="id17">
+<h2>[0.1] - 2015-12-04<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>first commit; set up the <code class="docutils literal notranslate"><span class="pre">chat</span></code> submodule</p></li>
+<li><p>class <code class="docutils literal notranslate"><span class="pre">Reader</span></code> defined for reading CHAT files,
+with methods <code class="docutils literal notranslate"><span class="pre">cha_lines()</span></code>, <code class="docutils literal notranslate"><span class="pre">metadata()</span></code>, and <code class="docutils literal notranslate"><span class="pre">age()</span></code></p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="api.html" class="btn btn-neutral float-left" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2015-2021, Jackson L. Lee | PyLangAcq 0.12.0 | Documentation last updated on March 15, 2021.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

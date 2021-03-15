@@ -694,7 +694,7 @@ class Reader:
     def mlu(self, participant="CHI") -> List[float]:
         """Return the mean lengths of utterance (MLU).
 
-        This method is equivalent to :func:`~pylangacq.Reader.mlum`.
+        This method is equivalent to :func:`~pylangacq.chat.Reader.mlum`.
 
         Parameters
         ----------

@@ -10,29 +10,29 @@ API Reference
 
 
 
-:class:`~pylangacq.Reader`
---------------------------
+:class:`~pylangacq.chat.Reader`
+-------------------------------
 
-.. autoclass:: pylangacq.Reader
+.. autoclass:: pylangacq.chat.Reader
    :members:
 
 
 
-:class:`~pylangacq.chat.Token`
-------------------------------
+:class:`~pylangacq.objects.Token`
+---------------------------------
 
-.. autoclass:: pylangacq.chat.Token
-
-
-
-:class:`~pylangacq.chat.Gra`
-----------------------------
-
-.. autoclass:: pylangacq.chat.Gra
+.. autoclass:: pylangacq.objects.Token
 
 
 
-:class:`~pylangacq.chat.Utterance`
-----------------------------------
+:class:`~pylangacq.objects.Gra`
+-------------------------------
 
-.. autoclass:: pylangacq.chat.Utterance
+.. autoclass:: pylangacq.objects.Gra
+
+
+
+:class:`~pylangacq.objects.Utterance`
+-------------------------------------
+
+.. autoclass:: pylangacq.objects.Utterance

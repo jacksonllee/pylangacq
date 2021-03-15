@@ -217,85 +217,72 @@
             
   <div class="section" id="word-frequencies-and-ngrams">
 <span id="frequencies"></span><h1>Word Frequencies and Ngrams<a class="headerlink" href="#word-frequencies-and-ngrams" title="Permalink to this headline">¶</a></h1>
-<p>The way words combine in natural language data is of great interest in all areas
-of linguistic research.
-PyLangAcq provides several handy functionality for word combinatorics.</p>
-<p>We are often interested in word frequency information and word ngrams:</p>
-<table class="docutils align-default">
+<p>Because word frequencies and combinatorics are useful for many purposes,
+the following <a class="reference internal" href="api.html#pylangacq.chat.Reader" title="pylangacq.chat.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> methods are defined:</p>
+<table class="longtable docutils align-default">
 <colgroup>
-<col style="width: 29%" />
-<col style="width: 71%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Method</p></th>
-<th class="head"><p>Return object</p></th>
-</tr>
-</thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">word_frequency()</span></code></p></td>
-<td><p>Counter dict(word: word token count)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#pylangacq.chat.Reader.word_frequencies" title="pylangacq.chat.Reader.word_frequencies"><code class="xref py py-obj docutils literal notranslate"><span class="pre">word_frequencies</span></code></a>([keep_case, participants, …])</p></td>
+<td><p>Return word frequencies.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">word_ngrams(n)</span></code></p></td>
-<td><p>Counter dict(ngram as a tuple: ngram token count)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#pylangacq.chat.Reader.word_ngrams" title="pylangacq.chat.Reader.word_ngrams"><code class="xref py py-obj docutils literal notranslate"><span class="pre">word_ngrams</span></code></a>(n[, keep_case, participants, …])</p></td>
+<td><p>Return word ngrams.</p></td>
 </tr>
 </tbody>
 </table>
-<p>Both methods return
-<a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.Counter">Counter dicts from collections</a>
-in the Python standard
-library. As a result (and as an advantage!), all Counter methods apply to
-the return objects of these methods.</p>
-<p><code class="docutils literal notranslate"><span class="pre">word_frequency()</span></code> and <code class="docutils literal notranslate"><span class="pre">word_ngrams(n)</span></code> (with the obligatory parameter
-<em>n</em>) share the following optional parameters:</p>
+<p>For both <code class="xref py py-func docutils literal notranslate"><span class="pre">word_frequencies()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">word_ngrams()</span></code>:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">participant</span></code>: see <span class="xref std std-ref">cds</span></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">by_files</span></code>: see <span class="xref std std-ref">reader_properties</span></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">keep_case</span></code>: whether case distinction such as “Rocky” and “rocky” is kept;
-defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>. If “Rocky” and “rocky” are treated as distinct, then
-they are two distinct word types and have separate key:value entries in the
-return object.</p></li>
+<li><p>They have the same optional arguments <code class="docutils literal notranslate"><span class="pre">participants</span></code>, <code class="docutils literal notranslate"><span class="pre">exclude</span></code>, and <code class="docutils literal notranslate"><span class="pre">by_files</span></code>
+as <code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code>,
+<code class="xref py py-func docutils literal notranslate"><span class="pre">utterances()</span></code> do.</p></li>
+<li><p>They have the optional argument <code class="docutils literal notranslate"><span class="pre">keep_case</span></code>
+to specify whether upper/lowercase distinction should be kept or collapsed
+in counting words or ngrams.</p></li>
+<li><p>They return <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.Counter" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Counter</span></code></a> objects, which naturally represent
+a mapping from words or ngrams to their counts, and have useful methods
+for working with count data.</p></li>
 </ul>
-<p>To illustrate, we set up a <code class="docutils literal notranslate"><span class="pre">Reader</span></code> instance <code class="docutils literal notranslate"><span class="pre">eve</span></code>
-based on Eve’s data from CHILDES Brown:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span> <span class="kn">as</span> <span class="nn">pla</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pla</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="s1">&#39;Brown/Eve/*.cha&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>We use the <code class="docutils literal notranslate"><span class="pre">participant</span></code> parameter and the
-<code class="docutils literal notranslate"><span class="pre">most_common()</span></code> method available for Counter dicts below.</p>
-<p>For <code class="docutils literal notranslate"><span class="pre">word_frequency()</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_frequency</span><span class="p">()</span>  <span class="c1"># all participants</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq_CDS</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_frequency</span><span class="p">(</span><span class="n">exclude</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">)</span>  <span class="c1"># child-directed speech</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq_child</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_frequency</span><span class="p">(</span><span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">)</span>  <span class="c1"># child speech</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<span class="go">[(&#39;.&#39;, 20130), (&#39;?&#39;, 6358), (&#39;you&#39;, 3695), (&#39;the&#39;, 2524), (&#39;it&#39;, 2365)]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq_CDS</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<span class="go">[(&#39;.&#39;, 9687), (&#39;?&#39;, 4909), (&#39;you&#39;, 3061), (&#39;the&#39;, 1966), (&#39;it&#39;, 1563)]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq_child</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<span class="go">[(&#39;.&#39;, 10443), (&#39;?&#39;, 1449), (&#39;I&#39;, 1199), (&#39;that&#39;, 1051), (&#39;a&#39;, 968)]</span>
-</pre></div>
-</div>
-<p>This tiny example already shows a key and expected difference (“you” versus “I”)
-between child speech and
-child directed speech in terms of pronoun distribution.</p>
-<p>For <code class="docutils literal notranslate"><span class="pre">word_ngrams(n)</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">trigrams_CDS</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_ngrams</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">)</span>  <span class="c1"># 3 for trigrams; for child-directed speech</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">trigrams_child</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_ngrams</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">participant</span><span class="o">=</span><span class="s1">&#39;CHI&#39;</span><span class="p">)</span>  <span class="c1"># child speech</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">trigrams_CDS</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>  <span class="c1"># lots of questions in child-directed speech!</span>
-<span class="go">[((&quot;that&#39;s&quot;, &#39;right&#39;, &#39;.&#39;), 178),</span>
-<span class="go"> ((&#39;what&#39;, &#39;are&#39;, &#39;you&#39;), 149),</span>
-<span class="go"> ((&#39;is&#39;, &#39;that&#39;, &#39;?&#39;), 124),</span>
-<span class="go"> ((&#39;do&#39;, &#39;you&#39;, &#39;want&#39;), 104),</span>
-<span class="go"> ((&#39;what&#39;, &#39;is&#39;, &#39;that&#39;), 99)]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">trigrams_child</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<p>For illustration, let’s check out some of the word trigrams in Eve’s data from Brown.
+To make it slightly more interesting,
+we are going to look at child speech and child-directed speech separately.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://childes.talkbank.org/data/Eng-NA/Brown.zip&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;Eve&quot;</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trigrams_child_speech</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_ngrams</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">participants</span><span class="o">=</span><span class="s2">&quot;CHI&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trigrams_child_speech</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>  <span class="c1"># A collections.Counter object has the method ``most_common``.</span>
 <span class="go">[((&#39;grape&#39;, &#39;juice&#39;, &#39;.&#39;), 74),</span>
 <span class="go"> ((&#39;another&#39;, &#39;one&#39;, &#39;.&#39;), 55),</span>
 <span class="go"> ((&#39;what&#39;, &#39;that&#39;, &#39;?&#39;), 50),</span>
 <span class="go"> ((&#39;a&#39;, &#39;b&#39;, &#39;c&#39;), 47),</span>
-<span class="go"> ((&#39;right&#39;, &#39;there&#39;, &#39;.&#39;), 45)]</span>
+<span class="go"> ((&#39;right&#39;, &#39;there&#39;, &#39;.&#39;), 45),</span>
+<span class="go"> ((&#39;in&#39;, &#39;there&#39;, &#39;.&#39;), 43),</span>
+<span class="go"> ((&#39;b&#39;, &#39;c&#39;, &#39;.&#39;), 42),</span>
+<span class="go"> ((&#39;hi&#39;, &#39;Fraser&#39;, &#39;.&#39;), 39),</span>
+<span class="go"> ((&#39;I&#39;, &#39;want&#39;, &#39;some&#39;), 39),</span>
+<span class="go"> ((&#39;a&#39;, &#39;minute&#39;, &#39;.&#39;), 35)]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trigrams_child_directed_speech</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">word_ngrams</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="s2">&quot;CHI&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trigrams_child_directed_speech</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">[((&quot;that&#39;s&quot;, &#39;right&#39;, &#39;.&#39;), 178),</span>
+<span class="go"> ((&#39;what&#39;, &#39;are&#39;, &#39;you&#39;), 149),</span>
+<span class="go"> ((&#39;is&#39;, &#39;that&#39;, &#39;?&#39;), 124),</span>
+<span class="go"> ((&#39;do&#39;, &#39;you&#39;, &#39;want&#39;), 104),</span>
+<span class="go"> ((&#39;what&#39;, &#39;is&#39;, &#39;that&#39;), 99),</span>
+<span class="go"> ((&#39;are&#39;, &#39;you&#39;, &#39;doing&#39;), 94),</span>
+<span class="go"> ((&quot;what&#39;s&quot;, &#39;that&#39;, &#39;?&#39;), 92),</span>
+<span class="go"> ((&#39;would&#39;, &#39;you&#39;, &#39;like&#39;), 89),</span>
+<span class="go"> ((&#39;what&#39;, &#39;do&#39;, &#39;you&#39;), 89),</span>
+<span class="go"> ((&#39;is&#39;, &#39;it&#39;, &#39;?&#39;), 89)]</span>
 </pre></div>
 </div>
+<p>Just this very brief result using word trigrams appears to show a contrast between
+various demands being frequent in child speech,
+versus the dominant usage of confirmation and attempts to get the child’s
+attention using questions in child-directed speech.</p>
 </div>
 
 
@@ -312,7 +299,7 @@ child directed speech in terms of pronoun distribution.</p>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2015-2021, Jackson L. Lee | PyLangAcq 0.12.0 | Documentation last updated on March 14, 2021.
+        &#169; Copyright 2015-2021, Jackson L. Lee | PyLangAcq 0.12.0 | Documentation last updated on March 15, 2021.
 
     </p>
   </div>

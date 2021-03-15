@@ -233,7 +233,7 @@ The following is the header section of <code class="docutils literal notranslate
 <span class="nd">@Date</span><span class="p">:</span>      <span class="mi">15</span><span class="o">-</span><span class="n">OCT</span><span class="o">-</span><span class="mi">1962</span>
 </pre></div>
 </div>
-<p><a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> has the following methods
+<p><a class="reference internal" href="api.html#pylangacq.chat.Reader" title="pylangacq.chat.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> has the following methods
 to access the commonly needed information from the headers:</p>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -241,19 +241,19 @@ to access the commonly needed information from the headers:</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="api.html#pylangacq.Reader.ages" title="pylangacq.Reader.ages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ages</span></code></a>([participant, months])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ages</span></code>([participant, months])</p></td>
 <td><p>Return the ages of the given participant in the data.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="api.html#pylangacq.Reader.dates_of_recording" title="pylangacq.Reader.dates_of_recording"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dates_of_recording</span></code></a>([by_files])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dates_of_recording</span></code>([by_files])</p></td>
 <td><p>Return the dates of recording.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="api.html#pylangacq.Reader.headers" title="pylangacq.Reader.headers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">headers</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">headers</span></code>()</p></td>
 <td><p>Return the headers.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="api.html#pylangacq.Reader.languages" title="pylangacq.Reader.languages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">languages</span></code></a>([by_files])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">languages</span></code>([by_files])</p></td>
 <td><p>Return the languages in the data.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="api.html#pylangacq.Reader.participants" title="pylangacq.Reader.participants"><code class="xref py py-obj docutils literal notranslate"><span class="pre">participants</span></code></a>([by_files])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">participants</span></code>([by_files])</p></td>
 <td><p>Return the participants (e.g., CHI, MOT).</p></td>
 </tr>
 </tbody>
@@ -266,12 +266,12 @@ to access the commonly needed information from the headers:</p>
 </div>
 <div class="section" id="ages">
 <h2>Ages<a class="headerlink" href="#ages" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="api.html#pylangacq.Reader.ages" title="pylangacq.Reader.ages"><code class="xref py py-func docutils literal notranslate"><span class="pre">ages()</span></code></a> returns the age information of the participant <code class="docutils literal notranslate"><span class="pre">&quot;CHI&quot;</span></code>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">ages()</span></code> returns the age information of the participant <code class="docutils literal notranslate"><span class="pre">&quot;CHI&quot;</span></code>
 (the target child) by default, since CHAT is by far most commonly used
 in language acquisition and development research, and that typically only the age of the
 target child is available. The only argument <code class="docutils literal notranslate"><span class="pre">participant</span></code> can be passed in
 if your use case is not the target child.</p>
-<p><a class="reference internal" href="api.html#pylangacq.Reader.ages" title="pylangacq.Reader.ages"><code class="xref py py-func docutils literal notranslate"><span class="pre">ages()</span></code></a> understands the age format that looks like <code class="docutils literal notranslate"><span class="pre">1;06.00</span></code>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">ages()</span></code> understands the age format that looks like <code class="docutils literal notranslate"><span class="pre">1;06.00</span></code>
 and gives you a tuple of three integers
 such as <code class="docutils literal notranslate"><span class="pre">(1,</span> <span class="pre">6,</span> <span class="pre">0)</span></code> for one year, six months, and zero days old.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">ages</span><span class="p">()</span>
@@ -324,7 +324,7 @@ such as <code class="docutils literal notranslate"><span class="pre">(1,</span> 
 </div>
 <div class="section" id="dates-of-recording">
 <h2>Dates of Recording<a class="headerlink" href="#dates-of-recording" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="api.html#pylangacq.Reader.dates_of_recording" title="pylangacq.Reader.dates_of_recording"><code class="xref py py-func docutils literal notranslate"><span class="pre">dates_of_recording()</span></code></a> returns the dates of recording
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">dates_of_recording()</span></code> returns the dates of recording
 as a set of <a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.date" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">date</span></code></a> objects
 for all the date files.</p>
 <p>Some files have the same dates, as multiple recording sessions were conducted
@@ -359,7 +359,7 @@ where each set is for one file:</p>
 </div>
 <div class="section" id="languages">
 <h2>Languages<a class="headerlink" href="#languages" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="api.html#pylangacq.Reader.languages" title="pylangacq.Reader.languages"><code class="xref py py-func docutils literal notranslate"><span class="pre">languages()</span></code></a> returns the language information.
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">languages()</span></code> returns the language information.
 Eve’s data is naturally in English.
 In datasets with more than one language (bi-/multilingualism),
 the <code class="docutils literal notranslate"><span class="pre">by_files=True</span></code> flag would indicate the languages in individual files according to
@@ -371,7 +371,7 @@ the headers.</p>
 </div>
 <div class="section" id="participants">
 <h2>Participants<a class="headerlink" href="#participants" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="api.html#pylangacq.Reader.participants" title="pylangacq.Reader.participants"><code class="xref py py-func docutils literal notranslate"><span class="pre">participants()</span></code></a> returns the participants (e.g., <code class="docutils literal notranslate"><span class="pre">&quot;CHI&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;MOT&quot;</span></code>)
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">participants()</span></code> returns the participants (e.g., <code class="docutils literal notranslate"><span class="pre">&quot;CHI&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;MOT&quot;</span></code>)
 in the reader. <code class="docutils literal notranslate"><span class="pre">by_files=True</span></code> is also available if you need the information
 by individual files.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">participants</span><span class="p">()</span>
@@ -379,13 +379,13 @@ by individual files.</p>
 </pre></div>
 </div>
 <p>The more detailed information for each participant
-(e.g., gender, role in recording) can be retrieved from <a class="reference internal" href="api.html#pylangacq.Reader.headers" title="pylangacq.Reader.headers"><code class="xref py py-func docutils literal notranslate"><span class="pre">headers()</span></code></a>,
+(e.g., gender, role in recording) can be retrieved from <code class="xref py py-func docutils literal notranslate"><span class="pre">headers()</span></code>,
 which is illustrated next.</p>
 </div>
 <div class="section" id="other-header-information">
 <h2>Other Header Information<a class="headerlink" href="#other-header-information" title="Permalink to this headline">¶</a></h2>
 <p>For any header information not given by one of the implemented methods above,
-<a class="reference internal" href="api.html#pylangacq.Reader.headers" title="pylangacq.Reader.headers"><code class="xref py py-func docutils literal notranslate"><span class="pre">headers()</span></code></a> gives a list of headers,
+<code class="xref py py-func docutils literal notranslate"><span class="pre">headers()</span></code> gives a list of headers,
 where each header is a generic Python dictionary for each data file,
 and you can walk through the dict for information you need.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">headers</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">headers</span><span class="p">()</span>  <span class="c1"># a list of dicts</span>
@@ -456,7 +456,7 @@ and you can walk through the dict for information you need.</p>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2015-2021, Jackson L. Lee | PyLangAcq 0.12.0 | Documentation last updated on March 14, 2021.
+        &#169; Copyright 2015-2021, Jackson L. Lee | PyLangAcq 0.12.0 | Documentation last updated on March 15, 2021.
 
     </p>
   </div>

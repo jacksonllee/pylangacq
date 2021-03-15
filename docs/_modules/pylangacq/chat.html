@@ -1188,20 +1188,13 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">file_paths</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">dirpath</span><span class="p">,</span> <span class="n">dirnames</span><span class="p">,</span> <span class="n">filenames</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">dirpath</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">filenames</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">filenames</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">extension</span><span class="p">):</span>
                     <span class="k">continue</span>
-                <span class="n">dirs</span> <span class="o">=</span> <span class="p">[]</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">dirnames</span><span class="p">:</span>
-                    <span class="n">dirs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dirpath</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">dirname</span> <span class="ow">in</span> <span class="n">dirnames</span><span class="p">:</span>
-                        <span class="n">dirs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirpath</span><span class="p">,</span> <span class="n">dirname</span><span class="p">))</span>
-                <span class="k">for</span> <span class="n">dir_</span> <span class="ow">in</span> <span class="n">dirs</span><span class="p">:</span>
-                    <span class="n">file_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dir_</span><span class="p">,</span> <span class="n">filename</span><span class="p">))</span>
+                <span class="n">file_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirpath</span><span class="p">,</span> <span class="n">filename</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_files</span><span class="p">(</span>
             <span class="nb">sorted</span><span class="p">(</span><span class="n">file_paths</span><span class="p">),</span> <span class="n">match</span><span class="o">=</span><span class="n">match</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="n">exclude</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span>
         <span class="p">)</span></div>
@@ -1580,6 +1573,17 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">cls</span> <span class="o">!=</span> <span class="n">Reader</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">Reader</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Only a Reader class or its child class is allowed: </span><span class="si">{cls}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Just in case the user provides a CHILDES web link like</span>
+    <span class="c1"># https://childes.talkbank.org/access/Eng-NA/Brown.html</span>
+    <span class="c1"># instead of https://childes.talkbank.org/data/Eng-NA/Brown.zip.</span>
+    <span class="c1"># The &quot;childes&quot; subdomain could sometimes be &quot;phonbank&quot; (and something else?).</span>
+    <span class="c1"># This hack is just for convenience.</span>
+    <span class="c1"># Not sure if we should encourage using the .html link...</span>
+    <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;https://\S+\.talkbank\.org/access/\S+\.html&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/access/&quot;</span><span class="p">,</span> <span class="s2">&quot;/data/&quot;</span><span class="p">)</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.html&quot;</span><span class="p">,</span> <span class="s2">&quot;.zip&quot;</span><span class="p">)</span>
+
     <span class="n">path_lower</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">path_lower</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.zip&quot;</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_zip</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">match</span><span class="o">=</span><span class="n">match</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="n">exclude</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>

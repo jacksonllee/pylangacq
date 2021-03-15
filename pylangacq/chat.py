@@ -938,20 +938,13 @@ class Reader:
         """
 
         file_paths = []
-        for dirpath, dirnames, filenames in os.walk(path):
+        for dirpath, _, filenames in os.walk(path):
             if not filenames:
                 continue
             for filename in filenames:
                 if not filename.endswith(extension):
                     continue
-                dirs = []
-                if not dirnames:
-                    dirs.append(dirpath)
-                else:
-                    for dirname in dirnames:
-                        dirs.append(os.path.join(dirpath, dirname))
-                for dir_ in dirs:
-                    file_paths.append(os.path.join(dir_, filename))
+                file_paths.append(os.path.join(dirpath, filename))
         return cls.from_files(
             sorted(file_paths), match=match, exclude=exclude, encoding=encoding
         )
@@ -1330,6 +1323,17 @@ def read_chat(
     """
     if cls != Reader and not issubclass(cls, Reader):
         raise TypeError(f"Only a Reader class or its child class is allowed: {cls}")
+
+    # Just in case the user provides a CHILDES web link like
+    # https://childes.talkbank.org/access/Eng-NA/Brown.html
+    # instead of https://childes.talkbank.org/data/Eng-NA/Brown.zip.
+    # The "childes" subdomain could sometimes be "phonbank" (and something else?).
+    # This hack is just for convenience.
+    # Not sure if we should encourage using the .html link...
+    if re.search(r"https://\S+\.talkbank\.org/access/\S+\.html", path):
+        path = path.replace("/access/", "/data/")
+        path = path.replace(".html", ".zip")
+
     path_lower = path.lower()
     if path_lower.endswith(".zip"):
         return cls.from_zip(path, match=match, exclude=exclude, encoding=encoding)

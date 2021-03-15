@@ -74,6 +74,11 @@ Changed
   now gives you a simpler list of results for each data file,
   no longer the previous output of a dict that mapped a file path to the file's
   result.
+* The ``participant`` argument, which many ``Reader`` methods has for specifying
+  which participants' data to include in the output, has been renamed as
+  ``participants`` to avoid confusion. There is no change to its behavior of
+  handling either a single string (e.g., ``"CHI"``\ ) or a collection of strings
+  (e.g., ``{"CHI", "MOT"}``\ ) .
 * The following ``Reader`` methods have been renamed as indicated,
   some for stylistic or Pythonic reasons, others for reasons as given:
 
@@ -107,6 +112,11 @@ Changed
   * ``participant_role`` -> ``role``
   * ``SES`` -> ``ses`` (socioeconomic status)
 
+* The class ``DependencyGraph`` has been made private
+  (i.e., now ``_DependencyGraph`` with a leading underscore).
+  Its functionality hasn't really changed (it's used in the computation of IPSyn).
+  It may be made more visible again in the future if more functionality
+  related to grammatical relations is developed in the package.
 * Switched to sphinx-rtd-theme as the documentation theme.
 * Switched to CircleCI orbs; update dev requirements' versions.
 

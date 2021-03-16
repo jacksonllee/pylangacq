@@ -324,11 +324,11 @@ utterance or recording session.
 Many of these tiers are used only as needed (<code class="docutils literal notranslate"><span class="pre">%int</span></code> not used in Eve’s mother’s
 utterance in this example).</p></li>
 </ul>
-<p>Once you have a <a class="reference internal" href="api.html#pylangacq.chat.Reader" title="pylangacq.chat.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> object with CHAT data,
+<p>Once you have a <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> object with CHAT data,
 several methods are available for accessing the transcriptions and annotations.
 Which method suits your need best depends on which level of information you need.
-The following sections introduce these <a class="reference internal" href="api.html#pylangacq.chat.Reader" title="pylangacq.chat.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> methods,
-using a reader created by <code class="xref py py-func docutils literal notranslate"><span class="pre">from_strs()</span></code> with the two CHAT
+The following sections introduce these <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> methods,
+using a reader created by <a class="reference internal" href="api.html#pylangacq.Reader.from_strs" title="pylangacq.Reader.from_strs"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_strs()</span></code></a> with the two CHAT
 utterances between Eve and her mother we’ve looked at.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
@@ -346,9 +346,9 @@ utterances between Eve and her mother we’ve looked at.</p>
 </div>
 <div class="section" id="words">
 <h2>Words<a class="headerlink" href="#words" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference internal" href="api.html#pylangacq.chat.Reader" title="pylangacq.chat.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> method <code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code>
+<p>The <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> method <a class="reference internal" href="api.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a>
 returns the transcriptions as segmented words.
-Calling <code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code> with no arguments gives a
+Calling <a class="reference internal" href="api.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a> with no arguments gives a
 flat list of the words:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span><span class="o">.</span><span class="n">words</span><span class="p">()</span>
 <span class="go">[&#39;more&#39;, &#39;cookie&#39;, &#39;.&#39;, &#39;you&#39;, &#39;0v&#39;, &#39;more&#39;, &#39;cookies&#39;, &#39;?&#39;]</span>
@@ -401,8 +401,8 @@ If specifying who to exclude is easier, use <code class="docutils literal notran
 </div>
 <div class="section" id="tokens">
 <h2>Tokens<a class="headerlink" href="#tokens" title="Permalink to this headline">¶</a></h2>
-<p>Beyond the transcriptions from <code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code>,
-<code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code> gives you the word-based
+<p>Beyond the transcriptions from <a class="reference internal" href="api.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a>,
+<a class="reference internal" href="api.html#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code></a> gives you the word-based
 annotations from the CHAT data.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve_tokens</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">tokens</span><span class="p">(</span><span class="n">participants</span><span class="o">=</span><span class="s2">&quot;CHI&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve_tokens</span>
@@ -411,11 +411,11 @@ annotations from the CHAT data.</p>
 <span class="go"> Token(word=&#39;.&#39;, pos=&#39;.&#39;, mor=&#39;&#39;, gra=Gra(dep=3, head=2, rel=&#39;PUNCT&#39;))]</span>
 </pre></div>
 </div>
-<p><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code> has the same optional arguments
+<p><a class="reference internal" href="api.html#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code></a> has the same optional arguments
 <code class="docutils literal notranslate"><span class="pre">participants</span></code>, <code class="docutils literal notranslate"><span class="pre">exclude</span></code>, <code class="docutils literal notranslate"><span class="pre">by_utterances</span></code>, and <code class="docutils literal notranslate"><span class="pre">by_files</span></code>
-as <code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code> does.</p>
-<p>While <code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code> represents a word by the built-in string type,
-<code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code> bundles the <code class="docutils literal notranslate"><span class="pre">%mor</span></code> and <code class="docutils literal notranslate"><span class="pre">%gra</span></code> annotations
+as <a class="reference internal" href="api.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a> does.</p>
+<p>While <a class="reference internal" href="api.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a> represents a word by the built-in string type,
+<a class="reference internal" href="api.html#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code></a> bundles the <code class="docutils literal notranslate"><span class="pre">%mor</span></code> and <code class="docutils literal notranslate"><span class="pre">%gra</span></code> annotations
 of a word into a <a class="reference internal" href="api.html#pylangacq.objects.Token" title="pylangacq.objects.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a> object.
 A <a class="reference internal" href="api.html#pylangacq.objects.Token" title="pylangacq.objects.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a>’s information can be accessed via its attributes
 <code class="docutils literal notranslate"><span class="pre">word</span></code>, <code class="docutils literal notranslate"><span class="pre">pos</span></code>, <code class="docutils literal notranslate"><span class="pre">mor</span></code>, and <code class="docutils literal notranslate"><span class="pre">gra</span></code>:</p>
@@ -447,8 +447,8 @@ and <code class="docutils literal notranslate"><span class="pre">rel</span></cod
 </div>
 <div class="section" id="utterances">
 <h2>Utterances<a class="headerlink" href="#utterances" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="xref py py-func docutils literal notranslate"><span class="pre">utterances()</span></code> method gives you information
-beyond <code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code>:</p>
+<p>The <a class="reference internal" href="api.html#pylangacq.Reader.utterances" title="pylangacq.Reader.utterances"><code class="xref py py-func docutils literal notranslate"><span class="pre">utterances()</span></code></a> method gives you information
+beyond <a class="reference internal" href="api.html#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span><span class="o">.</span><span class="n">utterances</span><span class="p">(</span><span class="n">participants</span><span class="o">=</span><span class="s2">&quot;CHI&quot;</span><span class="p">)</span>
 <span class="go">[Utterance(participant=&#39;CHI&#39;,</span>
 <span class="go">           tokens=[Token(word=&#39;more&#39;, pos=&#39;qn&#39;, mor=&#39;more&#39;, gra=Gra(dep=1, head=2, rel=&#39;QUANT&#39;)),</span>
@@ -461,15 +461,15 @@ beyond <code class="xref py py-func docutils literal notranslate"><span class="p
 <span class="go">                  &#39;%int&#39;: &#39;distinctive , loud&#39;})]</span>
 </pre></div>
 </div>
-<p><code class="xref py py-func docutils literal notranslate"><span class="pre">utterances()</span></code> has the same optional arguments
+<p><a class="reference internal" href="api.html#pylangacq.Reader.utterances" title="pylangacq.Reader.utterances"><code class="xref py py-func docutils literal notranslate"><span class="pre">utterances()</span></code></a> has the same optional arguments
 <code class="docutils literal notranslate"><span class="pre">participants</span></code>, <code class="docutils literal notranslate"><span class="pre">exclude</span></code>, and <code class="docutils literal notranslate"><span class="pre">by_files</span></code>
-as <code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code> do.</p>
-<p>Each utterance from <code class="xref py py-func docutils literal notranslate"><span class="pre">utterances()</span></code> is
+as <a class="reference internal" href="api.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a> and <a class="reference internal" href="api.html#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code></a> do.</p>
+<p>Each utterance from <a class="reference internal" href="api.html#pylangacq.Reader.utterances" title="pylangacq.Reader.utterances"><code class="xref py py-func docutils literal notranslate"><span class="pre">utterances()</span></code></a> is
 an <a class="reference internal" href="api.html#pylangacq.objects.Utterance" title="pylangacq.objects.Utterance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Utterance</span></code></a> object,
 which has the attributes
 <code class="docutils literal notranslate"><span class="pre">participant</span></code>, <code class="docutils literal notranslate"><span class="pre">tokens</span></code>, <code class="docutils literal notranslate"><span class="pre">time_marks</span></code>, and <code class="docutils literal notranslate"><span class="pre">tiers</span></code>
 as shown in the code snippet just above.
-Accessing CHAT data using <code class="xref py py-func docutils literal notranslate"><span class="pre">utterances()</span></code>
+Accessing CHAT data using <a class="reference internal" href="api.html#pylangacq.Reader.utterances" title="pylangacq.Reader.utterances"><code class="xref py py-func docutils literal notranslate"><span class="pre">utterances()</span></code></a>
 is useful when you need to, say, tie participant information to
 the transcriptions and/or annotations.</p>
 <div class="section" id="time-marks">

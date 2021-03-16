@@ -90,10 +90,10 @@ PyLangAcq handles CHAT data by paying attention to the following:
   utterance in this example).
 
 
-Once you have a :class:`~pylangacq.chat.Reader` object with CHAT data,
+Once you have a :class:`~pylangacq.Reader` object with CHAT data,
 several methods are available for accessing the transcriptions and annotations.
 Which method suits your need best depends on which level of information you need.
-The following sections introduce these :class:`~pylangacq.chat.Reader` methods,
+The following sections introduce these :class:`~pylangacq.Reader` methods,
 using a reader created by :func:`~pylangacq.Reader.from_strs` with the two CHAT
 utterances between Eve and her mother we've looked at.
 
@@ -115,7 +115,7 @@ utterances between Eve and her mother we've looked at.
 Words
 -----
 
-The :class:`~pylangacq.chat.Reader` method :func:`~pylangacq.Reader.words`
+The :class:`~pylangacq.Reader` method :func:`~pylangacq.Reader.words`
 returns the transcriptions as segmented words.
 Calling :func:`~pylangacq.Reader.words` with no arguments gives a
 flat list of the words:

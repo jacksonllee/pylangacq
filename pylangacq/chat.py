@@ -119,11 +119,11 @@ def _params_in_docstring(*params, class_method=True):
     if "cls" in params:
         docstring += """
         cls : type, optional
-            Either :class:`~pylangacq.chat.Reader` (the default),
+            Either :class:`~pylangacq.Reader` (the default),
             or a subclass from it that expects the same arguments for the methods
             :func:`~pylangacq.Reader.from_zip`, :func:`~pylangacq.Reader.from_dir`,
             and :func:`~pylangacq.Reader.from_files`.
-            Pass in your own :class:`~pylangacq.chat.Reader` subclass
+            Pass in your own :class:`~pylangacq.Reader` subclass
             for new or modified behavior of the returned reader object."""
 
     if not class_method:
@@ -320,7 +320,7 @@ class Reader:
 
         Returns
         -------
-        Reader
+        :class:`pylangacq.Reader`
         """
         return self._pop("right")
 
@@ -329,7 +329,7 @@ class Reader:
 
         Returns
         -------
-        Reader
+        :class:`pylangacq.Reader`
         """
         return self._pop("left")
 
@@ -694,7 +694,7 @@ class Reader:
     def mlu(self, participant="CHI") -> List[float]:
         """Return the mean lengths of utterance (MLU).
 
-        This method is equivalent to :func:`~pylangacq.chat.Reader.mlum`.
+        This method is equivalent to :func:`~pylangacq.Reader.mlum`.
 
         Parameters
         ----------
@@ -726,7 +726,7 @@ class Reader:
         )
 
     def ttr(self, keep_case=True, participant="CHI") -> List[float]:
-        """Return the type-token ratios.
+        """Return the type-token ratios (TTR).
 
         Parameters
         ----------
@@ -860,7 +860,7 @@ class Reader:
 
         Returns
         -------
-        Reader
+        :class:`pylangacq.Reader`
         """
         strs = list(strs)
         if ids is None:
@@ -894,7 +894,7 @@ class Reader:
 
         Returns
         -------
-        Reader
+        :class:`pylangacq.Reader`
         """
 
         # Inner function with file closing and closure to wrap in the given encoding
@@ -938,7 +938,7 @@ class Reader:
 
         Returns
         -------
-        Reader
+        :class:`pylangacq.Reader`
         """
 
         file_paths = []
@@ -977,7 +977,7 @@ class Reader:
 
         Returns
         -------
-        Reader
+        :class:`pylangacq.Reader`
         """
         with contextlib.ExitStack() as stack:
             temp_dir = stack.enter_context(tempfile.TemporaryDirectory())
@@ -1315,15 +1315,15 @@ def read_chat(
     path : str
         A path that points to one of the following:
 
-        - ZIP file. Either a local file path or a URL (one that begins with
+        - ZIP file. Either a local ``.zip`` file path or a URL (one that begins with
           ``"https://"`` or ``"http://"``).
           Example of a URL: ``"https://childes.talkbank.org/data/Eng-NA/Brown.zip"``
         - A local directory, for files under this directory recursively.
-        - A single CHAT file.
+        - A single ``.cha`` CHAT file.
 
     Returns
     -------
-    :class:`~pylangacq.chat.Reader`
+    :class:`~pylangacq.Reader`
     """
     if cls != Reader and not issubclass(cls, Reader):
         raise TypeError(f"Only a Reader class or its child class is allowed: {cls}")
@@ -1349,7 +1349,7 @@ def read_chat(
     else:
         raise ValueError(
             "path is not one of the accepted choices of "
-            f"{{zip file, local directory, `.cha` file}}: {path}"
+            f"{{.zip file, local directory, .cha file}}: {path}"
         )
 
 

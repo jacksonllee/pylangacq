@@ -3,9 +3,9 @@
 Developmental Measures
 ======================
 
-Several developmental measures are defined as :class:`~pylangacq.chat.Reader` methods:
+Several developmental measures are defined as :class:`~pylangacq.Reader` methods:
 
-.. currentmodule:: pylangacq.chat.Reader
+.. currentmodule:: pylangacq.Reader
 
 .. autosummary::
 

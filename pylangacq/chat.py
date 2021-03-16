@@ -731,10 +731,14 @@ class Reader:
         Parameters
         ----------
         keep_case : bool, optional
-            If ``True``, case distinctions are kept, e.g.,
+            If ``True`` (the default), case distinctions are kept, e.g.,
             word tokens like "the" and "The" are treated as distinct.
-            If ``False`` (the default), all word tokens are forced to be in lowercase
+            If ``False``, all word tokens are forced to be in lowercase
             as a preprocessing step.
+            CHAT data from CHILDES intentionally does not follow the orthographic
+            convention of capitalizing the first letter of a sentence in the
+            transcriptions (as would have been done in many European languages),
+            and so leaving keep_case as True is appropriate in most cases.
         participant : str, optional
             Participant of interest, which defaults to the typical use case of ``"CHI"``
             for the target child.

@@ -981,10 +981,14 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        keep_case : bool, optional</span>
-<span class="sd">            If ``True``, case distinctions are kept, e.g.,</span>
+<span class="sd">            If ``True`` (the default), case distinctions are kept, e.g.,</span>
 <span class="sd">            word tokens like &quot;the&quot; and &quot;The&quot; are treated as distinct.</span>
-<span class="sd">            If ``False`` (the default), all word tokens are forced to be in lowercase</span>
+<span class="sd">            If ``False``, all word tokens are forced to be in lowercase</span>
 <span class="sd">            as a preprocessing step.</span>
+<span class="sd">            CHAT data from CHILDES intentionally does not follow the orthographic</span>
+<span class="sd">            convention of capitalizing the first letter of a sentence in the</span>
+<span class="sd">            transcriptions (as would have been done in many European languages),</span>
+<span class="sd">            and so leaving keep_case as True is appropriate in most cases.</span>
 <span class="sd">        participant : str, optional</span>
 <span class="sd">            Participant of interest, which defaults to the typical use case of ``&quot;CHI&quot;``</span>
 <span class="sd">            for the target child.</span>

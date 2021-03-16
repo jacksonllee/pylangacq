@@ -1047,10 +1047,14 @@ distinction just described for when <code class="docutils literal notranslate"><
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>keep_case</strong><span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, case distinctions are kept, e.g.,
+<dt><strong>keep_case</strong><span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code> (the default), case distinctions are kept, e.g.,
 word tokens like “the” and “The” are treated as distinct.
-If <code class="docutils literal notranslate"><span class="pre">False</span></code> (the default), all word tokens are forced to be in lowercase
-as a preprocessing step.</p>
+If <code class="docutils literal notranslate"><span class="pre">False</span></code>, all word tokens are forced to be in lowercase
+as a preprocessing step.
+CHAT data from CHILDES intentionally does not follow the orthographic
+convention of capitalizing the first letter of a sentence in the
+transcriptions (as would have been done in many European languages),
+and so leaving keep_case as True is appropriate in most cases.</p>
 </dd>
 <dt><strong>participant</strong><span class="classifier">str, optional</span></dt><dd><p>Participant of interest, which defaults to the typical use case of <code class="docutils literal notranslate"><span class="pre">&quot;CHI&quot;</span></code>
 for the target child.</p>

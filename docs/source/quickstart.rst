@@ -32,7 +32,7 @@ corpus of American English:
     >>> eve.n_files()
     20
 
-``eve`` is a :class:`~pylangacq.chat.Reader` instance.
+``eve`` is a :class:`~pylangacq.Reader` instance.
 It has Eve's 20 CHAT data files all parsed and ready for your analysis.
 ``eve`` has various methods through which you can access different information
 with Python data structures.

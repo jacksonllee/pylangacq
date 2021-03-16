@@ -4,9 +4,9 @@ Word Frequencies and Ngrams
 ===========================
 
 Because word frequencies and combinatorics are useful for many purposes,
-the following :class:`~pylangacq.chat.Reader` methods are defined:
+the following :class:`~pylangacq.Reader` methods are defined:
 
-.. currentmodule:: pylangacq.chat.Reader
+.. currentmodule:: pylangacq.Reader
 
 .. autosummary::
 

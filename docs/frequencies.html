@@ -252,26 +252,26 @@
   <div class="section" id="word-frequencies-and-ngrams">
 <span id="frequencies"></span><h1>Word Frequencies and Ngrams<a class="headerlink" href="#word-frequencies-and-ngrams" title="Permalink to this headline">¶</a></h1>
 <p>Because word frequencies and combinatorics are useful for many purposes,
-the following <a class="reference internal" href="api.html#pylangacq.chat.Reader" title="pylangacq.chat.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> methods are defined:</p>
+the following <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> methods are defined:</p>
 <table class="longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="api.html#pylangacq.chat.Reader.word_frequencies" title="pylangacq.chat.Reader.word_frequencies"><code class="xref py py-obj docutils literal notranslate"><span class="pre">word_frequencies</span></code></a>([keep_case, participants, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#pylangacq.Reader.word_frequencies" title="pylangacq.Reader.word_frequencies"><code class="xref py py-obj docutils literal notranslate"><span class="pre">word_frequencies</span></code></a>([keep_case, participants, …])</p></td>
 <td><p>Return word frequencies.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="api.html#pylangacq.chat.Reader.word_ngrams" title="pylangacq.chat.Reader.word_ngrams"><code class="xref py py-obj docutils literal notranslate"><span class="pre">word_ngrams</span></code></a>(n[, keep_case, participants, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#pylangacq.Reader.word_ngrams" title="pylangacq.Reader.word_ngrams"><code class="xref py py-obj docutils literal notranslate"><span class="pre">word_ngrams</span></code></a>(n[, keep_case, participants, …])</p></td>
 <td><p>Return word ngrams.</p></td>
 </tr>
 </tbody>
 </table>
-<p>For both <code class="xref py py-func docutils literal notranslate"><span class="pre">word_frequencies()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">word_ngrams()</span></code>:</p>
+<p>For both <a class="reference internal" href="api.html#pylangacq.Reader.word_frequencies" title="pylangacq.Reader.word_frequencies"><code class="xref py py-func docutils literal notranslate"><span class="pre">word_frequencies()</span></code></a> and <a class="reference internal" href="api.html#pylangacq.Reader.word_ngrams" title="pylangacq.Reader.word_ngrams"><code class="xref py py-func docutils literal notranslate"><span class="pre">word_ngrams()</span></code></a>:</p>
 <ul class="simple">
 <li><p>They have the same optional arguments <code class="docutils literal notranslate"><span class="pre">participants</span></code>, <code class="docutils literal notranslate"><span class="pre">exclude</span></code>, and <code class="docutils literal notranslate"><span class="pre">by_files</span></code>
-as <code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code>,
-<code class="xref py py-func docutils literal notranslate"><span class="pre">utterances()</span></code> do.</p></li>
+as <a class="reference internal" href="api.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a>, <a class="reference internal" href="api.html#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code></a>,
+<a class="reference internal" href="api.html#pylangacq.Reader.utterances" title="pylangacq.Reader.utterances"><code class="xref py py-func docutils literal notranslate"><span class="pre">utterances()</span></code></a> do.</p></li>
 <li><p>They have the optional argument <code class="docutils literal notranslate"><span class="pre">keep_case</span></code>
 to specify whether upper/lowercase distinction should be kept or collapsed
 in counting words or ngrams.</p></li>

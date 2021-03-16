@@ -14,7 +14,7 @@ Initializing a Reader
 :func:`~pylangacq.read_chat`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Reading CHAT data in PyLangAcq is all about creating a :class:`~pylangacq.chat.Reader` object.
+Reading CHAT data in PyLangAcq is all about creating a :class:`~pylangacq.Reader` object.
 The most convenient way to do it is to use the :func:`~pylangacq.read_chat` function,
 which asks for a data source and several optional arguments.
 As an example, let's use the `Brown <https://childes.talkbank.org/access/Eng-NA/Brown.html>`_
@@ -108,7 +108,7 @@ to a ZIP file. Other data sources that this function is designed for are:
 
 
 :func:`~pylangacq.read_chat` is designed to cover the common use cases of reading in CHAT data.
-Under the hood, it is a wrapper of several classmethods of :class:`~pylangacq.chat.Reader`,
+Under the hood, it is a wrapper of several classmethods of :class:`~pylangacq.Reader`,
 some of which aren't available from :func:`~pylangacq.read_chat`.
 These classmethods are introduced in the following.
 
@@ -120,7 +120,7 @@ Perhaps you don't want :func:`~pylangacq.read_chat` to do the guess work of
 what type of your data source is, or you want more fine-grained control
 of what counts as CHAT data files or not in your data source.
 While :func:`~pylangacq.read_chat` already handles a ZIP archive file and
-a local directory, the :class:`~pylangacq.chat.Reader` classmethods
+a local directory, the :class:`~pylangacq.Reader` classmethods
 :func:`~pylangacq.Reader.from_zip` and :func:`~pylangacq.Reader.from_dir`
 allow more optional arguments for customization.
 Here's sample code for using these classmethods in the base case:
@@ -138,7 +138,7 @@ Here's sample code for using these classmethods in the base case:
 From Specific CHAT Data Files
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you'd like to target specific files, the :class:`~pylangacq.chat.Reader` classmethod
+If you'd like to target specific files, the :class:`~pylangacq.Reader` classmethod
 :func:`~pylangacq.Reader.from_files` takes a list of file paths:
 
     .. skip: start
@@ -156,7 +156,7 @@ From In-Memory Strings
 ^^^^^^^^^^^^^^^^^^^^^^
 
 If your CHAT data comes from in-memory strings,
-the :class:`~pylangacq.chat.Reader` classmethod
+the :class:`~pylangacq.Reader` classmethod
 :func:`~pylangacq.Reader.from_strs` takes a list of strings,
 where each string is assumed to conform to the
 `CHAT data format <https://talkbank.org/manuals/CHAT.pdf>`_:
@@ -195,7 +195,7 @@ where each string is assumed to conform to the
                    tiers={'MOT': 'okay .'})]
 
 We are getting ahead of ourselves by showing the result
-of the :class:`~pylangacq.chat.Reader` classmethod :func:`~pylangacq.Reader.utterances`.
+of the :class:`~pylangacq.Reader` classmethod :func:`~pylangacq.Reader.utterances`.
 We are going to drill down to this and many other functions
 in the upcoming parts of the documentation,
 but this quick example gives you a glimpse of how PyLangAcq represents CHAT data.
@@ -204,7 +204,7 @@ but this quick example gives you a glimpse of how PyLangAcq represents CHAT data
 Creating an Empty Reader
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Calling :class:`~pylangacq.chat.Reader` itself initializes an empty reader:
+Calling :class:`~pylangacq.Reader` itself initializes an empty reader:
 
 .. code-block:: python
 
@@ -220,7 +220,7 @@ The section below discusses how to manipulate data in a reader.
 Adding and Removing Data
 ------------------------
 
-A :class:`~pylangacq.chat.Reader` keeps the linear ordering of CHAT data
+A :class:`~pylangacq.Reader` keeps the linear ordering of CHAT data
 by the ordering of the source data files.
 CHAT data typically comes as data files that each represent a recording session.
 There is, therefore, a natural ordering of the files by time,
@@ -229,12 +229,12 @@ The ordering is also commonly reflected by the way CHAT data files are named.
 For this reason, if your input data source is a ZIP file or local directory,
 the resulting reader has the data automatically sorted based on file paths.
 
-With the knowledge that data is ordered by files in a :class:`~pylangacq.chat.Reader`,
-it is reasonable for a :class:`~pylangacq.chat.Reader` to append or drop data,
+With the knowledge that data is ordered by files in a :class:`~pylangacq.Reader`,
+it is reasonable for a :class:`~pylangacq.Reader` to append or drop data,
 and to do so from either end for modeling purposes.
 Think of a CHAT data reader more or less like a :class:`~collections.deque`.
 
-The following :class:`~pylangacq.chat.Reader` methods support adding and removing data
+The following :class:`~pylangacq.Reader` methods support adding and removing data
 from a reader:
 
 .. currentmodule:: pylangacq.Reader
@@ -249,11 +249,11 @@ from a reader:
     pop_left
     clear
 
-A :class:`~pylangacq.chat.Reader` can be iterated upon
+A :class:`~pylangacq.Reader` can be iterated upon
 (e.g., ``for reader_one_file in reader: ...``),
-where the element in each iteration is a :class:`~pylangacq.chat.Reader` for one data file.
+where the element in each iteration is a :class:`~pylangacq.Reader` for one data file.
 Slicing (``reader[:5]``, ``reader[3:6]``, etc) is also supported,
-which gives you a :class:`~pylangacq.chat.Reader` object (which is iterable)
+which gives you a :class:`~pylangacq.Reader` object (which is iterable)
 for the specified data files.
 To inspect what data files are in a reader and their ordering
 (as well as extract their indices, if necessary),

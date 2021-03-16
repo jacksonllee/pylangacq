@@ -10,10 +10,10 @@ API Reference
 
 
 
-:class:`~pylangacq.chat.Reader`
+:class:`~pylangacq.Reader`
 -------------------------------
 
-.. autoclass:: pylangacq.chat.Reader
+.. autoclass:: pylangacq.Reader
    :members:
 
 

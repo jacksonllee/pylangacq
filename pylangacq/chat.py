@@ -1331,9 +1331,10 @@ def read_chat(
     # Just in case the user provides a CHILDES web link like
     # https://childes.talkbank.org/access/Eng-NA/Brown.html
     # instead of https://childes.talkbank.org/data/Eng-NA/Brown.zip.
-    # The "childes" subdomain could sometimes be "phonbank" (and something else?).
+    # The subdomain can be "childes", "phonbank", "ca", etc.
     # This hack is just for convenience.
-    # Not sure if we should encourage using the .html link...
+    # Not sure if we should encourage using the .html link,
+    # since I can't guarantee the URL format...
     if re.search(r"https://\S+\.talkbank\.org/access/\S+\.html", path):
         path = path.replace("/access/", "/data/")
         path = path.replace(".html", ".zip")

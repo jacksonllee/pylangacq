@@ -23,13 +23,12 @@ Full documentation: https://pylangacq.org
 
 PyLangAcq is a Python library for language acquisition research.
 
-- Comprehensive capabilities of handling CHAT transcripts as used in CHILDES
-- Intuitive Python data structures for flexible data access and manipulation for modeling work
+- Easy access to CHILDES CHAT datasets, with both local data loading and direct
+  downloading from CHILDES supported right from your own Python code
+- Intuitive Python data structures for flexible data access and manipulation
 - Standard developmental measures readily available: Mean length of utterance (MLU),
   type-token ratio (TTR), and index of productive syntax (IPSyn)
-- More benefits from Python: Fast prototyping, numerous libraries
-  for computational modeling and machine learning
-- Powerful extensions for research with conversational data in general
+- Powerful extensions possible for other CHAT-based conversational data from TalkBank
 
 .. _download_install:
 

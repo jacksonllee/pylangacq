@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Security
 
+## [0.13.1] - 2021-03-23
+
+### Fixed
+* Fixed a CHAT parsing issue when correction and repetition are combined.
+
 ## [0.13.0] - 2021-03-15
 
 **API-breaking changes:**

@@ -1,16 +1,11 @@
 import copy
 import datetime
 import filecmp
+import os
 
 import pytest
 
-from pylangacq.chat import (
-    _clean_utterance,
-    _clean_word,
-    _remove_extra_spaces,
-    _find_indices,
-    Reader,
-)
+from pylangacq.chat import _clean_word, Reader, read_chat
 from pylangacq.objects import Gra, Utterance, Token
 from pylangacq.tests.test_data import (
     LOCAL_EVE_PATH,
@@ -351,47 +346,6 @@ def test_word_frequency():
 @pytest.mark.parametrize(
     "original, expected",
     [
-        ("[= foo ] bar", "bar"),
-        ("[x 2] bar", "bar"),
-        ("[+ foo ] bar", "bar"),
-        ("[* foo ] bar", "bar"),
-        ("[=? foo ] bar", "bar"),
-        ("[=! foo ] bar", "bar"),
-        ("[% foo ] bar", "bar"),
-        ("[- foo ] bar", "bar"),
-        ("[^ foo ] bar", "bar"),
-        ("[<1] bar", "bar"),
-        ("[<] bar", "bar"),
-        ("[>1] bar", "bar"),
-        ("[>] bar", "bar"),
-        ("[<1] bar", "bar"),
-        ("(1) bar", "bar"),
-        ("(1.) bar", "bar"),
-        ("(1.3) bar", "bar"),
-        ("(1.34) bar", "bar"),
-        ("(12.34) bar", "bar"),
-        ("[%act: foo] bar", "bar"),
-        ("[?] bar", "bar"),
-        ("[!] bar", "bar"),
-        ("‹ bar", "bar"),
-        ("› bar", "bar"),
-        ("bar", "bar"),
-        ("[*] bar", "bar"),
-        ("bar [*]", "bar"),
-        ("“bar”", "bar"),
-        # Step 3
-        ("foo bar [/-]", "foo"),
-        ("foo < bar baz > [/-]", "foo"),
-    ],
-)
-def test__clean_utterance(original, expected):
-    # TODO: Most of step 3 and all of step 5 in the function not tested
-    assert _clean_utterance(original) == expected
-
-
-@pytest.mark.parametrize(
-    "original, expected",
-    [
         ("foo", "foo"),
         ("&foo", "foo"),
         ("foo@bar", "foo"),
@@ -406,22 +360,20 @@ def test__clean_word(original, expected):
     assert _clean_word(original) == expected
 
 
-@pytest.mark.parametrize(
-    "original, expected",
-    [("foo  bar", "foo bar"), ("foo bar  baz", "foo bar baz")],
+@pytest.mark.skipif(
+    os.getenv("CI") == "true",
+    reason="no slow slow tests of pulling lots of CHILDES/TalkBank data from CircleCI",
 )
-def test__remove_extra_spaces(original, expected):
-    assert _remove_extra_spaces(original) == expected
-
-
 @pytest.mark.parametrize(
-    "original, target, expected",
+    "url",
     [
-        ("foo bar", "foo", [0]),
-        ("foo foo bar", "foo", [0, 4]),
-        ("foo bar foo", "foo", [0, 8]),
-        ("foo bar baz", "bar", [4]),
+        "https://childes.talkbank.org/data/Eng-NA/Brent.zip",
+        "https://childes.talkbank.org/data/Eng-NA/HSLLD.zip",
+        "https://childes.talkbank.org/data/Eng-NA/Kuczaj.zip",
+        "https://childes.talkbank.org/data/Eng-NA/MacWhinney.zip",
+        "https://childes.talkbank.org/data/Eng-NA/Valian.zip",
+        "https://childes.talkbank.org/data/Eng-NA/Rollins.zip",
     ],
 )
-def test__find_indices(original, target, expected):
-    assert _find_indices(original, target) == expected
+def test_parse_talkbank_datasets(url):
+    read_chat(url)  # shouldn't error

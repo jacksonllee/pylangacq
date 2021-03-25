@@ -109,6 +109,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#adding-and-removing-data">Adding and Removing Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-behavior">Custom Behavior</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="headers.html">Accessing Headers</a><ul>
@@ -511,6 +512,21 @@ starting from an empty one and adding data to it one file at a time.</p>
 </pre></div>
 </div>
 </div>
+<div class="section" id="custom-behavior">
+<h2>Custom Behavior<a class="headerlink" href="#custom-behavior" title="Permalink to this headline">¶</a></h2>
+<p>If custom behavior in CHAT handling is needed,
+consider defining a child class that inherits from <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a>.
+This approach is suitable if, for instance, new class methods are needed,
+or the words / tokens / utterances need a custom treatment during CHAT parsing.
+As long as you have conversational data formatted in CHAT
+(data not necessarily from CHILDES or TalkBank,
+and not necessarily for language acquisition research, either),
+subclassing from <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> is a powerful way to
+modify and extend the CHAT handling capabilities.
+As an example, please see the class <a class="reference external" href="https://pycantonese.org/generated/pycantonese.CHATReader.html#pycantonese.CHATReader" title="(in PyCantonese v3.2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">CHATReader</span></code></a>
+for Cantonese conversational data in the
+<a class="reference external" href="https://pycantonese.org">PyCantonese</a> package.</p>
+</div>
 </div>
 
 
@@ -527,7 +543,7 @@ starting from an empty one and adding data to it one file at a time.</p>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2015-2021, Jackson L. Lee | PyLangAcq 0.13.1 | Documentation last updated on March 23, 2021.
+        &#169; Copyright 2015-2021, Jackson L. Lee | PyLangAcq 0.13.1 | Documentation last updated on March 24, 2021.
 
     </p>
   </div>

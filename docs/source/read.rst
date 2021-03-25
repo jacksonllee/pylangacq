@@ -277,3 +277,19 @@ starting from an empty one and adding data to it one file at a time.
     Number of Eve's utterances in the reader so far: 1467
     Number of Eve's utterances in the reader so far: 2052
     Number of Eve's utterances in the reader so far: 2758
+
+Custom Behavior
+---------------
+
+If custom behavior in CHAT handling is needed,
+consider defining a child class that inherits from :class:`~pylangacq.Reader`.
+This approach is suitable if, for instance, new class methods are needed,
+or the words / tokens / utterances need a custom treatment during CHAT parsing.
+As long as you have conversational data formatted in CHAT
+(data not necessarily from CHILDES or TalkBank,
+and not necessarily for language acquisition research, either),
+subclassing from :class:`~pylangacq.Reader` is a powerful way to
+modify and extend the CHAT handling capabilities.
+As an example, please see the class :class:`~pycantonese.CHATReader`
+for Cantonese conversational data in the
+`PyCantonese <https://pycantonese.org>`_ package.

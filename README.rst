@@ -111,7 +111,7 @@ To run tests and styling checks:
 
 .. code-block:: bash
 
-   $ pytest -vv --doctest-modules --cov=pylangacq pylangacq docs
+   $ pytest -vv --doctest-modules --cov=pylangacq pylangacq docs/source
    $ flake8 pylangacq
    $ black --check pylangacq
 

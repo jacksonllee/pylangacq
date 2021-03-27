@@ -23,12 +23,12 @@ Full documentation: https://pylangacq.org
 
 PyLangAcq is a Python library for language acquisition research.
 
-- Easy access to CHILDES CHAT datasets, with both local data loading and direct
-  downloading from CHILDES supported right from your own Python code
+- Easy access to CHILDES and TalkBank datasets for language acquisition research
 - Intuitive Python data structures for flexible data access and manipulation
 - Standard developmental measures readily available: Mean length of utterance (MLU),
   type-token ratio (TTR), and index of productive syntax (IPSyn)
-- Powerful extensions possible for other CHAT-based conversational data from TalkBank
+- Direct support and powerful extensions possible for CHAT-formatted conversational datasets
+  more generally
 
 .. _download_install:
 
@@ -39,13 +39,6 @@ To download and install the most recent version::
 
     $ pip install --upgrade pylangacq
 
-To test your installation in the Python interpreter:
-
-.. code-block:: python
-
-    >>> import pylangacq
-    >>> pylangacq.__version__  # show version number
-
 Ready for more?
 Check out the `Quickstart <https://pylangacq.org/quickstart.html>`_ page.
 
@@ -53,9 +46,15 @@ Links
 -----
 
 * Source code: https://github.com/jacksonllee/pylangacq
-* Bug tracker, feature requests: https://github.com/jacksonllee/pylangacq/issues
-* Email: Please contact `Jackson Lee <https://jacksonllee.com>`_.
+* Bug tracker: https://github.com/jacksonllee/pylangacq/issues
 * Social media: `Twitter <https://twitter.com/pylangacq>`_
+
+Consulting
+----------
+
+If you team would like professional assistance in using PyLangAcq,
+technical consulting and training services are available.
+Please email `Jackson Lee <https://jacksonllee.com>`_.
 
 How to Cite
 -----------

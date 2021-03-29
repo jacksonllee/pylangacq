@@ -13,9 +13,9 @@ Full documentation: https://pylangacq.org
    :target: https://pypi.python.org/pypi/pylangacq
    :alt: Supported Python versions
 
-.. image:: https://circleci.com/gh/jacksonllee/pylangacq/tree/main.svg?style=svg
-   :target: https://circleci.com/gh/jacksonllee/pylangacq/tree/main
-   :alt: Build
+.. image:: https://circleci.com/gh/jacksonllee/pylangacq.svg?style=shield
+   :target: https://circleci.com/gh/jacksonllee/pylangacq
+   :alt: CircleCI Builds
 
 |
 

@@ -42,19 +42,25 @@ To download and install the most recent version::
 Ready for more?
 Check out the `Quickstart <https://pylangacq.org/quickstart.html>`_ page.
 
-Links
------
-
-* Source code: https://github.com/jacksonllee/pylangacq
-* Bug tracker: https://github.com/jacksonllee/pylangacq/issues
-* Social media: `Twitter <https://twitter.com/pylangacq>`_
-
 Consulting
 ----------
 
 If your team would like professional assistance in using PyLangAcq,
 technical consulting and training services are available.
 Please email `Jackson L. Lee <https://jacksonllee.com>`_.
+
+Support
+-------
+
+If you have found PyLangAcq useful and would like to offer support,
+`buying me a coffee <https://www.buymeacoffee.com/pylangacq>`_ would go a long way!
+
+Links
+-----
+
+* Source code: https://github.com/jacksonllee/pylangacq
+* Bug tracker: https://github.com/jacksonllee/pylangacq/issues
+* Social media: `Twitter <https://twitter.com/pylangacq>`_
 
 How to Cite
 -----------

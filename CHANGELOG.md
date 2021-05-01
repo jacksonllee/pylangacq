@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 ### Removed
 ### Fixed
+* Fixed utterance cleaning so that it is now compatible with all CHILDES datasets.
+
 ### Security
 
 ## [0.13.1] - 2021-03-23

@@ -1,11 +1,10 @@
 import copy
 import datetime
 import filecmp
-import os
 
 import pytest
 
-from pylangacq.chat import _clean_word, Reader, read_chat
+from pylangacq.chat import _clean_word, Reader
 from pylangacq.objects import Gra, Utterance, Token
 from pylangacq.tests.test_data import (
     LOCAL_EVE_PATH,
@@ -358,22 +357,3 @@ def test_word_frequency():
 )
 def test__clean_word(original, expected):
     assert _clean_word(original) == expected
-
-
-@pytest.mark.skipif(
-    os.getenv("CI") == "true",
-    reason="no slow slow tests of pulling lots of CHILDES/TalkBank data from CircleCI",
-)
-@pytest.mark.parametrize(
-    "url",
-    [
-        "https://childes.talkbank.org/data/Eng-NA/Brent.zip",
-        "https://childes.talkbank.org/data/Eng-NA/HSLLD.zip",
-        "https://childes.talkbank.org/data/Eng-NA/Kuczaj.zip",
-        "https://childes.talkbank.org/data/Eng-NA/MacWhinney.zip",
-        "https://childes.talkbank.org/data/Eng-NA/Valian.zip",
-        "https://childes.talkbank.org/data/Eng-NA/Rollins.zip",
-    ],
-)
-def test_parse_talkbank_datasets(url):
-    read_chat(url)  # shouldn't error

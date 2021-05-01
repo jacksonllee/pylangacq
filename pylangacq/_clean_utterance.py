@@ -14,19 +14,34 @@ _REGEX_DROP = (
     re.compile(r"[^]+?"),
     re.compile(r"\[<\d?\]"),
     re.compile(r"\[>\d?\]"),
-    re.compile(r"\(\d+?\.?\d*?\)"),
+    re.compile(r"\((\d+?:)?\d+?\.?\d*?\)"),
     re.compile(r"\[%act: [^\[]+?\]"),
+)
+
+_REGEX_REPLACE = (
+    (re.compile(r"[^\[\./!]\?"), " ? "),
+    (re.compile(r"\(\.\)"), " (.) "),
+    (re.compile(r"([a-z])\.\Z"), r"\1 ."),
 )
 
 _REPLACEE_REPLACER = (
     ("[?]", " "),
     ("[!]", " "),
+    ("[!!]", " "),
+    ("[^c]", " "),
     ("‹", " "),
     ("›", " "),
+    ("⌈", ""),
+    ("⌉", ""),
+    ("⌊", ""),
+    ("⌋", ""),
     ("[*] [/", " [/"),
     ("] [*]", "] "),
     ("[*]", " "),
     ("[//] [//]", "[//]"),
+    ("[/] [//]", "[//]"),
+    ("[/?] [/]", "[//]"),
+    ("[//] [/]", "[/]"),
     ("<", " < "),
     ("+ <", "+<"),
     (">", " > "),
@@ -40,11 +55,11 @@ _REPLACEE_REPLACER = (
 
 _REGEX_SKIP_EXTRACT = (
     # xxx [:: zzz] or < xxx yyy > [:: zzz]
-    re.compile(r"(<[^>]+?>) \[::([^\]]+?)(\])"),
-    re.compile(r"(\S+?) \[::([^\]]+?)(\])"),
+    (re.compile(r"(<[^>]+?>) \[:: ([^\]]+?)\]"), r"\1"),
+    (re.compile(r"(\S+?) \[:: ([^\]]+?)\]"), r"\1"),
     # xxx [: zzz] or < xxx yyy > [: zzz]
-    re.compile(r"(<[^>]+?>) \[:([^\]]+?)(\])"),
-    re.compile(r"(\S+?) \[:([^\]]+?)(\])"),
+    (re.compile(r"(<[^>]+?>) \[: ([^\]]+?)\]"), r"<\2>"),
+    (re.compile(r"(\S+?) \[: ([^\]]+?)\]"), r"<\2>"),
 )
 
 _REGEX_DROP_AFTER_SKIP_EXTRACT = (
@@ -67,14 +82,10 @@ _REGEX_CLEAN_WORD = (
 )
 
 
-def _skip_extract(utterance, regex) -> str:
+def _skip_extract(utterance, regex, replacee) -> str:
     match = regex.search(utterance)
     while match:
-        utterance = (
-            f"{utterance[: match.start(1)]} "
-            f"<{utterance[match.start(2): match.end(2)]}> "
-            f"{utterance[match.end(3) + 1:]}"
-        )
+        utterance = regex.sub(replacee, utterance)
         match = regex.search(utterance)
     else:
         return utterance
@@ -157,8 +168,8 @@ def _clean_utterance(utterance: str) -> str:
     # Remove extra spaces
     utterance = " ".join(utterance.split())
 
-    utterance = re.sub(r"[^\[\./!]\?", " ? ", utterance)
-    utterance = re.sub(r"\(\.\)", " (.) ", utterance)
+    for regex, replacee in _REGEX_REPLACE:
+        utterance = regex.sub(replacee, utterance)
     utterance = " ".join(utterance.split())
 
     # Step 3:
@@ -166,15 +177,15 @@ def _clean_utterance(utterance: str) -> str:
     #        [: xx] or [:: xx] for errors
     #
     # Strategies:
-    # 1. For "zz [:: xx]" or "<yy zz> [:: xx]", keep "xx" and discard the rest.
-    # 2. For "zz [: xx]" or "<yy zz> [: xx]", keep "xx" and discard the rest.
+    # 1. For "z [:: x]" or "<y z> [:: x]", keep "z" or "y z" and discard the rest.
+    # 2. For "z [: x]" or "<y z> [: x]", keep "x" and discard the rest.
     # 3. Discard:
     #    "xx [///]", "<xx yy> [///]",
     #    "xx [//]", "<xx yy> [//]",
     #    "xx [/]", "<xx yy> [/]"
 
-    for regex in _REGEX_SKIP_EXTRACT:
-        utterance = _skip_extract(utterance, regex)
+    for regex, replacee in _REGEX_SKIP_EXTRACT:
+        utterance = _skip_extract(utterance, regex, replacee)
         utterance = " ".join(utterance.split())
 
     current = utterance
@@ -215,6 +226,7 @@ def _clean_utterance(utterance: str) -> str:
         "<&",
         "&",  # drop this for PhonBank later?
     }
+    escape_suffixes = {"↫xxx"}
     escape_words = {
         "0",
         "++",
@@ -232,7 +244,11 @@ def _clean_utterance(utterance: str) -> str:
         "yyy",
         "www",
         "xxx:",
+        "xxx;",
+        "xxx→",
+        "xxx↑",
         "yyy:",
+        "→",
     }
     keep_prefixes = {'+"/', "+,/", '+".'}
 
@@ -250,9 +266,11 @@ def _clean_utterance(utterance: str) -> str:
             new_words.append(word)
             continue
 
-        if word not in escape_words and not any(
-            word.startswith(e) for e in escape_prefixes
+        if (
+            word not in escape_words
+            and not any(word.startswith(e) for e in escape_prefixes)
+            and not any(word.endswith(e) for e in escape_suffixes)
         ):
             new_words.append(word)
 
-    return " ".join(new_words)
+    return " ".join(new_words).strip()

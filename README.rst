@@ -23,7 +23,7 @@ Full documentation: https://pylangacq.org
 
 PyLangAcq is a Python library for language acquisition research.
 
-- Easy access to CHILDES and TalkBank datasets
+- Easy access to CHILDES and other TalkBank datasets
 - Intuitive Python data structures for flexible data access and manipulation
 - Standard developmental measures readily available: Mean length of utterance (MLU),
   type-token ratio (TTR), and index of productive syntax (IPSyn)

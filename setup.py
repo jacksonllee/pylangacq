@@ -3,7 +3,7 @@ import re
 import setuptools
 
 
-_VERSION = "0.13.1"
+_VERSION = "0.13.2"
 
 _THIS_DIR = os.path.dirname(os.path.realpath(__file__))
 

@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 ### Removed
 ### Fixed
+* The methods `append`, `append_left`, `extend`, and `extend_left` now work with a subclass
+  of `Reader`, not just `Reader` itself.
+
 ### Security
 
 ## [0.13.2] - 2021-05-02

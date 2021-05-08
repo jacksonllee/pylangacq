@@ -242,7 +242,7 @@ class Reader:
 
     def _append(self, left_or_right, reader: "Reader") -> None:
         func = "extendleft" if left_or_right == "left" else "extend"
-        if type(reader) != Reader:
+        if not issubclass(reader.__class__, Reader):
             raise TypeError(f"not a Reader object: {type(reader)}")
         getattr(self._files, func)(reader._files)
 
@@ -277,7 +277,7 @@ class Reader:
         # a chance to check that the object is indeed a Reader instance.
         new_files = []
         for reader in readers:
-            if type(reader) != Reader:
+            if not issubclass(reader.__class__, Reader):
                 raise TypeError(f"not a Reader object: {type(reader)}")
             new_files.extend(reader._files)
         func = "extendleft" if left_or_right == "left" else "extend"

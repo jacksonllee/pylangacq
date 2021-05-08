@@ -24,6 +24,16 @@ Fixed
 Security
 ^^^^^^^^
 
+[0.13.3] - 2021-05-07
+---------------------
+
+Fixed
+^^^^^
+
+
+* The methods ``append``\ , ``append_left``\ , ``extend``\ , and ``extend_left`` now work with a subclass
+  of ``Reader``\ , not just ``Reader`` itself.
+
 [0.13.2] - 2021-05-02
 ---------------------
 

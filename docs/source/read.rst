@@ -221,10 +221,27 @@ in the upcoming parts of the documentation,
 but this quick example gives you a glimpse of how PyLangAcq represents CHAT data.
 
 
+Parallel Processing
+^^^^^^^^^^^^^^^^^^^
+
+Because a CHILDES / TalkBank dataset usually comes with multiple CHAT data files,
+it is reasonable to parallelize the process of reading and parsing CHAT data for speed-up.
+By default, such parallelization is applied.
+If you would like to turn off parallel processing
+(e.g., because your application is already parallelized, and further parallelization
+from within PyLangAcq would create undesirable effects),
+the boolean argument ``parallel`` is available at
+:func:`~pylangacq.Reader.from_zip`,
+:func:`~pylangacq.Reader.from_dir`,
+:func:`~pylangacq.Reader.from_files`, and
+:func:`~pylangacq.Reader.from_strs`,
+and you may set it to ``False`` .
+
+
 Creating an Empty Reader
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Calling :class:`~pylangacq.Reader` itself initializes an empty reader:
+Calling :class:`~pylangacq.Reader` itself with no arguments initializes an empty reader:
 
 .. code-block:: python
 
@@ -267,7 +284,13 @@ from a reader:
     extend_left
     pop
     pop_left
+    filter
     clear
+
+Among these methods, :func:`~pylangacq.Reader.filter` creates and
+returns a new :class:`~pylangacq.Reader`
+without altering the original one.
+All the other methods work by mutating the calling :class:`~pylangacq.Reader` in-place.
 
 A :class:`~pylangacq.Reader` can be iterated upon
 (e.g., ``for reader_one_file in reader: ...``),
@@ -299,6 +322,40 @@ starting from an empty one and adding data to it one file at a time.
     Number of Eve's utterances in the reader so far: 1467
     Number of Eve's utterances in the reader so far: 2052
     Number of Eve's utterances in the reader so far: 2758
+
+.. skip: end
+
+:func:`~pylangacq.Reader.filter` is designed to explicitly return
+a new :class:`~pylangacq.Reader`
+so that we can instantiate a source :class:`~pylangacq.Reader` for a CHILDES / TalkBank dataset
+and filter it down to specific file paths to get smaller :class:`~pylangacq.Reader` objects.
+Typically, a CHILDES dataset contains multiple children's data
+organized by a subdirectory structure.
+:func:`~pylangacq.Reader.filter` allows us to easily create :class:`~pylangacq.Reader` objects
+for individual children without re-downloading data:
+
+.. skip: start if(os.getenv("CI") == "true" and sys.version_info[:2] == (3, 9), reason="py39 on CI doesn't work for unknown reason")
+
+.. code-block:: python
+
+    >>> url = "https://childes.talkbank.org/data/Eng-NA/Brown.zip"
+    >>> brown = pylangacq.read_chat(url)
+    >>> len(brown.file_paths())  # All CHAT files in the Brown dataset
+    214
+    >>>
+    >>> # Eve's data is all Brown/Eve/*.cha -- match the "Eve" substring
+    >>> eve = brown.filter(match="Eve")
+    >>> len(eve.file_paths())  # Only the 20 CHAT files for Eve
+    20
+    >>> eve.file_paths()[:3]
+    ['Brown/Eve/010600a.cha', 'Brown/Eve/010600b.cha', 'Brown/Eve/010700a.cha']
+    >>>
+    >>> # Sarah's data is all Brown/Sarah/*.cha -- match the "Sarah" substring
+    >>> sarah = brown.filter(match="Sarah")
+    >>> len(sarah.file_paths())  # Only the 139 CHAT files for Sarah
+    139
+    >>> sarah.file_paths()[:3]
+    ['Brown/Sarah/020305.cha', 'Brown/Sarah/020307.cha', 'Brown/Sarah/020319.cha']
 
 .. skip: end
 

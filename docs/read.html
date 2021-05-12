@@ -105,6 +105,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#from-a-zip-file-or-local-directory">From a ZIP File or Local Directory</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#from-specific-chat-data-files">From Specific CHAT Data Files</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#from-in-memory-strings">From In-Memory Strings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parallel-processing">Parallel Processing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#creating-an-empty-reader">Creating an Empty Reader</a></li>
 </ul>
 </li>
@@ -435,9 +436,24 @@ We are going to drill down to this and many other functions
 in the upcoming parts of the documentation,
 but this quick example gives you a glimpse of how PyLangAcq represents CHAT data.</p>
 </div>
+<div class="section" id="parallel-processing">
+<h3>Parallel Processing<a class="headerlink" href="#parallel-processing" title="Permalink to this headline">¶</a></h3>
+<p>Because a CHILDES / TalkBank dataset usually comes with multiple CHAT data files,
+it is reasonable to parallelize the process of reading and parsing CHAT data for speed-up.
+By default, such parallelization is applied.
+If you would like to turn off parallel processing
+(e.g., because your application is already parallelized, and further parallelization
+from within PyLangAcq would create undesirable effects),
+the boolean argument <code class="docutils literal notranslate"><span class="pre">parallel</span></code> is available at
+<a class="reference internal" href="api.html#pylangacq.Reader.from_zip" title="pylangacq.Reader.from_zip"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_zip()</span></code></a>,
+<a class="reference internal" href="api.html#pylangacq.Reader.from_dir" title="pylangacq.Reader.from_dir"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_dir()</span></code></a>,
+<a class="reference internal" href="api.html#pylangacq.Reader.from_files" title="pylangacq.Reader.from_files"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_files()</span></code></a>, and
+<a class="reference internal" href="api.html#pylangacq.Reader.from_strs" title="pylangacq.Reader.from_strs"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_strs()</span></code></a>,
+and you may set it to <code class="docutils literal notranslate"><span class="pre">False</span></code> .</p>
+</div>
 <div class="section" id="creating-an-empty-reader">
 <h3>Creating an Empty Reader<a class="headerlink" href="#creating-an-empty-reader" title="Permalink to this headline">¶</a></h3>
-<p>Calling <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> itself initializes an empty reader:</p>
+<p>Calling <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> itself with no arguments initializes an empty reader:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">Reader</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span><span class="o">.</span><span class="n">n_files</span><span class="p">()</span>
 <span class="go">0</span>
@@ -488,11 +504,18 @@ from a reader:</p>
 <tr class="row-even"><td><p><a class="reference internal" href="api.html#pylangacq.Reader.pop_left" title="pylangacq.Reader.pop_left"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pop_left</span></code></a>()</p></td>
 <td><p>Drop the first data file from the reader and return it as a reader.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="api.html#pylangacq.Reader.clear" title="pylangacq.Reader.clear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#pylangacq.Reader.filter" title="pylangacq.Reader.filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter</span></code></a>([match, exclude])</p></td>
+<td><p>Return a new reader filtered by file paths.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#pylangacq.Reader.clear" title="pylangacq.Reader.clear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear</span></code></a>()</p></td>
 <td><p>Remove all data from this reader.</p></td>
 </tr>
 </tbody>
 </table>
+<p>Among these methods, <a class="reference internal" href="api.html#pylangacq.Reader.filter" title="pylangacq.Reader.filter"><code class="xref py py-func docutils literal notranslate"><span class="pre">filter()</span></code></a> creates and
+returns a new <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a>
+without altering the original one.
+All the other methods work by mutating the calling <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> in-place.</p>
 <p>A <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> can be iterated upon
 (e.g., <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">reader_one_file</span> <span class="pre">in</span> <span class="pre">reader:</span> <span class="pre">...</span></code>),
 where the element in each iteration is a <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> for one data file.
@@ -519,6 +542,34 @@ starting from an empty one and adding data to it one file at a time.</p>
 <span class="go">Number of Eve&#39;s utterances in the reader so far: 2758</span>
 </pre></div>
 </div>
+<p><a class="reference internal" href="api.html#pylangacq.Reader.filter" title="pylangacq.Reader.filter"><code class="xref py py-func docutils literal notranslate"><span class="pre">filter()</span></code></a> is designed to explicitly return
+a new <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a>
+so that we can instantiate a source <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> for a CHILDES / TalkBank dataset
+and filter it down to specific file paths to get smaller <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> objects.
+Typically, a CHILDES dataset contains multiple children’s data
+organized by a subdirectory structure.
+<a class="reference internal" href="api.html#pylangacq.Reader.filter" title="pylangacq.Reader.filter"><code class="xref py py-func docutils literal notranslate"><span class="pre">filter()</span></code></a> allows us to easily create <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> objects
+for individual children without re-downloading data:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://childes.talkbank.org/data/Eng-NA/Brown.zip&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">brown</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">brown</span><span class="o">.</span><span class="n">file_paths</span><span class="p">())</span>  <span class="c1"># All CHAT files in the Brown dataset</span>
+<span class="go">214</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Eve&#39;s data is all Brown/Eve/*.cha -- match the &quot;Eve&quot; substring</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">brown</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">match</span><span class="o">=</span><span class="s2">&quot;Eve&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">file_paths</span><span class="p">())</span>  <span class="c1"># Only the 20 CHAT files for Eve</span>
+<span class="go">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">file_paths</span><span class="p">()[:</span><span class="mi">3</span><span class="p">]</span>
+<span class="go">[&#39;Brown/Eve/010600a.cha&#39;, &#39;Brown/Eve/010600b.cha&#39;, &#39;Brown/Eve/010700a.cha&#39;]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Sarah&#39;s data is all Brown/Sarah/*.cha -- match the &quot;Sarah&quot; substring</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sarah</span> <span class="o">=</span> <span class="n">brown</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">match</span><span class="o">=</span><span class="s2">&quot;Sarah&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">sarah</span><span class="o">.</span><span class="n">file_paths</span><span class="p">())</span>  <span class="c1"># Only the 139 CHAT files for Sarah</span>
+<span class="go">139</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sarah</span><span class="o">.</span><span class="n">file_paths</span><span class="p">()[:</span><span class="mi">3</span><span class="p">]</span>
+<span class="go">[&#39;Brown/Sarah/020305.cha&#39;, &#39;Brown/Sarah/020307.cha&#39;, &#39;Brown/Sarah/020319.cha&#39;]</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="custom-behavior">
 <h2>Custom Behavior<a class="headerlink" href="#custom-behavior" title="Permalink to this headline">¶</a></h2>
@@ -531,7 +582,7 @@ As long as you have conversational data formatted in CHAT
 and not necessarily for language acquisition research, either),
 subclassing from <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> is a powerful way to
 modify and extend the CHAT handling capabilities.
-As an example, please see the class <a class="reference external" href="https://pycantonese.org/generated/pycantonese.CHATReader.html#pycantonese.CHATReader" title="(in PyCantonese v3.2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">CHATReader</span></code></a>
+As an example, please see the class <a class="reference external" href="https://pycantonese.org/generated/pycantonese.CHATReader.html#pycantonese.CHATReader" title="(in PyCantonese v3.2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">CHATReader</span></code></a>
 for Cantonese conversational data in the
 <a class="reference external" href="https://pycantonese.org">PyCantonese</a> package.</p>
 </div>
@@ -551,7 +602,7 @@ for Cantonese conversational data in the
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2015-2021, Jackson L. Lee | PyLangAcq 0.13.3 | Documentation last updated on May 07, 2021.
+        &#169; Copyright 2015-2021, Jackson L. Lee | PyLangAcq 0.13.3 | Documentation last updated on May 12, 2021.
 
     </p>
   </div>

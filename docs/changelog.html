@@ -104,6 +104,7 @@
 <li class="toctree-l3"><a class="reference internal" href="read.html#from-a-zip-file-or-local-directory">From a ZIP File or Local Directory</a></li>
 <li class="toctree-l3"><a class="reference internal" href="read.html#from-specific-chat-data-files">From Specific CHAT Data Files</a></li>
 <li class="toctree-l3"><a class="reference internal" href="read.html#from-in-memory-strings">From In-Memory Strings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="read.html#parallel-processing">Parallel Processing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="read.html#creating-an-empty-reader">Creating an Empty Reader</a></li>
 </ul>
 </li>
@@ -267,6 +268,12 @@
 <h2>[Unreleased]<a class="headerlink" href="#unreleased" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="added">
 <h3>Added<a class="headerlink" href="#added" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Added the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> optional argument to the <code class="docutils literal notranslate"><span class="pre">Reader</span></code> methods
+<code class="docutils literal notranslate"><span class="pre">{from_zip,</span> <span class="pre">from_dir,</span> <span class="pre">from_files,</span> <span class="pre">from_strs}</span></code>
+so that parallelization can be turned off if desired.</p></li>
+<li><p>Added the <code class="docutils literal notranslate"><span class="pre">filter</span></code> method to <code class="docutils literal notranslate"><span class="pre">Reader</span></code> for filtering data by file paths.</p></li>
+</ul>
 </div>
 <div class="section" id="changed">
 <h3>Changed<a class="headerlink" href="#changed" title="Permalink to this headline">¶</a></h3>
@@ -639,7 +646,7 @@ with methods <code class="docutils literal notranslate"><span class="pre">cha_li
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2015-2021, Jackson L. Lee | PyLangAcq 0.13.3 | Documentation last updated on May 07, 2021.
+        &#169; Copyright 2015-2021, Jackson L. Lee | PyLangAcq 0.13.3 | Documentation last updated on May 12, 2021.
 
     </p>
   </div>

@@ -22,6 +22,7 @@ from requests.packages.urllib3.util.retry import Retry
 from dateutil.parser import parse as parse_date
 from dateutil.parser import ParserError
 
+import pylangacq
 from pylangacq.measures import _CLITIC, _get_ipsyn, _get_mlum, _get_mluw, _get_ttr
 from pylangacq.objects import Gra, Token, Utterance
 from pylangacq._clean_utterance import _clean_utterance
@@ -92,7 +93,7 @@ def _params_in_docstring(*params, class_method=True):
             For example, to work with the American English dataset Brown (containing
             data for the children Adam, Eve, and Sarah),
             you can pass in ``"Eve"`` here to only handle the data for Eve, since
-            the unzipped Brown data from CHILDES is in a directory structure of
+            the unzipped Brown data from CHILDES has a directory structure of
             ``Brown/Eve/xxx.cha`` for Eve's data.
             If this parameter is not specified or ``None`` is passed in (the default),
             such file path filtering does not apply.
@@ -257,13 +258,13 @@ class Reader:
         """Remove all data from this reader."""
         self._files = collections.deque()
 
-    def _append(self, left_or_right, reader: "Reader") -> None:
+    def _append(self, left_or_right, reader: "pylangacq.Reader") -> None:
         func = "extendleft" if left_or_right == "left" else "extend"
         if not issubclass(reader.__class__, Reader):
             raise TypeError(f"not a Reader object: {type(reader)}")
         getattr(self._files, func)(reader._files)
 
-    def append(self, reader: "Reader") -> None:
+    def append(self, reader: "pylangacq.Reader") -> None:
         """Append data from another reader.
 
         New data is appended as-is with no filtering of any sort,
@@ -276,7 +277,7 @@ class Reader:
         """
         self._append("right", reader)
 
-    def append_left(self, reader: "Reader") -> None:
+    def append_left(self, reader: "pylangacq.Reader") -> None:
         """Left-append data from another reader.
 
         New data is appended as-is with no filtering of any sort,
@@ -289,7 +290,7 @@ class Reader:
         """
         self._append("left", reader)
 
-    def _extend(self, left_or_right, readers: "Iterable[Reader]") -> None:
+    def _extend(self, left_or_right, readers: "Iterable[pylangacq.Reader]") -> None:
         # Loop through each object in ``readers`` explicitly, so that we have
         # a chance to check that the object is indeed a Reader instance.
         new_files = []
@@ -300,7 +301,7 @@ class Reader:
         func = "extendleft" if left_or_right == "left" else "extend"
         getattr(self._files, func)(new_files)
 
-    def extend(self, readers: "Iterable[Reader]") -> None:
+    def extend(self, readers: "Iterable[pylangacq.Reader]") -> None:
         """Extend data from other readers.
 
         New data is appended as-is with no filtering of any sort,
@@ -315,7 +316,7 @@ class Reader:
         # a chance to check that the object is indeed a Reader instance.
         self._extend("right", readers)
 
-    def extend_left(self, readers: "Iterable[Reader]") -> None:
+    def extend_left(self, readers: "Iterable[pylangacq.Reader]") -> None:
         """Left-extend data from other readers.
 
         New data is appended as-is with no filtering of any sort,
@@ -328,12 +329,12 @@ class Reader:
         """
         self._extend("left", readers)
 
-    def _pop(self, left_or_right) -> "Reader":
+    def _pop(self, left_or_right) -> "pylangacq.Reader":
         func = "popleft" if left_or_right == "left" else "pop"
         file_ = getattr(self._files, func)()
         return self._get_reader_from_files([file_])
 
-    def pop(self) -> "Reader":
+    def pop(self) -> "pylangacq.Reader":
         """Drop the last data file from the reader and return it as a reader.
 
         Returns
@@ -342,7 +343,7 @@ class Reader:
         """
         return self._pop("right")
 
-    def pop_left(self) -> "Reader":
+    def pop_left(self) -> "pylangacq.Reader":
         """Drop the first data file from the reader and return it as a reader.
 
         Returns
@@ -352,7 +353,7 @@ class Reader:
         return self._pop("left")
 
     @_params_in_docstring("match", "exclude")
-    def filter(self, match: str = None, exclude: str = None) -> "Reader":
+    def filter(self, match: str = None, exclude: str = None) -> "pylangacq.Reader":
         """Return a new reader filtered by file paths.
 
         Parameters
@@ -892,7 +893,7 @@ class Reader:
     @_params_in_docstring("parallel")
     def from_strs(
         cls, strs: List[str], ids: List[str] = None, parallel: bool = True
-    ) -> "Reader":
+    ) -> "pylangacq.Reader":
         """Instantiate a reader from in-memory CHAT data strings.
 
         Parameters
@@ -931,7 +932,7 @@ class Reader:
         exclude: str = None,
         encoding: str = _ENCODING,
         parallel: bool = True,
-    ) -> "Reader":
+    ) -> "pylangacq.Reader":
         """Instantiate a reader from local CHAT data files.
 
         Parameters
@@ -983,7 +984,7 @@ class Reader:
         extension: str = _CHAT_EXTENSION,
         encoding: str = _ENCODING,
         parallel: bool = True,
-    ) -> "Reader":
+    ) -> "pylangacq.Reader":
         """Instantiate a reader from a local directory with CHAT data files.
 
         Parameters
@@ -1027,7 +1028,7 @@ class Reader:
         allow_remote: bool = True,
         encoding: str = _ENCODING,
         parallel: bool = True,
-    ) -> "Reader":
+    ) -> "pylangacq.Reader":
         """Instantiate a reader from a local or remote ZIP file.
 
         Parameters
@@ -1372,7 +1373,7 @@ def read_chat(
     exclude: str = None,
     encoding: str = _ENCODING,
     cls: type = Reader,
-) -> Reader:
+) -> "pylangacq.Reader":
     """Create a reader of CHAT data.
 
     Parameters

@@ -351,6 +351,32 @@ class Reader:
         """
         return self._pop("left")
 
+    @_params_in_docstring("match", "exclude")
+    def filter(self, match: str = None, exclude: str = None) -> "Reader":
+        """Return a new reader filtered by file paths.
+
+        Parameters
+        ----------
+
+
+        Returns
+        -------
+        :class:`pylangacq.Reader`
+
+        Raises
+        ------
+        TypeError
+            If neither ``match`` nor ``exclude`` is specified.
+        """
+        if not match and not exclude:
+            raise TypeError("At least one of {match, exclude} must be specified")
+        reader = self.__class__()
+        file_paths = set(self._filter_file_paths(self.file_paths(), match, exclude))
+        reader._files = collections.deque(
+            f for f in self._files if f.file_path in file_paths
+        )
+        return reader
+
     @staticmethod
     def _flatten(item_type, nested) -> Union[List, Set]:
         if item_type == list:
@@ -924,15 +950,7 @@ class Reader:
             with open(path, encoding=encoding) as f:
                 return f.read()
 
-        paths = list(paths)
-
-        if match:
-            regex = re.compile(match)
-            paths = [p for p in paths if regex.search(p)]
-
-        if exclude:
-            regex = re.compile(exclude)
-            paths = [p for p in paths if not regex.search(p)]
+        paths = cls._filter_file_paths(paths, match, exclude)
 
         if parallel:
             with cf.ThreadPoolExecutor() as executor:
@@ -941,6 +959,19 @@ class Reader:
             strs = [_open_file(p) for p in paths]
 
         return cls.from_strs(strs, paths, parallel=parallel)
+
+    @staticmethod
+    def _filter_file_paths(
+        paths: List[str], match: str = None, exclude: str = None
+    ) -> List[str]:
+        paths = list(paths)
+        if match:
+            regex = re.compile(match)
+            paths = [p for p in paths if regex.search(p)]
+        if exclude:
+            regex = re.compile(exclude)
+            paths = [p for p in paths if not regex.search(p)]
+        return paths
 
     @classmethod
     @_params_in_docstring("match", "exclude", "extension", "encoding", "parallel")

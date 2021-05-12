@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added the `parallel` optional argument to the `Reader` methods
   `{from_zip, from_dir, from_files, from_strs}`
   so that parallelization can be turned off if desired.
+* Added the `filter` method to `Reader` for filtering data by file paths.
 
 ### Changed
 ### Deprecated

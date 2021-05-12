@@ -41,6 +41,11 @@ class BaseTestCHATReader:
     def eve_remote(self):
         return self.reader_class.from_files([REMOTE_EVE_FILE_PATH])
 
+    @property
+    @functools.lru_cache(maxsize=1)
+    def brown_remote_url(self):
+        return self.reader_class.from_zip(REMOTE_BROWN_URL)
+
     def test_from_strs_same_as_from_files(self):
         with open(LOCAL_EVE_PATH, encoding="utf-8") as f:
             from_strs = self.reader_class.from_strs([f.read()])
@@ -53,10 +58,9 @@ class BaseTestCHATReader:
         sarah_path = "Brown/Sarah/020305.cha"
         eve_path = "Brown/Eve/010600a.cha"
 
-        r = self.reader_class.from_zip(REMOTE_BROWN_URL)
-        assert r.n_files() == 214
-        assert sarah_path in r.file_paths()
-        assert eve_path in r.file_paths()
+        assert self.brown_remote_url.n_files() == 214
+        assert sarah_path in self.brown_remote_url.file_paths()
+        assert eve_path in self.brown_remote_url.file_paths()
 
         r = self.reader_class.from_zip(REMOTE_BROWN_URL, "Eve")
         assert r.n_files() == 20
@@ -106,6 +110,27 @@ class BaseTestCHATReader:
         eve_first = eve.pop_left()
         assert eve_first.file_paths() == [eve_path_first]
         assert eve.file_paths()[0] != eve_path_first
+
+    def test_filter(self):
+        # Just two paths for each child in the American English Brown corpus.
+        eve_paths = {"Brown/Eve/010600a.cha", "Brown/Eve/010600b.cha"}
+        sarah_paths = {"Brown/Sarah/020305.cha", "Brown/Sarah/020307.cha"}
+        adam_paths = {"Brown/Adam/020304.cha", "Brown/Adam/020318.cha"}
+
+        brown = copy.deepcopy(self.brown_remote_url)
+        assert eve_paths.issubset(set(brown.file_paths()))
+        assert sarah_paths.issubset(set(brown.file_paths()))
+        assert adam_paths.issubset(set(brown.file_paths()))
+
+        no_eve = brown.filter(exclude="Eve")
+        assert not eve_paths.issubset(set(no_eve.file_paths()))
+        assert sarah_paths.issubset(set(no_eve.file_paths()))
+        assert adam_paths.issubset(set(no_eve.file_paths()))
+
+        sarah = no_eve.filter(match="Sarah")
+        assert not eve_paths.issubset(set(sarah.file_paths()))
+        assert sarah_paths.issubset(set(sarah.file_paths()))
+        assert not adam_paths.issubset(set(sarah.file_paths()))
 
     def test_utterances(self):
         assert self.eve_local.utterances()[:2] == [

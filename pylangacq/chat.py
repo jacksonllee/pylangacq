@@ -127,6 +127,16 @@ def _params_in_docstring(*params, class_method=True):
             Pass in your own :class:`~pylangacq.Reader` subclass
             for new or modified behavior of the returned reader object."""
 
+    if "parallel" in params:
+        docstring += """
+        parallel : bool, optional
+            If ``True`` (the default), CHAT reading and parsing is parallelized
+            for speed-up, because in most cases multiple CHAT data files and/or strings
+            are being handled.
+            Under certain circumstances (e.g., your application is already parallelized
+            and further parallelization from within PyLangAcq might be undesirable),
+            you may like to consider setting this parameter to ``False``."""
+
     if not class_method:
         docstring = docstring.replace("\n        ", "\n    ")
 
@@ -193,10 +203,17 @@ class Reader:
         """Initialize an empty reader."""
         self._files = collections.deque()
 
-    def _parse_chat_strs(self, strs: List[str], file_paths: List[str]) -> None:
-        with cf.ProcessPoolExecutor() as executor:
+    def _parse_chat_strs(
+        self, strs: List[str], file_paths: List[str], parallel: bool
+    ) -> None:
+        if parallel:
+            with cf.ProcessPoolExecutor() as executor:
+                self._files = collections.deque(
+                    executor.map(self._parse_chat_str, strs, file_paths)
+                )
+        else:
             self._files = collections.deque(
-                executor.map(self._parse_chat_str, strs, file_paths)
+                self._parse_chat_str(s, f) for s, f in zip(strs, file_paths)
             )
 
     def __len__(self):
@@ -846,7 +863,10 @@ class Reader:
             return self._flatten(collections.Counter, result_by_files)
 
     @classmethod
-    def from_strs(cls, strs: List[str], ids: List[str] = None) -> "Reader":
+    @_params_in_docstring("parallel")
+    def from_strs(
+        cls, strs: List[str], ids: List[str] = None, parallel: bool = True
+    ) -> "Reader":
         """Instantiate a reader from in-memory CHAT data strings.
 
         Parameters
@@ -873,17 +893,18 @@ class Reader:
                 f"strs and ids must have the same size: {len(strs)} and {len(ids)}"
             )
         reader = cls()
-        reader._parse_chat_strs(strs, ids)
+        reader._parse_chat_strs(strs, ids, parallel)
         return reader
 
     @classmethod
-    @_params_in_docstring("match", "exclude", "encoding")
+    @_params_in_docstring("match", "exclude", "encoding", "parallel")
     def from_files(
         cls,
         paths: List[str],
         match: str = None,
         exclude: str = None,
         encoding: str = _ENCODING,
+        parallel: bool = True,
     ) -> "Reader":
         """Instantiate a reader from local CHAT data files.
 
@@ -913,13 +934,16 @@ class Reader:
             regex = re.compile(exclude)
             paths = [p for p in paths if not regex.search(p)]
 
-        with cf.ThreadPoolExecutor() as executor:
-            strs = list(executor.map(_open_file, paths))
+        if parallel:
+            with cf.ThreadPoolExecutor() as executor:
+                strs = list(executor.map(_open_file, paths))
+        else:
+            strs = [_open_file(p) for p in paths]
 
-        return cls.from_strs(strs, paths)
+        return cls.from_strs(strs, paths, parallel=parallel)
 
     @classmethod
-    @_params_in_docstring("match", "exclude", "extension", "encoding")
+    @_params_in_docstring("match", "exclude", "extension", "encoding", "parallel")
     def from_dir(
         cls,
         path: str,
@@ -927,6 +951,7 @@ class Reader:
         exclude: str = None,
         extension: str = _CHAT_EXTENSION,
         encoding: str = _ENCODING,
+        parallel: bool = True,
     ) -> "Reader":
         """Instantiate a reader from a local directory with CHAT data files.
 
@@ -951,11 +976,17 @@ class Reader:
                     continue
                 file_paths.append(os.path.join(dirpath, filename))
         return cls.from_files(
-            sorted(file_paths), match=match, exclude=exclude, encoding=encoding
+            sorted(file_paths),
+            match=match,
+            exclude=exclude,
+            encoding=encoding,
+            parallel=parallel,
         )
 
     @classmethod
-    @_params_in_docstring("match", "exclude", "extension", "allow_remote", "encoding")
+    @_params_in_docstring(
+        "match", "exclude", "extension", "allow_remote", "encoding", "parallel"
+    )
     def from_zip(
         cls,
         path: str,
@@ -964,6 +995,7 @@ class Reader:
         extension: str = _CHAT_EXTENSION,
         allow_remote: bool = True,
         encoding: str = _ENCODING,
+        parallel: bool = True,
     ) -> "Reader":
         """Instantiate a reader from a local or remote ZIP file.
 
@@ -1002,6 +1034,7 @@ class Reader:
                 exclude=exclude,
                 extension=extension,
                 encoding=encoding,
+                parallel=parallel,
             )
 
         # Unzipped files from `.from_zip` have the unwieldy temp dir in the file path.

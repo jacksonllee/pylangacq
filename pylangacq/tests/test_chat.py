@@ -367,6 +367,14 @@ class BaseTestCHATReader:
             ("the", 132),
         ]
 
+    def test_file_from_empty_string(self):
+        # pytest.mark.parameterize didn't work for a class method?
+        for empty_input in ("", None):
+            reader = self.reader_class.from_strs([empty_input])
+            file_ = reader._files[0]
+            assert file_.header == {}
+            assert file_.utterances == []
+
 
 class TestPylangacqReader(BaseTestCHATReader, unittest.TestCase):
     """Run the reader tests using ``pylangacq.Reader``."""

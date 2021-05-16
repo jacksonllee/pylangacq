@@ -586,7 +586,7 @@ class Reader:
         Set[datetime.date] if ``by_files`` is ``False``,
         otherwise List[Set[datetime.date]]]
         """
-        result_by_files = [f.header["Date"] for f in self._files]
+        result_by_files = [f.header.get("Date", set()) for f in self._files]
         if by_files:
             return result_by_files
         else:
@@ -1331,7 +1331,7 @@ class Reader:
             else:
                 headname_to_entry[head] = line
 
-        return headname_to_entry
+        return headname_to_entry if any(headname_to_entry.values()) else {}
 
     @staticmethod
     def _header_line_to_date(line: str) -> datetime.date:
@@ -1340,6 +1340,9 @@ class Reader:
     @staticmethod
     def _get_lines(raw_str: str) -> List[str]:
         lines: List[str] = []
+
+        if not raw_str:
+            return lines
 
         previous_line = ""
 

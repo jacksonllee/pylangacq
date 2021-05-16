@@ -12,10 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 ### Removed
 ### Fixed
+### Security
+
+## [0.14.1] - 2021-05-16
+
+### Fixed
 - The header/metadata has a more reasonable representation for emptiness
   when input data is empty.
-
-### Security
 
 ## [0.14.0] - 2021-05-12
 

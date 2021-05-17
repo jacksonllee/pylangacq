@@ -372,8 +372,15 @@ class BaseTestCHATReader:
         for empty_input in ("", None):
             reader = self.reader_class.from_strs([empty_input])
             file_ = reader._files[0]
+
             assert file_.header == {}
             assert file_.utterances == []
+
+            assert reader.headers() == [{}]
+            assert reader.ages() == [None]
+            assert reader.dates_of_recording() == set()
+            assert reader.languages() == set()
+            assert reader.participants() == set()
 
 
 class TestPylangacqReader(BaseTestCHATReader, unittest.TestCase):

@@ -1031,6 +1031,12 @@ class Reader:
     ) -> "pylangacq.Reader":
         """Instantiate a reader from a local or remote ZIP file.
 
+        If the input data is a remote ZIP file and you expect to call this method
+        with the same path multiple times, consider downloading the data to the local
+        system and then reading it from there to avoid unnecessary re-downloading.
+        Caching a remote ZIP file isn't implemented (yet) as the upstream CHILDES /
+        TalkBank data is updated in minor ways from time to time.
+
         Parameters
         ----------
         path : str
@@ -1378,6 +1384,12 @@ def read_chat(
     cls: type = Reader,
 ) -> "pylangacq.Reader":
     """Create a reader of CHAT data.
+
+    If ``path`` is a remote ZIP file and you expect to call this function
+    with the same path multiple times, consider downloading the data to the local
+    system and then reading it from there to avoid unnecessary re-downloading.
+    Caching a remote ZIP file isn't implemented (yet) as the upstream CHILDES /
+    TalkBank data is updated in minor ways from time to time.
 
     Parameters
     ----------

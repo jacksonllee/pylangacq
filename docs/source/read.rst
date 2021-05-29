@@ -154,6 +154,14 @@ Here's sample code for using these classmethods in the base case:
 
     .. skip: end
 
+If you pass in a remote URL of a ZIP archive (``"https://.../some_data.zip"``) to
+:func:`~pylangacq.Reader.from_zip`,
+the downloaded data is cached on disk by default, so that the same data won't have
+to be downloaded again for the same URL.
+Setting the boolean keyword argument ``use_cached`` to ``False`` would force re-downloading.
+The helper functions :func:`pylangacq.chat.cached_data_info` and
+:func:`pylangacq.chat.remove_cached_data` let you check and remove cached data, respectively.
+
 
 From Specific CHAT Data Files
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

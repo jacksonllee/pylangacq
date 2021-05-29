@@ -7,6 +7,7 @@ import dataclasses
 import datetime
 import functools
 import itertools
+import json
 import os
 import re
 import shutil
@@ -33,6 +34,9 @@ _ENCODING = "utf-8"
 _CHAT_EXTENSION = ".cha"
 
 _TIMER_MARKS_REGEX = re.compile(r"\x15-?(\d+)_(\d+)-?\x15")
+
+_CACHED_DATA_DIR = os.path.join(os.path.expanduser("~"), ".pylangacq")
+_CACHED_DATA_JSON_PATH = os.path.join(_CACHED_DATA_DIR, "cached_data.json")
 
 
 def _params_in_docstring(*params, class_method=True):
@@ -101,12 +105,6 @@ def _params_in_docstring(*params, class_method=True):
             If provided, the file paths that match this string (by regular expression
             matching) are excluded for reading and parsing."""
 
-    if "allow_remote" in params:
-        docstring += """
-        allow_remote : bool, optional
-            If ``True`` (the default), and if the data source looks like a URL,
-            downloading the data from the internet will be attempted."""
-
     if "encoding" in params:
         docstring += """
         encoding : str, optional
@@ -137,6 +135,29 @@ def _params_in_docstring(*params, class_method=True):
             Under certain circumstances (e.g., your application is already parallelized
             and further parallelization from within PyLangAcq might be undesirable),
             you may like to consider setting this parameter to ``False``."""
+
+    if "use_cached" in params:
+        docstring += """
+        use_cached : bool, optional
+            If ``True`` (the default), and if the path is a URL for a remote ZIP
+            archive, then CHAT reading attempts to use the previously downloaded
+            data cached on disk. This setting allows you to call
+            this function with the same URL repeatedly without hitting the CHILDES /
+            TalkBank server more than once for the same data.
+            Pass in ``False`` to force a new download; the upstream CHILDES / TalkBank
+            data is updated in minor ways from time to time, e.g., for CHAT format,
+            header/metadata information, updated annotations.
+            See also the helper functions: :func:`pylangacq.chat.cached_data_info`,
+            :func:`pylangacq.chat.remove_cached_data`."""
+
+    if "session" in params:
+        docstring += """
+        session : requests.Session, optional
+            If the path is a URL for a remote ZIP archive, data downloading is
+            done with reasonable settings of retries and timeout by default,
+            in order to be robust against intermittent network issues.
+            If necessary, pass in your own instance of :class:`requests.Session`
+            to customize."""
 
     if not class_method:
         docstring = docstring.replace("\n        ", "\n    ")
@@ -1017,7 +1038,13 @@ class Reader:
 
     @classmethod
     @_params_in_docstring(
-        "match", "exclude", "extension", "allow_remote", "encoding", "parallel"
+        "match",
+        "exclude",
+        "extension",
+        "encoding",
+        "parallel",
+        "use_cached",
+        "session",
     )
     def from_zip(
         cls,
@@ -1025,9 +1052,10 @@ class Reader:
         match: str = None,
         exclude: str = None,
         extension: str = _CHAT_EXTENSION,
-        allow_remote: bool = True,
         encoding: str = _ENCODING,
         parallel: bool = True,
+        use_cached: bool = True,
+        session: requests.Session = None,
     ) -> "pylangacq.Reader":
         """Instantiate a reader from a local or remote ZIP file.
 
@@ -1053,21 +1081,26 @@ class Reader:
         with contextlib.ExitStack() as stack:
             temp_dir = stack.enter_context(tempfile.TemporaryDirectory())
             is_url = path.startswith("https://") or path.startswith("http://")
+            unzip_dir = cls._retrieve_unzip_dir(path) if is_url else None
 
-            if allow_remote and is_url:
+            if is_url and (not use_cached or not unzip_dir):
+                if unzip_dir:
+                    remove_cached_data(path)
                 zip_path = os.path.join(temp_dir, os.path.basename(path))
-                _download_file(path, zip_path)
+                _download_file(path, zip_path, session)
+                unzip_dir = cls._create_unzip_dir(path)
+            elif is_url and unzip_dir:
+                zip_path = None
             else:
                 zip_path = path
+                unzip_dir = temp_dir
 
-            zfile = stack.enter_context(zipfile.ZipFile(zip_path))
-            zfile.extractall(temp_dir)
-
-            if allow_remote and is_url:
-                os.remove(zip_path)
+            if zip_path:
+                zfile = stack.enter_context(zipfile.ZipFile(zip_path))
+                zfile.extractall(unzip_dir)
 
             reader = cls.from_dir(
-                temp_dir,
+                unzip_dir,
                 match=match,
                 exclude=exclude,
                 extension=extension,
@@ -1077,9 +1110,40 @@ class Reader:
 
         # Unzipped files from `.from_zip` have the unwieldy temp dir in the file path.
         for f in reader._files:
-            f.file_path = f.file_path.replace(temp_dir, "").lstrip(os.sep)
+            f.file_path = f.file_path.replace(unzip_dir, "").lstrip(os.sep)
 
         return reader
+
+    @staticmethod
+    def _retrieve_unzip_dir(url: str) -> Union[str, None]:
+        try:
+            existing_records = json.load(open(_CACHED_DATA_JSON_PATH))
+        except FileNotFoundError:
+            return None
+        subdir = existing_records.get(url, {}).get("subdir")
+        if subdir is None:
+            return None
+        else:
+            return os.path.join(_CACHED_DATA_DIR, subdir)
+
+    @staticmethod
+    def _create_unzip_dir(url: str) -> str:
+        if not os.path.isdir(_CACHED_DATA_DIR):
+            _initialize_cached_data_dir()
+
+        subdir = str(uuid.uuid4())
+        unzip_dir = os.path.join(_CACHED_DATA_DIR, subdir)
+        os.makedirs(unzip_dir)
+
+        new_record = {
+            "subdir": subdir,
+            "url": url,
+            "cached_at": datetime.datetime.now().isoformat(),
+        }
+        existing_records = json.load(open(_CACHED_DATA_JSON_PATH))
+        _write_cached_data_json({**existing_records, **{url: new_record}})
+
+        return unzip_dir
 
     def _parse_chat_str(self, chat_str, file_path) -> _File:
         lines = self._get_lines(chat_str)
@@ -1375,6 +1439,68 @@ class Reader:
         return lines
 
 
+def _initialize_cached_data_dir() -> None:
+    if os.path.isdir(_CACHED_DATA_DIR):
+        shutil.rmtree(_CACHED_DATA_DIR)
+    os.makedirs(_CACHED_DATA_DIR)
+    with open(os.path.join(_CACHED_DATA_DIR, "README.txt"), "w") as f:
+        f.write(
+            "The contents of this directory are automatically managed by "
+            "the PyLangAcq library. Please do not edit anything on your own.\n"
+        )
+    with open(_CACHED_DATA_JSON_PATH, "w") as f:
+        f.write("{}")
+
+
+def _write_cached_data_json(records: Dict) -> None:
+    with open(_CACHED_DATA_JSON_PATH, "w") as f:
+        json.dump(records, f, indent=4)
+
+
+def cached_data_info() -> Set[str]:
+    """Return the information of the cached datasets.
+
+    Returns
+    -------
+    Set[str]
+        A set of the URLs for the cached CHILDES / TalkBank datasets.
+    """
+    try:
+        existing_records = json.load(open(_CACHED_DATA_JSON_PATH))
+    except FileNotFoundError:
+        return set()
+    else:
+        return set(existing_records.keys())
+
+
+def remove_cached_data(url: str = None) -> None:
+    """Remove data cached on disk.
+
+    Parameters
+    ----------
+    url : str, optional
+        If provided, remove only the data specified by this URL. If not provided,
+        all cached data is removed.
+    """
+    try:
+        existing_records = json.load(open(_CACHED_DATA_JSON_PATH))
+    except FileNotFoundError:
+        _initialize_cached_data_dir()
+        return
+    if url is None:
+        for subdir in [record["subdir"] for record in existing_records.values()]:
+            shutil.rmtree(os.path.join(_CACHED_DATA_DIR, subdir))
+        _initialize_cached_data_dir()
+    else:
+        subdir = existing_records.get(url, {}).get("subdir")
+        if subdir:
+            del existing_records[url]
+            _write_cached_data_json(existing_records)
+            shutil.rmtree(os.path.join(_CACHED_DATA_DIR, subdir))
+        else:
+            raise KeyError(f"url not found among the cached data: {url}")
+
+
 @_params_in_docstring("match", "exclude", "encoding", "cls", class_method=False)
 def read_chat(
     path: str,
@@ -1478,8 +1604,10 @@ class _HTTPSession(requests.Session):
         return super(_HTTPSession, self).request(*args, **kwargs)
 
 
-def _download_file(url, path):
+def _download_file(url, path, session=None):
+    if session is None:
+        session = _HTTPSession()
     with contextlib.ExitStack() as stack:
         f = stack.enter_context(open(path, "wb"))
-        r = stack.enter_context(_HTTPSession().get(url, stream=True))
+        r = stack.enter_context(session.get(url, stream=True))
         shutil.copyfileobj(r.raw, f)

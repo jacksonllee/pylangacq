@@ -3,10 +3,11 @@ import datetime
 import filecmp
 import functools
 import unittest
+from unittest import mock
 
 import pytest
 
-from pylangacq.chat import _clean_word, Reader
+from pylangacq.chat import _clean_word, Reader, cached_data_info, remove_cached_data
 from pylangacq.objects import Gra, Utterance, Token
 from pylangacq.tests.test_data import (
     LOCAL_EVE_PATH,
@@ -46,6 +47,30 @@ class BaseTestCHATReader:
     def brown_remote_url(self):
         return self.reader_class.from_zip(REMOTE_BROWN_URL)
 
+    def test_access_and_remove_cached_data(self):
+        remove_cached_data()
+        assert len(cached_data_info()) == 0
+        self.reader_class.from_zip(REMOTE_BROWN_URL)
+        assert len(cached_data_info()) == 1
+        remove_cached_data()
+        assert len(cached_data_info()) == 0
+
+    def test_use_cached(self):
+        remove_cached_data()
+        self.reader_class.from_zip(REMOTE_BROWN_URL)
+
+        mock_session = mock.Mock()
+        self.reader_class.from_zip(REMOTE_BROWN_URL, session=mock_session)
+        mock_session.get.assert_not_called()
+
+        mock_session = mock.MagicMock()  # MagicMock for __enter__, etc.
+        with pytest.raises(TypeError):
+            # Swallow TypeError coming from mock_session's response object.
+            self.reader_class.from_zip(
+                REMOTE_BROWN_URL, use_cached=False, session=mock_session
+            )
+        mock_session.get.assert_called_once()
+
     def test_from_strs_same_as_from_files(self):
         with open(LOCAL_EVE_PATH, encoding="utf-8") as f:
             from_strs = self.reader_class.from_strs([f.read()])
@@ -58,9 +83,10 @@ class BaseTestCHATReader:
         sarah_path = "Brown/Sarah/020305.cha"
         eve_path = "Brown/Eve/010600a.cha"
 
-        assert self.brown_remote_url.n_files() == 214
-        assert sarah_path in self.brown_remote_url.file_paths()
-        assert eve_path in self.brown_remote_url.file_paths()
+        brown = self.brown_remote_url
+        assert brown.n_files() == 214
+        assert sarah_path in brown.file_paths()
+        assert eve_path in brown.file_paths()
 
         r = self.reader_class.from_zip(REMOTE_BROWN_URL, "Eve")
         assert r.n_files() == 20

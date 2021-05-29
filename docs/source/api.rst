@@ -36,3 +36,11 @@ API Reference
 -------------------------------------
 
 .. autoclass:: pylangacq.objects.Utterance
+
+
+Helper Functions
+----------------
+
+.. autofunction:: pylangacq.chat.cached_data_info
+
+.. autofunction:: pylangacq.chat.remove_cached_data

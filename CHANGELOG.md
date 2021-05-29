@@ -8,9 +8,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+* `Reader.from_zip` (also `read_chat`) now keeps the downloaded ZIP archive
+  in a non-temporary directory for possible re-use.
+  - Added the kwarg `use_cached` in `Reader.from_zip`, so that we use the cached data
+    by default for the same input URL, and that we can force re-downloading by
+    setting `use_cached` to `False`.
+  - Added the kwarg `session` in `Reader.from_zip`, in case using a customized
+    `requests.Session` instance is desired. `session` also makes it possible to
+    write tests for the new kwarg `use_cached`.
+  - Added the helper functions `cached_data_info` and `remove_cached_data`.
+
 ### Changed
 ### Deprecated
 ### Removed
+* Dropped kwarg `allow_remote` in `Reader.from_zip`. This kwarg wouldn't make any sense
+  anymore, or at least would be confusing with the introduction of `use_cached`.
+
 ### Fixed
 ### Security
 

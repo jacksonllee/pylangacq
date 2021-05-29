@@ -333,4 +333,5 @@ texinfo_documents = [
 intersphinx_mapping = {
     "python": ('https://docs.python.org/3/', None),
     "pycantonese": ('https://pycantonese.org', None),
+    "requests": ("https://docs.python-requests.org/en/master/", None),
 }

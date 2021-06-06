@@ -15,7 +15,7 @@ import tempfile
 import uuid
 import warnings
 import zipfile
-from typing import Dict, Iterable, List, Optional, Set, Tuple, Union
+from typing import Dict, Generator, Iterable, List, Optional, Set, Tuple, Union
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -1145,6 +1145,148 @@ class Reader:
 
         return unzip_dir
 
+    @staticmethod
+    def _sort_keys(keys, *, first=None, drop=None) -> List[str]:
+        sorted_keys = []
+        first = first or []
+        drop = set(drop or [])  # ordering doesn't matter
+        for key in first:
+            if key in keys:
+                sorted_keys.append(key)
+        for key in keys:
+            if not (key in sorted_keys or key in drop):
+                sorted_keys.append(key)
+        return sorted_keys
+
+    def to_strs(self) -> Generator[str, None, None]:
+        """Yield CHAT data strings.
+
+        .. note::
+            The header information may not be completely reproduced in the output
+            CHAT strings. Known issues all have to do with a header field used
+            multiple times in the original CHAT data.
+            For ``Date``, only the first date of recording is retained in the output
+            string.
+            For all other multiply used header fields
+            (e.g., ``Tape Location``, ``Time Duration``),
+            only the last value in a given CHAT file is retained.
+            Note that ``ID`` for participant information is not affected.
+
+        Yields
+        ------
+        str
+            CHAT data string for one file.
+        """
+        header_first = (
+            "UTF8",
+            "PID",
+            "Languages",
+            "Participants",
+            "Date",
+            "Types",
+        )
+
+        for f in self._files:
+            str_for_file = ""
+
+            header_keys = self._sort_keys(f.header.keys(), first=header_first)
+
+            for key in header_keys:
+                if key == "Languages":
+                    str_for_file += (
+                        f"@Languages:\t{' , '.join(f.header['Languages'])}\n"
+                    )
+                elif key == "Participants":
+                    participants = f.header["Participants"]
+
+                    parts = []
+                    for code, demographics in participants.items():
+                        parts.append(
+                            f"{code} {demographics['name']} {demographics['role']}"
+                        )
+                    str_for_file += f"@Participants:\t{' , '.join(parts)}\n"
+
+                    for code, d in participants.items():
+                        # d = demographics
+                        id_line = (
+                            f"{d['language']}|"
+                            f"{d['corpus']}|"
+                            f"{code}|"
+                            f"{d['age']}|"
+                            f"{d['sex']}|"
+                            f"{d['group']}|"
+                            f"{d['ses']}|"
+                            f"{d['role']}|"
+                            f"{d['education']}|"
+                            f"{d['custom']}|"
+                        )
+                        str_for_file += f"@ID:\t{id_line}\n"
+
+                elif key == "Date":
+                    # TODO: A CHAT file may have more than one recording date.
+                    try:
+                        date = sorted(f.header["Date"])[0]
+                    except IndexError:
+                        continue
+                    str_for_file += f"@Date:\t{date.strftime('%d-%b-%Y').upper()}\n"
+
+                elif f.header[key]:
+                    str_for_file += f"@{key}:\t{f.header[key]}\n"
+
+                else:
+                    str_for_file += f"@{key}\n"
+
+            for u in f.utterances:
+                str_for_file += f"*{u.participant}:\t{u.tiers[u.participant]}\n"
+                keys = self._sort_keys(
+                    u.tiers.keys(), first=["%mor", "%gra"], drop={u.participant}
+                )
+                for key in keys:
+                    line = u.tiers.get(key)
+                    if line is None:
+                        continue
+                    str_for_file += f"{key}:\t{line}\n"
+
+            yield str_for_file
+
+    def to_chat(
+        self, path: str, filenames: Iterable[str] = None, mode: int = 0o777
+    ) -> None:
+        """Export to CHAT data files.
+
+        Parameters
+        ----------
+        path : str
+            A directory to write the CHAT files in. If the directory doesn't already
+            exist, it will be created.
+        filenames : Iterable[str], optional
+            Filenames of the CHAT files. If ``None`` or not given,
+            {0001.cha, 0002.cha, ...} are used.
+        mode : int, optional
+            Set permissions for the new directory. This is the same ``mode`` keyword
+            argument for :func:`~os.makedirs`.
+            The default is ``0o777`` (= ``511`` in decimal).
+
+        Raises
+        ------
+        ValueError
+            If explicit filenames are given but the number of them doesn't match
+            the number of CHAT files in this reader object.
+        """
+        if filenames is None:
+            filenames = [f"{str(i + 1).zfill(4)}.cha" for i in range(len(self._files))]
+        else:
+            filenames = list(filenames)
+        if len(filenames) != len(self._files):
+            raise ValueError(
+                f"There are {len(self._files)} CHAT files to create, "
+                f"but you've provide {len(filenames)} filenames."
+            )
+        os.makedirs(path, mode=mode, exist_ok=True)
+        for filename, lines in zip(filenames, self.to_strs()):
+            with open(os.path.join(path, filename), "w") as f:
+                f.write(lines)
+
     def _parse_chat_str(self, chat_str, file_path) -> _File:
         lines = self._get_lines(chat_str)
         header = self._get_header(lines)
@@ -1316,7 +1458,7 @@ class Reader:
         return index_to_tiers.values()
 
     def _get_header(self, lines: List[str]) -> Dict:
-        headname_to_entry = {"Date": set(), "Participants": {}}
+        headname_to_entry = {}
 
         for line in lines:
 
@@ -1345,6 +1487,8 @@ class Reader:
                         participant_role,
                     ) = participant_label.partition(" ")
                     # code = participant code, e.g. CHI, MOT
+                    if "Participants" not in headname_to_entry:
+                        headname_to_entry["Participants"] = {}
                     headname_to_entry["Participants"][code] = {"name": participant_name}
 
             elif head == "ID":
@@ -1370,6 +1514,11 @@ class Reader:
                 ]
                 head_to_info = dict(zip(participant_info_heads, participant_info))
 
+                if "Participants" not in headname_to_entry:
+                    headname_to_entry["Participants"] = {}
+                if code not in headname_to_entry["Participants"]:
+                    headname_to_entry["Participants"][code] = {}
+
                 headname_to_entry["Participants"][code].update(head_to_info)
 
             elif head == "Date":
@@ -1377,6 +1526,8 @@ class Reader:
                     date = self._header_line_to_date(line.strip())
                 except (TypeError, ValueError, ParserError):
                     continue
+                if "Date" not in headname_to_entry:
+                    headname_to_entry["Date"] = set()
                 headname_to_entry["Date"].add(date)
 
             elif head.startswith("Birth of"):

@@ -30,6 +30,7 @@ Table of Contents
    read
    headers
    transcriptions
+   write
    frequencies
    measures
    api

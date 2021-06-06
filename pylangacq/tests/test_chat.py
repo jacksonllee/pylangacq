@@ -2,6 +2,8 @@ import copy
 import datetime
 import filecmp
 import functools
+import os
+import tempfile
 import unittest
 from unittest import mock
 
@@ -96,6 +98,39 @@ class BaseTestCHATReader:
     def test_from_dir(self):
         r = self.reader_class.from_dir(REMOTE_EVE_DIR)
         assert r.n_files() == 20
+
+    def test_to_strs(self):
+        expected = (
+            "@Languages:\teng , yue\n"
+            "@Participants:\tFOO Foo P1 , BAR Bar P2\n"
+            "@ID:\teng|Foobar|FOO||female|||P1|||\n"
+            "@ID:\teng|Foobar|BAR||male|||P2|||\n"
+            "@Date:\t03-NOV-2016\n"
+            "@Comment:\tThis is a comment.\n"
+            "*FOO:\thow are you ?\n"
+            "*BAR:\tfine , thank you ."
+        )
+        reader = self.reader_class.from_strs([expected])
+        actual = list(reader.to_strs())[0]
+        assert actual.strip() == expected.strip()
+
+    def test_to_chat(self):
+        expected = (
+            "@Languages:\teng , yue\n"
+            "@Participants:\tFOO Foo P1 , BAR Bar P2\n"
+            "@ID:\teng|Foobar|FOO||female|||P1|||\n"
+            "@ID:\teng|Foobar|BAR||male|||P2|||\n"
+            "@Date:\t03-NOV-2016\n"
+            "@Comment:\tThis is a comment.\n"
+            "*FOO:\thow are you ?\n"
+            "*BAR:\tfine , thank you ."
+        )
+        reader = self.reader_class.from_strs([expected])
+        with tempfile.TemporaryDirectory() as temp_dir:
+            reader.to_chat(temp_dir)
+            assert os.listdir(temp_dir) == ["0001.cha"]
+            with open(os.path.join(temp_dir, "0001.cha")) as f:
+                assert f.read().strip() == expected
 
     def test_clear(self):
         eve_copy = copy.deepcopy(self.eve_local)

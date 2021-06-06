@@ -38,6 +38,10 @@ _TIMER_MARKS_REGEX = re.compile(r"\x15-?(\d+)_(\d+)-?\x15")
 _CACHED_DATA_DIR = os.path.join(os.path.expanduser("~"), ".pylangacq")
 _CACHED_DATA_JSON_PATH = os.path.join(_CACHED_DATA_DIR, "cached_data.json")
 
+_CHAT_LINE_INDICATORS = frozenset({"@", "*", "%"})
+
+_HEADER_REGEX = re.compile(r"\A@([^@:]+)(:\s+(\S[\S\s]+))?\Z")
+
 
 def _params_in_docstring(*params, class_method=True):
     docstring = ""
@@ -1462,17 +1466,16 @@ class Reader:
 
         for line in lines:
 
+            header_re_search = _HEADER_REGEX.search(line)
+            if not header_re_search:
+                continue
+
             if line.startswith("@Begin") or line.startswith("@End"):
                 continue
 
-            if not line.startswith("@"):
-                continue
-
             # find head, e.g., "Languages", "Participants", "ID" etc
-            head, _, line = line.partition("\t")
-            line = line.strip()
-            head = head.lstrip("@")  # remove beginning "@"
-            head = head.rstrip(":")  # remove ending ":", if any
+            head = header_re_search.group(1)
+            line = header_re_search.group(3)
 
             if head == "Participants":
 
@@ -1550,7 +1553,7 @@ class Reader:
                 headname_to_entry["Languages"] = languages
 
             else:
-                headname_to_entry[head] = line
+                headname_to_entry[head] = line or ""
 
         return headname_to_entry if any(headname_to_entry.values()) else {}
 
@@ -1561,31 +1564,25 @@ class Reader:
     @staticmethod
     def _get_lines(raw_str: str) -> List[str]:
         lines: List[str] = []
+        raw_str = (raw_str or "").strip()
 
         if not raw_str:
             return lines
 
-        previous_line = ""
-
         for line in raw_str.splitlines():
-            previous_line = previous_line.strip()
-            current_line = line.rstrip()  # don't remove leading \t
-
-            if not current_line:
+            line = line.strip()
+            if not line:
                 continue
 
-            if current_line.startswith("%xpho:") or current_line.startswith("%xmod:"):
-                current_line = current_line.replace("%x", "%", 1)
+            # TODO: Why did I do this?
+            if line.startswith("%xpho:") or line.startswith("%xmod:"):
+                line = line.replace("%x", "%", 1)
 
-            if previous_line and current_line.startswith("\t"):
-                previous_line = f"{previous_line} {current_line.strip()}"
-            elif previous_line:
-                lines.append(previous_line)
-                previous_line = current_line
-            else:  # when it's the very first line
-                previous_line = current_line
+            if line[0] not in _CHAT_LINE_INDICATORS:
+                previous_line = lines.pop()
+                line = f"{previous_line} {line}"
 
-        lines.append(previous_line)  # don't forget the very last line!
+            lines.append(line)
 
         return lines
 

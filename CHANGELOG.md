@@ -21,6 +21,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `Reader` has the new `to_chat` method that exports data to local files.
 
 ### Changed
+* CHAT parsing for the header information is now more robust for varying whitespace
+  characters between the head and its associated value.
+
 ### Deprecated
 ### Removed
 * Dropped kwarg `allow_remote` in `Reader.from_zip`. This kwarg wouldn't make any sense

@@ -305,6 +305,14 @@ class BaseTestCHATReader:
             }
         ]
 
+    def test_headers_more_lenient_parsing(self):
+        header1 = "@UTF8\n@Foo:\tone two\n@Foo Bar:\thello how are you"
+        header2 = "@UTF8\n@Foo: one two\n@Foo Bar: hello how are you"
+        reader1 = self.reader_class.from_strs([header1])
+        reader2 = self.reader_class.from_strs([header2])
+        expected = {"UTF8": "", "Foo": "one two", "Foo Bar": "hello how are you"}
+        assert reader1.headers()[0] == reader2.headers()[0] == expected
+
     def test_n_files(self):
         assert self.eve_local.n_files() == 1
 

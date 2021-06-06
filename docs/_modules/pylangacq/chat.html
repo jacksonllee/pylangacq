@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>pylangacq.chat &mdash; PyLangAcq 0.14.1 documentation</title>
+  <title>pylangacq.chat &mdash; PyLangAcq 0.15.0 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.14.1
+                0.15.0
               </div>
             
           
@@ -134,6 +134,7 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../write.html">Writing CHAT Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../frequencies.html">Word Frequencies and Ngrams</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../measures.html">Developmental Measures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a><ul>
@@ -142,6 +143,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../api.html#token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../api.html#gra"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gra</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../api.html#utterance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Utterance</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#helper-functions">Helper Functions</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a><ul>
@@ -154,54 +156,60 @@
 <li class="toctree-l3"><a class="reference internal" href="../../changelog.html#security">Security</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id2">[0.14.1] - 2021-05-16</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id3">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id2">[0.15.0] - 2021-06-06</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id3">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id4">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id5">Removed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id4">[0.14.0] - 2021-05-12</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id5">Added</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id6">[0.13.3] - 2021-05-07</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id6">[0.14.1] - 2021-05-16</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id7">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id8">[0.13.2] - 2021-05-02</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id9">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id8">[0.14.0] - 2021-05-12</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id9">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id10">[0.13.1] - 2021-03-23</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id10">[0.13.3] - 2021-05-07</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id11">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id12">[0.13.0] - 2021-03-15</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id13">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id14">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id15">Deprecated</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id16">Removed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id17">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id12">[0.13.2] - 2021-05-02</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id13">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id18">[0.12.0] - 2020-10-11</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id19">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id14">[0.13.1] - 2021-03-23</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id15">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id20">[0.11.0] - 2020-07-02</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id21">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id22">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id23">Removed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id16">[0.13.0] - 2021-03-15</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id17">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id18">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id19">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id20">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id21">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id24">[0.10.0] - 2017-11-02</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id25">[0.9.0] - 2017-10-25</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id26">[0.8] - 2016-01-30</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id27">[0.7] - 2016-01-06</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id28">[0.6] - 2015-12-27</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id29">[0.5] - 2015-12-16</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id30">[0.4] - 2015-12-13</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id31">[0.3] - 2015-12-09</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id32">[0.2] - 2015-12-05</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id33">[0.1] - 2015-12-04</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id22">[0.12.0] - 2020-10-11</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id23">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id24">[0.11.0] - 2020-07-02</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id25">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id26">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id27">Removed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id28">[0.10.0] - 2017-11-02</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id29">[0.9.0] - 2017-10-25</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id30">[0.8] - 2016-01-30</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id31">[0.7] - 2016-01-06</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id32">[0.6] - 2015-12-27</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id33">[0.5] - 2015-12-16</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id34">[0.4] - 2015-12-13</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id35">[0.3] - 2015-12-09</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id36">[0.2] - 2015-12-05</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id37">[0.1] - 2015-12-04</a></li>
 </ul>
 </li>
 </ul>
@@ -279,6 +287,7 @@
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
@@ -286,7 +295,7 @@
 <span class="kn">import</span> <span class="nn">uuid</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">zipfile</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Generator</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">from</span> <span class="nn">requests.adapters</span> <span class="k">import</span> <span class="n">HTTPAdapter</span>
@@ -305,6 +314,13 @@
 <span class="n">_CHAT_EXTENSION</span> <span class="o">=</span> <span class="s2">&quot;.cha&quot;</span>
 
 <span class="n">_TIMER_MARKS_REGEX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\x15-?(\d+)_(\d+)-?\x15&quot;</span><span class="p">)</span>
+
+<span class="n">_CACHED_DATA_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">),</span> <span class="s2">&quot;.pylangacq&quot;</span><span class="p">)</span>
+<span class="n">_CACHED_DATA_JSON_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_CACHED_DATA_DIR</span><span class="p">,</span> <span class="s2">&quot;cached_data.json&quot;</span><span class="p">)</span>
+
+<span class="n">_CHAT_LINE_INDICATORS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;@&quot;</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="s2">&quot;%&quot;</span><span class="p">})</span>
+
+<span class="n">_HEADER_REGEX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\A@([^@:]+)(:\s+(\S[\S\s]+))?\Z&quot;</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">_params_in_docstring</span><span class="p">(</span><span class="o">*</span><span class="n">params</span><span class="p">,</span> <span class="n">class_method</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -373,12 +389,6 @@
 <span class="s2">            If provided, the file paths that match this string (by regular expression</span>
 <span class="s2">            matching) are excluded for reading and parsing.&quot;&quot;&quot;</span>
 
-    <span class="k">if</span> <span class="s2">&quot;allow_remote&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-        <span class="n">docstring</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        allow_remote : bool, optional</span>
-<span class="s2">            If ``True`` (the default), and if the data source looks like a URL,</span>
-<span class="s2">            downloading the data from the internet will be attempted.&quot;&quot;&quot;</span>
-
     <span class="k">if</span> <span class="s2">&quot;encoding&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
         <span class="n">docstring</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">        encoding : str, optional</span>
@@ -409,6 +419,29 @@
 <span class="s2">            Under certain circumstances (e.g., your application is already parallelized</span>
 <span class="s2">            and further parallelization from within PyLangAcq might be undesirable),</span>
 <span class="s2">            you may like to consider setting this parameter to ``False``.&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="s2">&quot;use_cached&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+        <span class="n">docstring</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        use_cached : bool, optional</span>
+<span class="s2">            If ``True`` (the default), and if the path is a URL for a remote ZIP</span>
+<span class="s2">            archive, then CHAT reading attempts to use the previously downloaded</span>
+<span class="s2">            data cached on disk. This setting allows you to call</span>
+<span class="s2">            this function with the same URL repeatedly without hitting the CHILDES /</span>
+<span class="s2">            TalkBank server more than once for the same data.</span>
+<span class="s2">            Pass in ``False`` to force a new download; the upstream CHILDES / TalkBank</span>
+<span class="s2">            data is updated in minor ways from time to time, e.g., for CHAT format,</span>
+<span class="s2">            header/metadata information, updated annotations.</span>
+<span class="s2">            See also the helper functions: :func:`pylangacq.chat.cached_data_info`,</span>
+<span class="s2">            :func:`pylangacq.chat.remove_cached_data`.&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="s2">&quot;session&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+        <span class="n">docstring</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        session : requests.Session, optional</span>
+<span class="s2">            If the path is a URL for a remote ZIP archive, data downloading is</span>
+<span class="s2">            done with reasonable settings of retries and timeout by default,</span>
+<span class="s2">            in order to be robust against intermittent network issues.</span>
+<span class="s2">            If necessary, pass in your own instance of :class:`requests.Session`</span>
+<span class="s2">            to customize.&quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">class_method</span><span class="p">:</span>
         <span class="n">docstring</span> <span class="o">=</span> <span class="n">docstring</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">        &quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">    &quot;</span><span class="p">)</span>
@@ -1289,7 +1322,13 @@
 
 <div class="viewcode-block" id="Reader.from_zip"><a class="viewcode-back" href="../../api.html#pylangacq.Reader.from_zip">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="nd">@_params_in_docstring</span><span class="p">(</span>
-        <span class="s2">&quot;match&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;extension&quot;</span><span class="p">,</span> <span class="s2">&quot;allow_remote&quot;</span><span class="p">,</span> <span class="s2">&quot;encoding&quot;</span><span class="p">,</span> <span class="s2">&quot;parallel&quot;</span>
+        <span class="s2">&quot;match&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;exclude&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;extension&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;encoding&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;parallel&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;use_cached&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;session&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">def</span> <span class="nf">from_zip</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
@@ -1297,9 +1336,10 @@
         <span class="n">match</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">exclude</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">extension</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_CHAT_EXTENSION</span><span class="p">,</span>
-        <span class="n">allow_remote</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_ENCODING</span><span class="p">,</span>
         <span class="n">parallel</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">use_cached</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">session</span><span class="p">:</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;pylangacq.Reader&quot;</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Instantiate a reader from a local or remote ZIP file.</span>
 
@@ -1325,21 +1365,26 @@
         <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">ExitStack</span><span class="p">()</span> <span class="k">as</span> <span class="n">stack</span><span class="p">:</span>
             <span class="n">temp_dir</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">enter_context</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">())</span>
             <span class="n">is_url</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http://&quot;</span><span class="p">)</span>
+            <span class="n">unzip_dir</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_retrieve_unzip_dir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">if</span> <span class="n">is_url</span> <span class="k">else</span> <span class="kc">None</span>
 
-            <span class="k">if</span> <span class="n">allow_remote</span> <span class="ow">and</span> <span class="n">is_url</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">is_url</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">use_cached</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">unzip_dir</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">unzip_dir</span><span class="p">:</span>
+                    <span class="n">remove_cached_data</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
                 <span class="n">zip_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
-                <span class="n">_download_file</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">zip_path</span><span class="p">)</span>
+                <span class="n">_download_file</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">zip_path</span><span class="p">,</span> <span class="n">session</span><span class="p">)</span>
+                <span class="n">unzip_dir</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_create_unzip_dir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">is_url</span> <span class="ow">and</span> <span class="n">unzip_dir</span><span class="p">:</span>
+                <span class="n">zip_path</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">zip_path</span> <span class="o">=</span> <span class="n">path</span>
+                <span class="n">unzip_dir</span> <span class="o">=</span> <span class="n">temp_dir</span>
 
-            <span class="n">zfile</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">enter_context</span><span class="p">(</span><span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">zip_path</span><span class="p">))</span>
-            <span class="n">zfile</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">allow_remote</span> <span class="ow">and</span> <span class="n">is_url</span><span class="p">:</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">zip_path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">zip_path</span><span class="p">:</span>
+                <span class="n">zfile</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">enter_context</span><span class="p">(</span><span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">zip_path</span><span class="p">))</span>
+                <span class="n">zfile</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">unzip_dir</span><span class="p">)</span>
 
             <span class="n">reader</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_dir</span><span class="p">(</span>
-                <span class="n">temp_dir</span><span class="p">,</span>
+                <span class="n">unzip_dir</span><span class="p">,</span>
                 <span class="n">match</span><span class="o">=</span><span class="n">match</span><span class="p">,</span>
                 <span class="n">exclude</span><span class="o">=</span><span class="n">exclude</span><span class="p">,</span>
                 <span class="n">extension</span><span class="o">=</span><span class="n">extension</span><span class="p">,</span>
@@ -1349,9 +1394,182 @@
 
         <span class="c1"># Unzipped files from `.from_zip` have the unwieldy temp dir in the file path.</span>
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">reader</span><span class="o">.</span><span class="n">_files</span><span class="p">:</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">file_path</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">file_path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">file_path</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">file_path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">unzip_dir</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">reader</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_retrieve_unzip_dir</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">existing_records</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">_CACHED_DATA_JSON_PATH</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">subdir</span> <span class="o">=</span> <span class="n">existing_records</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;subdir&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">subdir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_CACHED_DATA_DIR</span><span class="p">,</span> <span class="n">subdir</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_create_unzip_dir</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">_CACHED_DATA_DIR</span><span class="p">):</span>
+            <span class="n">_initialize_cached_data_dir</span><span class="p">()</span>
+
+        <span class="n">subdir</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+        <span class="n">unzip_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_CACHED_DATA_DIR</span><span class="p">,</span> <span class="n">subdir</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">unzip_dir</span><span class="p">)</span>
+
+        <span class="n">new_record</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;subdir&quot;</span><span class="p">:</span> <span class="n">subdir</span><span class="p">,</span>
+            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">url</span><span class="p">,</span>
+            <span class="s2">&quot;cached_at&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+        <span class="p">}</span>
+        <span class="n">existing_records</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">_CACHED_DATA_JSON_PATH</span><span class="p">))</span>
+        <span class="n">_write_cached_data_json</span><span class="p">({</span><span class="o">**</span><span class="n">existing_records</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="n">url</span><span class="p">:</span> <span class="n">new_record</span><span class="p">}})</span>
+
+        <span class="k">return</span> <span class="n">unzip_dir</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_sort_keys</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">first</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="n">sorted_keys</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">first</span> <span class="o">=</span> <span class="n">first</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="n">drop</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">drop</span> <span class="ow">or</span> <span class="p">[])</span>  <span class="c1"># ordering doesn&#39;t matter</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">first</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+                <span class="n">sorted_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">key</span> <span class="ow">in</span> <span class="n">sorted_keys</span> <span class="ow">or</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">drop</span><span class="p">):</span>
+                <span class="n">sorted_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">sorted_keys</span>
+
+<div class="viewcode-block" id="Reader.to_strs"><a class="viewcode-back" href="../../api.html#pylangacq.Reader.to_strs">[docs]</a>    <span class="k">def</span> <span class="nf">to_strs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Yield CHAT data strings.</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">            The header information may not be completely reproduced in the output</span>
+<span class="sd">            CHAT strings. Known issues all have to do with a header field used</span>
+<span class="sd">            multiple times in the original CHAT data.</span>
+<span class="sd">            For ``Date``, only the first date of recording is retained in the output</span>
+<span class="sd">            string.</span>
+<span class="sd">            For all other multiply used header fields</span>
+<span class="sd">            (e.g., ``Tape Location``, ``Time Duration``),</span>
+<span class="sd">            only the last value in a given CHAT file is retained.</span>
+<span class="sd">            Note that ``ID`` for participant information is not affected.</span>
+
+<span class="sd">        Yields</span>
+<span class="sd">        ------</span>
+<span class="sd">        str</span>
+<span class="sd">            CHAT data string for one file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">header_first</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;UTF8&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;PID&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Languages&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Participants&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Date&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Types&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_files</span><span class="p">:</span>
+            <span class="n">str_for_file</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+            <span class="n">header_keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sort_keys</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">first</span><span class="o">=</span><span class="n">header_first</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">header_keys</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;Languages&quot;</span><span class="p">:</span>
+                    <span class="n">str_for_file</span> <span class="o">+=</span> <span class="p">(</span>
+                        <span class="n">f</span><span class="s2">&quot;@Languages:</span><span class="se">\t</span><span class="s2">{&#39; , &#39;.join(f.header[&#39;Languages&#39;])}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+                <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;Participants&quot;</span><span class="p">:</span>
+                    <span class="n">participants</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;Participants&quot;</span><span class="p">]</span>
+
+                    <span class="n">parts</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="k">for</span> <span class="n">code</span><span class="p">,</span> <span class="n">demographics</span> <span class="ow">in</span> <span class="n">participants</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                        <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="n">f</span><span class="s2">&quot;</span><span class="si">{code}</span><span class="s2"> </span><span class="si">{demographics[&#39;name&#39;]}</span><span class="s2"> </span><span class="si">{demographics[&#39;role&#39;]}</span><span class="s2">&quot;</span>
+                        <span class="p">)</span>
+                    <span class="n">str_for_file</span> <span class="o">+=</span> <span class="n">f</span><span class="s2">&quot;@Participants:</span><span class="se">\t</span><span class="s2">{&#39; , &#39;.join(parts)}</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+                    <span class="k">for</span> <span class="n">code</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">participants</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                        <span class="c1"># d = demographics</span>
+                        <span class="n">id_line</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="n">f</span><span class="s2">&quot;</span><span class="si">{d[&#39;language&#39;]}</span><span class="s2">|&quot;</span>
+                            <span class="n">f</span><span class="s2">&quot;</span><span class="si">{d[&#39;corpus&#39;]}</span><span class="s2">|&quot;</span>
+                            <span class="n">f</span><span class="s2">&quot;</span><span class="si">{code}</span><span class="s2">|&quot;</span>
+                            <span class="n">f</span><span class="s2">&quot;</span><span class="si">{d[&#39;age&#39;]}</span><span class="s2">|&quot;</span>
+                            <span class="n">f</span><span class="s2">&quot;</span><span class="si">{d[&#39;sex&#39;]}</span><span class="s2">|&quot;</span>
+                            <span class="n">f</span><span class="s2">&quot;</span><span class="si">{d[&#39;group&#39;]}</span><span class="s2">|&quot;</span>
+                            <span class="n">f</span><span class="s2">&quot;</span><span class="si">{d[&#39;ses&#39;]}</span><span class="s2">|&quot;</span>
+                            <span class="n">f</span><span class="s2">&quot;</span><span class="si">{d[&#39;role&#39;]}</span><span class="s2">|&quot;</span>
+                            <span class="n">f</span><span class="s2">&quot;</span><span class="si">{d[&#39;education&#39;]}</span><span class="s2">|&quot;</span>
+                            <span class="n">f</span><span class="s2">&quot;</span><span class="si">{d[&#39;custom&#39;]}</span><span class="s2">|&quot;</span>
+                        <span class="p">)</span>
+                        <span class="n">str_for_file</span> <span class="o">+=</span> <span class="n">f</span><span class="s2">&quot;@ID:</span><span class="se">\t</span><span class="si">{id_line}</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+                <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;Date&quot;</span><span class="p">:</span>
+                    <span class="c1"># TODO: A CHAT file may have more than one recording date.</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">date</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;Date&quot;</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="n">str_for_file</span> <span class="o">+=</span> <span class="n">f</span><span class="s2">&quot;@Date:</span><span class="se">\t</span><span class="s2">{date.strftime(&#39;</span><span class="si">%d</span><span class="s2">-%b-%Y&#39;).upper()}</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+                <span class="k">elif</span> <span class="n">f</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                    <span class="n">str_for_file</span> <span class="o">+=</span> <span class="n">f</span><span class="s2">&quot;@</span><span class="si">{key}</span><span class="s2">:</span><span class="se">\t</span><span class="si">{f.header[key]}</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">str_for_file</span> <span class="o">+=</span> <span class="n">f</span><span class="s2">&quot;@</span><span class="si">{key}</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+            <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">utterances</span><span class="p">:</span>
+                <span class="n">str_for_file</span> <span class="o">+=</span> <span class="n">f</span><span class="s2">&quot;*</span><span class="si">{u.participant}</span><span class="s2">:</span><span class="se">\t</span><span class="si">{u.tiers[u.participant]}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="n">keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sort_keys</span><span class="p">(</span>
+                    <span class="n">u</span><span class="o">.</span><span class="n">tiers</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">first</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;%mor&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%g</span><span class="s2">ra&quot;</span><span class="p">],</span> <span class="n">drop</span><span class="o">=</span><span class="p">{</span><span class="n">u</span><span class="o">.</span><span class="n">participant</span><span class="p">}</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+                    <span class="n">line</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">tiers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">line</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="n">str_for_file</span> <span class="o">+=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{key}</span><span class="s2">:</span><span class="se">\t</span><span class="si">{line}</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+            <span class="k">yield</span> <span class="n">str_for_file</span></div>
+
+<div class="viewcode-block" id="Reader.to_chat"><a class="viewcode-back" href="../../api.html#pylangacq.Reader.to_chat">[docs]</a>    <span class="k">def</span> <span class="nf">to_chat</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">filenames</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mo">0o777</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Export to CHAT data files.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path : str</span>
+<span class="sd">            A directory to write the CHAT files in. If the directory doesn&#39;t already</span>
+<span class="sd">            exist, it will be created.</span>
+<span class="sd">        filenames : Iterable[str], optional</span>
+<span class="sd">            Filenames of the CHAT files. If ``None`` or not given,</span>
+<span class="sd">            {0001.cha, 0002.cha, ...} are used.</span>
+<span class="sd">        mode : int, optional</span>
+<span class="sd">            Set permissions for the new directory. This is the same ``mode`` keyword</span>
+<span class="sd">            argument for :func:`~os.makedirs`.</span>
+<span class="sd">            The default is ``0o777`` (= ``511`` in decimal).</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If explicit filenames are given but the number of them doesn&#39;t match</span>
+<span class="sd">            the number of CHAT files in this reader object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">filenames</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filenames</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="s2">&quot;{str(i + 1).zfill(4)}.cha&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_files</span><span class="p">))]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">filenames</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">filenames</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filenames</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_files</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="n">f</span><span class="s2">&quot;There are {len(self._files)} CHAT files to create, &quot;</span>
+                <span class="n">f</span><span class="s2">&quot;but you&#39;ve provide {len(filenames)} filenames.&quot;</span>
+            <span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">filename</span><span class="p">,</span> <span class="n">lines</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">filenames</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_strs</span><span class="p">()):</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_parse_chat_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chat_str</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_File</span><span class="p">:</span>
         <span class="n">lines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_lines</span><span class="p">(</span><span class="n">chat_str</span><span class="p">)</span>
@@ -1524,21 +1742,20 @@
         <span class="k">return</span> <span class="n">index_to_tiers</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_get_header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
-        <span class="n">headname_to_entry</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Date&quot;</span><span class="p">:</span> <span class="nb">set</span><span class="p">(),</span> <span class="s2">&quot;Participants&quot;</span><span class="p">:</span> <span class="p">{}}</span>
+        <span class="n">headname_to_entry</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+
+            <span class="n">header_re_search</span> <span class="o">=</span> <span class="n">_HEADER_REGEX</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">header_re_search</span><span class="p">:</span>
+                <span class="k">continue</span>
 
             <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;@Begin&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;@End&quot;</span><span class="p">):</span>
                 <span class="k">continue</span>
 
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">):</span>
-                <span class="k">continue</span>
-
             <span class="c1"># find head, e.g., &quot;Languages&quot;, &quot;Participants&quot;, &quot;ID&quot; etc</span>
-            <span class="n">head</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-            <span class="n">head</span> <span class="o">=</span> <span class="n">head</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">)</span>  <span class="c1"># remove beginning &quot;@&quot;</span>
-            <span class="n">head</span> <span class="o">=</span> <span class="n">head</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>  <span class="c1"># remove ending &quot;:&quot;, if any</span>
+            <span class="n">head</span> <span class="o">=</span> <span class="n">header_re_search</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">header_re_search</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">head</span> <span class="o">==</span> <span class="s2">&quot;Participants&quot;</span><span class="p">:</span>
 
@@ -1553,6 +1770,8 @@
                         <span class="n">participant_role</span><span class="p">,</span>
                     <span class="p">)</span> <span class="o">=</span> <span class="n">participant_label</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
                     <span class="c1"># code = participant code, e.g. CHI, MOT</span>
+                    <span class="k">if</span> <span class="s2">&quot;Participants&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">headname_to_entry</span><span class="p">:</span>
+                        <span class="n">headname_to_entry</span><span class="p">[</span><span class="s2">&quot;Participants&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
                     <span class="n">headname_to_entry</span><span class="p">[</span><span class="s2">&quot;Participants&quot;</span><span class="p">][</span><span class="n">code</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">participant_name</span><span class="p">}</span>
 
             <span class="k">elif</span> <span class="n">head</span> <span class="o">==</span> <span class="s2">&quot;ID&quot;</span><span class="p">:</span>
@@ -1578,6 +1797,11 @@
                 <span class="p">]</span>
                 <span class="n">head_to_info</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">participant_info_heads</span><span class="p">,</span> <span class="n">participant_info</span><span class="p">))</span>
 
+                <span class="k">if</span> <span class="s2">&quot;Participants&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">headname_to_entry</span><span class="p">:</span>
+                    <span class="n">headname_to_entry</span><span class="p">[</span><span class="s2">&quot;Participants&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">if</span> <span class="n">code</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">headname_to_entry</span><span class="p">[</span><span class="s2">&quot;Participants&quot;</span><span class="p">]:</span>
+                    <span class="n">headname_to_entry</span><span class="p">[</span><span class="s2">&quot;Participants&quot;</span><span class="p">][</span><span class="n">code</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
                 <span class="n">headname_to_entry</span><span class="p">[</span><span class="s2">&quot;Participants&quot;</span><span class="p">][</span><span class="n">code</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">head_to_info</span><span class="p">)</span>
 
             <span class="k">elif</span> <span class="n">head</span> <span class="o">==</span> <span class="s2">&quot;Date&quot;</span><span class="p">:</span>
@@ -1585,6 +1809,8 @@
                     <span class="n">date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_header_line_to_date</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
                 <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">,</span> <span class="n">ParserError</span><span class="p">):</span>
                     <span class="k">continue</span>
+                <span class="k">if</span> <span class="s2">&quot;Date&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">headname_to_entry</span><span class="p">:</span>
+                    <span class="n">headname_to_entry</span><span class="p">[</span><span class="s2">&quot;Date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
                 <span class="n">headname_to_entry</span><span class="p">[</span><span class="s2">&quot;Date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">date</span><span class="p">)</span>
 
             <span class="k">elif</span> <span class="n">head</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;Birth of&quot;</span><span class="p">):</span>
@@ -1607,7 +1833,7 @@
                 <span class="n">headname_to_entry</span><span class="p">[</span><span class="s2">&quot;Languages&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">languages</span>
 
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">headname_to_entry</span><span class="p">[</span><span class="n">head</span><span class="p">]</span> <span class="o">=</span> <span class="n">line</span>
+                <span class="n">headname_to_entry</span><span class="p">[</span><span class="n">head</span><span class="p">]</span> <span class="o">=</span> <span class="n">line</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
 
         <span class="k">return</span> <span class="n">headname_to_entry</span> <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">headname_to_entry</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="k">else</span> <span class="p">{}</span>
 
@@ -1618,33 +1844,89 @@
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_get_lines</span><span class="p">(</span><span class="n">raw_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="n">lines</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">raw_str</span> <span class="o">=</span> <span class="p">(</span><span class="n">raw_str</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">raw_str</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">lines</span>
 
-        <span class="n">previous_line</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">raw_str</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
-            <span class="n">previous_line</span> <span class="o">=</span> <span class="n">previous_line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-            <span class="n">current_line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>  <span class="c1"># don&#39;t remove leading \t</span>
-
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">current_line</span><span class="p">:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
                 <span class="k">continue</span>
 
-            <span class="k">if</span> <span class="n">current_line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%x</span><span class="s2">pho:&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">current_line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%x</span><span class="s2">mod:&quot;</span><span class="p">):</span>
-                <span class="n">current_line</span> <span class="o">=</span> <span class="n">current_line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%x</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;%&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="c1"># TODO: Why did I do this?</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%x</span><span class="s2">pho:&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%x</span><span class="s2">mod:&quot;</span><span class="p">):</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%x</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;%&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">previous_line</span> <span class="ow">and</span> <span class="n">current_line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">):</span>
-                <span class="n">previous_line</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{previous_line}</span><span class="s2"> {current_line.strip()}&quot;</span>
-            <span class="k">elif</span> <span class="n">previous_line</span><span class="p">:</span>
-                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">previous_line</span><span class="p">)</span>
-                <span class="n">previous_line</span> <span class="o">=</span> <span class="n">current_line</span>
-            <span class="k">else</span><span class="p">:</span>  <span class="c1"># when it&#39;s the very first line</span>
-                <span class="n">previous_line</span> <span class="o">=</span> <span class="n">current_line</span>
+            <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_CHAT_LINE_INDICATORS</span><span class="p">:</span>
+                <span class="n">previous_line</span> <span class="o">=</span> <span class="n">lines</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{previous_line}</span><span class="s2"> </span><span class="si">{line}</span><span class="s2">&quot;</span>
 
-        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">previous_line</span><span class="p">)</span>  <span class="c1"># don&#39;t forget the very last line!</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">lines</span></div>
+
+
+<span class="k">def</span> <span class="nf">_initialize_cached_data_dir</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">_CACHED_DATA_DIR</span><span class="p">):</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">_CACHED_DATA_DIR</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">_CACHED_DATA_DIR</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_CACHED_DATA_DIR</span><span class="p">,</span> <span class="s2">&quot;README.txt&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+            <span class="s2">&quot;The contents of this directory are automatically managed by &quot;</span>
+            <span class="s2">&quot;the PyLangAcq library. Please do not edit anything on your own.</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">_CACHED_DATA_JSON_PATH</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_write_cached_data_json</span><span class="p">(</span><span class="n">records</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">_CACHED_DATA_JSON_PATH</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="cached_data_info"><a class="viewcode-back" href="../../api.html#pylangacq.cached_data_info">[docs]</a><span class="k">def</span> <span class="nf">cached_data_info</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Return the information of the cached datasets.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Set[str]</span>
+<span class="sd">        A set of the URLs for the cached CHILDES / TalkBank datasets.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">existing_records</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">_CACHED_DATA_JSON_PATH</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">existing_records</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="remove_cached_data"><a class="viewcode-back" href="../../api.html#pylangacq.remove_cached_data">[docs]</a><span class="k">def</span> <span class="nf">remove_cached_data</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Remove data cached on disk.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    url : str, optional</span>
+<span class="sd">        If provided, remove only the data specified by this URL. If not provided,</span>
+<span class="sd">        all cached data is removed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">existing_records</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">_CACHED_DATA_JSON_PATH</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="n">_initialize_cached_data_dir</span><span class="p">()</span>
+        <span class="k">return</span>
+    <span class="k">if</span> <span class="n">url</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">subdir</span> <span class="ow">in</span> <span class="p">[</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;subdir&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">existing_records</span><span class="o">.</span><span class="n">values</span><span class="p">()]:</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_CACHED_DATA_DIR</span><span class="p">,</span> <span class="n">subdir</span><span class="p">))</span>
+        <span class="n">_initialize_cached_data_dir</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">subdir</span> <span class="o">=</span> <span class="n">existing_records</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;subdir&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">subdir</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">existing_records</span><span class="p">[</span><span class="n">url</span><span class="p">]</span>
+            <span class="n">_write_cached_data_json</span><span class="p">(</span><span class="n">existing_records</span><span class="p">)</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_CACHED_DATA_DIR</span><span class="p">,</span> <span class="n">subdir</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;url not found among the cached data: </span><span class="si">{url}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="read_chat"><a class="viewcode-back" href="../../api.html#pylangacq.read_chat">[docs]</a><span class="nd">@_params_in_docstring</span><span class="p">(</span><span class="s2">&quot;match&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;encoding&quot;</span><span class="p">,</span> <span class="s2">&quot;cls&quot;</span><span class="p">,</span> <span class="n">class_method</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -1750,10 +2032,12 @@
         <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">_HTTPSession</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_download_file</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_download_file</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">session</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">_HTTPSession</span><span class="p">()</span>
     <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">ExitStack</span><span class="p">()</span> <span class="k">as</span> <span class="n">stack</span><span class="p">:</span>
         <span class="n">f</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">enter_context</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">enter_context</span><span class="p">(</span><span class="n">_HTTPSession</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">enter_context</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
         <span class="n">shutil</span><span class="o">.</span><span class="n">copyfileobj</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">raw</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
 </pre></div>
 
@@ -1766,7 +2050,7 @@
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2015-2021, Jackson L. Lee | PyLangAcq 0.14.1 | Documentation last updated on May 16, 2021.
+        &#169; Copyright 2015-2021, Jackson L. Lee | PyLangAcq 0.15.0 | Documentation last updated on June 06, 2021.
 
     </p>
   </div>

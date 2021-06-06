@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [0.15.0] - 2021-06-06
+
+### Added
 * `Reader.from_zip` (also `read_chat`) now keeps the downloaded ZIP archive
   in a non-temporary directory for possible re-use.
   - Added the kwarg `use_cached` in `Reader.from_zip`, so that we use the cached data
@@ -24,13 +33,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * CHAT parsing for the header information is now more robust for varying whitespace
   characters between the head and its associated value.
 
-### Deprecated
 ### Removed
 * Dropped kwarg `allow_remote` in `Reader.from_zip`. This kwarg wouldn't make any sense
   anymore, or at least would be confusing with the introduction of `use_cached`.
-
-### Fixed
-### Security
 
 ## [0.14.1] - 2021-05-16
 

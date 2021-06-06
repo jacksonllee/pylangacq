@@ -1,0 +1,369 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Writing CHAT Data &mdash; PyLangAcq 0.15.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+    <link rel="canonical" href="https://pylangacq.org/write.html" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Word Frequencies and Ngrams" href="frequencies.html" />
+    <link rel="prev" title="Transcriptions and Annotations" href="transcriptions.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> PyLangAcq
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.15.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#reading-chat-data">Reading CHAT data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#header-information">Header Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#transcriptions-and-annotations">Transcriptions and Annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#word-frequencies-and-ngrams">Word Frequencies and Ngrams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#developmental-measures">Developmental Measures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#questions">Questions?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="read.html">Reading CHAT Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="read.html#initializing-a-reader">Initializing a Reader</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="read.html#read-chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="read.html#from-a-zip-file-or-local-directory">From a ZIP File or Local Directory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="read.html#from-specific-chat-data-files">From Specific CHAT Data Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="read.html#from-in-memory-strings">From In-Memory Strings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="read.html#parallel-processing">Parallel Processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="read.html#creating-an-empty-reader">Creating an Empty Reader</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="read.html#adding-and-removing-data">Adding and Removing Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read.html#custom-behavior">Custom Behavior</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="headers.html">Accessing Headers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="headers.html#ages">Ages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="headers.html#dates-of-recording">Dates of Recording</a></li>
+<li class="toctree-l2"><a class="reference internal" href="headers.html#languages">Languages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="headers.html#participants">Participants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="headers.html#other-header-information">Other Header Information</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="transcriptions.html">Transcriptions and Annotations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#chat-format">CHAT Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#words">Words</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcriptions.html#output-by-utterances-or-files">Output by Utterances or Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transcriptions.html#filter-by-participants">Filter by Participants</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#tokens">Tokens</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcriptions.html#utterances">Utterances</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcriptions.html#time-marks">Time Marks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transcriptions.html#tiers">Tiers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Writing CHAT Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frequencies.html">Word Frequencies and Ngrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="measures.html">Developmental Measures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#read-chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#gra"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gra</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#utterance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Utterance</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#helper-functions">Helper Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">[Unreleased]</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#added">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#removed">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#fixed">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#security">Security</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">[0.15.0] - 2021-06-06</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id3">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id4">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">Removed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id6">[0.14.1] - 2021-05-16</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id7">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id8">[0.14.0] - 2021-05-12</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id9">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id10">[0.13.3] - 2021-05-07</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id11">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id12">[0.13.2] - 2021-05-02</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id13">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id14">[0.13.1] - 2021-03-23</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id15">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id16">[0.13.0] - 2021-03-15</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id17">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id18">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id19">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id20">Removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id21">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id22">[0.12.0] - 2020-10-11</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id23">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id24">[0.11.0] - 2020-07-02</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id25">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id26">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id27">Removed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id28">[0.10.0] - 2017-11-02</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id29">[0.9.0] - 2017-10-25</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id30">[0.8] - 2016-01-30</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id31">[0.7] - 2016-01-06</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id32">[0.6] - 2015-12-27</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id33">[0.5] - 2015-12-16</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id34">[0.4] - 2015-12-13</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id35">[0.3] - 2015-12-09</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id36">[0.2] - 2015-12-05</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id37">[0.1] - 2015-12-04</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyLangAcq</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Writing CHAT Data</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="writing-chat-data">
+<span id="write"></span><h1>Writing CHAT Data<a class="headerlink" href="#writing-chat-data" title="Permalink to this headline">¶</a></h1>
+<p>To write CHAT data, a <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> object can either write its data
+to CHAT data strings or export data to CHAT files.</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#pylangacq.Reader.to_strs" title="pylangacq.Reader.to_strs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_strs</span></code></a>()</p></td>
+<td><p>Yield CHAT data strings.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#pylangacq.Reader.to_chat" title="pylangacq.Reader.to_chat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_chat</span></code></a>(path[, filenames, mode])</p></td>
+<td><p>Export to CHAT data files.</p></td>
+</tr>
+</tbody>
+</table>
+<p>These methods are useful for saving CHAT data for re-use or distribution,
+especially when your data or <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> object is customized in some way,
+e.g., by adding or removing data from an existing dataset, or through
+an in-memory CHAT data string – see <a class="reference internal" href="read.html#read"><span class="std std-ref">Reading CHAT Data</span></a>.</p>
+<p><a class="reference internal" href="api.html#pylangacq.Reader.to_chat" title="pylangacq.Reader.to_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_chat()</span></code></a> writes CHAT data files in a local directory.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">brown</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="s2">&quot;https://childes.talkbank.org/data/Eng-NA/Brown.zip&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Brown has data for Adam, Eve, and Sarah.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Now we want to save only Eve and Sarah&#39;s data somewhere on disk.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve_and_sarah</span> <span class="o">=</span> <span class="n">brown</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">exclude</span><span class="o">=</span><span class="s2">&quot;Adam&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve_and_sarah</span><span class="o">.</span><span class="n">to_chat</span><span class="p">(</span><span class="s2">&quot;your/new/directory&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>By default, the files are named <code class="docutils literal notranslate"><span class="pre">0001.cha</span></code>, <code class="docutils literal notranslate"><span class="pre">0002.cha</span></code>, etc.
+To customize the filenames,
+<a class="reference internal" href="api.html#pylangacq.Reader.to_chat" title="pylangacq.Reader.to_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_chat()</span></code></a> has the <code class="docutils literal notranslate"><span class="pre">filenames</span></code> keyword argument.</p>
+<p>If you would like the CHAT data as strings in memory for use cases other than
+local file export,
+<a class="reference internal" href="api.html#pylangacq.Reader.to_strs" title="pylangacq.Reader.to_strs"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_strs()</span></code></a> is available.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="frequencies.html" class="btn btn-neutral float-right" title="Word Frequencies and Ngrams" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="transcriptions.html" class="btn btn-neutral float-left" title="Transcriptions and Annotations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2015-2021, Jackson L. Lee | PyLangAcq 0.15.0 | Documentation last updated on June 06, 2021.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

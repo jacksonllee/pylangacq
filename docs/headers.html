@@ -1,75 +1,38 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Accessing Headers &mdash; PyLangAcq 0.15.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="canonical" href="https://pylangacq.org/headers.html" />
-
-  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Transcriptions and Annotations" href="transcriptions.html" />
     <link rel="prev" title="Reading CHAT Data" href="read.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> PyLangAcq
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 0.15.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -77,18 +40,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#reading-chat-data">Reading CHAT data</a></li>
@@ -216,71 +168,31 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">PyLangAcq</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>Accessing Headers</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="accessing-headers">
-<span id="headers"></span><h1>Accessing Headers<a class="headerlink" href="#accessing-headers" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="accessing-headers">
+<span id="headers"></span><h1>Accessing Headers<a class="headerlink" href="#accessing-headers" title="Permalink to this headline"></a></h1>
 <p>CHAT data files record metadata such as the participants’ demographic information
 in a header section, which has lines starting with the <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> character
 and is typically found at the top of a data file.
@@ -328,8 +240,8 @@ to access the commonly needed information from the headers:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;Eve&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="section" id="ages">
-<h2>Ages<a class="headerlink" href="#ages" title="Permalink to this headline">¶</a></h2>
+<section id="ages">
+<h2>Ages<a class="headerlink" href="#ages" title="Permalink to this headline"></a></h2>
 <p><a class="reference internal" href="api.html#pylangacq.Reader.ages" title="pylangacq.Reader.ages"><code class="xref py py-func docutils literal notranslate"><span class="pre">ages()</span></code></a> returns the age information of the participant <code class="docutils literal notranslate"><span class="pre">&quot;CHI&quot;</span></code>
 (the target child) by default, since CHAT is by far most commonly used
 in language acquisition and development research, and that typically only the age of the
@@ -362,7 +274,7 @@ such as <code class="docutils literal notranslate"><span class="pre">(1,</span> 
 </pre></div>
 </div>
 <p>Passing in <code class="docutils literal notranslate"><span class="pre">months=True</span></code> converts the ages into months:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">ages</span><span class="p">(</span><span class="n">months</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">ages</span><span class="p">(</span><span class="n">months</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="go">[18.0,</span>
 <span class="go"> 18.0,</span>
 <span class="go"> 19.0,</span>
@@ -385,9 +297,9 @@ such as <code class="docutils literal notranslate"><span class="pre">(1,</span> 
 <span class="go"> 27.0]</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="dates-of-recording">
-<h2>Dates of Recording<a class="headerlink" href="#dates-of-recording" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="dates-of-recording">
+<h2>Dates of Recording<a class="headerlink" href="#dates-of-recording" title="Permalink to this headline"></a></h2>
 <p><a class="reference internal" href="api.html#pylangacq.Reader.dates_of_recording" title="pylangacq.Reader.dates_of_recording"><code class="xref py py-func docutils literal notranslate"><span class="pre">dates_of_recording()</span></code></a> returns the dates of recording
 as a set of <a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.date" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">date</span></code></a> objects
 for all the date files.</p>
@@ -395,7 +307,7 @@ for all the date files.</p>
 on the same day. To have the dates by data files,
 passing in <code class="docutils literal notranslate"><span class="pre">by_files=True</span></code> gives you a list of sets of :class:<a href="#id1"><span class="problematic" id="id2">`</span></a>~datetime.date`s,
 where each set is for one file:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">dates_of_recording</span><span class="p">(</span><span class="n">by_files</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">dates_of_recording</span><span class="p">(</span><span class="n">by_files</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="go">[{datetime.date(1962, 10, 15), datetime.date(1962, 10, 17)},</span>
 <span class="go"> {datetime.date(1962, 10, 31), datetime.date(1962, 10, 29)},</span>
 <span class="go"> {datetime.date(1962, 11, 12)},</span>
@@ -420,9 +332,9 @@ where each set is for one file:</p>
 <span class="go"> {datetime.date(1963, 7, 23)}]</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="languages">
-<h2>Languages<a class="headerlink" href="#languages" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="languages">
+<h2>Languages<a class="headerlink" href="#languages" title="Permalink to this headline"></a></h2>
 <p><a class="reference internal" href="api.html#pylangacq.Reader.languages" title="pylangacq.Reader.languages"><code class="xref py py-func docutils literal notranslate"><span class="pre">languages()</span></code></a> returns the language information.
 Eve’s data is naturally in English.
 In datasets with more than one language (bi-/multilingualism),
@@ -432,9 +344,9 @@ the headers.</p>
 <span class="go">{&#39;eng&#39;}</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="participants">
-<h2>Participants<a class="headerlink" href="#participants" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="participants">
+<h2>Participants<a class="headerlink" href="#participants" title="Permalink to this headline"></a></h2>
 <p><a class="reference internal" href="api.html#pylangacq.Reader.participants" title="pylangacq.Reader.participants"><code class="xref py py-func docutils literal notranslate"><span class="pre">participants()</span></code></a> returns the participants (e.g., <code class="docutils literal notranslate"><span class="pre">&quot;CHI&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;MOT&quot;</span></code>)
 in the reader. <code class="docutils literal notranslate"><span class="pre">by_files=True</span></code> is also available if you need the information
 by individual files.</p>
@@ -445,9 +357,9 @@ by individual files.</p>
 <p>The more detailed information for each participant
 (e.g., gender, role in recording) can be retrieved from <a class="reference internal" href="api.html#pylangacq.Reader.headers" title="pylangacq.Reader.headers"><code class="xref py py-func docutils literal notranslate"><span class="pre">headers()</span></code></a>,
 which is illustrated next.</p>
-</div>
-<div class="section" id="other-header-information">
-<h2>Other Header Information<a class="headerlink" href="#other-header-information" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="other-header-information">
+<h2>Other Header Information<a class="headerlink" href="#other-header-information" title="Permalink to this headline"></a></h2>
 <p>For any header information not given by one of the implemented methods above,
 <a class="reference internal" href="api.html#pylangacq.Reader.headers" title="pylangacq.Reader.headers"><code class="xref py py-func docutils literal notranslate"><span class="pre">headers()</span></code></a> gives a list of headers,
 where each header is a generic Python dictionary for each data file,
@@ -503,55 +415,38 @@ and you can walk through the dict for information you need.</p>
 <span class="go"> &#39;UTF8&#39;: &#39;&#39;}</span>
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="transcriptions.html" class="btn btn-neutral float-right" title="Transcriptions and Annotations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="read.html" class="btn btn-neutral float-left" title="Reading CHAT Data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="transcriptions.html" class="btn btn-neutral float-right" title="Transcriptions and Annotations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2015-2021, Jackson L. Lee | PyLangAcq 0.15.0 | Documentation last updated on June 06, 2021.
-
-    </p>
+    <p>&#169; Copyright 2015-2021, Jackson L. Lee | PyLangAcq 0.15.0 | Documentation last updated on September 23, 2021.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

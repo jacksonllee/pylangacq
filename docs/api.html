@@ -1,75 +1,38 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>API Reference &mdash; PyLangAcq 0.15.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="canonical" href="https://pylangacq.org/api.html" />
-
-  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Changelog" href="changelog.html" />
     <link rel="prev" title="Developmental Measures" href="measures.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> PyLangAcq
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 0.15.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -77,18 +40,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#reading-chat-data">Reading CHAT data</a></li>
@@ -216,76 +168,36 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">PyLangAcq</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>API Reference</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="api-reference">
-<span id="api"></span><h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="read-chat">
-<h2><a class="reference internal" href="#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a><a class="headerlink" href="#read-chat" title="Permalink to this headline">¶</a></h2>
+             
+  <section id="api-reference">
+<span id="api"></span><h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline"></a></h1>
+<section id="read-chat">
+<h2><a class="reference internal" href="#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a><a class="headerlink" href="#read-chat" title="Permalink to this headline"></a></h2>
 <dl class="py function">
-<dt id="pylangacq.read_chat">
-<code class="sig-prename descclassname">pylangacq.</code><code class="sig-name descname">read_chat</code><span class="sig-paren">(</span><em class="sig-param">path: str</em>, <em class="sig-param">match: str = None</em>, <em class="sig-param">exclude: str = None</em>, <em class="sig-param">encoding: str = 'utf-8'</em>, <em class="sig-param">cls: type = &lt;class 'pylangacq.chat.Reader'&gt;</em><span class="sig-paren">)</span> &#x2192; pylangacq.chat.Reader<a class="reference internal" href="_modules/pylangacq/chat.html#read_chat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.read_chat" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.read_chat">
+<span class="sig-prename descclassname"><span class="pre">pylangacq.</span></span><span class="sig-name descname"><span class="pre">read_chat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">path:</span> <span class="pre">str</span></em>, <em class="sig-param"><span class="pre">match:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">exclude:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">encoding:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'utf-8'</span></em>, <em class="sig-param"><span class="pre">cls:</span> <span class="pre">type</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'pylangacq.chat.Reader'&gt;</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pylangacq.Reader" title="pylangacq.chat.Reader"><span class="pre">pylangacq.chat.Reader</span></a></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#read_chat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.read_chat" title="Permalink to this definition"></a></dt>
 <dd><p>Create a reader of CHAT data.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">path</span></code> is a remote ZIP file and you expect to call this function
 with the same path multiple times, consider downloading the data to the local
@@ -337,12 +249,12 @@ for new or modified behavior of the returned reader object.</p>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="reader">
-<h2><a class="reference internal" href="#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a><a class="headerlink" href="#reader" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="reader">
+<h2><a class="reference internal" href="#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a><a class="headerlink" href="#reader" title="Permalink to this headline"></a></h2>
 <dl class="py class">
-<dt id="pylangacq.Reader">
-<em class="property">class </em><code class="sig-prename descclassname">pylangacq.</code><code class="sig-name descname">Reader</code><a class="reference internal" href="_modules/pylangacq/chat.html#Reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pylangacq.</span></span><span class="sig-name descname"><span class="pre">Reader</span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader" title="Permalink to this definition"></a></dt>
 <dd><p>A reader that handles CHAT data.</p>
 <p class="rubric">Methods</p>
 <table class="longtable docutils align-default">
@@ -378,16 +290,16 @@ for new or modified behavior of the returned reader object.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.Reader.filter" title="pylangacq.Reader.filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter</span></code></a>([match, exclude])</p></td>
 <td><p>Return a new reader filtered by file paths.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.Reader.from_dir" title="pylangacq.Reader.from_dir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_dir</span></code></a>(path[, match, exclude, extension, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.Reader.from_dir" title="pylangacq.Reader.from_dir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_dir</span></code></a>(path[, match, exclude, extension, ...])</p></td>
 <td><p>Instantiate a reader from a local directory with CHAT data files.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.Reader.from_files" title="pylangacq.Reader.from_files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_files</span></code></a>(paths[, match, exclude, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.Reader.from_files" title="pylangacq.Reader.from_files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_files</span></code></a>(paths[, match, exclude, ...])</p></td>
 <td><p>Instantiate a reader from local CHAT data files.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.Reader.from_strs" title="pylangacq.Reader.from_strs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_strs</span></code></a>(strs[, ids, parallel])</p></td>
 <td><p>Instantiate a reader from in-memory CHAT data strings.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.Reader.from_zip" title="pylangacq.Reader.from_zip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_zip</span></code></a>(path[, match, exclude, extension, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.Reader.from_zip" title="pylangacq.Reader.from_zip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_zip</span></code></a>(path[, match, exclude, extension, ...])</p></td>
 <td><p>Instantiate a reader from a local or remote ZIP file.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.Reader.headers" title="pylangacq.Reader.headers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">headers</span></code></a>()</p></td>
@@ -435,7 +347,7 @@ for new or modified behavior of the returned reader object.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.Reader.to_strs" title="pylangacq.Reader.to_strs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_strs</span></code></a>()</p></td>
 <td><p>Yield CHAT data strings.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tokens</span></code></a>([participants, exclude, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tokens</span></code></a>([participants, exclude, ...])</p></td>
 <td><p>Return the tokens.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.Reader.ttr" title="pylangacq.Reader.ttr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ttr</span></code></a>([keep_case, participant])</p></td>
@@ -444,20 +356,20 @@ for new or modified behavior of the returned reader object.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.Reader.utterances" title="pylangacq.Reader.utterances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utterances</span></code></a>([participants, exclude, by_files])</p></td>
 <td><p>Return the utterances.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.Reader.word_frequencies" title="pylangacq.Reader.word_frequencies"><code class="xref py py-obj docutils literal notranslate"><span class="pre">word_frequencies</span></code></a>([keep_case, participants, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.Reader.word_frequencies" title="pylangacq.Reader.word_frequencies"><code class="xref py py-obj docutils literal notranslate"><span class="pre">word_frequencies</span></code></a>([keep_case, participants, ...])</p></td>
 <td><p>Return word frequencies.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.Reader.word_ngrams" title="pylangacq.Reader.word_ngrams"><code class="xref py py-obj docutils literal notranslate"><span class="pre">word_ngrams</span></code></a>(n[, keep_case, participants, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pylangacq.Reader.word_ngrams" title="pylangacq.Reader.word_ngrams"><code class="xref py py-obj docutils literal notranslate"><span class="pre">word_ngrams</span></code></a>(n[, keep_case, participants, ...])</p></td>
 <td><p>Return word ngrams.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-obj docutils literal notranslate"><span class="pre">words</span></code></a>([participants, exclude, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-obj docutils literal notranslate"><span class="pre">words</span></code></a>([participants, exclude, ...])</p></td>
 <td><p>Return the words.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py method">
-<dt id="pylangacq.Reader.ages">
-<code class="sig-name descname">ages</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">participant</span><span class="o">=</span><span class="default_value">'CHI'</span></em>, <em class="sig-param"><span class="n">months</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>List<span class="p">[</span>Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span><span class="p">]</span><span class="p">, </span>List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.ages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.ages" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.ages">
+<span class="sig-name descname"><span class="pre">ages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">participant</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'CHI'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">months</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.ages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.ages" title="Permalink to this definition"></a></dt>
 <dd><p>Return the ages of the given participant in the data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -481,8 +393,8 @@ e.g., “1;06.00” in CHAT becomes <code class="docutils literal notranslate"><
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.append">
-<code class="sig-name descname">append</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">reader</span><span class="p">:</span> <span class="n">pylangacq.chat.Reader</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.append"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.append" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.append">
+<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reader</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#pylangacq.Reader" title="pylangacq.chat.Reader"><span class="pre">pylangacq.chat.Reader</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.append"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.append" title="Permalink to this definition"></a></dt>
 <dd><p>Append data from another reader.</p>
 <p>New data is appended as-is with no filtering of any sort,
 even for files whose file paths duplicate those already in the current reader.</p>
@@ -497,8 +409,8 @@ even for files whose file paths duplicate those already in the current reader.</
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.append_left">
-<code class="sig-name descname">append_left</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">reader</span><span class="p">:</span> <span class="n">pylangacq.chat.Reader</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.append_left"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.append_left" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.append_left">
+<span class="sig-name descname"><span class="pre">append_left</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reader</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#pylangacq.Reader" title="pylangacq.chat.Reader"><span class="pre">pylangacq.chat.Reader</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.append_left"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.append_left" title="Permalink to this definition"></a></dt>
 <dd><p>Left-append data from another reader.</p>
 <p>New data is appended as-is with no filtering of any sort,
 even for files whose file paths duplicate those already in the current reader.</p>
@@ -513,14 +425,14 @@ even for files whose file paths duplicate those already in the current reader.</
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.clear">
-<code class="sig-name descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.clear" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.clear" title="Permalink to this definition"></a></dt>
 <dd><p>Remove all data from this reader.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.dates_of_recording">
-<code class="sig-name descname">dates_of_recording</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>Set<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.date" title="(in Python v3.9)">datetime.date</a><span class="p">]</span><span class="p">, </span>List<span class="p">[</span>Set<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.date" title="(in Python v3.9)">datetime.date</a><span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.dates_of_recording"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.dates_of_recording" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.dates_of_recording">
+<span class="sig-name descname"><span class="pre">dates_of_recording</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">by_files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.date" title="(in Python v3.9)"><span class="pre">datetime.date</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.date" title="(in Python v3.9)"><span class="pre">datetime.date</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.dates_of_recording"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.dates_of_recording" title="Permalink to this definition"></a></dt>
 <dd><p>Return the dates of recording.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -544,8 +456,8 @@ distinction just described for when <code class="docutils literal notranslate"><
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.extend">
-<code class="sig-name descname">extend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">readers</span><span class="p">:</span> <span class="n">Iterable<span class="p">[</span>pylangacq.chat.Reader<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.extend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.extend" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.extend">
+<span class="sig-name descname"><span class="pre">extend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">readers</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pylangacq.Reader" title="pylangacq.chat.Reader"><span class="pre">pylangacq.chat.Reader</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.extend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.extend" title="Permalink to this definition"></a></dt>
 <dd><p>Extend data from other readers.</p>
 <p>New data is appended as-is with no filtering of any sort,
 even for files whose file paths duplicate those already in the current reader.</p>
@@ -560,8 +472,8 @@ even for files whose file paths duplicate those already in the current reader.</
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.extend_left">
-<code class="sig-name descname">extend_left</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">readers</span><span class="p">:</span> <span class="n">Iterable<span class="p">[</span>pylangacq.chat.Reader<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.extend_left"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.extend_left" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.extend_left">
+<span class="sig-name descname"><span class="pre">extend_left</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">readers</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pylangacq.Reader" title="pylangacq.chat.Reader"><span class="pre">pylangacq.chat.Reader</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.extend_left"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.extend_left" title="Permalink to this definition"></a></dt>
 <dd><p>Left-extend data from other readers.</p>
 <p>New data is appended as-is with no filtering of any sort,
 even for files whose file paths duplicate those already in the current reader.</p>
@@ -576,8 +488,8 @@ even for files whose file paths duplicate those already in the current reader.</
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.file_paths">
-<code class="sig-name descname">file_paths</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.file_paths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.file_paths" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.file_paths">
+<span class="sig-name descname"><span class="pre">file_paths</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.file_paths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.file_paths" title="Permalink to this definition"></a></dt>
 <dd><p>Return the file paths.</p>
 <p>If the data comes from in-memory strings, then the “file paths” are
 arbitrary UUID random strings.</p>
@@ -591,8 +503,8 @@ arbitrary UUID random strings.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.filter">
-<code class="sig-name descname">filter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">match</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; pylangacq.chat.Reader<a class="reference internal" href="_modules/pylangacq/chat.html#Reader.filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.filter" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.filter">
+<span class="sig-name descname"><span class="pre">filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">match</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pylangacq.Reader" title="pylangacq.chat.Reader"><span class="pre">pylangacq.chat.Reader</span></a></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.filter" title="Permalink to this definition"></a></dt>
 <dd><p>Return a new reader filtered by file paths.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -627,8 +539,8 @@ matching) are excluded for reading and parsing.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.from_dir">
-<em class="property">classmethod </em><code class="sig-name descname">from_dir</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">match</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">extension</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">'.cha'</span></em>, <em class="sig-param"><span class="n">encoding</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">'utf-8'</span></em>, <em class="sig-param"><span class="n">parallel</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; pylangacq.chat.Reader<a class="reference internal" href="_modules/pylangacq/chat.html#Reader.from_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.from_dir" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.from_dir">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">from_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">match</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'.cha'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'utf-8'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pylangacq.Reader" title="pylangacq.chat.Reader"><span class="pre">pylangacq.chat.Reader</span></a></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.from_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.from_dir" title="Permalink to this definition"></a></dt>
 <dd><p>Instantiate a reader from a local directory with CHAT data files.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -673,8 +585,8 @@ you may like to consider setting this parameter to <code class="docutils literal
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.from_files">
-<em class="property">classmethod </em><code class="sig-name descname">from_files</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">paths</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">match</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">encoding</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">'utf-8'</span></em>, <em class="sig-param"><span class="n">parallel</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; pylangacq.chat.Reader<a class="reference internal" href="_modules/pylangacq/chat.html#Reader.from_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.from_files" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.from_files">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">from_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paths</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'utf-8'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pylangacq.Reader" title="pylangacq.chat.Reader"><span class="pre">pylangacq.chat.Reader</span></a></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.from_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.from_files" title="Permalink to this definition"></a></dt>
 <dd><p>Instantiate a reader from local CHAT data files.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -716,8 +628,8 @@ you may like to consider setting this parameter to <code class="docutils literal
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.from_strs">
-<em class="property">classmethod </em><code class="sig-name descname">from_strs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">strs</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">parallel</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; pylangacq.chat.Reader<a class="reference internal" href="_modules/pylangacq/chat.html#Reader.from_strs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.from_strs" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.from_strs">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">from_strs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pylangacq.Reader" title="pylangacq.chat.Reader"><span class="pre">pylangacq.chat.Reader</span></a></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.from_strs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.from_strs" title="Permalink to this definition"></a></dt>
 <dd><p>Instantiate a reader from in-memory CHAT data strings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -747,8 +659,8 @@ you may like to consider setting this parameter to <code class="docutils literal
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.from_zip">
-<em class="property">classmethod </em><code class="sig-name descname">from_zip</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">match</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">extension</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">'.cha'</span></em>, <em class="sig-param"><span class="n">encoding</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">'utf-8'</span></em>, <em class="sig-param"><span class="n">parallel</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">use_cached</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">session</span><span class="p">:</span> <span class="n">requests.sessions.Session</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; pylangacq.chat.Reader<a class="reference internal" href="_modules/pylangacq/chat.html#Reader.from_zip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.from_zip" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.from_zip">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">from_zip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">match</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'.cha'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'utf-8'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cached</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">requests.sessions.Session</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pylangacq.Reader" title="pylangacq.chat.Reader"><span class="pre">pylangacq.chat.Reader</span></a></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.from_zip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.from_zip" title="Permalink to this definition"></a></dt>
 <dd><p>Instantiate a reader from a local or remote ZIP file.</p>
 <p>If the input data is a remote ZIP file and you expect to call this method
 with the same path multiple times, consider downloading the data to the local
@@ -803,7 +715,7 @@ See also the helper functions: <a class="reference internal" href="#pylangacq.ch
 <dt><strong>session</strong><span class="classifier">requests.Session, optional</span></dt><dd><p>If the path is a URL for a remote ZIP archive, data downloading is
 done with reasonable settings of retries and timeout by default,
 in order to be robust against intermittent network issues.
-If necessary, pass in your own instance of <a class="reference external" href="https://docs.python-requests.org/en/master/api/#requests.Session" title="(in Requests v2.25.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">requests.Session</span></code></a>
+If necessary, pass in your own instance of <a class="reference external" href="https://docs.python-requests.org/en/master/api/#requests.Session" title="(in Requests v2.26.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">requests.Session</span></code></a>
 to customize.</p>
 </dd>
 </dl>
@@ -817,8 +729,8 @@ to customize.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.headers">
-<code class="sig-name descname">headers</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>Dict<span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.headers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.headers" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.headers">
+<span class="sig-name descname"><span class="pre">headers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.headers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.headers" title="Permalink to this definition"></a></dt>
 <dd><p>Return the headers.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -830,8 +742,8 @@ to customize.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.ipsyn">
-<code class="sig-name descname">ipsyn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">participant</span><span class="o">=</span><span class="default_value">'CHI'</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.ipsyn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.ipsyn" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.ipsyn">
+<span class="sig-name descname"><span class="pre">ipsyn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">participant</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'CHI'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.ipsyn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.ipsyn" title="Permalink to this definition"></a></dt>
 <dd><p>Return the indexes of productive syntax (IPSyn).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -850,8 +762,8 @@ for the target child.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.languages">
-<code class="sig-name descname">languages</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>Set<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">, </span>List<span class="p">[</span>List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.languages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.languages" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.languages">
+<span class="sig-name descname"><span class="pre">languages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">by_files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.languages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.languages" title="Permalink to this definition"></a></dt>
 <dd><p>Return the languages in the data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -878,8 +790,8 @@ instead of a list.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.mlu">
-<code class="sig-name descname">mlu</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">participant</span><span class="o">=</span><span class="default_value">'CHI'</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.mlu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.mlu" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.mlu">
+<span class="sig-name descname"><span class="pre">mlu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">participant</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'CHI'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.mlu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.mlu" title="Permalink to this definition"></a></dt>
 <dd><p>Return the mean lengths of utterance (MLU).</p>
 <p>This method is equivalent to <a class="reference internal" href="#pylangacq.Reader.mlum" title="pylangacq.Reader.mlum"><code class="xref py py-func docutils literal notranslate"><span class="pre">mlum()</span></code></a>.</p>
 <dl class="field-list simple">
@@ -899,8 +811,8 @@ for the target child.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.mlum">
-<code class="sig-name descname">mlum</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">participant</span><span class="o">=</span><span class="default_value">'CHI'</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.mlum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.mlum" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.mlum">
+<span class="sig-name descname"><span class="pre">mlum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">participant</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'CHI'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.mlum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.mlum" title="Permalink to this definition"></a></dt>
 <dd><p>Return the mean lengths of utterance by morphemes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -919,8 +831,8 @@ for the target child.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.mluw">
-<code class="sig-name descname">mluw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">participant</span><span class="o">=</span><span class="default_value">'CHI'</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.mluw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.mluw" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.mluw">
+<span class="sig-name descname"><span class="pre">mluw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">participant</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'CHI'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.mluw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.mluw" title="Permalink to this definition"></a></dt>
 <dd><p>Return the mean lengths of utterance by words.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -939,14 +851,14 @@ for the target child.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.n_files">
-<code class="sig-name descname">n_files</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.n_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.n_files" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.n_files">
+<span class="sig-name descname"><span class="pre">n_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.n_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.n_files" title="Permalink to this definition"></a></dt>
 <dd><p>Return the number of files.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.participants">
-<code class="sig-name descname">participants</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>Set<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">, </span>List<span class="p">[</span>Set<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.participants"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.participants" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.participants">
+<span class="sig-name descname"><span class="pre">participants</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">by_files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.participants"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.participants" title="Permalink to this definition"></a></dt>
 <dd><p>Return the participants (e.g., CHI, MOT).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -969,8 +881,8 @@ distinction just described for when <code class="docutils literal notranslate"><
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.pop">
-<code class="sig-name descname">pop</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; pylangacq.chat.Reader<a class="reference internal" href="_modules/pylangacq/chat.html#Reader.pop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.pop" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.pop">
+<span class="sig-name descname"><span class="pre">pop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pylangacq.Reader" title="pylangacq.chat.Reader"><span class="pre">pylangacq.chat.Reader</span></a></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.pop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.pop" title="Permalink to this definition"></a></dt>
 <dd><p>Drop the last data file from the reader and return it as a reader.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -982,8 +894,8 @@ distinction just described for when <code class="docutils literal notranslate"><
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.pop_left">
-<code class="sig-name descname">pop_left</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; pylangacq.chat.Reader<a class="reference internal" href="_modules/pylangacq/chat.html#Reader.pop_left"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.pop_left" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.pop_left">
+<span class="sig-name descname"><span class="pre">pop_left</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pylangacq.Reader" title="pylangacq.chat.Reader"><span class="pre">pylangacq.chat.Reader</span></a></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.pop_left"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.pop_left" title="Permalink to this definition"></a></dt>
 <dd><p>Drop the first data file from the reader and return it as a reader.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -995,8 +907,8 @@ distinction just described for when <code class="docutils literal notranslate"><
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.sents">
-<code class="sig-name descname">sents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">participants</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>List<span class="p">[</span>List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">]</span><span class="p">, </span>List<span class="p">[</span>List<span class="p">[</span>List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.sents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.sents" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.sents">
+<span class="sig-name descname"><span class="pre">sents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">participants</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by_files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.sents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.sents" title="Permalink to this definition"></a></dt>
 <dd><p>Return the sents.</p>
 <div class="deprecated">
 <p><span class="versionmodified deprecated">Deprecated since version 0.13.0: </span>Please use <a class="reference internal" href="#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a> with <code class="docutils literal notranslate"><span class="pre">by_utterances=True</span></code>
@@ -1037,8 +949,8 @@ distinction just described for when <code class="docutils literal notranslate"><
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.tagged_sents">
-<code class="sig-name descname">tagged_sents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">participants</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>List<span class="p">[</span>List<span class="p">[</span><a class="reference internal" href="#pylangacq.objects.Token" title="pylangacq.objects.Token">pylangacq.objects.Token</a><span class="p">]</span><span class="p">]</span><span class="p">, </span>List<span class="p">[</span>List<span class="p">[</span>List<span class="p">[</span><a class="reference internal" href="#pylangacq.objects.Token" title="pylangacq.objects.Token">pylangacq.objects.Token</a><span class="p">]</span><span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.tagged_sents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.tagged_sents" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.tagged_sents">
+<span class="sig-name descname"><span class="pre">tagged_sents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">participants</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by_files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pylangacq.objects.Token" title="pylangacq.objects.Token"><span class="pre">pylangacq.objects.Token</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pylangacq.objects.Token" title="pylangacq.objects.Token"><span class="pre">pylangacq.objects.Token</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.tagged_sents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.tagged_sents" title="Permalink to this definition"></a></dt>
 <dd><p>Return the tagged sents.</p>
 <div class="deprecated">
 <p><span class="versionmodified deprecated">Deprecated since version 0.13.0: </span>Please use <a class="reference internal" href="#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code></a> with <code class="docutils literal notranslate"><span class="pre">by_utterances=True</span></code>
@@ -1080,8 +992,8 @@ distinction just described for when <code class="docutils literal notranslate"><
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.tagged_words">
-<code class="sig-name descname">tagged_words</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">participants</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>List<span class="p">[</span><a class="reference internal" href="#pylangacq.objects.Token" title="pylangacq.objects.Token">pylangacq.objects.Token</a><span class="p">]</span><span class="p">, </span>List<span class="p">[</span>List<span class="p">[</span><a class="reference internal" href="#pylangacq.objects.Token" title="pylangacq.objects.Token">pylangacq.objects.Token</a><span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.tagged_words"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.tagged_words" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.tagged_words">
+<span class="sig-name descname"><span class="pre">tagged_words</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">participants</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by_files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pylangacq.objects.Token" title="pylangacq.objects.Token"><span class="pre">pylangacq.objects.Token</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pylangacq.objects.Token" title="pylangacq.objects.Token"><span class="pre">pylangacq.objects.Token</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.tagged_words"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.tagged_words" title="Permalink to this definition"></a></dt>
 <dd><p>Return the tagged words.</p>
 <div class="deprecated">
 <p><span class="versionmodified deprecated">Deprecated since version 0.13.0: </span>Please use <a class="reference internal" href="#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code></a> with <code class="docutils literal notranslate"><span class="pre">by_utterances=False</span></code>
@@ -1122,8 +1034,8 @@ distinction just described for when <code class="docutils literal notranslate"><
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.to_chat">
-<code class="sig-name descname">to_chat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">filenames</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Iterable<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mode</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">511</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.to_chat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.to_chat" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.to_chat">
+<span class="sig-name descname"><span class="pre">to_chat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">filenames</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">511</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.to_chat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.to_chat" title="Permalink to this definition"></a></dt>
 <dd><p>Export to CHAT data files.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1151,8 +1063,8 @@ the number of CHAT files in this reader object.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.to_strs">
-<code class="sig-name descname">to_strs</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Generator<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.to_strs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.to_strs" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.to_strs">
+<span class="sig-name descname"><span class="pre">to_strs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Generator</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.to_strs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.to_strs" title="Permalink to this definition"></a></dt>
 <dd><p>Yield CHAT data strings.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1177,8 +1089,8 @@ Note that <code class="docutils literal notranslate"><span class="pre">ID</span>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.tokens">
-<code class="sig-name descname">tokens</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">participants</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">by_utterances</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>List<span class="p">[</span><a class="reference internal" href="#pylangacq.objects.Token" title="pylangacq.objects.Token">pylangacq.objects.Token</a><span class="p">]</span><span class="p">, </span>List<span class="p">[</span>List<span class="p">[</span><a class="reference internal" href="#pylangacq.objects.Token" title="pylangacq.objects.Token">pylangacq.objects.Token</a><span class="p">]</span><span class="p">]</span><span class="p">, </span>List<span class="p">[</span>List<span class="p">[</span>List<span class="p">[</span><a class="reference internal" href="#pylangacq.objects.Token" title="pylangacq.objects.Token">pylangacq.objects.Token</a><span class="p">]</span><span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.tokens"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.tokens" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.tokens">
+<span class="sig-name descname"><span class="pre">tokens</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">participants</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by_utterances</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by_files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pylangacq.objects.Token" title="pylangacq.objects.Token"><span class="pre">pylangacq.objects.Token</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pylangacq.objects.Token" title="pylangacq.objects.Token"><span class="pre">pylangacq.objects.Token</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pylangacq.objects.Token" title="pylangacq.objects.Token"><span class="pre">pylangacq.objects.Token</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.tokens"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.tokens" title="Permalink to this definition"></a></dt>
 <dd><p>Return the tokens.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1223,8 +1135,8 @@ distinction just described for when <code class="docutils literal notranslate"><
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.ttr">
-<code class="sig-name descname">ttr</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">keep_case</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">participant</span><span class="o">=</span><span class="default_value">'CHI'</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.ttr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.ttr" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.ttr">
+<span class="sig-name descname"><span class="pre">ttr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keep_case</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">participant</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'CHI'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.ttr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.ttr" title="Permalink to this definition"></a></dt>
 <dd><p>Return the type-token ratios (TTR).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1252,8 +1164,8 @@ for the target child.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.utterances">
-<code class="sig-name descname">utterances</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">participants</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>List<span class="p">[</span><a class="reference internal" href="#pylangacq.objects.Utterance" title="pylangacq.objects.Utterance">pylangacq.objects.Utterance</a><span class="p">]</span><span class="p">, </span>List<span class="p">[</span>List<span class="p">[</span><a class="reference internal" href="#pylangacq.objects.Utterance" title="pylangacq.objects.Utterance">pylangacq.objects.Utterance</a><span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.utterances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.utterances" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.utterances">
+<span class="sig-name descname"><span class="pre">utterances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">participants</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by_files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pylangacq.objects.Utterance" title="pylangacq.objects.Utterance"><span class="pre">pylangacq.objects.Utterance</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pylangacq.objects.Utterance" title="pylangacq.objects.Utterance"><span class="pre">pylangacq.objects.Utterance</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.utterances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.utterances" title="Permalink to this definition"></a></dt>
 <dd><p>Return the utterances.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1290,8 +1202,8 @@ distinction just described for when <code class="docutils literal notranslate"><
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.word_frequencies">
-<code class="sig-name descname">word_frequencies</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">keep_case</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">participants</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.Counter" title="(in Python v3.9)">collections.Counter</a><span class="p">, </span>List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.Counter" title="(in Python v3.9)">collections.Counter</a><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.word_frequencies"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.word_frequencies" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.word_frequencies">
+<span class="sig-name descname"><span class="pre">word_frequencies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keep_case</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">participants</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by_files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.Counter" title="(in Python v3.9)"><span class="pre">collections.Counter</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.Counter" title="(in Python v3.9)"><span class="pre">collections.Counter</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.word_frequencies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.word_frequencies" title="Permalink to this definition"></a></dt>
 <dd><p>Return word frequencies.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1338,8 +1250,8 @@ and so leaving keep_case as True is appropriate in most cases.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.word_ngrams">
-<code class="sig-name descname">word_ngrams</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n</span></em>, <em class="sig-param"><span class="n">keep_case</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">participants</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.Counter" title="(in Python v3.9)">collections.Counter</a><span class="p">, </span>List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.Counter" title="(in Python v3.9)">collections.Counter</a><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.word_ngrams"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.word_ngrams" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.word_ngrams">
+<span class="sig-name descname"><span class="pre">word_ngrams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_case</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">participants</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by_files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.Counter" title="(in Python v3.9)"><span class="pre">collections.Counter</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.Counter" title="(in Python v3.9)"><span class="pre">collections.Counter</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.word_ngrams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.word_ngrams" title="Permalink to this definition"></a></dt>
 <dd><p>Return word ngrams.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1386,8 +1298,8 @@ and so leaving keep_case as True is appropriate in most cases.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pylangacq.Reader.words">
-<code class="sig-name descname">words</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">participants</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">by_utterances</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">by_files</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">, </span>List<span class="p">[</span>List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">]</span><span class="p">, </span>List<span class="p">[</span>List<span class="p">[</span>List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.words"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.Reader.words" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.Reader.words">
+<span class="sig-name descname"><span class="pre">words</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">participants</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by_utterances</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by_files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#Reader.words"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.Reader.words" title="Permalink to this definition"></a></dt>
 <dd><p>Return the words.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1433,12 +1345,12 @@ distinction just described for when <code class="docutils literal notranslate"><
 
 </dd></dl>
 
-</div>
-<div class="section" id="token">
-<h2><a class="reference internal" href="#pylangacq.objects.Token" title="pylangacq.objects.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a><a class="headerlink" href="#token" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="token">
+<h2><a class="reference internal" href="#pylangacq.objects.Token" title="pylangacq.objects.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a><a class="headerlink" href="#token" title="Permalink to this headline"></a></h2>
 <dl class="py class">
-<dt id="pylangacq.objects.Token">
-<em class="property">class </em><code class="sig-prename descclassname">pylangacq.objects.</code><code class="sig-name descname">Token</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">pos</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">mor</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">gra</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference internal" href="#pylangacq.objects.Gra" title="pylangacq.objects.Gra">pylangacq.objects.Gra</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/objects.html#Token"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.objects.Token" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.objects.Token">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pylangacq.objects.</span></span><span class="sig-name descname"><span class="pre">Token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mor</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gra</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pylangacq.objects.Gra" title="pylangacq.objects.Gra"><span class="pre">pylangacq.objects.Gra</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/objects.html#Token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.objects.Token" title="Permalink to this definition"></a></dt>
 <dd><p>Token with attributes as parsed from a CHAT utterance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attributes</dt>
@@ -1456,12 +1368,12 @@ distinction just described for when <code class="docutils literal notranslate"><
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="gra">
-<h2><a class="reference internal" href="#pylangacq.objects.Gra" title="pylangacq.objects.Gra"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gra</span></code></a><a class="headerlink" href="#gra" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="gra">
+<h2><a class="reference internal" href="#pylangacq.objects.Gra" title="pylangacq.objects.Gra"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gra</span></code></a><a class="headerlink" href="#gra" title="Permalink to this headline"></a></h2>
 <dl class="py class">
-<dt id="pylangacq.objects.Gra">
-<em class="property">class </em><code class="sig-prename descclassname">pylangacq.objects.</code><code class="sig-name descname">Gra</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dep</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">head</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">rel</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/objects.html#Gra"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.objects.Gra" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.objects.Gra">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pylangacq.objects.</span></span><span class="sig-name descname"><span class="pre">Gra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dep</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">head</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/objects.html#Gra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.objects.Gra" title="Permalink to this definition"></a></dt>
 <dd><p>Grammatical relation of a word in an utterance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attributes</dt>
@@ -1477,12 +1389,12 @@ distinction just described for when <code class="docutils literal notranslate"><
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="utterance">
-<h2><a class="reference internal" href="#pylangacq.objects.Utterance" title="pylangacq.objects.Utterance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Utterance</span></code></a><a class="headerlink" href="#utterance" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="utterance">
+<h2><a class="reference internal" href="#pylangacq.objects.Utterance" title="pylangacq.objects.Utterance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Utterance</span></code></a><a class="headerlink" href="#utterance" title="Permalink to this headline"></a></h2>
 <dl class="py class">
-<dt id="pylangacq.objects.Utterance">
-<em class="property">class </em><code class="sig-prename descclassname">pylangacq.objects.</code><code class="sig-name descname">Utterance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">participant</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">tokens</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#pylangacq.objects.Token" title="pylangacq.objects.Token">pylangacq.objects.Token</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">time_marks</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">tiers</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/objects.html#Utterance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.objects.Utterance" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.objects.Utterance">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pylangacq.objects.</span></span><span class="sig-name descname"><span class="pre">Utterance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">participant</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">tokens</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pylangacq.objects.Token" title="pylangacq.objects.Token"><span class="pre">pylangacq.objects.Token</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_marks</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tiers</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pylangacq/objects.html#Utterance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.objects.Utterance" title="Permalink to this definition"></a></dt>
 <dd><p>Utterance in a CHAT transcript data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attributes</dt>
@@ -1507,12 +1419,12 @@ whatever information not readily handled by this package.</p>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="helper-functions">
-<h2>Helper Functions<a class="headerlink" href="#helper-functions" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="helper-functions">
+<h2>Helper Functions<a class="headerlink" href="#helper-functions" title="Permalink to this headline"></a></h2>
 <dl class="py function">
-<dt id="pylangacq.chat.cached_data_info">
-<code class="sig-prename descclassname">pylangacq.chat.</code><code class="sig-name descname">cached_data_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Set<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><a class="reference internal" href="_modules/pylangacq/chat.html#cached_data_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.cached_data_info" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.chat.cached_data_info">
+<span class="sig-prename descclassname"><span class="pre">pylangacq.chat.</span></span><span class="sig-name descname"><span class="pre">cached_data_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#cached_data_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.chat.cached_data_info" title="Permalink to this definition"></a></dt>
 <dd><p>Return the information of the cached datasets.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -1525,8 +1437,8 @@ whatever information not readily handled by this package.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="pylangacq.chat.remove_cached_data">
-<code class="sig-prename descclassname">pylangacq.chat.</code><code class="sig-name descname">remove_cached_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="reference internal" href="_modules/pylangacq/chat.html#remove_cached_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylangacq.chat.remove_cached_data" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pylangacq.chat.remove_cached_data">
+<span class="sig-prename descclassname"><span class="pre">pylangacq.chat.</span></span><span class="sig-name descname"><span class="pre">remove_cached_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/pylangacq/chat.html#remove_cached_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pylangacq.chat.remove_cached_data" title="Permalink to this definition"></a></dt>
 <dd><p>Remove data cached on disk.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1539,55 +1451,38 @@ all cached data is removed.</p>
 </dl>
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="changelog.html" class="btn btn-neutral float-right" title="Changelog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="measures.html" class="btn btn-neutral float-left" title="Developmental Measures" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="changelog.html" class="btn btn-neutral float-right" title="Changelog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2015-2021, Jackson L. Lee | PyLangAcq 0.15.0 | Documentation last updated on June 06, 2021.
-
-    </p>
+    <p>&#169; Copyright 2015-2021, Jackson L. Lee | PyLangAcq 0.15.0 | Documentation last updated on September 23, 2021.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

@@ -8,6 +8,14 @@ as used in the CHILDES database for language acquisition research;
 CHAT is documented in its `official manual <https://talkbank.org/manuals/CHAT.pdf>`_.
 This page describes the ways CHAT data can be read by the ``pylangacq`` package.
 
+.. note::
+    CHAT data is processed in parallelized code to speed things up by default.
+    Especially for Windows users, you may need to put your code under the
+    ``if __name__ == "__main__":`` idiom in a script to avoid running into an error.
+    For reference, please see the `"safe importing of main module" section
+    <https://docs.python.org/3/library/multiprocessing.html#the-spawn-and-forkserver-start-methods>`_
+    for parallelization from the official Python documentation.
+
 Initializing a Reader
 ---------------------
 

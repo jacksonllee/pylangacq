@@ -1,75 +1,38 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Quickstart &mdash; PyLangAcq 0.15.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="canonical" href="https://pylangacq.org/quickstart.html" />
-
-  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Reading CHAT Data" href="read.html" />
     <link rel="prev" title="PyLangAcq: Language Acquisition Research in Python" href="index.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> PyLangAcq
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 0.15.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -77,18 +40,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#reading-chat-data">Reading CHAT data</a></li>
@@ -216,79 +168,39 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">PyLangAcq</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>Quickstart</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="quickstart">
-<span id="id1"></span><h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="quickstart">
+<span id="id1"></span><h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline"></a></h1>
 <p>After you have downloaded and installed PyLangAcq (see <a class="reference internal" href="index.html#download-install"><span class="std std-ref">Download and Install</span></a>),
 import the package <code class="docutils literal notranslate"><span class="pre">pylangacq</span></code> in your Python interpreter:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span>
 </pre></div>
 </div>
 <p>No errors? Great! Now you’re ready to proceed.</p>
-<div class="section" id="reading-chat-data">
-<h2>Reading CHAT data<a class="headerlink" href="#reading-chat-data" title="Permalink to this headline">¶</a></h2>
+<section id="reading-chat-data">
+<h2>Reading CHAT data<a class="headerlink" href="#reading-chat-data" title="Permalink to this headline"></a></h2>
 <p>First off, we need some CHAT data to work with.
 The function <a class="reference internal" href="api.html#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a>
 asks for a data source and returns a CHAT data reader.
@@ -298,6 +210,14 @@ A prototypical example for the latter is a dataset from CHILDES.
 To illustrate, let’s use Eve’s data from the
 <a class="reference external" href="https://childes.talkbank.org/access/Eng-NA/Brown.html">Brown</a>
 corpus of American English:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>CHAT data is processed in parallelized code to speed things up by default.
+Especially for Windows users, you may need to put your code under the
+<code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">__name__</span> <span class="pre">==</span> <span class="pre">&quot;__main__&quot;:</span></code> idiom in a script to avoid running into an error.
+For reference, please see the <a class="reference external" href="https://docs.python.org/3/library/multiprocessing.html#the-spawn-and-forkserver-start-methods">“safe importing of main module” section</a>
+for parallelization from the official Python documentation.</p>
+</div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://childes.talkbank.org/data/Eng-NA/Brown.zip&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;Eve&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">n_files</span><span class="p">()</span>
@@ -309,9 +229,9 @@ It has Eve’s 20 CHAT data files all parsed and ready for your analysis.
 <code class="docutils literal notranslate"><span class="pre">eve</span></code> has various methods through which you can access different information
 with Python data structures.</p>
 <p>More on <a class="reference internal" href="read.html#read"><span class="std std-ref">Reading CHAT Data</span></a>.</p>
-</div>
-<div class="section" id="header-information">
-<h2>Header Information<a class="headerlink" href="#header-information" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="header-information">
+<h2>Header Information<a class="headerlink" href="#header-information" title="Permalink to this headline"></a></h2>
 <p>CHAT transcript files store metadata in the header with lines beginning with <code class="docutils literal notranslate"><span class="pre">&#64;</span></code>.
 Among other things, <code class="docutils literal notranslate"><span class="pre">eve</span></code> has the age information of Eve when the recordings were made,
 which is from 1 year and 6 months old to 2 years and 3 months old:</p>
@@ -339,9 +259,9 @@ which is from 1 year and 6 months old to 2 years and 3 months old:</p>
 </pre></div>
 </div>
 <p>More on <a class="reference internal" href="headers.html#headers"><span class="std std-ref">Accessing Headers</span></a>.</p>
-</div>
-<div class="section" id="transcriptions-and-annotations">
-<h2>Transcriptions and Annotations<a class="headerlink" href="#transcriptions-and-annotations" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="transcriptions-and-annotations">
+<h2>Transcriptions and Annotations<a class="headerlink" href="#transcriptions-and-annotations" title="Permalink to this headline"></a></h2>
 <p><a class="reference internal" href="api.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a> is the basic method to access the transcriptions:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">words</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">words</span><span class="p">()</span>  <span class="c1"># list of strings, for all the words across all 20 files</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>  <span class="c1"># total word count</span>
@@ -354,11 +274,11 @@ which is from 1 year and 6 months old to 2 years and 3 months old:</p>
 returns a flat list of results from all the files.
 If we are interested in the results for individual files,
 the method has the optional boolean parameter <code class="docutils literal notranslate"><span class="pre">by_files</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">words_by_files</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="n">by_files</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># list of lists of strings, each inner list for one file</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">words_by_files</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="n">by_files</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># list of lists of strings, each inner list for one file</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">words_by_files</span><span class="p">)</span>  <span class="c1"># expects 20 -- that&#39;s the number of files of ``eve``</span>
 <span class="go">20</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">words_one_file</span> <span class="ow">in</span> <span class="n">words_by_files</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">words_one_file</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">words_one_file</span><span class="p">))</span>
 <span class="gp">...</span>
 <span class="go">5810</span>
 <span class="go">5258</span>
@@ -403,7 +323,7 @@ as <a class="reference internal" href="api.html#pylangacq.Reader.words" title="p
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># The Token class is a dataclass. A Token instance has attributes as shown above.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">some_tokens</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">word</span><span class="p">,</span> <span class="n">token</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">word</span><span class="p">,</span> <span class="n">token</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="go">more qn</span>
 <span class="go">cookie n</span>
@@ -429,9 +349,9 @@ or any unparsed tiers, <a class="reference internal" href="api.html#pylangacq.Re
 </pre></div>
 </div>
 <p>More on <a class="reference internal" href="transcriptions.html#transcriptions"><span class="std std-ref">Transcriptions and Annotations</span></a>.</p>
-</div>
-<div class="section" id="word-frequencies-and-ngrams">
-<h2>Word Frequencies and Ngrams<a class="headerlink" href="#word-frequencies-and-ngrams" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="word-frequencies-and-ngrams">
+<h2>Word Frequencies and Ngrams<a class="headerlink" href="#word-frequencies-and-ngrams" title="Permalink to this headline"></a></h2>
 <p>For word combinatorics, check out
 <a class="reference internal" href="api.html#pylangacq.Reader.word_frequencies" title="pylangacq.Reader.word_frequencies"><code class="xref py py-func docutils literal notranslate"><span class="pre">word_frequencies()</span></code></a>
 and <a class="reference internal" href="api.html#pylangacq.Reader.word_ngrams" title="pylangacq.Reader.word_ngrams"><code class="xref py py-func docutils literal notranslate"><span class="pre">word_ngrams()</span></code></a>:</p>
@@ -453,9 +373,9 @@ and <a class="reference internal" href="api.html#pylangacq.Reader.word_ngrams" t
 </pre></div>
 </div>
 <p>More on <a class="reference internal" href="frequencies.html#frequencies"><span class="std std-ref">Word Frequencies and Ngrams</span></a>.</p>
-</div>
-<div class="section" id="developmental-measures">
-<h2>Developmental Measures<a class="headerlink" href="#developmental-measures" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="developmental-measures">
+<h2>Developmental Measures<a class="headerlink" href="#developmental-measures" title="Permalink to this headline"></a></h2>
 <p>To get the mean length of utterance (MLU), use <a class="reference internal" href="api.html#pylangacq.Reader.mlu" title="pylangacq.Reader.mlu"><code class="xref py py-func docutils literal notranslate"><span class="pre">mlu()</span></code></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">mlu</span><span class="p">()</span>
 <span class="go">[2.309041835357625,</span>
@@ -487,61 +407,44 @@ other packages for making plots, for example.</p>
 <a class="reference internal" href="api.html#pylangacq.Reader.ttr" title="pylangacq.Reader.ttr"><code class="xref py py-func docutils literal notranslate"><span class="pre">ttr()</span></code></a> for the type-token ratio (TTR) and
 <a class="reference internal" href="api.html#pylangacq.Reader.ipsyn" title="pylangacq.Reader.ipsyn"><code class="xref py py-func docutils literal notranslate"><span class="pre">ipsyn()</span></code></a> for the index of productive syntax (IPSyn).</p>
 <p>More on <a class="reference internal" href="measures.html#measures"><span class="std std-ref">Developmental Measures</span></a>.</p>
-</div>
-<div class="section" id="questions">
-<h2>Questions?<a class="headerlink" href="#questions" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="questions">
+<h2>Questions?<a class="headerlink" href="#questions" title="Permalink to this headline"></a></h2>
 <p>If you have any questions, comments, bug reports etc, please open <a class="reference external" href="https://github.com/jacksonllee/pylangacq/issues">issues
 at the GitHub repository</a>, or
 contact <a class="reference external" href="https://jacksonllee.com/">Jackson L. Lee</a>.</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="read.html" class="btn btn-neutral float-right" title="Reading CHAT Data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index.html" class="btn btn-neutral float-left" title="PyLangAcq: Language Acquisition Research in Python" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="read.html" class="btn btn-neutral float-right" title="Reading CHAT Data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2015-2021, Jackson L. Lee | PyLangAcq 0.15.0 | Documentation last updated on June 06, 2021.
-
-    </p>
+    <p>&#169; Copyright 2015-2021, Jackson L. Lee | PyLangAcq 0.15.0 | Documentation last updated on September 23, 2021.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

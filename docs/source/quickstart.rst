@@ -25,6 +25,14 @@ To illustrate, let's use Eve's data from the
 `Brown <https://childes.talkbank.org/access/Eng-NA/Brown.html>`_
 corpus of American English:
 
+.. note::
+    CHAT data is processed in parallelized code to speed things up by default.
+    Especially for Windows users, you may need to put your code under the
+    ``if __name__ == "__main__":`` idiom in a script to avoid running into an error.
+    For reference, please see the `"safe importing of main module" section
+    <https://docs.python.org/3/library/multiprocessing.html#the-spawn-and-forkserver-start-methods>`_
+    for parallelization from the official Python documentation.
+
 .. code-block:: python
 
     >>> url = "https://childes.talkbank.org/data/Eng-NA/Brown.zip"

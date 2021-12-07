@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 * `Reader` objects can now be concatenated by the addition operator `+`.
 * Implemented the `head`, `tail`, and `info` methods at `Reader`.
+* Added support for Python 3.10.
 
 ### Changed
 * The `to_strs` and `to_chat` methods of a `Reader` object return
@@ -17,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 ### Removed
+* Dropped support for Python 3.6.
+
 ### Fixed
 ### Security
 

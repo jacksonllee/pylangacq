@@ -9,14 +9,26 @@ Changelog
 Added
 ^^^^^
 
+
+* ``Reader`` objects can now be concatenated by the addition operator ``+``.
+* Implemented the ``head``\ , ``tail``\ , and ``info`` methods at ``Reader``.
+* Added support for Python 3.10.
+
 Changed
 ^^^^^^^
+
+
+* The ``to_strs`` and ``to_chat`` methods of a ``Reader`` object return
+  tabulated outputs by default.
 
 Deprecated
 ^^^^^^^^^^
 
 Removed
 ^^^^^^^
+
+
+* Dropped support for Python 3.6.
 
 Fixed
 ^^^^^

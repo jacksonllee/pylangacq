@@ -51,14 +51,55 @@ If the ZIP file has a fair amount of data
 (the Brown dataset has over 200 CHAT data files, with over 180,000 utterances),
 a :func:`~pylangacq.read_chat` call like this typically takes a couple seconds.
 
-.. skip: start if(os.getenv("CI") == "true" and sys.version_info[:2] == (3, 9), reason="py39 on CI doesn't work for unknown reason")
+.. skip: start if(os.getenv("CI") == "true", reason="maybe Sybil can't handle <1> in the output?")
 
 .. code-block:: python
 
-    >>> brown.n_files()
-    214
-    >>> len(brown.utterances())
-    184639
+    >>> brown.info()
+    214 files
+    184639 utterances
+    880322 words
+          Utterance Count    Word Count  File Path
+    --  -----------------  ------------  ---------------------
+    #1               1737          6435  Brown/Adam/020304.cha
+    #2               1972          7749  Brown/Adam/020318.cha
+    #3               1305          5577  Brown/Adam/020403.cha
+    #4               1224          4568  Brown/Adam/020415.cha
+    #5               1344          5479  Brown/Adam/020430.cha
+    ...
+    (set `verbose` to True for all the files)
+
+
+For a quick preview of what the data looks like,
+The :func:`~pylangacq.Reader.head` and :func:`~pylangacq.Reader.tail` methods
+provide a quick preview of what the data looks like:
+
+.. code-block:: python
+
+    >>> brown.head()
+    *CHI:  play     checkers      .
+    %mor:  n|play   n|checker-PL  .
+    %gra:  1|2|MOD  2|0|INCROOT   3|2|PUNCT
+    %pho:   <1> pe
+
+    *CHI:  big      drum         .
+    %mor:  adj|big  n|drum       .
+    %gra:  1|2|MOD  2|0|INCROOT  3|2|PUNCT
+
+    *MOT:  big      drum         ?
+    %mor:  adj|big  n|drum       ?
+    %gra:  1|2|MOD  2|0|INCROOT  3|2|PUNCT
+
+    *CHI:  big      drum         .
+    %mor:  adj|big  n|drum       .
+    %gra:  1|2|MOD  2|0|INCROOT  3|2|PUNCT
+    %spa:   $IMIT
+
+    *CHI:  big      drum         .
+    %mor:  adj|big  n|drum       .
+    %gra:  1|2|MOD  2|0|INCROOT  3|2|PUNCT
+    %spa:   $IMIT
+
 
 .. skip: end
 
@@ -307,6 +348,11 @@ Among these methods, :func:`~pylangacq.Reader.filter` creates and
 returns a new :class:`~pylangacq.Reader`
 without altering the original one.
 All the other methods work by mutating the calling :class:`~pylangacq.Reader` in-place.
+
+For convenience, the addition operator ``+`` is defined for :class:`~pylangacq.Reader`
+objects, and can be used to concatenate two :class:`~pylangacq.Reader` objects.
+By extension, ``+=`` is also valid, so a statement in the form of ``reader1 += reader2``
+would mutate ``reader1`` by concatenating the two readers.
 
 A :class:`~pylangacq.Reader` can be iterated upon
 (e.g., ``for reader_one_file in reader: ...``),

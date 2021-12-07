@@ -178,11 +178,17 @@ def _params_in_docstring(*params, class_method=True):
         docstring = docstring.replace("\n        ", "\n    ")
 
     def real_decorator(func):
-        if class_method:
-            returns_header = "\n\n        Returns\n        -------"
+        returns_none = "Returns\n        -------" not in func.__doc__
+        if returns_none:
+            func.__doc__ += docstring
         else:
-            returns_header = "\n\n    Returns\n    -------"
-        func.__doc__ = func.__doc__.replace(returns_header, docstring + returns_header)
+            if class_method:
+                returns_header = "\n\n        Returns\n        -------"
+            else:
+                returns_header = "\n\n    Returns\n    -------"
+            func.__doc__ = func.__doc__.replace(
+                returns_header, docstring + returns_header
+            )
 
         @functools.wraps(func)
         def wrapper(*args, **kwargs):

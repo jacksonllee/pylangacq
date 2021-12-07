@@ -22,6 +22,70 @@ from pylangacq.tests.test_data import (
 
 download_and_extract_brown()
 
+_EXPECTED_EVE_UTTERANCES = [
+    Utterance(
+        participant="CHI",
+        tokens=[
+            Token(
+                word="more",
+                pos="qn",
+                mor="more",
+                gra=Gra(dep=1, head=2, rel="QUANT"),
+            ),
+            Token(
+                word="cookie",
+                pos="n",
+                mor="cookie",
+                gra=Gra(dep=2, head=0, rel="INCROOT"),
+            ),
+            Token(word=".", pos=".", mor="", gra=Gra(dep=3, head=2, rel="PUNCT")),
+        ],
+        time_marks=None,
+        tiers={
+            "CHI": "more cookie . [+ IMP]",
+            "%mor": "qn|more n|cookie .",
+            "%gra": "1|2|QUANT 2|0|INCROOT 3|2|PUNCT",
+            "%int": "distinctive , loud",
+        },
+    ),
+    Utterance(
+        participant="MOT",
+        tokens=[
+            Token(
+                word="you",
+                pos="pro:per",
+                mor="you",
+                gra=Gra(dep=1, head=2, rel="SUBJ"),
+            ),
+            Token(
+                word="0v",
+                pos="0v",
+                mor="v",
+                gra=Gra(dep=2, head=0, rel="ROOT"),
+            ),
+            Token(
+                word="more",
+                pos="qn",
+                mor="more",
+                gra=Gra(dep=3, head=4, rel="QUANT"),
+            ),
+            Token(
+                word="cookies",
+                pos="n",
+                mor="cookie-PL",
+                gra=Gra(dep=4, head=2, rel="OBJ"),
+            ),
+            Token(word="?", pos="?", mor="", gra=Gra(dep=5, head=2, rel="PUNCT")),
+        ],
+        time_marks=None,
+        tiers={
+            "MOT": "you 0v more cookies ?",
+            "%mor": "pro:per|you 0v|v qn|more n|cookie-PL ?",
+            "%gra": "1|2|SUBJ 2|0|ROOT 3|4|QUANT 4|2|OBJ 5|2|PUNCT",
+        },
+    ),
+]
+
 
 class BaseTestCHATReader:
     """A base test class that collects all tests for a CHAT reader class.
@@ -88,7 +152,9 @@ class BaseTestCHATReader:
             "@ID:\teng|Foobar|BAR||male|||P2|||\n"
             "@Date:\t03-NOV-2016\n"
             "@Comment:\tThis is a comment.\n"
+            "\n"
             "*FOO:\thow are you ?\n"
+            "\n"
             "*BAR:\tfine , thank you ."
         )
         reader = self.reader_class.from_strs([expected])
@@ -103,7 +169,9 @@ class BaseTestCHATReader:
             "@ID:\teng|Foobar|BAR||male|||P2|||\n"
             "@Date:\t03-NOV-2016\n"
             "@Comment:\tThis is a comment.\n"
+            "\n"
             "*FOO:\thow are you ?\n"
+            "\n"
             "*BAR:\tfine , thank you ."
         )
         reader = self.reader_class.from_strs([expected])
@@ -113,10 +181,61 @@ class BaseTestCHATReader:
             with open(os.path.join(temp_dir, "0001.cha")) as f:
                 assert f.read().strip() == expected
 
+    def test__utterance_to_str_tabular_false(self):
+        reader = self.reader_class()
+        actual = reader._utterance_to_str(_EXPECTED_EVE_UTTERANCES[0], tabular=False)
+        expected = (
+            "\n"
+            "*CHI:\tmore cookie . [+ IMP]\n"
+            "%mor:\tqn|more n|cookie .\n"
+            "%gra:\t1|2|QUANT 2|0|INCROOT 3|2|PUNCT\n"
+            "%int:\tdistinctive , loud"
+            "\n"
+        )
+        assert actual == expected
+
+    def test__utterance_to_str_tabular_true(self):
+        reader = self.reader_class()
+        actual = reader._utterance_to_str(_EXPECTED_EVE_UTTERANCES[0], tabular=True)
+        expected = (
+            "\n"
+            "*CHI:  more       cookie       .\n"
+            "%mor:  qn|more    n|cookie     .\n"
+            "%gra:  1|2|QUANT  2|0|INCROOT  3|2|PUNCT\n"
+            "%int:\tdistinctive , loud"
+            "\n"
+        )
+        assert actual == expected
+
+    def test_round_trip_to_strs_and_from_strs_for_tabular_true(self):
+        original = self.eve_local
+        new = self.reader_class.from_strs([list(original.to_strs(tabular=True))[0]])
+        assert original.n_files() == new.n_files() == 1
+        assert (
+            # Utterance count
+            sum(len(f.utterances) for f in original._files)
+            == sum(len(f.utterances) for f in new._files)
+            == 1588
+        )
+        assert (
+            # Word count
+            sum(len(u.tokens) for f in original._files for u in f.utterances)
+            == sum(len(u.tokens) for f in new._files for u in f.utterances)
+            == 6101
+        )
+
     def test_clear(self):
         eve_copy = copy.deepcopy(self.eve_local)
         eve_copy.clear()
         assert eve_copy.n_files() == 0
+
+    def test_add(self):
+        reader1 = self.reader_class.from_strs(["*X: foo"])
+        reader2 = self.reader_class.from_strs(["*X: bar"])
+        reader3 = self.reader_class.from_strs(["*X: baz"])
+        assert list((reader1 + reader2).to_strs()) == ["\n*X:\tfoo\n", "\n*X:\tbar\n"]
+        reader2 += reader3
+        assert list(reader2.to_strs()) == ["\n*X:\tbar\n", "\n*X:\tbaz\n"]
 
     def test_append_and_append_left(self):
         eve_copy = copy.deepcopy(self.eve_local)
@@ -174,73 +293,7 @@ class BaseTestCHATReader:
         assert not adam_paths.issubset(set(eve.file_paths()))
 
     def test_utterances(self):
-        assert self.eve_local.utterances()[:2] == [
-            Utterance(
-                participant="CHI",
-                tokens=[
-                    Token(
-                        word="more",
-                        pos="qn",
-                        mor="more",
-                        gra=Gra(dep=1, head=2, rel="QUANT"),
-                    ),
-                    Token(
-                        word="cookie",
-                        pos="n",
-                        mor="cookie",
-                        gra=Gra(dep=2, head=0, rel="INCROOT"),
-                    ),
-                    Token(
-                        word=".", pos=".", mor="", gra=Gra(dep=3, head=2, rel="PUNCT")
-                    ),
-                ],
-                time_marks=None,
-                tiers={
-                    "CHI": "more cookie . [+ IMP]",
-                    "%mor": "qn|more n|cookie .",
-                    "%gra": "1|2|QUANT 2|0|INCROOT 3|2|PUNCT",
-                    "%int": "distinctive , loud",
-                },
-            ),
-            Utterance(
-                participant="MOT",
-                tokens=[
-                    Token(
-                        word="you",
-                        pos="pro:per",
-                        mor="you",
-                        gra=Gra(dep=1, head=2, rel="SUBJ"),
-                    ),
-                    Token(
-                        word="0v",
-                        pos="0v",
-                        mor="v",
-                        gra=Gra(dep=2, head=0, rel="ROOT"),
-                    ),
-                    Token(
-                        word="more",
-                        pos="qn",
-                        mor="more",
-                        gra=Gra(dep=3, head=4, rel="QUANT"),
-                    ),
-                    Token(
-                        word="cookies",
-                        pos="n",
-                        mor="cookie-PL",
-                        gra=Gra(dep=4, head=2, rel="OBJ"),
-                    ),
-                    Token(
-                        word="?", pos="?", mor="", gra=Gra(dep=5, head=2, rel="PUNCT")
-                    ),
-                ],
-                time_marks=None,
-                tiers={
-                    "MOT": "you 0v more cookies ?",
-                    "%mor": "pro:per|you 0v|v qn|more n|cookie-PL ?",
-                    "%gra": "1|2|SUBJ 2|0|ROOT 3|4|QUANT 4|2|OBJ 5|2|PUNCT",
-                },
-            ),
-        ]
+        assert self.eve_local.utterances()[:2] == _EXPECTED_EVE_UTTERANCES
 
     def test_headers(self):
         assert self.eve_local.headers() == [

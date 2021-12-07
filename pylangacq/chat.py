@@ -11,6 +11,7 @@ import json
 import os
 import re
 import shutil
+import sys
 import tempfile
 import uuid
 import warnings
@@ -22,6 +23,7 @@ from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 from dateutil.parser import parse as parse_date
 from dateutil.parser import ParserError
+from tabulate import tabulate
 
 import pylangacq
 from pylangacq.measures import _CLITIC, _get_ipsyn, _get_mlum, _get_mluw, _get_ttr
@@ -163,6 +165,15 @@ def _params_in_docstring(*params, class_method=True):
             If necessary, pass in your own instance of :class:`requests.Session`
             to customize."""
 
+    if "stream" in params:
+        docstring += """
+        stream : object, optional
+            An object with a ``write(string)`` method. This parameter controls
+            where the output goes, and is passed to the ``file`` parameter of
+            ``print()``. If ``None`` or not given, ``sys.stdout`` is used.
+            Pass in ``sys.stderr`` for printing to the standard error,
+            or a file object for redirecting the output to a text file."""
+
     if not class_method:
         docstring = docstring.replace("\n        ", "\n    ")
 
@@ -249,7 +260,7 @@ class Reader:
             "Number of files in this reader? Utterances? Words? Something else?"
         )
 
-    def _get_reader_from_files(self, files: Iterable[_File]):
+    def _get_reader_from_files(self, files: Iterable[_File]) -> "pylangacq.Reader":
         reader = self.__class__()
         reader._files = collections.deque(files)
         return reader
@@ -282,6 +293,11 @@ class Reader:
     def clear(self) -> None:
         """Remove all data from this reader."""
         self._files = collections.deque()
+
+    def __add__(self, other: "pylangacq.Reader") -> "pylangacq.Reader":
+        if not issubclass(other.__class__, Reader):
+            raise TypeError(f'cannot concatenate "{other.__class__}" to a reader')
+        return self._get_reader_from_files(self._files + other._files)
 
     def _append(self, left_or_right, reader: "pylangacq.Reader") -> None:
         func = "extendleft" if left_or_right == "left" else "extend"
@@ -937,7 +953,7 @@ class Reader:
         """
         strs = list(strs)
         if ids is None:
-            ids = [str(uuid.uuid4()) for _ in range(len(strs))]
+            ids = [_get_uuid() for _ in range(len(strs))]
         else:
             ids = list(ids)
         if len(strs) != len(ids):
@@ -1135,7 +1151,7 @@ class Reader:
         if not os.path.isdir(_CACHED_DATA_DIR):
             _initialize_cached_data_dir()
 
-        subdir = str(uuid.uuid4())
+        subdir = _get_uuid()
         unzip_dir = os.path.join(_CACHED_DATA_DIR, subdir)
         os.makedirs(unzip_dir)
 
@@ -1162,7 +1178,7 @@ class Reader:
                 sorted_keys.append(key)
         return sorted_keys
 
-    def to_strs(self) -> Generator[str, None, None]:
+    def to_strs(self, tabular: bool = True) -> Generator[str, None, None]:
         """Yield CHAT data strings.
 
         .. note::
@@ -1175,6 +1191,13 @@ class Reader:
             (e.g., ``Tape Location``, ``Time Duration``),
             only the last value in a given CHAT file is retained.
             Note that ``ID`` for participant information is not affected.
+
+        Parameters
+        ----------
+        tabular : bool, optional
+            If ``True``, adjust spacing such that the three tiers of the utterance,
+            %mor, and %gra are aligned in a tabular form. Note that such alignment
+            would drop annotations (e.g., pauses) on the main utterance tier.
 
         Yields
         ------
@@ -1241,20 +1264,139 @@ class Reader:
                     str_for_file += f"@{key}\n"
 
             for u in f.utterances:
-                str_for_file += f"*{u.participant}:\t{u.tiers[u.participant]}\n"
-                keys = self._sort_keys(
-                    u.tiers.keys(), first=["%mor", "%gra"], drop={u.participant}
-                )
-                for key in keys:
-                    line = u.tiers.get(key)
-                    if line is None:
-                        continue
-                    str_for_file += f"{key}:\t{line}\n"
+                str_for_file += self._utterance_to_str(u, tabular)
 
             yield str_for_file
 
+    def _utterance_to_str(self, u: Utterance, tabular: bool) -> str:
+        # `mor_gra_keys` needs to be a list for the ordering.
+        mor_gra_keys = [key for key in ("%mor", "%gra") if key in u.tiers.keys()]
+        if tabular and mor_gra_keys:
+            tokens_in_table = []
+            prev_token = None
+            for token in u.tokens:
+                token_in_table = []
+                # TODO: Write a test for the clitic case.
+                if token.word == _CLITIC and prev_token is not None:
+                    tokens_in_table.pop()
+                    token_in_table.append(prev_token.word)
+                    if "%mor" in mor_gra_keys:
+                        token_in_table.append(
+                            f"{prev_token.to_mor_tier()}~{token.to_mor_tier()}"
+                        )
+                    if "%gra" in mor_gra_keys:
+                        token_in_table.append(
+                            f"{prev_token.to_gra_tier()} {token.to_gra_tier()}"
+                        )
+                else:
+                    token_in_table.append(token.word)
+                    if "%mor" in mor_gra_keys:
+                        token_in_table.append(token.to_mor_tier())
+                    if "%gra" in mor_gra_keys:
+                        token_in_table.append(token.to_gra_tier())
+                prev_token = token
+                tokens_in_table.append(token_in_table)
+            tokens_in_table_with_keys = [
+                [f"*{u.participant}:"] + [f"{key}:" for key in mor_gra_keys],
+                *tokens_in_table,
+            ]
+            # Transpose (see https://stackoverflow.com/a/6473724)
+            tiers_in_table = list(map(list, zip(*tokens_in_table_with_keys)))
+            str_for_u = f"\n{tabulate(tiers_in_table, tablefmt='plain')}\n"
+        else:
+            str_for_u = f"\n*{u.participant}:\t{u.tiers[u.participant]}\n"
+            for key in mor_gra_keys:
+                str_for_u += f"{key}:\t{u.tiers[key]}\n"
+
+        keys = self._sort_keys(u.tiers.keys(), drop={u.participant, "%mor", "%gra"})
+        for key in keys:
+            str_for_u += f"{key}:\t{u.tiers[key]}\n"
+
+        return str_for_u
+
+    @_params_in_docstring("participants", "exclude", "stream")
+    def head(self, n: int = 5, participants=None, exclude=None, stream=None) -> None:
+        """Print the first several utterances.
+
+        Parameters
+        ----------
+        n : int, optional
+            The number of utterances to print.
+        """
+        self._head_or_tail(slice(n), participants, exclude, stream)
+
+    @_params_in_docstring("participants", "exclude", "stream")
+    def tail(self, n: int = 5, participants=None, exclude=None, stream=None) -> None:
+        """Print the last several utterances.
+
+        Parameters
+        ----------
+        n : int, optional
+            The number of utterances to print.
+        """
+        self._head_or_tail(slice(-n, None), participants, exclude, stream)
+
+    def _head_or_tail(self, slice_, participants, exclude, stream) -> None:
+        us = self.utterances(
+            participants=participants, exclude=exclude, by_files=False
+        ).__getitem__(slice_)
+        output = ""
+        for u in us:
+            output += self._utterance_to_str(u, tabular=True)
+        if stream is None:
+            stream = sys.stdout
+        print(output.strip(), file=stream)
+
+    def _get_info_summary(self) -> str:
+        lines = [
+            f"{len(self._files)} files",
+            f"{sum(len(f.utterances) for f in self._files)} utterances",
+            f"{sum(len(u.tokens) for f in self._files for u in f.utterances)} words",
+        ]
+        return "\n".join(lines)
+
+    def _get_info_details_of_file(self, f: _File) -> Dict:
+        result = {
+            "Utterance Count": len(f.utterances),
+            "Word Count": sum(len(u.tokens) for u in f.utterances),
+        }
+        if not _is_uuid(f.file_path):
+            result["File Path"] = f.file_path
+        return result
+
+    @_params_in_docstring("stream")
+    def info(self, verbose=False, stream=None) -> None:
+        """Print a summary of this Reader's data.
+
+        Parameters
+        ----------
+        verbose : bool, optional
+            If ``True`` (default is ``False``), show the details of all the files.
+        """
+        if stream is None:
+            stream = sys.stdout
+        print(self._get_info_summary(), file=stream)
+        if len(self._files) < 2:
+            return
+        details = [self._get_info_details_of_file(f) for f in self._files]
+        max_n_files_if_not_verbose = 5
+        if not verbose:
+            details = details[:max_n_files_if_not_verbose]
+            n_files = max_n_files_if_not_verbose
+        else:
+            n_files = self.n_files()
+        indices = (f"#{i + 1}" for i in range(n_files))
+        output = tabulate(details, headers="keys", showindex=indices)
+        if not verbose:
+            output += "\n...\n(set `verbose` to True for all the files)"
+        print(output, file=stream)
+
     def to_chat(
-        self, path: str, filenames: Iterable[str] = None, mode: int = 0o777
+        self,
+        path: str,
+        filenames: Iterable[str] = None,
+        tabular: bool = True,
+        mode: int = 0o777,
     ) -> None:
         """Export to CHAT data files.
 
@@ -1266,6 +1408,10 @@ class Reader:
         filenames : Iterable[str], optional
             Filenames of the CHAT files. If ``None`` or not given,
             {0001.cha, 0002.cha, ...} are used.
+        tabular : bool, optional
+            If ``True``, adjust spacing such that the three tiers of the utterance,
+            %mor, and %gra are aligned in a tabular form. Note that such alignment
+            would drop annotations (e.g., pauses) on the main utterance tier.
         mode : int, optional
             Set permissions for the new directory. This is the same ``mode`` keyword
             argument for :func:`~os.makedirs`.
@@ -1287,7 +1433,7 @@ class Reader:
                 f"but you've provide {len(filenames)} filenames."
             )
         os.makedirs(path, mode=mode, exist_ok=True)
-        for filename, lines in zip(filenames, self.to_strs()):
+        for filename, lines in zip(filenames, self.to_strs(tabular=tabular)):
             with open(os.path.join(path, filename), "w") as f:
                 f.write(lines)
 
@@ -1585,6 +1731,21 @@ class Reader:
             lines.append(line)
 
         return lines
+
+
+def _get_uuid() -> str:
+    """This function goes hand-in-hand with _is_uuid() below."""
+    return str(uuid.uuid4())
+
+
+def _is_uuid(s: str) -> bool:
+    """This function goes hand-in-hand with _get_uuid() above."""
+    # Implementation from https://stackoverflow.com/a/33245493
+    try:
+        uuid_obj = uuid.UUID(s, version=4)
+    except ValueError:
+        return False
+    return str(uuid_obj) == s
 
 
 def _initialize_cached_data_dir() -> None:

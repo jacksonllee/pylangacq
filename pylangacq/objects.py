@@ -1,6 +1,8 @@
 import dataclasses
 from typing import Dict, List, Tuple, Union
 
+from pylangacq._punctuation_marks import _PUNCTUATION_MARKS
+
 
 @dataclasses.dataclass
 class Gra:
@@ -45,6 +47,15 @@ class Token:
     pos: Union[str, None]
     mor: Union[str, None]
     gra: Union[Gra, None]
+
+    def to_mor_tier(self) -> str:
+        if self.word in _PUNCTUATION_MARKS:
+            return self.word
+        else:
+            return f"{self.pos or ''}|{self.mor or ''}"
+
+    def to_gra_tier(self) -> str:
+        return f"{self.gra.dep}|{self.gra.head}|{self.gra.rel}"
 
 
 @dataclasses.dataclass

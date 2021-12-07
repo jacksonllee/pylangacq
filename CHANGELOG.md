@@ -8,7 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+* `Reader` objects can now be concatenated by the addition operator `+`.
+* Implemented the `head`, `tail`, and `info` methods at `Reader`.
+
 ### Changed
+* The `to_strs` and `to_chat` methods of a `Reader` object return
+  tabulated outputs by default.
+
 ### Deprecated
 ### Removed
 ### Fixed

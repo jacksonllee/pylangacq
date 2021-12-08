@@ -1104,8 +1104,7 @@ class Reader:
         -------
         :class:`pylangacq.Reader`
         """
-        with contextlib.ExitStack() as stack:
-            temp_dir = stack.enter_context(tempfile.TemporaryDirectory())
+        with tempfile.TemporaryDirectory() as temp_dir:
             is_url = path.startswith("https://") or path.startswith("http://")
             unzip_dir = cls._retrieve_unzip_dir(path) if is_url else None
 
@@ -1122,8 +1121,8 @@ class Reader:
                 unzip_dir = temp_dir
 
             if zip_path:
-                zfile = stack.enter_context(zipfile.ZipFile(zip_path))
-                zfile.extractall(unzip_dir)
+                with zipfile.ZipFile(zip_path) as zfile:
+                    zfile.extractall(unzip_dir)
 
             reader = cls.from_dir(
                 unzip_dir,

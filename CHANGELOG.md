@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 * The `to_strs` and `to_chat` methods of a `Reader` object return
   tabulated outputs by default.
+* Unzipping CHAT data now uses less memory.
 
 ### Deprecated
 ### Removed

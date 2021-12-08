@@ -38,6 +38,7 @@ jobs:
         #auth:
         #  username: $DOCKERHUB_USERNAME
         #  password: $DOCKERHUB_PASSWORD
+    resource_class: medium+
     steps:
       - checkout
       - run:

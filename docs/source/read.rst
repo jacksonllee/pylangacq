@@ -32,15 +32,11 @@ dataset of American English on CHILDES:
 
     >>> import os, sys, pylangacq
 
-.. skip: start if(os.getenv("CI") == "true" and sys.version_info[:2] == (3, 9), reason="py39 on CI doesn't work for unknown reason")
-
 .. code-block:: python
 
     >>> import pylangacq
     >>> url = "https://childes.talkbank.org/data/Eng-NA/Brown.zip"
     >>> brown = pylangacq.read_chat(url)
-
-.. skip: end
 
 If your data source is a URL pointing to a ZIP archive file, like the Brown
 example here or many others from CHILDES,
@@ -113,8 +109,6 @@ either you independently have the unzipped files on your system
 and see the subdirectory structure, or the ``brown`` reader we've just created
 can tell you that via :func:`~pylangacq.Reader.file_paths`:
 
-.. skip: start if(os.getenv("CI") == "true" and sys.version_info[:2] == (3, 9), reason="py39 on CI doesn't work for unknown reason")
-
 .. code-block:: python
 
     >>> brown.file_paths()
@@ -129,14 +123,10 @@ can tell you that via :func:`~pylangacq.Reader.file_paths`:
      ...
      'Brown/Sarah/050106.cha']
 
-.. skip: end
-
 It looks like all and only Eve's data is inside the subdirectory called ``"Eve"``.
 If we pass ``"Eve"`` to ``match``, we should be getting only Eve's data this time
 (and the function should run and finish noticeably faster due to the much smaller
 data amount):
-
-.. skip: start if(os.getenv("CI") == "true" and sys.version_info[:2] == (3, 9), reason="py39 on CI doesn't work for unknown reason")
 
 .. code-block:: python
 
@@ -145,8 +135,6 @@ data amount):
     20
     >>> len(eve.utterances())
     26920
-
-.. skip: end
 
 So far, we've seen how :func:`~pylangacq.read_chat` works with a URL that points
 to a ZIP file. Other data sources that this function is designed for are:
@@ -367,8 +355,6 @@ To inspect what data files are in a reader and their ordering
 The following example illustrates how to build a reader of Eve's utterances
 starting from an empty one and adding data to it one file at a time.
 
-.. skip: start if(os.getenv("CI") == "true" and sys.version_info[:2] == (3, 9), reason="py39 on CI doesn't work for unknown reason")
-
 .. code-block:: python
 
     >>> reader = pylangacq.Reader()  # an empty reader
@@ -385,8 +371,6 @@ starting from an empty one and adding data to it one file at a time.
     Number of Eve's utterances in the reader so far: 2052
     Number of Eve's utterances in the reader so far: 2758
 
-.. skip: end
-
 :func:`~pylangacq.Reader.filter` is designed to explicitly return
 a new :class:`~pylangacq.Reader`
 so that we can instantiate a source :class:`~pylangacq.Reader` for a CHILDES / TalkBank dataset
@@ -395,8 +379,6 @@ Typically, a CHILDES dataset contains multiple children's data
 organized by a subdirectory structure.
 :func:`~pylangacq.Reader.filter` allows us to easily create :class:`~pylangacq.Reader` objects
 for individual children without re-downloading data:
-
-.. skip: start if(os.getenv("CI") == "true" and sys.version_info[:2] == (3, 9), reason="py39 on CI doesn't work for unknown reason")
 
 .. code-block:: python
 
@@ -418,8 +400,6 @@ for individual children without re-downloading data:
     139
     >>> sarah.file_paths()[:3]
     ['Brown/Sarah/020305.cha', 'Brown/Sarah/020307.cha', 'Brown/Sarah/020319.cha']
-
-.. skip: end
 
 Custom Behavior
 ---------------

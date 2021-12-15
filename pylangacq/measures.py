@@ -1,9 +1,8 @@
 from typing import List
 
 from pylangacq.dependency import _DependencyGraph
+from pylangacq.objects import _CLITIC
 
-
-_CLITIC = "CLITIC"
 
 _POS_TO_IGNORE = frozenset({"", "!", "+...", "0", "?", "BEG"})
 _WORDS_TO_IGNORE = frozenset(

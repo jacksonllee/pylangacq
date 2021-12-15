@@ -152,9 +152,7 @@ class BaseTestCHATReader:
             "@ID:\teng|Foobar|BAR||male|||P2|||\n"
             "@Date:\t03-NOV-2016\n"
             "@Comment:\tThis is a comment.\n"
-            "\n"
             "*FOO:\thow are you ?\n"
-            "\n"
             "*BAR:\tfine , thank you ."
         )
         reader = self.reader_class.from_strs([expected])
@@ -169,9 +167,7 @@ class BaseTestCHATReader:
             "@ID:\teng|Foobar|BAR||male|||P2|||\n"
             "@Date:\t03-NOV-2016\n"
             "@Comment:\tThis is a comment.\n"
-            "\n"
             "*FOO:\thow are you ?\n"
-            "\n"
             "*BAR:\tfine , thank you ."
         )
         reader = self.reader_class.from_strs([expected])
@@ -180,32 +176,6 @@ class BaseTestCHATReader:
             assert os.listdir(temp_dir) == ["0001.cha"]
             with open(os.path.join(temp_dir, "0001.cha")) as f:
                 assert f.read().strip() == expected
-
-    def test__utterance_to_str_tabular_false(self):
-        reader = self.reader_class()
-        actual = reader._utterance_to_str(_EXPECTED_EVE_UTTERANCES[0], tabular=False)
-        expected = (
-            "\n"
-            "*CHI:\tmore cookie . [+ IMP]\n"
-            "%mor:\tqn|more n|cookie .\n"
-            "%gra:\t1|2|QUANT 2|0|INCROOT 3|2|PUNCT\n"
-            "%int:\tdistinctive , loud"
-            "\n"
-        )
-        assert actual == expected
-
-    def test__utterance_to_str_tabular_true(self):
-        reader = self.reader_class()
-        actual = reader._utterance_to_str(_EXPECTED_EVE_UTTERANCES[0], tabular=True)
-        expected = (
-            "\n"
-            "*CHI:  more       cookie       .\n"
-            "%mor:  qn|more    n|cookie     .\n"
-            "%gra:  1|2|QUANT  2|0|INCROOT  3|2|PUNCT\n"
-            "%int:\tdistinctive , loud"
-            "\n"
-        )
-        assert actual == expected
 
     def test_round_trip_to_strs_and_from_strs_for_tabular_true(self):
         original = self.eve_local
@@ -233,9 +203,9 @@ class BaseTestCHATReader:
         reader1 = self.reader_class.from_strs(["*X: foo"])
         reader2 = self.reader_class.from_strs(["*X: bar"])
         reader3 = self.reader_class.from_strs(["*X: baz"])
-        assert list((reader1 + reader2).to_strs()) == ["\n*X:\tfoo\n", "\n*X:\tbar\n"]
+        assert list((reader1 + reader2).to_strs()) == ["*X:\tfoo\n", "*X:\tbar\n"]
         reader2 += reader3
-        assert list(reader2.to_strs()) == ["\n*X:\tbar\n", "\n*X:\tbaz\n"]
+        assert list(reader2.to_strs()) == ["*X:\tbar\n", "*X:\tbaz\n"]
 
     def test_append_and_append_left(self):
         eve_copy = copy.deepcopy(self.eve_local)

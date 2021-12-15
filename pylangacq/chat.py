@@ -11,7 +11,6 @@ import json
 import os
 import re
 import shutil
-import sys
 import tempfile
 import uuid
 import warnings
@@ -26,8 +25,8 @@ from dateutil.parser import ParserError
 from tabulate import tabulate
 
 import pylangacq
-from pylangacq.measures import _CLITIC, _get_ipsyn, _get_mlum, _get_mluw, _get_ttr
-from pylangacq.objects import Gra, Token, Utterance
+from pylangacq.measures import _get_ipsyn, _get_mlum, _get_mluw, _get_ttr
+from pylangacq.objects import Gra, Token, Utterance, _sort_keys, _CLITIC
 from pylangacq._clean_utterance import _clean_utterance
 
 
@@ -165,15 +164,6 @@ def _params_in_docstring(*params, class_method=True):
             If necessary, pass in your own instance of :class:`requests.Session`
             to customize."""
 
-    if "stream" in params:
-        docstring += """
-        stream : object, optional
-            An object with a ``write(string)`` method. This parameter controls
-            where the output goes, and is passed to the ``file`` parameter of
-            ``print()``. If ``None`` or not given, ``sys.stdout`` is used.
-            Pass in ``sys.stderr`` for printing to the standard error,
-            or a file object for redirecting the output to a text file."""
-
     if not class_method:
         docstring = docstring.replace("\n        ", "\n    ")
 
@@ -219,6 +209,14 @@ def _deprecate_warning(what, since_version, use_instead):
         f"Please use {use_instead} instead.",
         FutureWarning,
     )
+
+
+class _list(list):
+    def __repr__(self):
+        return "\n".join(x._to_str() for x in self)
+
+    def _repr_html_(self) -> str:
+        return "\n".join(x._repr_html_() for x in self)
 
 
 @dataclasses.dataclass
@@ -1170,19 +1168,6 @@ class Reader:
 
         return unzip_dir
 
-    @staticmethod
-    def _sort_keys(keys, *, first=None, drop=None) -> List[str]:
-        sorted_keys = []
-        first = first or []
-        drop = set(drop or [])  # ordering doesn't matter
-        for key in first:
-            if key in keys:
-                sorted_keys.append(key)
-        for key in keys:
-            if not (key in sorted_keys or key in drop):
-                sorted_keys.append(key)
-        return sorted_keys
-
     def to_strs(self, tabular: bool = True) -> Generator[str, None, None]:
         """Yield CHAT data strings.
 
@@ -1221,7 +1206,7 @@ class Reader:
         for f in self._files:
             str_for_file = ""
 
-            header_keys = self._sort_keys(f.header.keys(), first=header_first)
+            header_keys = _sort_keys(f.header.keys(), first=header_first)
 
             for key in header_keys:
                 if key == "Languages":
@@ -1269,88 +1254,45 @@ class Reader:
                     str_for_file += f"@{key}\n"
 
             for u in f.utterances:
-                str_for_file += self._utterance_to_str(u, tabular)
+                str_for_file += u._to_str(tabular=tabular)
 
             yield str_for_file
 
-    def _utterance_to_str(self, u: Utterance, tabular: bool) -> str:
-        # `mor_gra_keys` needs to be a list for the ordering.
-        mor_gra_keys = [key for key in ("%mor", "%gra") if key in u.tiers.keys()]
-        if tabular and mor_gra_keys:
-            tokens_in_table = []
-            prev_token = None
-            for token in u.tokens:
-                token_in_table = []
-                # TODO: Write a test for the clitic case.
-                if token.word == _CLITIC and prev_token is not None:
-                    tokens_in_table.pop()
-                    token_in_table.append(prev_token.word)
-                    if "%mor" in mor_gra_keys:
-                        token_in_table.append(
-                            f"{prev_token.to_mor_tier()}~{token.to_mor_tier()}"
-                        )
-                    if "%gra" in mor_gra_keys:
-                        token_in_table.append(
-                            f"{prev_token.to_gra_tier()} {token.to_gra_tier()}"
-                        )
-                else:
-                    token_in_table.append(token.word)
-                    if "%mor" in mor_gra_keys:
-                        token_in_table.append(token.to_mor_tier())
-                    if "%gra" in mor_gra_keys:
-                        token_in_table.append(token.to_gra_tier())
-                prev_token = token
-                tokens_in_table.append(token_in_table)
-            tokens_in_table_with_keys = [
-                [f"*{u.participant}:"] + [f"{key}:" for key in mor_gra_keys],
-                *tokens_in_table,
-            ]
-            # Transpose (see https://stackoverflow.com/a/6473724)
-            tiers_in_table = list(map(list, zip(*tokens_in_table_with_keys)))
-            str_for_u = f"\n{tabulate(tiers_in_table, tablefmt='plain')}\n"
-        else:
-            str_for_u = f"\n*{u.participant}:\t{u.tiers[u.participant]}\n"
-            for key in mor_gra_keys:
-                str_for_u += f"{key}:\t{u.tiers[key]}\n"
-
-        keys = self._sort_keys(u.tiers.keys(), drop={u.participant, "%mor", "%gra"})
-        for key in keys:
-            str_for_u += f"{key}:\t{u.tiers[key]}\n"
-
-        return str_for_u
-
-    @_params_in_docstring("participants", "exclude", "stream")
-    def head(self, n: int = 5, participants=None, exclude=None, stream=None) -> None:
-        """Print the first several utterances.
+    @_params_in_docstring("participants", "exclude")
+    def head(self, n: int = 5, participants=None, exclude=None):
+        """Return the first several utterances.
 
         Parameters
         ----------
         n : int, optional
-            The number of utterances to print.
-        """
-        self._head_or_tail(slice(n), participants, exclude, stream)
+            The number of utterances to return.
 
-    @_params_in_docstring("participants", "exclude", "stream")
-    def tail(self, n: int = 5, participants=None, exclude=None, stream=None) -> None:
-        """Print the last several utterances.
+        Returns
+        -------
+        list of utterances
+        """
+        return self._head_or_tail(slice(n), participants, exclude)
+
+    @_params_in_docstring("participants", "exclude")
+    def tail(self, n: int = 5, participants=None, exclude=None):
+        """Return the last several utterances.
 
         Parameters
         ----------
         n : int, optional
-            The number of utterances to print.
-        """
-        self._head_or_tail(slice(-n, None), participants, exclude, stream)
+            The number of utterances to return.
 
-    def _head_or_tail(self, slice_, participants, exclude, stream) -> None:
+        Returns
+        -------
+        list of utterances
+        """
+        return self._head_or_tail(slice(-n, None), participants, exclude)
+
+    def _head_or_tail(self, slice_, participants, exclude):
         us = self.utterances(
             participants=participants, exclude=exclude, by_files=False
         ).__getitem__(slice_)
-        output = ""
-        for u in us:
-            output += self._utterance_to_str(u, tabular=True)
-        if stream is None:
-            stream = sys.stdout
-        print(output.strip(), file=stream)
+        return _list(us)
 
     def _get_info_summary(self) -> str:
         lines = [
@@ -1369,8 +1311,7 @@ class Reader:
             result["File Path"] = f.file_path
         return result
 
-    @_params_in_docstring("stream")
-    def info(self, verbose=False, stream=None) -> None:
+    def info(self, verbose=False) -> None:
         """Print a summary of this Reader's data.
 
         Parameters
@@ -1378,9 +1319,7 @@ class Reader:
         verbose : bool, optional
             If ``True`` (default is ``False``), show the details of all the files.
         """
-        if stream is None:
-            stream = sys.stdout
-        print(self._get_info_summary(), file=stream)
+        print(self._get_info_summary())
         if len(self._files) < 2:
             return
         details = [self._get_info_details_of_file(f) for f in self._files]
@@ -1394,7 +1333,7 @@ class Reader:
         output = tabulate(details, headers="keys", showindex=indices)
         if not verbose:
             output += "\n...\n(set `verbose` to True for all the files)"
-        print(output, file=stream)
+        print(output)
 
     def to_chat(
         self,

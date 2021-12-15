@@ -1,7 +1,12 @@
 import dataclasses
 from typing import Dict, List, Tuple, Union
 
+from tabulate import tabulate
+
 from pylangacq._punctuation_marks import _PUNCTUATION_MARKS
+
+
+_CLITIC = "CLITIC"
 
 
 @dataclasses.dataclass
@@ -87,3 +92,105 @@ class Utterance:
     tokens: List[Token]
     time_marks: Union[Tuple[int, int], None]
     tiers: Dict[str, str]
+
+    def _to_str(self, tabular: bool = True) -> str:
+        # `mor_gra_keys` needs to be a list for the ordering.
+        mor_gra_keys = [key for key in ("%mor", "%gra") if key in self.tiers.keys()]
+        if tabular and mor_gra_keys:
+            tokens_in_table = []
+            prev_token = None
+            for token in self.tokens:
+                token_in_table = []
+                # TODO: Write a test for the clitic case.
+                if token.word == _CLITIC and prev_token is not None:
+                    tokens_in_table.pop()
+                    token_in_table.append(prev_token.word)
+                    if "%mor" in mor_gra_keys:
+                        token_in_table.append(
+                            f"{prev_token.to_mor_tier()}~{token.to_mor_tier()}"
+                        )
+                    if "%gra" in mor_gra_keys:
+                        token_in_table.append(
+                            f"{prev_token.to_gra_tier()} {token.to_gra_tier()}"
+                        )
+                else:
+                    token_in_table.append(token.word)
+                    if "%mor" in mor_gra_keys:
+                        token_in_table.append(token.to_mor_tier())
+                    if "%gra" in mor_gra_keys:
+                        token_in_table.append(token.to_gra_tier())
+                prev_token = token
+                tokens_in_table.append(token_in_table)
+            tokens_in_table_with_keys = [
+                [f"*{self.participant}:"] + [f"{key}:" for key in mor_gra_keys],
+                *tokens_in_table,
+            ]
+            # Transpose (see https://stackoverflow.com/a/6473724)
+            tiers_in_table = list(map(list, zip(*tokens_in_table_with_keys)))
+            str_for_u = f"{tabulate(tiers_in_table, tablefmt='plain')}\n"
+        else:
+            str_for_u = f"*{self.participant}:\t{self.tiers[self.participant]}\n"
+            for key in mor_gra_keys:
+                str_for_u += f"{key}:\t{self.tiers[key]}\n"
+
+        keys = _sort_keys(self.tiers.keys(), drop={self.participant, "%mor", "%gra"})
+        for key in keys:
+            str_for_u += f"{key}:\t{self.tiers[key]}\n"
+
+        return str_for_u
+
+    def _repr_html_(self):
+
+        html = ""
+
+        # Row from words
+        cells = [
+            f'    <td style="text-align: left">{t.word}</td>\n' for t in self.tokens
+        ]
+        html += (
+            "  <tr>\n"
+            f"    <td>*{self.participant}:</td>\n"
+            f"{''.join(cells)}"
+            "  </tr>\n"
+        )
+
+        # Row from %mor
+        if "%mor" in self.tiers:
+            cells = [
+                f'    <td style="text-align: left">{t.to_mor_tier()}</td>\n'
+                for t in self.tokens
+            ]
+            html += "  <tr>\n" "    <td>%mor:</td>\n" f"{''.join(cells)}" "  </tr>\n"
+
+        # Row from %gra
+        if "%gra" in self.tiers:
+            cells = [
+                f'    <td style="text-align: left">{t.to_gra_tier()}</td>\n'
+                for t in self.tokens
+            ]
+            html += "  <tr>\n" "    <td>%gra:</td>\n" f"{''.join(cells)}" "  </tr>\n"
+
+        keys = _sort_keys(self.tiers.keys(), drop={self.participant, "%mor", "%gra"})
+        for key in keys:
+            html += (
+                f"  <tr>\n"
+                f"    <td>{key}:</td>\n"
+                f'    <td colspan="{len(self.tokens)}" style="text-align: left">'
+                f"{self.tiers[key]}</td>\n"
+                f"  </tr>\n"
+            )
+
+        return f"<table>{html}</table>"
+
+
+def _sort_keys(keys, *, first=None, drop=None) -> List[str]:
+    sorted_keys = []
+    first = first or []
+    drop = set(drop or [])  # ordering doesn't matter
+    for key in first:
+        if key in keys:
+            sorted_keys.append(key)
+    for key in keys:
+        if not (key in sorted_keys or key in drop):
+            sorted_keys.append(key)
+    return sorted_keys

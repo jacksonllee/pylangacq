@@ -1338,47 +1338,83 @@ class Reader:
     def to_chat(
         self,
         path: str,
+        is_dir: bool = False,
         filenames: Iterable[str] = None,
         tabular: bool = True,
-        mode: int = 0o777,
     ) -> None:
         """Export to CHAT data files.
 
         Parameters
         ----------
         path : str
-            A directory to write the CHAT files in. If the directory doesn't already
-            exist, it will be created.
+            The path to a file where you want to output the CHAT data,
+            e.g., `"data.cha"`, `"foo/bar/data.cha"`.
+        is_dir : bool, optional
+            If ``True`` (default is ``False``), then ``path`` is interpreted as a
+            directory instead.
+            The CHAT data is written to possibly multiple files under this directory.
+            The number of files you get can be checked by calling
+            :func:`~pylangacq.Reader.n_files`, which depends on how this reader
+            object is created.
         filenames : Iterable[str], optional
-            Filenames of the CHAT files. If ``None`` or not given,
-            {0001.cha, 0002.cha, ...} are used.
+            Used only when ``is_dir`` is ``True``.
+            These are the filenames of the CHAT files to write.
+            If ``None`` or not given, {0001.cha, 0002.cha, ...} are used.
         tabular : bool, optional
             If ``True``, adjust spacing such that the three tiers of the utterance,
             %mor, and %gra are aligned in a tabular form. Note that such alignment
             would drop annotations (e.g., pauses) on the main utterance tier.
-        mode : int, optional
-            Set permissions for the new directory. This is the same ``mode`` keyword
-            argument for :func:`~os.makedirs`.
-            The default is ``0o777`` (= ``511`` in decimal).
 
         Raises
         ------
         ValueError
-            If explicit filenames are given but the number of them doesn't match
-            the number of CHAT files in this reader object.
+            - If you attempt to output data to a single local file, but the CHAT
+              data in this reader appears to be organized in multiple files.
+            - If you attempt to output data to a directory while providing your own
+              filenames, but the number of your filenames doesn't match
+              the number of CHAT files in this reader object.
         """
-        if filenames is None:
-            filenames = [f"{str(i + 1).zfill(4)}.cha" for i in range(len(self._files))]
+        if not is_dir:
+            if self.n_files() > 1:
+                raise ValueError(
+                    "The CHAT data in this reader object exists in more than one file. "
+                    "(Call the `.n_files()` method to check.) It is not possible to "
+                    "output data from multiple files to a single local file. "
+                    "To output data, set `is_dir` to `True`, and pass in a directory "
+                    "(not a file path) to `path`."
+                )
+            dir_, basename = os.path.split(path)
+            if not basename and dir_.endswith(os.sep):
+                raise ValueError(
+                    f"You've passed in {dir_} as `path` that looks like a directory "
+                    f"instead of a path to a file, because {dir_} ends with the "
+                    f"directory separator {os.sep}. "
+                    "As an example, a path to a file should look like "
+                    f"foo{os.sep}bar.cha"
+                )
+            elif not basename:
+                raise ValueError(
+                    f"You've passed in {dir_} as `path`, but it doesn't look like "
+                    "a path to a file."
+                )
+            filenames = [basename]
         else:
-            filenames = list(filenames)
-        if len(filenames) != len(self._files):
-            raise ValueError(
-                f"There are {len(self._files)} CHAT files to create, "
-                f"but you've provide {len(filenames)} filenames."
-            )
-        os.makedirs(path, mode=mode, exist_ok=True)
+            dir_ = path
+            if filenames is None:
+                filenames = [
+                    f"{str(i + 1).zfill(4)}.cha" for i in range(len(self._files))
+                ]
+            else:
+                filenames = list(filenames)
+            if len(filenames) != len(self._files):
+                raise ValueError(
+                    f"There are {len(self._files)} CHAT files to create, "
+                    f"but you've provided {len(filenames)} filenames."
+                )
+        if dir_:
+            os.makedirs(dir_, exist_ok=True)
         for filename, lines in zip(filenames, self.to_strs(tabular=tabular)):
-            with open(os.path.join(path, filename), "w") as f:
+            with open(os.path.join(dir_, filename), "w") as f:
                 f.write(lines)
 
     def _parse_chat_str(self, chat_str, file_path) -> _File:

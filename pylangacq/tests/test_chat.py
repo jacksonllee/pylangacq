@@ -159,7 +159,7 @@ class BaseTestCHATReader:
         actual = list(reader.to_strs())[0]
         assert actual.strip() == expected.strip()
 
-    def test_to_chat(self):
+    def test_to_chat_is_dir_true(self):
         expected = (
             "@Languages:\teng , yue\n"
             "@Participants:\tFOO Foo P1 , BAR Bar P2\n"
@@ -168,14 +168,34 @@ class BaseTestCHATReader:
             "@Date:\t03-NOV-2016\n"
             "@Comment:\tThis is a comment.\n"
             "*FOO:\thow are you ?\n"
-            "*BAR:\tfine , thank you ."
+            "*BAR:\tfine , thank you .\n"
         )
         reader = self.reader_class.from_strs([expected])
         with tempfile.TemporaryDirectory() as temp_dir:
-            reader.to_chat(temp_dir)
+            reader.to_chat(temp_dir, is_dir=True)
             assert os.listdir(temp_dir) == ["0001.cha"]
             with open(os.path.join(temp_dir, "0001.cha")) as f:
-                assert f.read().strip() == expected
+                assert f.read() == expected
+
+    def test_to_chat_is_dir_false(self):
+        expected = (
+            "@Languages:\teng , yue\n"
+            "@Participants:\tFOO Foo P1 , BAR Bar P2\n"
+            "@ID:\teng|Foobar|FOO||female|||P1|||\n"
+            "@ID:\teng|Foobar|BAR||male|||P2|||\n"
+            "@Date:\t03-NOV-2016\n"
+            "@Comment:\tThis is a comment.\n"
+            "*FOO:\thow are you ?\n"
+            "*BAR:\tfine , thank you .\n"
+        )
+        reader = self.reader_class.from_strs([expected])
+        with tempfile.TemporaryDirectory() as temp_dir:
+            basename = "data.cha"
+            file_path = os.path.join(temp_dir, basename)
+            reader.to_chat(file_path)
+            assert os.listdir(temp_dir) == [basename]
+            with open(file_path) as f:
+                assert f.read() == expected
 
     def test_round_trip_to_strs_and_from_strs_for_tabular_true(self):
         original = self.eve_local

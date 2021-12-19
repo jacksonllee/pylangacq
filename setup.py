@@ -3,8 +3,6 @@ import re
 import setuptools
 
 
-_VERSION = "0.15.0"
-
 _THIS_DIR = os.path.dirname(os.path.realpath(__file__))
 
 
@@ -18,10 +16,19 @@ def _get_long_description():
     return long_description
 
 
+def _get_version():
+    version = open(os.path.join(_THIS_DIR, "pylangacq", "_version.py"), "r").read()
+    regex = r"(?P<major>\d+)(.(?P<minor>\d+))?(.(?P<patch>\d+))?"
+    match = re.search(regex, version)
+    if not match:
+        raise RuntimeError("Unable to find version string.")
+    return f'{match.group("major")}.{match.group("minor")}.{match.group("patch")}'
+
+
 def main():
     setuptools.setup(
         name="pylangacq",
-        version=_VERSION,
+        version=_get_version(),
         description="PyLangAcq: Language Acquisition Research in Python",
         long_description=_get_long_description(),
         long_description_content_type="text/x-rst",

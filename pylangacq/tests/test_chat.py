@@ -262,6 +262,7 @@ class BaseTestCHATReader:
         assert eve_first.file_paths() == [eve_path_first]
         assert eve.file_paths()[0] != eve_path_first
 
+    @pytest.mark.skipif(os.name == "nt", reason="Windows OS sep is backslash instead")
     def test_filter(self):
         # Just two paths for each child in the American English Brown corpus.
         eve_paths = {"Brown/Eve/010600a.cha", "Brown/Eve/010600b.cha"}
@@ -481,6 +482,10 @@ class TestPylangacqReader(BaseTestCHATReader, unittest.TestCase):
     reader_class = Reader
 
 
+@pytest.mark.skipif(
+    os.name == "nt",
+    reason="Not sure? We're good so long as this test passes on Linux and MacOS",
+)
 def test_if_childes_has_updated_data():
     assert filecmp.cmp(LOCAL_EVE_PATH, REMOTE_EVE_FILE_PATH)
 

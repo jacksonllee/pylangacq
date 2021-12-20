@@ -109,6 +109,8 @@ either you independently have the unzipped files on your system
 and see the subdirectory structure, or the ``brown`` reader we've just created
 can tell you that via :func:`~pylangacq.Reader.file_paths`:
 
+.. skip: start if(os.name == "nt", reason="Windows OS sep is backslash instead")
+
 .. code-block:: python
 
     >>> brown.file_paths()
@@ -122,6 +124,8 @@ can tell you that via :func:`~pylangacq.Reader.file_paths`:
      'Brown/Sarah/020307.cha',
      ...
      'Brown/Sarah/050106.cha']
+
+.. skip: end
 
 It looks like all and only Eve's data is inside the subdirectory called ``"Eve"``.
 If we pass ``"Eve"`` to ``match``, we should be getting only Eve's data this time
@@ -380,6 +384,8 @@ organized by a subdirectory structure.
 :func:`~pylangacq.Reader.filter` allows us to easily create :class:`~pylangacq.Reader` objects
 for individual children without re-downloading data:
 
+.. skip: start if(os.name == "nt", reason="Windows OS sep is backslash instead")
+
 .. code-block:: python
 
     >>> url = "https://childes.talkbank.org/data/Eng-NA/Brown.zip"
@@ -400,6 +406,8 @@ for individual children without re-downloading data:
     139
     >>> sarah.file_paths()[:3]
     ['Brown/Sarah/020305.cha', 'Brown/Sarah/020307.cha', 'Brown/Sarah/020319.cha']
+
+.. skip: end
 
 Custom Behavior
 ---------------

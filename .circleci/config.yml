@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   python: circleci/python@1.5.0
+  win: circleci/windows@2.2.0
 
 jobs:
   pre-build:
@@ -76,6 +77,28 @@ jobs:
       - store_test_results:
           path: /tmp/testxml/
 
+  build-python-win:
+    executor:
+      name: win/default
+      shell: powershell.exe
+    steps:
+      - checkout
+      - run: systeminfo
+      - run:
+          name: Run tests on Windows
+          shell: bash.exe
+          # The codebase is available at c:\users\circleci\project,
+          # We run commands at one directory above, so that we avoid being able to
+          # import pylangacq by relative import when running the test suite.
+          working_directory: c:\users\circleci
+          command: |
+            python --version && \
+            pip install -r project/dev-requirements.txt && \
+            pip install project/. && \
+            pip list && \
+            pytest -vv project/pylangacq && \
+            pytest -vv project/docs/source
+
 workflows:
   version: 2
   build-and-test:
@@ -95,3 +118,7 @@ workflows:
           matrix:
             parameters:
               python-version: ["3.7", "3.8", "3.9", "3.10"]
+      - build-python-win:
+          requires:
+            - flake8
+            - black

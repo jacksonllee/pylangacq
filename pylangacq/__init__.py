@@ -1,5 +1,12 @@
-from pylangacq.chat import read_chat, Reader
-from pylangacq._version import __version__
+try:
+    from importlib.metadata import version
+except ModuleNotFoundError:
+    # For Python 3.7
+    from importlib_metadata import version
 
+from pylangacq.chat import read_chat, Reader
+
+
+__version__ = version("pylangacq")
 
 __all__ = ["__version__", "read_chat", "Reader"]

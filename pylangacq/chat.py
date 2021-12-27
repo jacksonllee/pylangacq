@@ -2,7 +2,6 @@
 
 import collections
 import concurrent.futures as cf
-import contextlib
 import dataclasses
 import datetime
 import functools
@@ -1140,7 +1139,7 @@ class Reader:
     @staticmethod
     def _retrieve_unzip_dir(url: str) -> Union[str, None]:
         try:
-            existing_records = json.load(open(_CACHED_DATA_JSON_PATH))
+            existing_records = json.load(open(_CACHED_DATA_JSON_PATH, encoding="utf-8"))
         except FileNotFoundError:
             return None
         subdir = existing_records.get(url, {}).get("subdir")
@@ -1163,7 +1162,7 @@ class Reader:
             "url": url,
             "cached_at": datetime.datetime.now().isoformat(),
         }
-        existing_records = json.load(open(_CACHED_DATA_JSON_PATH))
+        existing_records = json.load(open(_CACHED_DATA_JSON_PATH, encoding="utf-8"))
         _write_cached_data_json({**existing_records, **{url: new_record}})
 
         return unzip_dir
@@ -1341,6 +1340,7 @@ class Reader:
         is_dir: bool = False,
         filenames: Iterable[str] = None,
         tabular: bool = True,
+        encoding: str = _ENCODING,
     ) -> None:
         """Export to CHAT data files.
 
@@ -1364,6 +1364,9 @@ class Reader:
             If ``True``, adjust spacing such that the three tiers of the utterance,
             %mor, and %gra are aligned in a tabular form. Note that such alignment
             would drop annotations (e.g., pauses) on the main utterance tier.
+        encoding : str, optional
+            Text encoding to output the CHAT data as. The default value is ``"utf-8"``
+            for Unicode UTF-8.
 
         Raises
         ------
@@ -1414,7 +1417,7 @@ class Reader:
         if dir_:
             os.makedirs(dir_, exist_ok=True)
         for filename, lines in zip(filenames, self.to_strs(tabular=tabular)):
-            with open(os.path.join(dir_, filename), "w") as f:
+            with open(os.path.join(dir_, filename), "w", encoding=encoding) as f:
                 f.write(lines)
 
     def _parse_chat_str(self, chat_str, file_path) -> _File:
@@ -1732,17 +1735,17 @@ def _initialize_cached_data_dir() -> None:
     if os.path.isdir(_CACHED_DATA_DIR):
         shutil.rmtree(_CACHED_DATA_DIR)
     os.makedirs(_CACHED_DATA_DIR)
-    with open(os.path.join(_CACHED_DATA_DIR, "README.txt"), "w") as f:
+    with open(os.path.join(_CACHED_DATA_DIR, "README.txt"), "w", encoding="utf-8") as f:
         f.write(
             "The contents of this directory are automatically managed by "
             "the PyLangAcq library. Please do not edit anything on your own.\n"
         )
-    with open(_CACHED_DATA_JSON_PATH, "w") as f:
+    with open(_CACHED_DATA_JSON_PATH, "w", encoding="utf-8") as f:
         f.write("{}")
 
 
 def _write_cached_data_json(records: Dict) -> None:
-    with open(_CACHED_DATA_JSON_PATH, "w") as f:
+    with open(_CACHED_DATA_JSON_PATH, "w", encoding="utf-8") as f:
         json.dump(records, f, indent=4)
 
 
@@ -1755,7 +1758,7 @@ def cached_data_info() -> Set[str]:
         A set of the URLs for the cached CHILDES / TalkBank datasets.
     """
     try:
-        existing_records = json.load(open(_CACHED_DATA_JSON_PATH))
+        existing_records = json.load(open(_CACHED_DATA_JSON_PATH, encoding="utf-8"))
     except FileNotFoundError:
         return set()
     else:
@@ -1772,7 +1775,7 @@ def remove_cached_data(url: str = None) -> None:
         all cached data is removed.
     """
     try:
-        existing_records = json.load(open(_CACHED_DATA_JSON_PATH))
+        existing_records = json.load(open(_CACHED_DATA_JSON_PATH, encoding="utf-8"))
     except FileNotFoundError:
         _initialize_cached_data_dir()
         return
@@ -1896,7 +1899,5 @@ class _HTTPSession(requests.Session):
 def _download_file(url, path, session=None):
     if session is None:
         session = _HTTPSession()
-    with contextlib.ExitStack() as stack:
-        f = stack.enter_context(open(path, "wb"))
-        r = stack.enter_context(session.get(url, stream=True))
+    with open(path, "wb") as f, session.get(url, stream=True) as r:
         shutil.copyfileobj(r.raw, f)

@@ -170,7 +170,7 @@ class BaseTestCHATReader:
         with tempfile.TemporaryDirectory() as temp_dir:
             reader.to_chat(temp_dir, is_dir=True)
             assert os.listdir(temp_dir) == ["0001.cha"]
-            with open(os.path.join(temp_dir, "0001.cha")) as f:
+            with open(os.path.join(temp_dir, "0001.cha"), encoding="utf-8") as f:
                 assert f.read() == expected
 
     def test_to_chat_is_dir_false(self):
@@ -190,7 +190,7 @@ class BaseTestCHATReader:
             file_path = os.path.join(temp_dir, basename)
             reader.to_chat(file_path)
             assert os.listdir(temp_dir) == [basename]
-            with open(file_path) as f:
+            with open(file_path, encoding="utf-8") as f:
                 assert f.read() == expected
 
     def test_round_trip_to_strs_and_from_strs_for_tabular_true(self):

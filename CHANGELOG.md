@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 ### Security
+* Turned on `safety` and `bandit` checks at CircleCI builds.
 
 ## [0.15.0] - 2021-06-06
 

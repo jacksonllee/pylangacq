@@ -1,8 +1,9 @@
 # These requirements are only for testing and local dev work.
-# Packages that pylangacq depends on (if any) should be specified in setup.py instead.
+# Packages that pylangacq depends on (if any) should be specified in setup.cfg instead.
 #
 # For tests
 black==21.12b0
+build==0.7.0
 flake8==4.0.1
 pytest==6.2.5
 pytest-cov==3.0.0

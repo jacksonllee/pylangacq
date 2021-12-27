@@ -44,10 +44,6 @@ jobs:
               python -m build && \
               pip install dist/`ls dist/ | grep .whl`
       - run:
-          name: Install the full development requirements
-          working_directory: ~/project/
-          command: pip install --progress-bar off -r dev-requirements.txt
-      - run:
           name: Show installed Python packages
           command: pip list -v
       - run:

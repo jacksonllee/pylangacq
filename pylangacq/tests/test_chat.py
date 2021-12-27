@@ -108,29 +108,25 @@ class BaseTestCHATReader:
     def eve_remote(self):
         return self.reader_class.from_files([REMOTE_EVE_FILE_PATH])
 
-    def test_access_and_remove_cached_data(self):
-        remove_cached_data()
-        assert len(cached_data_info()) == 0
-        self.reader_class.from_zip(REMOTE_BROWN_URL)
-        assert len(cached_data_info()) == 1
-        remove_cached_data()
-        assert len(cached_data_info()) == 0
-
     def test_use_cached(self):
         remove_cached_data()
-        self.reader_class.from_zip(REMOTE_BROWN_URL)
+        assert len(cached_data_info()) == 0
 
+        self.reader_class.from_zip(REMOTE_BROWN_URL, match="Eve")
+        assert len(cached_data_info()) == 1
+        assert REMOTE_BROWN_URL in cached_data_info()
+
+        # Use a mock session to block internet access.
+        # The `from_zip` shouldn't crash and shouldn't use the session object anyway,
+        # because it should use the cached data.
         mock_session = mock.Mock()
-        self.reader_class.from_zip(REMOTE_BROWN_URL, session=mock_session)
+        self.reader_class.from_zip(REMOTE_BROWN_URL, match="Eve", session=mock_session)
+        assert len(cached_data_info()) == 1
+        assert REMOTE_BROWN_URL in cached_data_info()
         mock_session.get.assert_not_called()
 
-        mock_session = mock.MagicMock()  # MagicMock for __enter__, etc.
-        with pytest.raises(TypeError):
-            # Swallow TypeError coming from mock_session's response object.
-            self.reader_class.from_zip(
-                REMOTE_BROWN_URL, use_cached=False, session=mock_session
-            )
-        mock_session.get.assert_called_once()
+        remove_cached_data()
+        assert len(cached_data_info()) == 0
 
     def test_from_strs_same_as_from_files(self):
         with open(LOCAL_EVE_PATH, encoding="utf-8") as f:

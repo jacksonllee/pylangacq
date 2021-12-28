@@ -46,7 +46,7 @@ Consulting
 ----------
 
 If your team would like professional assistance in using PyLangAcq,
-technical consulting and training services are available.
+freelance consulting and training services are available for both academic and commercial groups.
 Please email `Jackson L. Lee <https://jacksonllee.com>`_.
 
 Support

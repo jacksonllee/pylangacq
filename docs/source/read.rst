@@ -8,7 +8,7 @@ as used in the CHILDES database for language acquisition research;
 CHAT is documented in its `official manual <https://talkbank.org/manuals/CHAT.pdf>`_.
 This page describes the ways CHAT data can be read by the ``pylangacq`` package.
 
-.. note::
+.. caution::
     CHAT data is processed in parallelized code to speed things up by default.
     Especially for Windows users, you may need to put your code under the
     ``if __name__ == "__main__":`` idiom in a script to avoid running into an error.
@@ -145,27 +145,27 @@ to a ZIP file. Other data sources that this function is designed for are:
 
 1. A ZIP file on your local system:
 
-    .. skip: next
+.. skip: next
 
-    .. code-block:: python
+.. code-block:: python
 
-        >>> reader = pylangacq.read_chat("path/to/your/local/data.zip")
+    >>> reader = pylangacq.read_chat("path/to/your/local/data.zip")
 
 2. A directory (i.e., folder) on your local system, where CHAT data files are found immediately or recursively in subdirectories:
 
-    .. skip: next
+.. skip: next
 
-    .. code-block:: python
+.. code-block:: python
 
-        >>> reader = pylangacq.read_chat("path/to/your/local/directory/")
+    >>> reader = pylangacq.read_chat("path/to/your/local/directory/")
 
 3. A single CHAT file on your system:
 
-    .. skip: next
+.. skip: next
 
-    .. code-block:: python
+.. code-block:: python
 
-        >>> reader = pylangacq.read_chat("path/to/your/local/data.cha")
+    >>> reader = pylangacq.read_chat("path/to/your/local/data.cha")
 
 
 :func:`~pylangacq.read_chat` is designed to cover the common use cases of reading in CHAT data.
@@ -186,14 +186,14 @@ a local directory, the :class:`~pylangacq.Reader` classmethods
 allow more optional arguments for customization.
 Here's sample code for using these classmethods in the base case:
 
-    .. skip: start
+.. skip: start
 
-    .. code-block:: python
+.. code-block:: python
 
-        >>> reader = pylangacq.Reader.from_zip("path/to/your/local/data.zip")
-        >>> reader = pylangacq.Reader.from_dir("path/to/your/local/directory/")
+    >>> reader = pylangacq.Reader.from_zip("path/to/your/local/data.zip")
+    >>> reader = pylangacq.Reader.from_dir("path/to/your/local/directory/")
 
-    .. skip: end
+.. skip: end
 
 If you pass in a remote URL of a ZIP archive (``"https://.../some_data.zip"``) to
 :func:`~pylangacq.Reader.from_zip`,
@@ -210,15 +210,15 @@ From Specific CHAT Data Files
 If you'd like to target specific files, the :class:`~pylangacq.Reader` classmethod
 :func:`~pylangacq.Reader.from_files` takes a list of file paths:
 
-    .. skip: start
+.. skip: start
 
-    .. code-block:: python
+.. code-block:: python
 
-        >>> path1 = "path/to/one/data/file.cha"
-        >>> path2 = "path/to/another/data/file.cha"
-        >>> reader = pylangacq.Reader.from_files([path1, path2])
+    >>> path1 = "path/to/one/data/file.cha"
+    >>> path2 = "path/to/another/data/file.cha"
+    >>> reader = pylangacq.Reader.from_files([path1, path2])
 
-    .. skip: end
+.. skip: end
 
 
 From In-Memory Strings
@@ -230,38 +230,38 @@ the :class:`~pylangacq.Reader` classmethod
 where each string is assumed to conform to the
 `CHAT data format <https://talkbank.org/manuals/CHAT.pdf>`_:
 
-    .. code-block:: python
+.. code-block:: python
 
-        >>> # Let's create some minimal CHAT data as a string.
-        >>> data = "*CHI:\tI want cookie .\n*MOT:\tokay ."
-        >>>
-        >>> # We should see two utterances.
-        >>> print(data)
-        *CHI:       I want cookie .
-        *MOT:       okay .
-        >>>
-        >>> reader = pylangacq.Reader.from_strs([data])
-        >>> len(reader.utterances())
-        2
-        >>>
-        >>> # All "file" terminology still applies.
-        >>> # Each CHAT data string you pass in is treated as one "file".
-        >>> reader.n_files()
-        1
-        >>>
-        >>> reader.utterances()
-        [Utterance(participant='CHI',
-                   tokens=[Token(word='I', pos=None, mor=None, gra=None),
-                           Token(word='want', pos=None, mor=None, gra=None),
-                           Token(word='cookie', pos=None, mor=None, gra=None),
-                           Token(word='.', pos=None, mor=None, gra=None)],
-                   time_marks=None,
-                   tiers={'CHI': 'I want cookie .'}),
-         Utterance(participant='MOT',
-                   tokens=[Token(word='okay', pos=None, mor=None, gra=None),
-                           Token(word='.', pos=None, mor=None, gra=None)],
-                   time_marks=None,
-                   tiers={'MOT': 'okay .'})]
+    >>> # Let's create some minimal CHAT data as a string.
+    >>> data = "*CHI:\tI want cookie .\n*MOT:\tokay ."
+    >>>
+    >>> # We should see two utterances.
+    >>> print(data)
+    *CHI:       I want cookie .
+    *MOT:       okay .
+    >>>
+    >>> reader = pylangacq.Reader.from_strs([data])
+    >>> len(reader.utterances())
+    2
+    >>>
+    >>> # All "file" terminology still applies.
+    >>> # Each CHAT data string you pass in is treated as one "file".
+    >>> reader.n_files()
+    1
+    >>>
+    >>> reader.utterances()
+    [Utterance(participant='CHI',
+               tokens=[Token(word='I', pos=None, mor=None, gra=None),
+                       Token(word='want', pos=None, mor=None, gra=None),
+                       Token(word='cookie', pos=None, mor=None, gra=None),
+                       Token(word='.', pos=None, mor=None, gra=None)],
+               time_marks=None,
+               tiers={'CHI': 'I want cookie .'}),
+     Utterance(participant='MOT',
+               tokens=[Token(word='okay', pos=None, mor=None, gra=None),
+                       Token(word='.', pos=None, mor=None, gra=None)],
+               time_marks=None,
+               tiers={'MOT': 'okay .'})]
 
 We are getting ahead of ourselves by showing the result
 of the :class:`~pylangacq.Reader` classmethod :func:`~pylangacq.Reader.utterances`.

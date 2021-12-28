@@ -54,12 +54,24 @@ class Token:
     gra: Union[Gra, None]
 
     def to_mor_tier(self) -> str:
+        """Return the %mor representation.
+
+        Returns
+        -------
+        str
+        """
         if self.word in _PUNCTUATION_MARKS:
             return self.word
         else:
             return f"{self.pos or ''}|{self.mor or ''}"
 
     def to_gra_tier(self) -> str:
+        """Return the %gra representation.
+
+        Returns
+        -------
+        str
+        """
         return f"{self.gra.dep}|{self.gra.head}|{self.gra.rel}"
 
 

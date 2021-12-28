@@ -9,17 +9,8 @@ Changelog
 Added
 ^^^^^
 
-
-* ``Reader`` objects can now be concatenated by the addition operator ``+``.
-* Implemented the ``head``\ , ``tail``\ , and ``info`` methods at ``Reader``.
-* Added support for Python 3.10.
-
 Changed
 ^^^^^^^
-
-
-* The ``to_strs`` and ``to_chat`` methods of a ``Reader`` object return
-  tabulated outputs by default.
 
 Deprecated
 ^^^^^^^^^^
@@ -27,14 +18,50 @@ Deprecated
 Removed
 ^^^^^^^
 
-
-* Dropped support for Python 3.6.
-
 Fixed
 ^^^^^
 
 Security
 ^^^^^^^^
+
+[0.16.0] - 2021-12-27
+---------------------
+
+Added
+^^^^^
+
+
+* ``Reader`` objects can now be concatenated by the addition operator ``+``.
+* Implemented the ``head``\ , ``tail``\ , and ``info`` methods at ``Reader``.
+* Added support for Python 3.10.
+* Turned on Windows testing on CircleCI.
+* Added ``pyproject.toml``. Related to prioritizing ``setup.cfg`` for specifying
+  build metadata and options.
+
+Changed
+^^^^^^^
+
+
+* The ``to_strs`` and ``to_chat`` methods of a ``Reader`` object return
+  tabulated outputs by default.
+* Prioritized ``to_chat`` for the single file output use case.
+* Unzipping CHAT data now uses less memory.
+* Switched to ``setup.cfg`` to fully specify build metadata and options,
+  while keeping a minimal ``setup.py`` for backward compatibility.
+  Related to the new ``pyproject.toml``.
+* Switched the Sphinx docs theme from ``sphinx-rtd-theme`` to ``furo``.
+
+Removed
+^^^^^^^
+
+
+* Dropped support for Python 3.6.
+
+Security
+^^^^^^^^
+
+
+* Turned on ``safety`` and ``bandit`` checks at CircleCI builds.
 
 [0.15.0] - 2021-06-06
 ---------------------

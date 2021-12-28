@@ -48,10 +48,26 @@ def create_robots_txt():
         f.write("User-agent: *\n\nSitemap: https://pylangacq.org/sitemap.xml\n")
 
 
+def add_custom_css():
+    logging.info("Adding custom css")
+    dir_ = os.path.join(_DOCS, "_static")
+    os.makedirs(dir_, exist_ok=True)
+    file_path = os.path.join(dir_, "custom.css")
+    with open(file_path, "w", encoding="utf-8") as f:
+        # https://stackoverflow.com/q/69873561
+        avoid_uppercasing_docstrings = """
+dl.py .field-list dt {
+    text-transform: none !important;
+}
+        """
+        f.write(avoid_uppercasing_docstrings)
+
+
 if __name__ == "__main__":
     logging.basicConfig(level="INFO")
     remove_generated_docs()
     create_changelog_rst()
     create_robots_txt()
+    add_custom_css()
     # Rebuilding docs has to be the final step.
     rebuild_docs()

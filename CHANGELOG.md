@@ -8,14 +8,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [0.16.0] - 2021-12-27
+
+### Added
 * `Reader` objects can now be concatenated by the addition operator `+`.
 * Implemented the `head`, `tail`, and `info` methods at `Reader`.
 * Added support for Python 3.10.
 * Turned on Windows testing on CircleCI.
 * Added `pyproject.toml`. Related to prioritizing `setup.cfg` for specifying
-  build metadata and options. Builds are still based on setuptools, though
-  having added `pyproject.toml` and minimized the role of `setup.py` makes it
-  easier to migrate to another build system, should migration happen in the future.
+  build metadata and options.
 
 ### Changed
 * The `to_strs` and `to_chat` methods of a `Reader` object return
@@ -25,15 +32,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Switched to `setup.cfg` to fully specify build metadata and options,
   while keeping a minimal `setup.py` for backward compatibility.
   Related to the new `pyproject.toml`.
-  Builds are still based on setuptools, though
-  having added `pyproject.toml` and minimized the role of `setup.py` makes it
-  easier to migrate to another build system, should migration happen in the future.
+* Switched the Sphinx docs theme from `sphinx-rtd-theme` to `furo`.
 
-### Deprecated
 ### Removed
 * Dropped support for Python 3.6.
 
-### Fixed
 ### Security
 * Turned on `safety` and `bandit` checks at CircleCI builds.
 

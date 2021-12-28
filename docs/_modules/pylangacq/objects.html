@@ -1,202 +1,210 @@
-<!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pylangacq.objects &mdash; PyLangAcq 0.15.0 documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-    <link rel="canonical" href="https://pylangacq.org/_modules/pylangacq/objects.html" />
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
-</head>
+<!doctype html>
+<html class="no-js">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> PyLangAcq
-          </a>
-              <div class="version">
-                0.15.0
-              </div>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#reading-chat-data">Reading CHAT data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#header-information">Header Information</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#transcriptions-and-annotations">Transcriptions and Annotations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#word-frequencies-and-ngrams">Word Frequencies and Ngrams</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#developmental-measures">Developmental Measures</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#questions">Questions?</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../read.html">Reading CHAT Data</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../read.html#initializing-a-reader">Initializing a Reader</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../read.html#read-chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../read.html#from-a-zip-file-or-local-directory">From a ZIP File or Local Directory</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../read.html#from-specific-chat-data-files">From Specific CHAT Data Files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../read.html#from-in-memory-strings">From In-Memory Strings</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../read.html#parallel-processing">Parallel Processing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../read.html#creating-an-empty-reader">Creating an Empty Reader</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../read.html#adding-and-removing-data">Adding and Removing Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../read.html#custom-behavior">Custom Behavior</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../headers.html">Accessing Headers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../headers.html#ages">Ages</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../headers.html#dates-of-recording">Dates of Recording</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../headers.html#languages">Languages</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../headers.html#participants">Participants</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../headers.html#other-header-information">Other Header Information</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../transcriptions.html">Transcriptions and Annotations</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../transcriptions.html#chat-format">CHAT Format</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../transcriptions.html#words">Words</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../transcriptions.html#output-by-utterances-or-files">Output by Utterances or Files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../transcriptions.html#filter-by-participants">Filter by Participants</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../transcriptions.html#tokens">Tokens</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../transcriptions.html#utterances">Utterances</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../transcriptions.html#time-marks">Time Marks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../transcriptions.html#tiers">Tiers</a></li>
-</ul>
-</li>
-</ul>
-</li>
+    <meta name="generator" content="sphinx-4.3.2, furo 2021.11.23"/>
+        <title>pylangacq.objects - PyLangAcq 0.16.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=7f0192ddeb2adecfbaa87ffbcf67d16358b30bc1" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=0af69da206d614734f649b27d4cdc2dd6c31f41d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  body[data-theme="dark"] {
+    --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+  }
+  @media (prefers-color-scheme: dark) {
+    body:not([data-theme="light"]) {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+  }
+</style></head>
+  <body>
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path stroke="none" d="M0 0h24v24H0z" />
+      <line x1="4" y1="6" x2="20" y2="6" />
+      <line x1="10" y1="12" x2="20" y2="12" />
+      <line x1="6" y1="18" x2="20" y2="18" />
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">PyLangAcq 0.16.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  
+  <span class="sidebar-brand-text">PyLangAcq 0.16.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../read.html">Reading CHAT Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../headers.html">Accessing Headers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../transcriptions.html">Transcriptions and Annotations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../write.html">Writing CHAT Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../frequencies.html">Word Frequencies and Ngrams</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../measures.html">Developmental Measures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../api.html#read-chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../api.html#reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../api.html#token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../api.html#gra"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gra</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../api.html#utterance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Utterance</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../api.html#helper-functions">Helper Functions</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#unreleased">[Unreleased]</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#added">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#changed">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#deprecated">Deprecated</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#removed">Removed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#fixed">Fixed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#security">Security</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id2">[0.15.0] - 2021-06-06</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id3">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id4">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id5">Removed</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id6">[0.14.1] - 2021-05-16</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id7">Fixed</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id8">[0.14.0] - 2021-05-12</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id9">Added</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id10">[0.13.3] - 2021-05-07</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id11">Fixed</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id12">[0.13.2] - 2021-05-02</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id13">Fixed</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id14">[0.13.1] - 2021-03-23</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id15">Fixed</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id16">[0.13.0] - 2021-03-15</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id17">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id18">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id19">Deprecated</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id20">Removed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id21">Fixed</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id22">[0.12.0] - 2020-10-11</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id23">Added</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id24">[0.11.0] - 2020-07-02</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id25">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id26">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id27">Removed</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id28">[0.10.0] - 2017-11-02</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id29">[0.9.0] - 2017-10-25</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id30">[0.8] - 2016-01-30</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id31">[0.7] - 2016-01-06</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id32">[0.6] - 2015-12-27</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id33">[0.5] - 2015-12-16</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id34">[0.4] - 2015-12-13</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id35">[0.3] - 2015-12-09</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id36">[0.2] - 2015-12-05</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id37">[0.1] - 2015-12-04</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
 </ul>
 
-        </div>
-      </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">PyLangAcq</a>
-      </nav>
-
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>pylangacq.objects</li>
-      <li class="wy-breadcrumbs-aside">
-      </li>
-  </ul>
-  <hr/>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
-  <h1>Source code for pylangacq.objects</h1><div class="highlight"><pre>
+</div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <h1>Source code for pylangacq.objects</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">dataclasses</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">tabulate</span> <span class="kn">import</span> <span class="n">tabulate</span>
+
+<span class="kn">from</span> <span class="nn">pylangacq._punctuation_marks</span> <span class="kn">import</span> <span class="n">_PUNCTUATION_MARKS</span>
+
+
+<span class="n">_CLITIC</span> <span class="o">=</span> <span class="s2">"CLITIC"</span>
 
 
 <div class="viewcode-block" id="Gra"><a class="viewcode-back" href="../../api.html#pylangacq.objects.Gra">[docs]</a><span class="nd">@dataclasses</span><span class="o">.</span><span class="n">dataclass</span>
 <span class="k">class</span> <span class="nc">Gra</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Grammatical relation of a word in an utterance.</span>
+    <span class="sd">"""Grammatical relation of a word in an utterance.</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -206,9 +214,9 @@
 <span class="sd">        The position of the head in the utterance</span>
 <span class="sd">    rel : str</span>
 <span class="sd">        Grammatical relation</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;dep&quot;</span><span class="p">,</span> <span class="s2">&quot;head&quot;</span><span class="p">,</span> <span class="s2">&quot;rel&quot;</span><span class="p">)</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"dep"</span><span class="p">,</span> <span class="s2">"head"</span><span class="p">,</span> <span class="s2">"rel"</span><span class="p">)</span>
 
     <span class="n">dep</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">head</span><span class="p">:</span> <span class="nb">int</span>
@@ -217,7 +225,7 @@
 
 <div class="viewcode-block" id="Token"><a class="viewcode-back" href="../../api.html#pylangacq.objects.Token">[docs]</a><span class="nd">@dataclasses</span><span class="o">.</span><span class="n">dataclass</span>
 <span class="k">class</span> <span class="nc">Token</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Token with attributes as parsed from a CHAT utterance.</span>
+    <span class="sd">"""Token with attributes as parsed from a CHAT utterance.</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -229,72 +237,196 @@
 <span class="sd">        Morphological information</span>
 <span class="sd">    gra : Gra</span>
 <span class="sd">        Grammatical relation</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;word&quot;</span><span class="p">,</span> <span class="s2">&quot;pos&quot;</span><span class="p">,</span> <span class="s2">&quot;mor&quot;</span><span class="p">,</span> <span class="s2">&quot;gra&quot;</span><span class="p">)</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"word"</span><span class="p">,</span> <span class="s2">"pos"</span><span class="p">,</span> <span class="s2">"mor"</span><span class="p">,</span> <span class="s2">"gra"</span><span class="p">)</span>
 
     <span class="n">word</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">pos</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
     <span class="n">mor</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
-    <span class="n">gra</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Gra</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span></div>
+    <span class="n">gra</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Gra</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">to_mor_tier</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">"""Return the %mor representation.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">word</span> <span class="ow">in</span> <span class="n">_PUNCTUATION_MARKS</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">word</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="ow">or</span> <span class="s1">''</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mor</span> <span class="ow">or</span> <span class="s1">''</span><span class="si">}</span><span class="s2">"</span>
+
+    <span class="k">def</span> <span class="nf">to_gra_tier</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">"""Return the %gra representation.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gra</span><span class="o">.</span><span class="n">dep</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gra</span><span class="o">.</span><span class="n">head</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gra</span><span class="o">.</span><span class="n">rel</span><span class="si">}</span><span class="s2">"</span></div>
 
 
 <div class="viewcode-block" id="Utterance"><a class="viewcode-back" href="../../api.html#pylangacq.objects.Utterance">[docs]</a><span class="nd">@dataclasses</span><span class="o">.</span><span class="n">dataclass</span>
 <span class="k">class</span> <span class="nc">Utterance</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Utterance in a CHAT transcript data.</span>
+    <span class="sd">"""Utterance in a CHAT transcript data.</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    participant : str</span>
-<span class="sd">        Participant of the utterance, e.g., ``&quot;CHI&quot;``, ``&quot;MOT&quot;``</span>
+<span class="sd">        Participant of the utterance, e.g., ``"CHI"``, ``"MOT"``</span>
 <span class="sd">    tokens : List[Token]</span>
 <span class="sd">        List of tokens of the utterance</span>
 <span class="sd">    time_marks : Tuple[int, int]</span>
 <span class="sd">        If available from the CHAT data, these are the start and end times</span>
 <span class="sd">        (in milliseconds) for a segment in a digitized video or audio file,</span>
-<span class="sd">        e.g., ``(0, 1073)``, extracted from ``&quot;·0_1073·&quot;`` in the CHAT data.</span>
-<span class="sd">        ``&quot;·&quot;`` is ASCII code 21 (0x15), for NAK (Negative Acknowledgment).</span>
+<span class="sd">        e.g., ``(0, 1073)``, extracted from ``"·0_1073·"`` in the CHAT data.</span>
+<span class="sd">        ``"·"`` is ASCII code 21 (0x15), for NAK (Negative Acknowledgment).</span>
 <span class="sd">    tiers : Dict[str, str]</span>
 <span class="sd">        This dictionary contains all the original, unparsed data from the utterance,</span>
 <span class="sd">        including the transcribed utterance (signaled by ``*CHI:``, ``*MOT:`` etc</span>
 <span class="sd">        in CHAT), common tiers such as %mor and %gra, as well as all other tiers</span>
 <span class="sd">        associated with the utterance. This dictionary is useful to retrieve</span>
 <span class="sd">        whatever information not readily handled by this package.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;participant&quot;</span><span class="p">,</span> <span class="s2">&quot;tokens&quot;</span><span class="p">,</span> <span class="s2">&quot;time_marks&quot;</span><span class="p">,</span> <span class="s2">&quot;tiers&quot;</span><span class="p">)</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"participant"</span><span class="p">,</span> <span class="s2">"tokens"</span><span class="p">,</span> <span class="s2">"time_marks"</span><span class="p">,</span> <span class="s2">"tiers"</span><span class="p">)</span>
 
     <span class="n">participant</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">tokens</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Token</span><span class="p">]</span>
     <span class="n">time_marks</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span>
-    <span class="n">tiers</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span></div>
+    <span class="n">tiers</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_to_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tabular</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="c1"># `mor_gra_keys` needs to be a list for the ordering.</span>
+        <span class="n">mor_gra_keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"%mor"</span><span class="p">,</span> <span class="s2">"</span><span class="si">%g</span><span class="s2">ra"</span><span class="p">)</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+        <span class="k">if</span> <span class="n">tabular</span> <span class="ow">and</span> <span class="n">mor_gra_keys</span><span class="p">:</span>
+            <span class="n">tokens_in_table</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">prev_token</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span><span class="p">:</span>
+                <span class="n">token_in_table</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="c1"># TODO: Write a test for the clitic case.</span>
+                <span class="k">if</span> <span class="n">token</span><span class="o">.</span><span class="n">word</span> <span class="o">==</span> <span class="n">_CLITIC</span> <span class="ow">and</span> <span class="n">prev_token</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">tokens_in_table</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                    <span class="n">token_in_table</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prev_token</span><span class="o">.</span><span class="n">word</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="s2">"%mor"</span> <span class="ow">in</span> <span class="n">mor_gra_keys</span><span class="p">:</span>
+                        <span class="n">token_in_table</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">prev_token</span><span class="o">.</span><span class="n">to_mor_tier</span><span class="p">()</span><span class="si">}</span><span class="s2">~</span><span class="si">{</span><span class="n">token</span><span class="o">.</span><span class="n">to_mor_tier</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span>
+                        <span class="p">)</span>
+                    <span class="k">if</span> <span class="s2">"</span><span class="si">%g</span><span class="s2">ra"</span> <span class="ow">in</span> <span class="n">mor_gra_keys</span><span class="p">:</span>
+                        <span class="n">token_in_table</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">prev_token</span><span class="o">.</span><span class="n">to_gra_tier</span><span class="p">()</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">token</span><span class="o">.</span><span class="n">to_gra_tier</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span>
+                        <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">token_in_table</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">word</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="s2">"%mor"</span> <span class="ow">in</span> <span class="n">mor_gra_keys</span><span class="p">:</span>
+                        <span class="n">token_in_table</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">to_mor_tier</span><span class="p">())</span>
+                    <span class="k">if</span> <span class="s2">"</span><span class="si">%g</span><span class="s2">ra"</span> <span class="ow">in</span> <span class="n">mor_gra_keys</span><span class="p">:</span>
+                        <span class="n">token_in_table</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">to_gra_tier</span><span class="p">())</span>
+                <span class="n">prev_token</span> <span class="o">=</span> <span class="n">token</span>
+                <span class="n">tokens_in_table</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">token_in_table</span><span class="p">)</span>
+            <span class="n">tokens_in_table_with_keys</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">[</span><span class="sa">f</span><span class="s2">"*</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">participant</span><span class="si">}</span><span class="s2">:"</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">:"</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">mor_gra_keys</span><span class="p">],</span>
+                <span class="o">*</span><span class="n">tokens_in_table</span><span class="p">,</span>
+            <span class="p">]</span>
+            <span class="c1"># Transpose (see https://stackoverflow.com/a/6473724)</span>
+            <span class="n">tiers_in_table</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">tokens_in_table_with_keys</span><span class="p">)))</span>
+            <span class="n">str_for_u</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">tabulate</span><span class="p">(</span><span class="n">tiers_in_table</span><span class="p">,</span> <span class="n">tablefmt</span><span class="o">=</span><span class="s1">'plain'</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">str_for_u</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"*</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">participant</span><span class="si">}</span><span class="s2">:</span><span class="se">\t</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">participant</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">mor_gra_keys</span><span class="p">:</span>
+                <span class="n">str_for_u</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">:</span><span class="se">\t</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+
+        <span class="n">keys</span> <span class="o">=</span> <span class="n">_sort_keys</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">drop</span><span class="o">=</span><span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">participant</span><span class="p">,</span> <span class="s2">"%mor"</span><span class="p">,</span> <span class="s2">"</span><span class="si">%g</span><span class="s2">ra"</span><span class="p">})</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+            <span class="n">str_for_u</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">:</span><span class="se">\t</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+
+        <span class="k">return</span> <span class="n">str_for_u</span>
+
+    <span class="k">def</span> <span class="nf">_repr_html_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">html</span> <span class="o">=</span> <span class="s2">""</span>
+
+        <span class="c1"># Row from words</span>
+        <span class="n">cells</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="sa">f</span><span class="s1">'    &lt;td style="text-align: left"&gt;</span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">word</span><span class="si">}</span><span class="s1">&lt;/td&gt;</span><span class="se">\n</span><span class="s1">'</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span>
+        <span class="p">]</span>
+        <span class="n">html</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="s2">"  &lt;tr&gt;</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="sa">f</span><span class="s2">"    &lt;td&gt;*</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">participant</span><span class="si">}</span><span class="s2">:&lt;/td&gt;</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">''</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cells</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+            <span class="s2">"  &lt;/tr&gt;</span><span class="se">\n</span><span class="s2">"</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Row from %mor</span>
+        <span class="k">if</span> <span class="s2">"%mor"</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="p">:</span>
+            <span class="n">cells</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="sa">f</span><span class="s1">'    &lt;td style="text-align: left"&gt;</span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">to_mor_tier</span><span class="p">()</span><span class="si">}</span><span class="s1">&lt;/td&gt;</span><span class="se">\n</span><span class="s1">'</span>
+                <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span>
+            <span class="p">]</span>
+            <span class="n">html</span> <span class="o">+=</span> <span class="s2">"  &lt;tr&gt;</span><span class="se">\n</span><span class="s2">"</span> <span class="s2">"    &lt;td&gt;%mor:&lt;/td&gt;</span><span class="se">\n</span><span class="s2">"</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">''</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cells</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span> <span class="s2">"  &lt;/tr&gt;</span><span class="se">\n</span><span class="s2">"</span>
+
+        <span class="c1"># Row from %gra</span>
+        <span class="k">if</span> <span class="s2">"</span><span class="si">%g</span><span class="s2">ra"</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="p">:</span>
+            <span class="n">cells</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="sa">f</span><span class="s1">'    &lt;td style="text-align: left"&gt;</span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">to_gra_tier</span><span class="p">()</span><span class="si">}</span><span class="s1">&lt;/td&gt;</span><span class="se">\n</span><span class="s1">'</span>
+                <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span>
+            <span class="p">]</span>
+            <span class="n">html</span> <span class="o">+=</span> <span class="s2">"  &lt;tr&gt;</span><span class="se">\n</span><span class="s2">"</span> <span class="s2">"    &lt;td&gt;</span><span class="si">%g</span><span class="s2">ra:&lt;/td&gt;</span><span class="se">\n</span><span class="s2">"</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">''</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cells</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span> <span class="s2">"  &lt;/tr&gt;</span><span class="se">\n</span><span class="s2">"</span>
+
+        <span class="n">keys</span> <span class="o">=</span> <span class="n">_sort_keys</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">drop</span><span class="o">=</span><span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">participant</span><span class="p">,</span> <span class="s2">"%mor"</span><span class="p">,</span> <span class="s2">"</span><span class="si">%g</span><span class="s2">ra"</span><span class="p">})</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+            <span class="n">html</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"  &lt;tr&gt;</span><span class="se">\n</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"    &lt;td&gt;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">:&lt;/td&gt;</span><span class="se">\n</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s1">'    &lt;td colspan="</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tokens</span><span class="p">)</span><span class="si">}</span><span class="s1">" style="text-align: left"&gt;'</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="s2">&lt;/td&gt;</span><span class="se">\n</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"  &lt;/tr&gt;</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"&lt;table&gt;</span><span class="si">{</span><span class="n">html</span><span class="si">}</span><span class="s2">&lt;/table&gt;"</span></div>
+
+
+<span class="k">def</span> <span class="nf">_sort_keys</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">first</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="n">sorted_keys</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">first</span> <span class="o">=</span> <span class="n">first</span> <span class="ow">or</span> <span class="p">[]</span>
+    <span class="n">drop</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">drop</span> <span class="ow">or</span> <span class="p">[])</span>  <span class="c1"># ordering doesn't matter</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">first</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+            <span class="n">sorted_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">key</span> <span class="ow">in</span> <span class="n">sorted_keys</span> <span class="ow">or</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">drop</span><span class="p">):</span>
+            <span class="n">sorted_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sorted_keys</span>
 </pre></div>
-
-           </div>
-          </div>
-          <footer>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2015-2021, Jackson L. Lee | PyLangAcq 0.15.0 | Documentation last updated on September 23, 2021.</p>
-  </div>
-
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
-
-</footer>
-        </div>
+        </article>
       </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
 
-</body>
+        <div class="related-information">
+              Copyright &#169; 2015-2021, Jackson L. Lee | PyLangAcq 0.16.0 | Documentation last updated on December 27, 2021 |
+          Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+          <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/scripts/furo.js"></script>
+    </body>
 </html>

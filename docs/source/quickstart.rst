@@ -25,7 +25,7 @@ To illustrate, let's use Eve's data from the
 `Brown <https://childes.talkbank.org/access/Eng-NA/Brown.html>`_
 corpus of American English:
 
-.. note::
+.. caution::
     CHAT data is processed in parallelized code to speed things up by default.
     Especially for Windows users, you may need to put your code under the
     ``if __name__ == "__main__":`` idiom in a script to avoid running into an error.

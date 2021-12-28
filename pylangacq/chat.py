@@ -167,7 +167,10 @@ def _params_in_docstring(*params, class_method=True):
         docstring = docstring.replace("\n        ", "\n    ")
 
     def real_decorator(func):
-        returns_none = "Returns\n        -------" not in func.__doc__
+        returns_none = (
+            f"Returns\n{'        ' if class_method else '    '}-------"
+            not in func.__doc__
+        )
         if returns_none:
             func.__doc__ += docstring
         else:

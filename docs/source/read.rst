@@ -47,7 +47,7 @@ If the ZIP file has a fair amount of data
 (the Brown dataset has over 200 CHAT data files, with over 180,000 utterances),
 a :func:`~pylangacq.read_chat` call like this typically takes a couple seconds.
 
-.. skip: start if(os.getenv("CI") == "true", reason="maybe Sybil can't handle <1> in the output?")
+.. skip: start if(os.name == "nt", reason="Windows uses backslash as path separator")
 
 .. code-block:: python
 
@@ -65,6 +65,7 @@ a :func:`~pylangacq.read_chat` call like this typically takes a couple seconds.
     ...
     (set `verbose` to True for all the files)
 
+.. skip: end
 
 For a quick preview of what the data looks like,
 The :func:`~pylangacq.Reader.head` and :func:`~pylangacq.Reader.tail` methods
@@ -77,27 +78,25 @@ provide a quick preview of what the data looks like:
     %mor:  n|play   n|checker-PL  .
     %gra:  1|2|MOD  2|0|INCROOT   3|2|PUNCT
     %pho:   <1> pe
-
+    <BLANKLINE>
     *CHI:  big      drum         .
     %mor:  adj|big  n|drum       .
     %gra:  1|2|MOD  2|0|INCROOT  3|2|PUNCT
-
+    <BLANKLINE>
     *MOT:  big      drum         ?
     %mor:  adj|big  n|drum       ?
     %gra:  1|2|MOD  2|0|INCROOT  3|2|PUNCT
-
+    <BLANKLINE>
     *CHI:  big      drum         .
     %mor:  adj|big  n|drum       .
     %gra:  1|2|MOD  2|0|INCROOT  3|2|PUNCT
     %spa:   $IMIT
-
+    <BLANKLINE>
     *CHI:  big      drum         .
     %mor:  adj|big  n|drum       .
     %gra:  1|2|MOD  2|0|INCROOT  3|2|PUNCT
     %spa:   $IMIT
-
-
-.. skip: end
+    <BLANKLINE>
 
 In practice, you likely only need a subset of the data at a time, e.g.,
 focusing on a particular child. The Brown dataset contains data for the three children

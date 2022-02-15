@@ -5,19 +5,49 @@ import functools
 import os
 import tempfile
 import unittest
+import zipfile
 from unittest import mock
 
 import pytest
 
-from pylangacq.chat import _clean_word, Reader, cached_data_info, remove_cached_data
-from pylangacq.objects import Gra, Utterance, Token
-from pylangacq.tests.test_data import (
-    LOCAL_EVE_PATH,
-    REMOTE_BROWN_URL,
-    REMOTE_EVE_DIR,
-    REMOTE_EVE_FILE_PATH,
-    download_and_extract_brown,
+from pylangacq.chat import (
+    _clean_word,
+    Reader,
+    _download_file,
+    cached_data_info,
+    remove_cached_data,
 )
+from pylangacq.objects import Gra, Utterance, Token
+
+
+_REMOTE_BROWN_URL = "https://childes.talkbank.org/data/Eng-NA/Brown.zip"
+
+_TEMP_DATA_DIR = tempfile.mkdtemp()
+_BROWN_ZIP_PATH = os.path.join(_TEMP_DATA_DIR, "brown.zip")
+
+_LOCAL_EVE_PATH = os.path.join(os.path.dirname(__file__), "eve.cha")
+_REMOTE_EVE_DIR = os.path.join(_TEMP_DATA_DIR, "Brown", "Eve")
+_REMOTE_EVE_FILE_PATH = os.path.join(_REMOTE_EVE_DIR, "010600a.cha")
+
+
+def download_and_extract_brown():
+    if os.path.exists(_BROWN_ZIP_PATH):
+        return
+    try:
+        _download_file(_REMOTE_BROWN_URL, _BROWN_ZIP_PATH)
+    except Exception as e:
+        msg = (
+            f"Error '{e}' in downloading {_REMOTE_BROWN_URL}: network problems or "
+            f"invalid URL for Brown zip? If URL needs updating, tutorial.rst in docs "
+            "has to be updated as well."
+        )
+        try:
+            raise e
+        finally:
+            pytest.exit(msg)
+    else:
+        with zipfile.ZipFile(_BROWN_ZIP_PATH) as zip_file:
+            zip_file.extractall(path=_TEMP_DATA_DIR)
 
 
 download_and_extract_brown()
@@ -101,35 +131,35 @@ class BaseTestCHATReader:
     @property
     @functools.lru_cache(maxsize=1)
     def eve_local(self):
-        return self.reader_class.from_files([LOCAL_EVE_PATH])
+        return self.reader_class.from_files([_LOCAL_EVE_PATH])
 
     @property
     @functools.lru_cache(maxsize=1)
     def eve_remote(self):
-        return self.reader_class.from_files([REMOTE_EVE_FILE_PATH])
+        return self.reader_class.from_files([_REMOTE_EVE_FILE_PATH])
 
     def test_use_cached(self):
         remove_cached_data()
         assert len(cached_data_info()) == 0
 
-        self.reader_class.from_zip(REMOTE_BROWN_URL, match="Eve")
+        self.reader_class.from_zip(_REMOTE_BROWN_URL, match="Eve")
         assert len(cached_data_info()) == 1
-        assert REMOTE_BROWN_URL in cached_data_info()
+        assert _REMOTE_BROWN_URL in cached_data_info()
 
         # Use a mock session to block internet access.
         # The `from_zip` shouldn't crash and shouldn't use the session object anyway,
         # because it should use the cached data.
         mock_session = mock.Mock()
-        self.reader_class.from_zip(REMOTE_BROWN_URL, match="Eve", session=mock_session)
+        self.reader_class.from_zip(_REMOTE_BROWN_URL, match="Eve", session=mock_session)
         assert len(cached_data_info()) == 1
-        assert REMOTE_BROWN_URL in cached_data_info()
+        assert _REMOTE_BROWN_URL in cached_data_info()
         mock_session.get.assert_not_called()
 
         remove_cached_data()
         assert len(cached_data_info()) == 0
 
     def test_from_strs_same_as_from_files(self):
-        with open(LOCAL_EVE_PATH, encoding="utf-8") as f:
+        with open(_LOCAL_EVE_PATH, encoding="utf-8") as f:
             from_strs = self.reader_class.from_strs([f.read()])
         file_from_strs = from_strs._files[0]
         file_from_files = self.eve_local._files[0]
@@ -137,7 +167,7 @@ class BaseTestCHATReader:
         assert file_from_strs.header == file_from_files.header
 
     def test_from_dir(self):
-        r = self.reader_class.from_dir(REMOTE_EVE_DIR)
+        r = self.reader_class.from_dir(_REMOTE_EVE_DIR)
         assert r.n_files() == 20
 
     def test_to_strs(self):
@@ -226,27 +256,27 @@ class BaseTestCHATReader:
     def test_append_and_append_left(self):
         eve_copy = copy.deepcopy(self.eve_local)
         eve_copy.append(self.eve_remote)
-        assert eve_copy.file_paths() == [LOCAL_EVE_PATH, REMOTE_EVE_FILE_PATH]
+        assert eve_copy.file_paths() == [_LOCAL_EVE_PATH, _REMOTE_EVE_FILE_PATH]
         eve_copy.append_left(self.eve_remote)
         assert eve_copy.file_paths() == [
-            REMOTE_EVE_FILE_PATH,
-            LOCAL_EVE_PATH,
-            REMOTE_EVE_FILE_PATH,
+            _REMOTE_EVE_FILE_PATH,
+            _LOCAL_EVE_PATH,
+            _REMOTE_EVE_FILE_PATH,
         ]
 
     def test_extend_and_extend_left(self):
         eve_copy = copy.deepcopy(self.eve_local)
         eve_copy.extend([self.eve_remote])
-        assert eve_copy.file_paths() == [LOCAL_EVE_PATH, REMOTE_EVE_FILE_PATH]
+        assert eve_copy.file_paths() == [_LOCAL_EVE_PATH, _REMOTE_EVE_FILE_PATH]
         eve_copy.extend_left([self.eve_remote])
         assert eve_copy.file_paths() == [
-            REMOTE_EVE_FILE_PATH,
-            LOCAL_EVE_PATH,
-            REMOTE_EVE_FILE_PATH,
+            _REMOTE_EVE_FILE_PATH,
+            _LOCAL_EVE_PATH,
+            _REMOTE_EVE_FILE_PATH,
         ]
 
     def test_pop_and_pop_left(self):
-        eve = self.reader_class.from_dir(REMOTE_EVE_DIR)
+        eve = self.reader_class.from_dir(_REMOTE_EVE_DIR)
         eve_path_last = eve.file_paths()[-1]
         eve_path_first = eve.file_paths()[0]
 
@@ -265,7 +295,7 @@ class BaseTestCHATReader:
         sarah_paths = {"Brown/Sarah/020305.cha", "Brown/Sarah/020307.cha"}
         adam_paths = {"Brown/Adam/020304.cha", "Brown/Adam/020318.cha"}
 
-        adam_and_eve = self.reader_class.from_zip(REMOTE_BROWN_URL, exclude="Sarah")
+        adam_and_eve = self.reader_class.from_zip(_REMOTE_BROWN_URL, exclude="Sarah")
 
         assert eve_paths.issubset(set(adam_and_eve.file_paths()))
         assert not sarah_paths.issubset(set(adam_and_eve.file_paths()))
@@ -483,7 +513,7 @@ class TestPylangacqReader(BaseTestCHATReader, unittest.TestCase):
     reason="Not sure? We're good so long as this test passes on Linux and MacOS",
 )
 def test_if_childes_has_updated_data():
-    assert filecmp.cmp(LOCAL_EVE_PATH, REMOTE_EVE_FILE_PATH)
+    assert filecmp.cmp(_LOCAL_EVE_PATH, _REMOTE_EVE_FILE_PATH)
 
 
 @pytest.mark.parametrize(

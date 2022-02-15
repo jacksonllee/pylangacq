@@ -1,4 +1,4 @@
-from pylangacq.tests.test_chat import _EXPECTED_EVE_UTTERANCES
+from .test_chat import _EXPECTED_EVE_UTTERANCES
 
 
 def test_utterance_to_str_tabular_false():

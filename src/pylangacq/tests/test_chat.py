@@ -88,29 +88,6 @@ _EXPECTED_EVE_UTTERANCES = [
 _BROWN_ZIP_PATH = os.path.join(_TEMP_DATA_DIR, "brown.zip")
 
 
-def download_and_extract_brown():
-    if os.path.exists(_BROWN_ZIP_PATH):
-        return
-    try:
-        _download_file(_REMOTE_BROWN_URL, _BROWN_ZIP_PATH)
-    except Exception as e:
-        msg = (
-            f"Error '{e}' in downloading {_REMOTE_BROWN_URL}: network problems or "
-            f"invalid URL for Brown zip? If URL needs updating, tutorial.rst in docs "
-            "has to be updated as well."
-        )
-        try:
-            raise e
-        finally:
-            pytest.exit(msg)
-    else:
-        with zipfile.ZipFile(_BROWN_ZIP_PATH) as zip_file:
-            zip_file.extractall(path=_TEMP_DATA_DIR)
-
-
-download_and_extract_brown()
-
-
 class BaseTestCHATReader:
     """A base test class that collects all tests for a CHAT reader class.
 
@@ -130,6 +107,7 @@ class BaseTestCHATReader:
     @property
     @functools.lru_cache(maxsize=1)
     def eve_remote(self):
+        download_and_extract_brown()
         return self.reader_class.from_files([_REMOTE_EVE_FILE_PATH])
 
     def test_use_cached(self):
@@ -494,3 +472,23 @@ class BaseTestCHATReader:
             assert reader.dates_of_recording() == set()
             assert reader.languages() == set()
             assert reader.participants() == set()
+
+
+def download_and_extract_brown():
+    if os.path.exists(_BROWN_ZIP_PATH):
+        return
+    try:
+        _download_file(_REMOTE_BROWN_URL, _BROWN_ZIP_PATH)
+    except Exception as e:
+        msg = (
+            f"Error '{e}' in downloading {_REMOTE_BROWN_URL}: network problems or "
+            f"invalid URL for Brown zip? If URL needs updating, tutorial.rst in docs "
+            "has to be updated as well."
+        )
+        try:
+            raise e
+        finally:
+            pytest.exit(msg)
+    else:
+        with zipfile.ZipFile(_BROWN_ZIP_PATH) as zip_file:
+            zip_file.extractall(path=_TEMP_DATA_DIR)

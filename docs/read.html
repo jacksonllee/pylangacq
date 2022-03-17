@@ -5,11 +5,11 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Accessing Headers" href="headers.html" /><link rel="prev" title="Quickstart" href="quickstart.html" />
 
-    <meta name="generator" content="sphinx-4.3.2, furo 2021.11.23"/>
-        <title>Reading CHAT Data - PyLangAcq 0.16.0 documentation</title>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.03.04"/>
+        <title>Reading CHAT Data - PyLangAcq 0.16.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=7f0192ddeb2adecfbaa87ffbcf67d16358b30bc1" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=0af69da206d614734f649b27d4cdc2dd6c31f41d" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css" />
     
     
@@ -21,16 +21,18 @@
   --color-code-foreground: black;
   
   }
-  body[data-theme="dark"] {
-    --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  
-  }
-  @media (prefers-color-scheme: dark) {
-    body:not([data-theme="light"]) {
+  @media not print {
+    body[data-theme="dark"] {
       --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
   
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
     }
   }
 </style></head>
@@ -42,17 +44,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="svg-toc" viewBox="0 0 24 24">
     <title>Contents</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <path stroke="none" d="M0 0h24v24H0z" />
-      <line x1="4" y1="6" x2="20" y2="6" />
-      <line x1="10" y1="12" x2="20" y2="12" />
-      <line x1="6" y1="18" x2="20" y2="18" />
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
     </svg>
   </symbol>
   <symbol id="svg-menu" viewBox="0 0 24 24">
     <title>Menu</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
       stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
       <line x1="3" y1="12" x2="21" y2="12"></line>
       <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -61,14 +59,14 @@
   </symbol>
   <symbol id="svg-arrow-right" viewBox="0 0 24 24">
     <title>Expand</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
       stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
       <polyline points="9 18 15 12 9 6"></polyline>
     </svg>
   </symbol>
   <symbol id="svg-sun" viewBox="0 0 24 24">
     <title>Light mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
       stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
       <circle cx="12" cy="12" r="5"></circle>
       <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -83,7 +81,7 @@
   </symbol>
   <symbol id="svg-moon" viewBox="0 0 24 24">
     <title>Dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
       stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
       <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
@@ -91,7 +89,7 @@
   </symbol>
   <symbol id="svg-sun-half" viewBox="0 0 24 24">
     <title>Auto light/dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
       stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
       <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
       <circle cx="12" cy="12" r="9" />
@@ -124,7 +122,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">PyLangAcq 0.16.0 documentation</div></a>
+      <a href="index.html"><div class="brand">PyLangAcq 0.16.1 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +145,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">PyLangAcq 0.16.0 documentation</span>
+  <span class="sidebar-brand-text">PyLangAcq 0.16.1 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -169,6 +167,7 @@
 
 </div>
 </div>
+
       </div>
       
     </div>
@@ -176,8 +175,13 @@
   <div class="main">
     <div class="content">
       <div class="article-container">
-        <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -192,7 +196,7 @@
         </div>
         <article role="main">
           <section id="reading-chat-data">
-<span id="read"></span><h1>Reading CHAT Data<a class="headerlink" href="#reading-chat-data" title="Permalink to this headline">¶</a></h1>
+<span id="read"></span><h1>Reading CHAT Data<a class="headerlink" href="#reading-chat-data" title="Permalink to this headline">#</a></h1>
 <p>PyLangAcq is designed to handle conversational data represented in the CHAT format
 as used in the CHILDES database for language acquisition research;
 CHAT is documented in its <a class="reference external" href="https://talkbank.org/manuals/CHAT.pdf">official manual</a>.
@@ -206,9 +210,9 @@ For reference, please see the <a class="reference external" href="https://docs.p
 for parallelization from the official Python documentation.</p>
 </div>
 <section id="initializing-a-reader">
-<h2>Initializing a Reader<a class="headerlink" href="#initializing-a-reader" title="Permalink to this headline">¶</a></h2>
+<h2>Initializing a Reader<a class="headerlink" href="#initializing-a-reader" title="Permalink to this headline">#</a></h2>
 <section id="read-chat">
-<h3><a class="reference internal" href="api.html#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a><a class="headerlink" href="#read-chat" title="Permalink to this headline">¶</a></h3>
+<h3><a class="reference internal" href="api.html#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a><a class="headerlink" href="#read-chat" title="Permalink to this headline">#</a></h3>
 <p>Reading CHAT data in PyLangAcq is all about creating a <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> object.
 The most convenient way to do it is to use the <a class="reference internal" href="api.html#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a> function,
 which asks for a data source and several optional arguments.
@@ -329,7 +333,7 @@ some of which aren’t available from <a class="reference internal" href="api.ht
 These classmethods are introduced in the following.</p>
 </section>
 <section id="from-a-zip-file-or-local-directory">
-<h3>From a ZIP File or Local Directory<a class="headerlink" href="#from-a-zip-file-or-local-directory" title="Permalink to this headline">¶</a></h3>
+<h3>From a ZIP File or Local Directory<a class="headerlink" href="#from-a-zip-file-or-local-directory" title="Permalink to this headline">#</a></h3>
 <p>Perhaps you don’t want <a class="reference internal" href="api.html#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a> to do the guess work of
 what type of your data source is, or you want more fine-grained control
 of what counts as CHAT data files or not in your data source.
@@ -351,7 +355,7 @@ The helper functions <a class="reference internal" href="api.html#pylangacq.chat
 <a class="reference internal" href="api.html#pylangacq.chat.remove_cached_data" title="pylangacq.chat.remove_cached_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">pylangacq.chat.remove_cached_data()</span></code></a> let you check and remove cached data, respectively.</p>
 </section>
 <section id="from-specific-chat-data-files">
-<h3>From Specific CHAT Data Files<a class="headerlink" href="#from-specific-chat-data-files" title="Permalink to this headline">¶</a></h3>
+<h3>From Specific CHAT Data Files<a class="headerlink" href="#from-specific-chat-data-files" title="Permalink to this headline">#</a></h3>
 <p>If you’d like to target specific files, the <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> classmethod
 <a class="reference internal" href="api.html#pylangacq.Reader.from_files" title="pylangacq.Reader.from_files"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_files()</span></code></a> takes a list of file paths:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">path1</span> <span class="o">=</span> <span class="s2">"path/to/one/data/file.cha"</span>
@@ -361,7 +365,7 @@ The helper functions <a class="reference internal" href="api.html#pylangacq.chat
 </div>
 </section>
 <section id="from-in-memory-strings">
-<h3>From In-Memory Strings<a class="headerlink" href="#from-in-memory-strings" title="Permalink to this headline">¶</a></h3>
+<h3>From In-Memory Strings<a class="headerlink" href="#from-in-memory-strings" title="Permalink to this headline">#</a></h3>
 <p>If your CHAT data comes from in-memory strings,
 the <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> classmethod
 <a class="reference internal" href="api.html#pylangacq.Reader.from_strs" title="pylangacq.Reader.from_strs"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_strs()</span></code></a> takes a list of strings,
@@ -406,7 +410,7 @@ in the upcoming parts of the documentation,
 but this quick example gives you a glimpse of how PyLangAcq represents CHAT data.</p>
 </section>
 <section id="parallel-processing">
-<h3>Parallel Processing<a class="headerlink" href="#parallel-processing" title="Permalink to this headline">¶</a></h3>
+<h3>Parallel Processing<a class="headerlink" href="#parallel-processing" title="Permalink to this headline">#</a></h3>
 <p>Because a CHILDES / TalkBank dataset usually comes with multiple CHAT data files,
 it is reasonable to parallelize the process of reading and parsing CHAT data for speed-up.
 By default, such parallelization is applied.
@@ -421,7 +425,7 @@ the boolean argument <code class="docutils literal notranslate"><span class="pre
 and you may set it to <code class="docutils literal notranslate"><span class="pre">False</span></code> .</p>
 </section>
 <section id="creating-an-empty-reader">
-<h3>Creating an Empty Reader<a class="headerlink" href="#creating-an-empty-reader" title="Permalink to this headline">¶</a></h3>
+<h3>Creating an Empty Reader<a class="headerlink" href="#creating-an-empty-reader" title="Permalink to this headline">#</a></h3>
 <p>Calling <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> itself with no arguments initializes an empty reader:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">Reader</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span><span class="o">.</span><span class="n">n_files</span><span class="p">()</span>
@@ -434,7 +438,7 @@ The section below discusses how to manipulate data in a reader.</p>
 </section>
 </section>
 <section id="adding-and-removing-data">
-<h2>Adding and Removing Data<a class="headerlink" href="#adding-and-removing-data" title="Permalink to this headline">¶</a></h2>
+<h2>Adding and Removing Data<a class="headerlink" href="#adding-and-removing-data" title="Permalink to this headline">#</a></h2>
 <p>A <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> keeps the linear ordering of CHAT data
 by the ordering of the source data files.
 CHAT data typically comes as data files that each represent a recording session.
@@ -545,7 +549,7 @@ for individual children without re-downloading data:</p>
 </div>
 </section>
 <section id="custom-behavior">
-<h2>Custom Behavior<a class="headerlink" href="#custom-behavior" title="Permalink to this headline">¶</a></h2>
+<h2>Custom Behavior<a class="headerlink" href="#custom-behavior" title="Permalink to this headline">#</a></h2>
 <p>If custom behavior in CHAT handling is needed,
 consider defining a child class that inherits from <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a>.
 This approach is suitable if, for instance, new class methods are needed,
@@ -587,11 +591,21 @@ for Cantonese conversational data in the
               </div>
             </a>
         </div>
-
-        <div class="related-information">
-              Copyright &#169; 2015-2021, Jackson L. Lee | PyLangAcq 0.16.0 | Documentation last updated on December 28, 2021 |
-          Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
-          <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2015-2022, Jackson L. Lee | PyLangAcq 0.16.1 | Documentation last updated on March 17, 2022
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
         </div>
         
       </footer>

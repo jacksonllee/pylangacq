@@ -42,13 +42,6 @@ To download and install the most recent version::
 Ready for more?
 Check out the `Quickstart <https://pylangacq.org/quickstart.html>`_ page.
 
-Consulting
-----------
-
-If your team would like professional assistance in using PyLangAcq,
-freelance consulting and training services are available for both academic and commercial groups.
-Please email `Jackson L. Lee <https://jacksonllee.com>`_.
-
 Support
 -------
 

@@ -24,6 +24,28 @@ Fixed
 Security
 ^^^^^^^^
 
+[0.16.1] - 2022-03-17
+---------------------
+
+Changed
+^^^^^^^
+
+
+* Restructured the repository to use top-level ``src/`` and ``tests/`` directories.
+
+Removed
+^^^^^^^
+
+
+* Removed ``setup.py``.
+
+Fixed
+^^^^^
+
+
+* Moved ``BaseTestCHATReader`` back under the ``pylangacq`` package namespace
+  so that download packages can import ``BaseTestCHATReader`` for testing.
+
 [0.16.0] - 2021-12-27
 ---------------------
 

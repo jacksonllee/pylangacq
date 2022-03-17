@@ -122,7 +122,7 @@ class _DependencyGraph:
         # add \begin{deptext}...\end{deptext}
         words = [self.node[n]["word"] for n in range(1, number_of_nodes)]
         deptext_template = (
-            u"    \\begin{{deptext}}[column sep=1em]\n"
+            "    \\begin{{deptext}}[column sep=1em]\n"
             "        {} \\\\ \n"
             "    \\end{{deptext}}\n"
         )
@@ -137,7 +137,7 @@ class _DependencyGraph:
                 dep_shooting_to_root = dep
                 root_rel = self.edge[dep_shooting_to_root][0]["rel"]
                 break
-        tikz_dep_code += u"    \\deproot{{{}}}{{{}}}\n".format(
+        tikz_dep_code += "    \\deproot{{{}}}{{{}}}\n".format(
             dep_shooting_to_root, root_rel
         )
 
@@ -145,12 +145,12 @@ class _DependencyGraph:
         for dep in range(1, number_of_nodes):
             head = dep_to_head[dep]
             rel = self.edge[dep][head]["rel"]
-            tikz_dep_code += u"    \\depedge{{{}}}{{{}}}{{{}}}\n".format(dep, head, rel)
+            tikz_dep_code += "    \\depedge{{{}}}{{{}}}{{{}}}\n".format(dep, head, rel)
 
         # return tikz_dep_code
         # wrapped inside \begin{dependency}...\end{dependency}
         dependency_template = (
-            u"\\begin{{dependency}}[theme = simple]\n" "{}\\end{{dependency}}"
+            "\\begin{{dependency}}[theme = simple]\n" "{}\\end{{dependency}}"
         )
         return dependency_template.format(tikz_dep_code)
 
@@ -170,6 +170,6 @@ class _DependencyGraph:
             word = self.node[dep]["word"]
             pos = self.node[dep]["pos"]
             rel = self.edge[dep][head]["rel"]
-            collector.append(u"{} {} {} {}".format(word, pos, head, rel))
+            collector.append("{} {} {} {}".format(word, pos, head, rel))
 
         return "\n".join(collector)

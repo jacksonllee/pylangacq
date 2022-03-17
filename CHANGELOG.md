@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Security
 
+## [0.16.2] - 2022-03-17
+
+### Fixed
+* Moved `download_and_extract_brown` test function to under the `pylangacq` package
+  namespace, as tests from `BaseTestCHATReader` require downloaded CHAT data files.
+
 ## [0.16.1] - 2022-03-17
 
 ### Changed
@@ -24,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 * Moved `BaseTestCHATReader` back under the `pylangacq` package namespace
-  so that download packages can import `BaseTestCHATReader` for testing.
+  so that downstream packages can import `BaseTestCHATReader` for testing.
 
 ## [0.16.0] - 2021-12-27
 

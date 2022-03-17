@@ -103,7 +103,7 @@ workflows:
           command-run: |
             pip install --upgrade bandit && \
             bandit --version && \
-            bandit -r src -x tests
+            bandit -r src -x tests,src/pylangacq/tests
       - build-python:
           requires:
             - flake8

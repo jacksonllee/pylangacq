@@ -90,7 +90,7 @@ MIT License. Please see ``LICENSE.txt`` in the GitHub source code for details.
 The test data files included come from CHILDES,
 and have a `CC BY-NC-SA 3.0 <https://creativecommons.org/licenses/by-nc-sa/3.0/>`_
 license instead; please also see
-``pylangacq/tests/test_data/README.md`` in the GitHub source code for details.
+``src/pylangacq/tests/README.md`` in the GitHub source code for details.
 
 .. end-sphinx-website-index-page
 

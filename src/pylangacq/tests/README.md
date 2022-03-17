@@ -1,10 +1,10 @@
 # Test Data
 
-`eve.cha` is an exact copy of `Brown/Eve/010600a.cha`, a CHAT data file
-unzipped from `Brown.zip` downloaded at
+`eve.cha` at this directory is an exact copy of `Brown/Eve/010600a.cha`,
+a CHAT data file unzipped from `Brown.zip` downloaded at
 `https://childes.talkbank.org/data/Eng-NA/Brown.zip`.
 The sole purpose of including `eve.cha` in this package is
-for testing this `pylangacq` package.
+for testing purposes.
 
 ## License
 

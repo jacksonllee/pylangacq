@@ -9,14 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 ### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [0.16.1] - 2022-03-17
+
+### Changed
 * Restructured the repository to use top-level `src/` and `tests/` directories.
 
-### Deprecated
 ### Removed
 * Removed `setup.py`.
 
 ### Fixed
-### Security
+* Moved `BaseTestCHATReader` back under the `pylangacq` package namespace
+  so that download packages can import `BaseTestCHATReader` for testing.
 
 ## [0.16.0] - 2021-12-27
 

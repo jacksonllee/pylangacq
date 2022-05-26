@@ -15,3 +15,4 @@ m2r2==0.3.2
 numpydoc==1.2
 Sphinx==4.4.0
 sphinx-sitemap==2.2.0
+sphinx-copybutton==0.5.0

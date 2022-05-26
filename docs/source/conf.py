@@ -42,6 +42,7 @@ extensions = [
     'sphinx.ext.intersphinx',
     'numpydoc',
     "sphinx_sitemap",
+    "sphinx_copybutton",
 ]
 
 # See https://pypi.org/project/sphinx-sitemap/2.2.0/

@@ -1,6 +1,74 @@
 [build-system]
-requires = ["setuptools >= 42.0.0", "wheel"]
+requires = ["setuptools >= 61.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "pylangacq"
+version = "0.17.0"
+description = "Tools for Language Acquisition Research"
+readme = "README.rst"
+requires-python = ">= 3.7.*"
+license = { text = "MIT License" }
+authors = [ { name = "Jackson L. Lee", email = "jacksonlunlee@gmail.com" } ]
+keywords = [
+    "computational linguistics",
+    "natural language processing",
+    "NLP",
+    "linguistics",
+    "corpora",
+    "speech",
+    "language",
+    "CHILDES",
+    "TalkBank",
+    "CHAT",
+    "transcription",
+    "child language",
+    "language acquisition",
+    "language development",
+]
+dependencies = [
+    'importlib-metadata; python_version < "3.8"',
+    'python-dateutil >= 2.0.0',
+    'requests >= 2.18.0',
+    'tabulate[widechars] >= 0.8.9',
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Human Machine Interfaces",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Text Processing",
+    "Topic :: Text Processing :: General",
+    "Topic :: Text Processing :: Indexing",
+    "Topic :: Text Processing :: Linguistic",
+]
+
+[project.urls]
+Homepage = "https://pylangacq.org"
+Source = "https://github.com/jacksonllee/pylangacq"
+
+[tool.setuptools]
+zip-safe = false
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = [ "src" ]
+
+[tool.setuptools.package-data]
+pylangacq = ["tests/*"]
 
 [tool.pytest.ini_options]
 # Adding -p no:doctest to disable pytest's own doctest,

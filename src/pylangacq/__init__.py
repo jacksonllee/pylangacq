@@ -4,7 +4,7 @@ except ModuleNotFoundError:
     # For Python 3.7
     from importlib_metadata import version
 
-from pylangacq.chat import read_chat, Reader
+from .chat import read_chat, Reader
 
 
 __version__ = version("pylangacq")

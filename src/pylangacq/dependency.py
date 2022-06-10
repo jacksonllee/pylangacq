@@ -2,7 +2,7 @@
 
 from typing import List
 
-from pylangacq.objects import Gra, Token
+from .objects import Gra, Token
 
 
 class _DependencyGraph:

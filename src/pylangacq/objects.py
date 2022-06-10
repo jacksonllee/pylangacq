@@ -3,7 +3,7 @@ from typing import Dict, List, Tuple, Union
 
 from tabulate import tabulate
 
-from pylangacq._punctuation_marks import _PUNCTUATION_MARKS
+from ._punctuation_marks import _PUNCTUATION_MARKS
 
 
 _CLITIC = "CLITIC"

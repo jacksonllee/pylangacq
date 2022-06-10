@@ -24,6 +24,25 @@ Fixed
 Security
 ^^^^^^^^
 
+[0.17.0] - 2022-06-09
+---------------------
+
+Added
+^^^^^
+
+
+* Added the ``exclude_switch`` option for MLU (\ ``mlu()``\ , ``mlum()``\ , and ``mluw()``\ ),
+  so that words with @s for switching language may be excluded.
+
+Fixed
+^^^^^
+
+
+* Fixed MLU computation (\ ``mlu()``\ , ``mlum()``\ , and ``mluw()``\ ):
+
+  * If xxx, yyy, or www appears in an utterance, the whole utterance is ignored.
+  * If there are no MLU-relevant words/morphemes in an utterances, the whole utterance is ignored.
+
 [0.16.2] - 2022-03-17
 ---------------------
 

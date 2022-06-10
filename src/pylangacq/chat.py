@@ -767,7 +767,7 @@ class Reader:
             return self._flatten(list, result_by_files)
 
     def mlum(self, participant="CHI", exclude_switch: bool = False) -> List[float]:
-        """Return the mean lengths of utterance by morphemes.
+        """Return the mean lengths of utterance in morphemes.
 
         Parameters
         ----------
@@ -775,9 +775,9 @@ class Reader:
             Participant of interest, which defaults to the typical use case of ``"CHI"``
             for the target child.
         exclude_switch : bool, optional
-            If ``True``, words with the suffix "@s" for switching to another
-            language (not uncommon in code-mixing or multilingual acquisition)
-            are excluded. The default is ``False``.
+            If ``True``, exclude words with the suffix "@s" for switching to another
+            language (not uncommon in code-mixing or multilingual acquisition).
+            The default is ``False``.
 
         Returns
         -------
@@ -799,9 +799,9 @@ class Reader:
             Participant of interest, which defaults to the typical use case of ``"CHI"``
             for the target child.
         exclude_switch : bool, optional
-            If ``True``, words with the suffix "@s" for switching to another
-            language (not uncommon in code-mixing or multilingual acquisition)
-            are excluded. The default is ``False``.
+            If ``True``, exclude words with the suffix "@s" for switching to another
+            language (not uncommon in code-mixing or multilingual acquisition).
+            The default is ``False``.
 
         Returns
         -------
@@ -810,7 +810,7 @@ class Reader:
         return self.mlum(participant=participant, exclude_switch=exclude_switch)
 
     def mluw(self, participant="CHI", exclude_switch: bool = False) -> List[float]:
-        """Return the mean lengths of utterance by words.
+        """Return the mean lengths of utterance in words.
 
         Parameters
         ----------
@@ -818,9 +818,9 @@ class Reader:
             Participant of interest, which defaults to the typical use case of ``"CHI"``
             for the target child.
         exclude_switch : bool, optional
-            If ``True``, words with the suffix "@s" for switching to another
-            language (not uncommon in code-mixing or multilingual acquisition)
-            are excluded. The default is ``False``.
+            If ``True``, exclude words with the suffix "@s" for switching to another
+            language (not uncommon in code-mixing or multilingual acquisition).
+            The default is ``False``.
 
         Returns
         -------

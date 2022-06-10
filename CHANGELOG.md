@@ -8,10 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Added the `exclude_switch` option for MLU (`mlu()`, `mlum()`, and `mluw()`),
+  so that words with @s for switching language may be excluded.
+
 ### Changed
 ### Deprecated
 ### Removed
 ### Fixed
+* Fixed MLU computation (`mlu()`, `mlum()`, and `mluw()`):
+  - If xxx, yyy, or www appears in an utterance, the whole utterance is ignored.
+  - If there are no MLU-relevant words/morphemes in an utterances, the whole utterance is ignored.
+
 ### Security
 
 ## [0.16.2] - 2022-03-17

@@ -1,9 +1,10 @@
 from typing import List
 
-from pylangacq.dependency import _DependencyGraph
-from pylangacq.objects import _CLITIC
+from .dependency import _DependencyGraph
+from .objects import _CLITIC
 
 
+_WORDS_IGNORE_WHOLE_UTTERANCE = frozenset({"xxx", "yyy", "www"})
 _POS_TO_IGNORE = frozenset({"", "!", "+...", "0", "?", "BEG"})
 _WORDS_TO_IGNORE = frozenset(
     {
@@ -37,7 +38,7 @@ def _get_lemma_from_mor(mor):
     return lemma
 
 
-def _get_mlum(tagged_sents) -> List[float]:
+def _get_mlum(tagged_sents, exclude_switch) -> List[float]:
     result = []
 
     if not tagged_sents:
@@ -49,15 +50,23 @@ def _get_mlum(tagged_sents) -> List[float]:
             continue
 
         morpheme_counts_for_file = []
-        for tagged_sent in tagged_sents_for_file:
+        for tokens in tagged_sents_for_file:
             morpheme_count = 0
-            for word in tagged_sent:
-                if word.pos in _POS_TO_IGNORE:
+            exclude_utterance = False
+            for token in tokens:
+                if token.word in _WORDS_IGNORE_WHOLE_UTTERANCE:
+                    exclude_utterance = True
+                    break
+                if exclude_switch and token.word.endswith("@s"):
+                    continue
+                if token.pos in _POS_TO_IGNORE:
                     continue
                 morpheme_count += 1
-                if type(word.mor) == str:
-                    morpheme_count += word.mor.count("-")
-                    morpheme_count += word.mor.count("~")
+                if type(token.mor) == str:
+                    morpheme_count += token.mor.count("-")
+                    morpheme_count += token.mor.count("~")
+            if exclude_utterance or not morpheme_count:
+                continue
             morpheme_counts_for_file.append(morpheme_count)
 
         if morpheme_counts_for_file:
@@ -68,7 +77,7 @@ def _get_mlum(tagged_sents) -> List[float]:
     return result
 
 
-def _get_mluw(sents) -> List[float]:
+def _get_mluw(sents, exclude_switch) -> List[float]:
     result = []
 
     if not sents:
@@ -81,7 +90,21 @@ def _get_mluw(sents) -> List[float]:
 
         word_counts_for_file = []
         for sent in sents_for_file:
-            word_count = sum(1 for word in sent if word not in _WORDS_TO_IGNORE)
+            exclude_utterance = False
+            for word in sent:
+                if word in _WORDS_IGNORE_WHOLE_UTTERANCE:
+                    exclude_utterance = True
+                    break
+            if exclude_utterance:
+                continue
+            word_count = sum(
+                1
+                for word in sent
+                if word not in _WORDS_TO_IGNORE
+                and (not exclude_switch or not word.endswith("@s"))
+            )
+            if not word_count:
+                continue
             word_counts_for_file.append(word_count)
 
         if word_counts_for_file:

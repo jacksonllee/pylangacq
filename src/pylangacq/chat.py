@@ -24,9 +24,9 @@ from dateutil.parser import ParserError
 from tabulate import tabulate
 
 import pylangacq
-from pylangacq.measures import _get_ipsyn, _get_mlum, _get_mluw, _get_ttr
-from pylangacq.objects import Gra, Token, Utterance, _sort_keys, _CLITIC
-from pylangacq._clean_utterance import _clean_utterance
+from .measures import _get_ipsyn, _get_mlum, _get_mluw, _get_ttr
+from .objects import Gra, Token, Utterance, _sort_keys, _CLITIC
+from ._clean_utterance import _clean_utterance
 
 
 _ENCODING = "utf-8"
@@ -766,7 +766,7 @@ class Reader:
         else:
             return self._flatten(list, result_by_files)
 
-    def mlum(self, participant="CHI") -> List[float]:
+    def mlum(self, participant="CHI", exclude_switch: bool = False) -> List[float]:
         """Return the mean lengths of utterance by morphemes.
 
         Parameters
@@ -774,16 +774,21 @@ class Reader:
         participant : str, optional
             Participant of interest, which defaults to the typical use case of ``"CHI"``
             for the target child.
+        exclude_switch : bool, optional
+            If ``True``, words with the suffix "@s" for switching to another
+            language (not uncommon in code-mixing or multilingual acquisition)
+            are excluded. The default is ``False``.
 
         Returns
         -------
         List[float]
         """
         return _get_mlum(
-            self.tokens(participants=participant, by_utterances=True, by_files=True)
+            self.tokens(participants=participant, by_utterances=True, by_files=True),
+            exclude_switch,
         )
 
-    def mlu(self, participant="CHI") -> List[float]:
+    def mlu(self, participant="CHI", exclude_switch: bool = False) -> List[float]:
         """Return the mean lengths of utterance (MLU).
 
         This method is equivalent to :func:`~pylangacq.Reader.mlum`.
@@ -793,14 +798,18 @@ class Reader:
         participant : str, optional
             Participant of interest, which defaults to the typical use case of ``"CHI"``
             for the target child.
+        exclude_switch : bool, optional
+            If ``True``, words with the suffix "@s" for switching to another
+            language (not uncommon in code-mixing or multilingual acquisition)
+            are excluded. The default is ``False``.
 
         Returns
         -------
         List[float]
         """
-        return self.mlum(participant=participant)
+        return self.mlum(participant=participant, exclude_switch=exclude_switch)
 
-    def mluw(self, participant="CHI") -> List[float]:
+    def mluw(self, participant="CHI", exclude_switch: bool = False) -> List[float]:
         """Return the mean lengths of utterance by words.
 
         Parameters
@@ -808,13 +817,18 @@ class Reader:
         participant : str, optional
             Participant of interest, which defaults to the typical use case of ``"CHI"``
             for the target child.
+        exclude_switch : bool, optional
+            If ``True``, words with the suffix "@s" for switching to another
+            language (not uncommon in code-mixing or multilingual acquisition)
+            are excluded. The default is ``False``.
 
         Returns
         -------
         List[float]
         """
         return _get_mluw(
-            self.words(participants=participant, by_utterances=True, by_files=True)
+            self.words(participants=participant, by_utterances=True, by_files=True),
+            exclude_switch,
         )
 
     def ttr(self, keep_case=True, participant="CHI") -> List[float]:

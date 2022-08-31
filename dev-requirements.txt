@@ -2,12 +2,12 @@
 # Packages that pylangacq depends on (if any) should be specified in setup.cfg instead.
 #
 # For tests
-black==22.3.0
+black==22.6.0
 build==0.8.0
-flake8==4.0.1
+flake8==5.0.4
 pytest==7.1.2
 sybil==3.0.1
-twine==4.0.0
+twine==4.0.1
 #
 # For docs
 furo==2022.3.4

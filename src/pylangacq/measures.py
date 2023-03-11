@@ -289,7 +289,6 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
         item = item_function.__name__
 
         for tagged_sent in tagged_sents:
-
             if scoring_board_stop[item]:
                 break
 
@@ -558,7 +557,6 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
         """
         for i in range(1, graph.n_nodes()):
             for j in graph.edge[i].keys():
-
                 if graph.edge[i][j]["rel"] == "POBJ":
                     scoring_board["V3"] += 1
                     add_one_point_if_needed("V2")
@@ -1062,7 +1060,6 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
                 wh_test = "dummy"
 
             if pos1 in {"cop", "mod", "aux"} and not wh_test.endswith("wh"):
-
                 for j in graph.edge[i + 1].keys():
                     rel2 = graph.edge[i + 1][j]["rel"]
 

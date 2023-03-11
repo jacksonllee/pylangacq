@@ -1611,7 +1611,6 @@ class Reader:
         headname_to_entry = {}
 
         for line in lines:
-
             header_re_search = _HEADER_REGEX.search(line)
             if not header_re_search:
                 continue
@@ -1624,7 +1623,6 @@ class Reader:
             line = header_re_search.group(3)
 
             if head == "Participants":
-
                 participants = line.split(",")
 
                 for participant in participants:

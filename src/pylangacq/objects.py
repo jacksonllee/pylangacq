@@ -152,7 +152,6 @@ class Utterance:
         return str_for_u
 
     def _repr_html_(self):
-
         html = ""
 
         # Row from words

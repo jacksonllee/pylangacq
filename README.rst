@@ -103,8 +103,7 @@ To obtain this version for experimental features or for development:
 
    $ git clone https://github.com/jacksonllee/pylangacq.git
    $ cd pylangacq
-   $ pip install -r dev-requirements.txt
-   $ pip install -e .
+   $ pip install -e ".[dev]"
 
 To run tests and styling checks:
 

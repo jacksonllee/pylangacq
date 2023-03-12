@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added support for Python 3.11.
 
+### Changed
+- Updated the test data from Brown's Eve from the upstream CHILDES.
+
 ### Removed
 - Dropped support for Python 3.7.
 

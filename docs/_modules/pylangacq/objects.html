@@ -1,16 +1,16 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
+        <link rel="canonical" href="https://pylangacq.org/_modules/pylangacq/objects.html" />
 
-    <meta name="generator" content="sphinx-4.3.2, furo 2022.03.04"/>
-        <title>pylangacq.objects - PyLangAcq 0.17.0 documentation</title>
+    <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
+        <title>pylangacq.objects - PyLangAcq 0.18.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
 
@@ -37,10 +37,12 @@
   }
 </style></head>
   <body>
+    
     <script>
       document.body.dataset.theme = localStorage.getItem("theme") || "auto";
     </script>
     
+
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="svg-toc" viewBox="0 0 24 24">
     <title>Contents</title>
@@ -122,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">PyLangAcq 0.17.0 documentation</div></a>
+      <a href="../../index.html"><div class="brand">PyLangAcq 0.18.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -145,10 +147,10 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">PyLangAcq 0.17.0 documentation</span>
+  <span class="sidebar-brand-text">PyLangAcq 0.18.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -181,7 +183,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -204,12 +207,12 @@
 <span class="kn">from</span> <span class="nn">._punctuation_marks</span> <span class="kn">import</span> <span class="n">_PUNCTUATION_MARKS</span>
 
 
-<span class="n">_CLITIC</span> <span class="o">=</span> <span class="s2">"CLITIC"</span>
+<span class="n">_CLITIC</span> <span class="o">=</span> <span class="s2">&quot;CLITIC&quot;</span>
 
 
 <div class="viewcode-block" id="Gra"><a class="viewcode-back" href="../../api.html#pylangacq.objects.Gra">[docs]</a><span class="nd">@dataclasses</span><span class="o">.</span><span class="n">dataclass</span>
 <span class="k">class</span> <span class="nc">Gra</span><span class="p">:</span>
-    <span class="sd">"""Grammatical relation of a word in an utterance.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Grammatical relation of a word in an utterance.</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -219,9 +222,9 @@
 <span class="sd">        The position of the head in the utterance</span>
 <span class="sd">    rel : str</span>
 <span class="sd">        Grammatical relation</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"dep"</span><span class="p">,</span> <span class="s2">"head"</span><span class="p">,</span> <span class="s2">"rel"</span><span class="p">)</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;dep&quot;</span><span class="p">,</span> <span class="s2">&quot;head&quot;</span><span class="p">,</span> <span class="s2">&quot;rel&quot;</span><span class="p">)</span>
 
     <span class="n">dep</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">head</span><span class="p">:</span> <span class="nb">int</span>
@@ -230,7 +233,7 @@
 
 <div class="viewcode-block" id="Token"><a class="viewcode-back" href="../../api.html#pylangacq.objects.Token">[docs]</a><span class="nd">@dataclasses</span><span class="o">.</span><span class="n">dataclass</span>
 <span class="k">class</span> <span class="nc">Token</span><span class="p">:</span>
-    <span class="sd">"""Token with attributes as parsed from a CHAT utterance.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Token with attributes as parsed from a CHAT utterance.</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -242,9 +245,9 @@
 <span class="sd">        Morphological information</span>
 <span class="sd">    gra : Gra</span>
 <span class="sd">        Grammatical relation</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"word"</span><span class="p">,</span> <span class="s2">"pos"</span><span class="p">,</span> <span class="s2">"mor"</span><span class="p">,</span> <span class="s2">"gra"</span><span class="p">)</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;word&quot;</span><span class="p">,</span> <span class="s2">&quot;pos&quot;</span><span class="p">,</span> <span class="s2">&quot;mor&quot;</span><span class="p">,</span> <span class="s2">&quot;gra&quot;</span><span class="p">)</span>
 
     <span class="n">word</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">pos</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
@@ -252,51 +255,51 @@
     <span class="n">gra</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Gra</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">to_mor_tier</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">"""Return the %mor representation.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the %mor representation.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        str</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">word</span> <span class="ow">in</span> <span class="n">_PUNCTUATION_MARKS</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">word</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="ow">or</span> <span class="s1">''</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mor</span> <span class="ow">or</span> <span class="s1">''</span><span class="si">}</span><span class="s2">"</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mor</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2">&quot;</span>
 
     <span class="k">def</span> <span class="nf">to_gra_tier</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">"""Return the %gra representation.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the %gra representation.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        str</span>
-<span class="sd">        """</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gra</span><span class="o">.</span><span class="n">dep</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gra</span><span class="o">.</span><span class="n">head</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gra</span><span class="o">.</span><span class="n">rel</span><span class="si">}</span><span class="s2">"</span></div>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gra</span><span class="o">.</span><span class="n">dep</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gra</span><span class="o">.</span><span class="n">head</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gra</span><span class="o">.</span><span class="n">rel</span><span class="si">}</span><span class="s2">&quot;</span></div>
 
 
 <div class="viewcode-block" id="Utterance"><a class="viewcode-back" href="../../api.html#pylangacq.objects.Utterance">[docs]</a><span class="nd">@dataclasses</span><span class="o">.</span><span class="n">dataclass</span>
 <span class="k">class</span> <span class="nc">Utterance</span><span class="p">:</span>
-    <span class="sd">"""Utterance in a CHAT transcript data.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Utterance in a CHAT transcript data.</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    participant : str</span>
-<span class="sd">        Participant of the utterance, e.g., ``"CHI"``, ``"MOT"``</span>
+<span class="sd">        Participant of the utterance, e.g., ``&quot;CHI&quot;``, ``&quot;MOT&quot;``</span>
 <span class="sd">    tokens : List[Token]</span>
 <span class="sd">        List of tokens of the utterance</span>
 <span class="sd">    time_marks : Tuple[int, int]</span>
 <span class="sd">        If available from the CHAT data, these are the start and end times</span>
 <span class="sd">        (in milliseconds) for a segment in a digitized video or audio file,</span>
-<span class="sd">        e.g., ``(0, 1073)``, extracted from ``"·0_1073·"`` in the CHAT data.</span>
-<span class="sd">        ``"·"`` is ASCII code 21 (0x15), for NAK (Negative Acknowledgment).</span>
+<span class="sd">        e.g., ``(0, 1073)``, extracted from ``&quot;·0_1073·&quot;`` in the CHAT data.</span>
+<span class="sd">        ``&quot;·&quot;`` is ASCII code 21 (0x15), for NAK (Negative Acknowledgment).</span>
 <span class="sd">    tiers : Dict[str, str]</span>
 <span class="sd">        This dictionary contains all the original, unparsed data from the utterance,</span>
 <span class="sd">        including the transcribed utterance (signaled by ``*CHI:``, ``*MOT:`` etc</span>
 <span class="sd">        in CHAT), common tiers such as %mor and %gra, as well as all other tiers</span>
 <span class="sd">        associated with the utterance. This dictionary is useful to retrieve</span>
 <span class="sd">        whatever information not readily handled by this package.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"participant"</span><span class="p">,</span> <span class="s2">"tokens"</span><span class="p">,</span> <span class="s2">"time_marks"</span><span class="p">,</span> <span class="s2">"tiers"</span><span class="p">)</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;participant&quot;</span><span class="p">,</span> <span class="s2">&quot;tokens&quot;</span><span class="p">,</span> <span class="s2">&quot;time_marks&quot;</span><span class="p">,</span> <span class="s2">&quot;tiers&quot;</span><span class="p">)</span>
 
     <span class="n">participant</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">tokens</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Token</span><span class="p">]</span>
@@ -305,7 +308,7 @@
 
     <span class="k">def</span> <span class="nf">_to_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tabular</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="c1"># `mor_gra_keys` needs to be a list for the ordering.</span>
-        <span class="n">mor_gra_keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"%mor"</span><span class="p">,</span> <span class="s2">"</span><span class="si">%g</span><span class="s2">ra"</span><span class="p">)</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+        <span class="n">mor_gra_keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;%mor&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%g</span><span class="s2">ra&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
         <span class="k">if</span> <span class="n">tabular</span> <span class="ow">and</span> <span class="n">mor_gra_keys</span><span class="p">:</span>
             <span class="n">tokens_in_table</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">prev_token</span> <span class="o">=</span> <span class="kc">None</span>
@@ -315,88 +318,87 @@
                 <span class="k">if</span> <span class="n">token</span><span class="o">.</span><span class="n">word</span> <span class="o">==</span> <span class="n">_CLITIC</span> <span class="ow">and</span> <span class="n">prev_token</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">tokens_in_table</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
                     <span class="n">token_in_table</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prev_token</span><span class="o">.</span><span class="n">word</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="s2">"%mor"</span> <span class="ow">in</span> <span class="n">mor_gra_keys</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s2">&quot;%mor&quot;</span> <span class="ow">in</span> <span class="n">mor_gra_keys</span><span class="p">:</span>
                         <span class="n">token_in_table</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">prev_token</span><span class="o">.</span><span class="n">to_mor_tier</span><span class="p">()</span><span class="si">}</span><span class="s2">~</span><span class="si">{</span><span class="n">token</span><span class="o">.</span><span class="n">to_mor_tier</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span>
+                            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prev_token</span><span class="o">.</span><span class="n">to_mor_tier</span><span class="p">()</span><span class="si">}</span><span class="s2">~</span><span class="si">{</span><span class="n">token</span><span class="o">.</span><span class="n">to_mor_tier</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
                         <span class="p">)</span>
-                    <span class="k">if</span> <span class="s2">"</span><span class="si">%g</span><span class="s2">ra"</span> <span class="ow">in</span> <span class="n">mor_gra_keys</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s2">&quot;</span><span class="si">%g</span><span class="s2">ra&quot;</span> <span class="ow">in</span> <span class="n">mor_gra_keys</span><span class="p">:</span>
                         <span class="n">token_in_table</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">prev_token</span><span class="o">.</span><span class="n">to_gra_tier</span><span class="p">()</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">token</span><span class="o">.</span><span class="n">to_gra_tier</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span>
+                            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prev_token</span><span class="o">.</span><span class="n">to_gra_tier</span><span class="p">()</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">token</span><span class="o">.</span><span class="n">to_gra_tier</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
                         <span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">token_in_table</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">word</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="s2">"%mor"</span> <span class="ow">in</span> <span class="n">mor_gra_keys</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s2">&quot;%mor&quot;</span> <span class="ow">in</span> <span class="n">mor_gra_keys</span><span class="p">:</span>
                         <span class="n">token_in_table</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">to_mor_tier</span><span class="p">())</span>
-                    <span class="k">if</span> <span class="s2">"</span><span class="si">%g</span><span class="s2">ra"</span> <span class="ow">in</span> <span class="n">mor_gra_keys</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s2">&quot;</span><span class="si">%g</span><span class="s2">ra&quot;</span> <span class="ow">in</span> <span class="n">mor_gra_keys</span><span class="p">:</span>
                         <span class="n">token_in_table</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">to_gra_tier</span><span class="p">())</span>
                 <span class="n">prev_token</span> <span class="o">=</span> <span class="n">token</span>
                 <span class="n">tokens_in_table</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">token_in_table</span><span class="p">)</span>
             <span class="n">tokens_in_table_with_keys</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="p">[</span><span class="sa">f</span><span class="s2">"*</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">participant</span><span class="si">}</span><span class="s2">:"</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">:"</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">mor_gra_keys</span><span class="p">],</span>
+                <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;*</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">participant</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">:&quot;</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">mor_gra_keys</span><span class="p">],</span>
                 <span class="o">*</span><span class="n">tokens_in_table</span><span class="p">,</span>
             <span class="p">]</span>
             <span class="c1"># Transpose (see https://stackoverflow.com/a/6473724)</span>
             <span class="n">tiers_in_table</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">tokens_in_table_with_keys</span><span class="p">)))</span>
-            <span class="n">str_for_u</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">tabulate</span><span class="p">(</span><span class="n">tiers_in_table</span><span class="p">,</span> <span class="n">tablefmt</span><span class="o">=</span><span class="s1">'plain'</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="n">str_for_u</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">tabulate</span><span class="p">(</span><span class="n">tiers_in_table</span><span class="p">,</span><span class="w"> </span><span class="n">tablefmt</span><span class="o">=</span><span class="s1">&#39;plain&#39;</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">str_for_u</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"*</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">participant</span><span class="si">}</span><span class="s2">:</span><span class="se">\t</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">participant</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="n">str_for_u</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;*</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">participant</span><span class="si">}</span><span class="s2">:</span><span class="se">\t</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">participant</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">mor_gra_keys</span><span class="p">:</span>
-                <span class="n">str_for_u</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">:</span><span class="se">\t</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+                <span class="n">str_for_u</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">:</span><span class="se">\t</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
 
-        <span class="n">keys</span> <span class="o">=</span> <span class="n">_sort_keys</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">drop</span><span class="o">=</span><span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">participant</span><span class="p">,</span> <span class="s2">"%mor"</span><span class="p">,</span> <span class="s2">"</span><span class="si">%g</span><span class="s2">ra"</span><span class="p">})</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="n">_sort_keys</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">drop</span><span class="o">=</span><span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">participant</span><span class="p">,</span> <span class="s2">&quot;%mor&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%g</span><span class="s2">ra&quot;</span><span class="p">})</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
-            <span class="n">str_for_u</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">:</span><span class="se">\t</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="n">str_for_u</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">:</span><span class="se">\t</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
 
         <span class="k">return</span> <span class="n">str_for_u</span>
 
     <span class="k">def</span> <span class="nf">_repr_html_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
-        <span class="n">html</span> <span class="o">=</span> <span class="s2">""</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
         <span class="c1"># Row from words</span>
         <span class="n">cells</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="sa">f</span><span class="s1">'    &lt;td style="text-align: left"&gt;</span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">word</span><span class="si">}</span><span class="s1">&lt;/td&gt;</span><span class="se">\n</span><span class="s1">'</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span>
+            <span class="sa">f</span><span class="s1">&#39;    &lt;td style=&quot;text-align: left&quot;&gt;</span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">word</span><span class="si">}</span><span class="s1">&lt;/td&gt;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span>
         <span class="p">]</span>
         <span class="n">html</span> <span class="o">+=</span> <span class="p">(</span>
-            <span class="s2">"  &lt;tr&gt;</span><span class="se">\n</span><span class="s2">"</span>
-            <span class="sa">f</span><span class="s2">"    &lt;td&gt;*</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">participant</span><span class="si">}</span><span class="s2">:&lt;/td&gt;</span><span class="se">\n</span><span class="s2">"</span>
-            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">''</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cells</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
-            <span class="s2">"  &lt;/tr&gt;</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="s2">&quot;  &lt;tr&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;    &lt;td&gt;*</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">participant</span><span class="si">}</span><span class="s2">:&lt;/td&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cells</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;  &lt;/tr&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
         <span class="c1"># Row from %mor</span>
-        <span class="k">if</span> <span class="s2">"%mor"</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;%mor&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="p">:</span>
             <span class="n">cells</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="sa">f</span><span class="s1">'    &lt;td style="text-align: left"&gt;</span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">to_mor_tier</span><span class="p">()</span><span class="si">}</span><span class="s1">&lt;/td&gt;</span><span class="se">\n</span><span class="s1">'</span>
+                <span class="sa">f</span><span class="s1">&#39;    &lt;td style=&quot;text-align: left&quot;&gt;</span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">to_mor_tier</span><span class="p">()</span><span class="si">}</span><span class="s1">&lt;/td&gt;</span><span class="se">\n</span><span class="s1">&#39;</span>
                 <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span>
             <span class="p">]</span>
-            <span class="n">html</span> <span class="o">+=</span> <span class="s2">"  &lt;tr&gt;</span><span class="se">\n</span><span class="s2">"</span> <span class="s2">"    &lt;td&gt;%mor:&lt;/td&gt;</span><span class="se">\n</span><span class="s2">"</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">''</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cells</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span> <span class="s2">"  &lt;/tr&gt;</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="n">html</span> <span class="o">+=</span> <span class="s2">&quot;  &lt;tr&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="s2">&quot;    &lt;td&gt;%mor:&lt;/td&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cells</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span> <span class="s2">&quot;  &lt;/tr&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
 
         <span class="c1"># Row from %gra</span>
-        <span class="k">if</span> <span class="s2">"</span><span class="si">%g</span><span class="s2">ra"</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;</span><span class="si">%g</span><span class="s2">ra&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="p">:</span>
             <span class="n">cells</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="sa">f</span><span class="s1">'    &lt;td style="text-align: left"&gt;</span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">to_gra_tier</span><span class="p">()</span><span class="si">}</span><span class="s1">&lt;/td&gt;</span><span class="se">\n</span><span class="s1">'</span>
+                <span class="sa">f</span><span class="s1">&#39;    &lt;td style=&quot;text-align: left&quot;&gt;</span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">to_gra_tier</span><span class="p">()</span><span class="si">}</span><span class="s1">&lt;/td&gt;</span><span class="se">\n</span><span class="s1">&#39;</span>
                 <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span>
             <span class="p">]</span>
-            <span class="n">html</span> <span class="o">+=</span> <span class="s2">"  &lt;tr&gt;</span><span class="se">\n</span><span class="s2">"</span> <span class="s2">"    &lt;td&gt;</span><span class="si">%g</span><span class="s2">ra:&lt;/td&gt;</span><span class="se">\n</span><span class="s2">"</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">''</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cells</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span> <span class="s2">"  &lt;/tr&gt;</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="n">html</span> <span class="o">+=</span> <span class="s2">&quot;  &lt;tr&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="s2">&quot;    &lt;td&gt;</span><span class="si">%g</span><span class="s2">ra:&lt;/td&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cells</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span> <span class="s2">&quot;  &lt;/tr&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
 
-        <span class="n">keys</span> <span class="o">=</span> <span class="n">_sort_keys</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">drop</span><span class="o">=</span><span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">participant</span><span class="p">,</span> <span class="s2">"%mor"</span><span class="p">,</span> <span class="s2">"</span><span class="si">%g</span><span class="s2">ra"</span><span class="p">})</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="n">_sort_keys</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">drop</span><span class="o">=</span><span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">participant</span><span class="p">,</span> <span class="s2">&quot;%mor&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%g</span><span class="s2">ra&quot;</span><span class="p">})</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
             <span class="n">html</span> <span class="o">+=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">"  &lt;tr&gt;</span><span class="se">\n</span><span class="s2">"</span>
-                <span class="sa">f</span><span class="s2">"    &lt;td&gt;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">:&lt;/td&gt;</span><span class="se">\n</span><span class="s2">"</span>
-                <span class="sa">f</span><span class="s1">'    &lt;td colspan="</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tokens</span><span class="p">)</span><span class="si">}</span><span class="s1">" style="text-align: left"&gt;'</span>
-                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="s2">&lt;/td&gt;</span><span class="se">\n</span><span class="s2">"</span>
-                <span class="sa">f</span><span class="s2">"  &lt;/tr&gt;</span><span class="se">\n</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">&quot;  &lt;tr&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;    &lt;td&gt;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">:&lt;/td&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s1">&#39;    &lt;td colspan=&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tokens</span><span class="p">)</span><span class="si">}</span><span class="s1">&quot; style=&quot;text-align: left&quot;&gt;&#39;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="s2">&lt;/td&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;  &lt;/tr&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="p">)</span>
 
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">"&lt;table&gt;</span><span class="si">{</span><span class="n">html</span><span class="si">}</span><span class="s2">&lt;/table&gt;"</span></div>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;table&gt;</span><span class="si">{</span><span class="n">html</span><span class="si">}</span><span class="s2">&lt;/table&gt;&quot;</span></div>
 
 
 <span class="k">def</span> <span class="nf">_sort_keys</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">first</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
     <span class="n">sorted_keys</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">first</span> <span class="o">=</span> <span class="n">first</span> <span class="ow">or</span> <span class="p">[]</span>
-    <span class="n">drop</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">drop</span> <span class="ow">or</span> <span class="p">[])</span>  <span class="c1"># ordering doesn't matter</span>
+    <span class="n">drop</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">drop</span> <span class="ow">or</span> <span class="p">[])</span>  <span class="c1"># ordering doesn&#39;t matter</span>
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">first</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
             <span class="n">sorted_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
@@ -416,7 +418,7 @@
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2015-2022, Jackson L. Lee | PyLangAcq 0.17.0 | Documentation last updated on June 09, 2022
+                Copyright &#169; 2015-2023, Jackson L. Lee | PyLangAcq 0.18.0 | Documentation last updated on March 11, 2023
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
@@ -424,9 +426,7 @@
             
           </div>
           <div class="right-details">
-            <div class="icons">
-              
-            </div>
+            
           </div>
         </div>
         
@@ -439,9 +439,8 @@
     </aside>
   </div>
 </div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/scripts/furo.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>

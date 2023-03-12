@@ -1,17 +1,17 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Writing CHAT Data" href="write.html" /><link rel="prev" title="Accessing Headers" href="headers.html" />
+        <link rel="canonical" href="https://pylangacq.org/transcriptions.html" />
 
-    <meta name="generator" content="sphinx-4.3.2, furo 2022.03.04"/>
-        <title>Transcriptions and Annotations - PyLangAcq 0.17.0 documentation</title>
+    <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
+        <title>Transcriptions and Annotations - PyLangAcq 0.18.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
 
@@ -38,10 +38,12 @@
   }
 </style></head>
   <body>
+    
     <script>
       document.body.dataset.theme = localStorage.getItem("theme") || "auto";
     </script>
     
+
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="svg-toc" viewBox="0 0 24 24">
     <title>Contents</title>
@@ -123,7 +125,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">PyLangAcq 0.17.0 documentation</div></a>
+      <a href="index.html"><div class="brand">PyLangAcq 0.18.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,10 +148,10 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">PyLangAcq 0.17.0 documentation</span>
+  <span class="sidebar-brand-text">PyLangAcq 0.18.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -182,7 +184,9 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -197,14 +201,14 @@
         </div>
         <article role="main">
           <section id="transcriptions-and-annotations">
-<span id="transcriptions"></span><h1>Transcriptions and Annotations<a class="headerlink" href="#transcriptions-and-annotations" title="Permalink to this headline">#</a></h1>
+<span id="transcriptions"></span><h1>Transcriptions and Annotations<a class="headerlink" href="#transcriptions-and-annotations" title="Permalink to this heading">#</a></h1>
 <p>Conversational data formatted in CHAT provides transcriptions with rich
 annotations for both linguistic and extra-linguistic information.
 PyLangAcq is designed to extract data and annotations in CHAT and expose them
 in Python data structures for flexible modeling work.
 This page explains how PyLangAcq represents CHAT data and annotations.</p>
 <section id="chat-format">
-<h2>CHAT Format<a class="headerlink" href="#chat-format" title="Permalink to this headline">#</a></h2>
+<h2>CHAT Format<a class="headerlink" href="#chat-format" title="Permalink to this heading">#</a></h2>
 <p>To see how the CHAT format translates to PyLangAcq, let’s look at the very first
 two utterances in Eve’s data in the American English
 <a class="reference external" href="https://childes.talkbank.org/access/Eng-NA/Brown.html">Brown</a>
@@ -278,7 +282,7 @@ The following sections introduce these <a class="reference internal" href="api.h
 using a reader created by <a class="reference internal" href="api.html#pylangacq.Reader.from_strs" title="pylangacq.Reader.from_strs"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_strs()</span></code></a> with the two CHAT
 utterances between Eve and her mother we’ve looked at.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="s2">"""</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="gp">... </span><span class="s2">    *CHI:   more cookie . [+ IMP]</span>
 <span class="gp">... </span><span class="s2">    %mor:   qn|more n|cookie .</span>
 <span class="gp">... </span><span class="s2">    </span><span class="si">%g</span><span class="s2">ra:   1|2|QUANT 2|0|INCROOT 3|2|PUNCT</span>
@@ -286,28 +290,28 @@ utterances between Eve and her mother we’ve looked at.</p>
 <span class="gp">... </span><span class="s2">    *MOT:   you 0v more cookies ?</span>
 <span class="gp">... </span><span class="s2">    %mor:   pro:per|you 0v|v qn|more n|cookie-PL ?</span>
 <span class="gp">... </span><span class="s2">    </span><span class="si">%g</span><span class="s2">ra:   1|2|SUBJ 2|0|ROOT 3|4|QUANT 4|2|OBJ 5|2|PUNCT</span>
-<span class="gp">... </span><span class="s2">"""</span>
+<span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">from_strs</span><span class="p">([</span><span class="n">data</span><span class="p">])</span>
 </pre></div>
 </div>
 </section>
 <section id="words">
-<h2>Words<a class="headerlink" href="#words" title="Permalink to this headline">#</a></h2>
+<h2>Words<a class="headerlink" href="#words" title="Permalink to this heading">#</a></h2>
 <p>The <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> method <a class="reference internal" href="api.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a>
 returns the transcriptions as segmented words.
 Calling <a class="reference internal" href="api.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a> with no arguments gives a
 flat list of the words:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span><span class="o">.</span><span class="n">words</span><span class="p">()</span>
-<span class="go">['more', 'cookie', '.', 'you', '0v', 'more', 'cookies', '?']</span>
+<span class="go">[&#39;more&#39;, &#39;cookie&#39;, &#39;.&#39;, &#39;you&#39;, &#39;0v&#39;, &#39;more&#39;, &#39;cookies&#39;, &#39;?&#39;]</span>
 </pre></div>
 </div>
 <section id="output-by-utterances-or-files">
-<h3>Output by Utterances or Files<a class="headerlink" href="#output-by-utterances-or-files" title="Permalink to this headline">#</a></h3>
+<h3>Output by Utterances or Files<a class="headerlink" href="#output-by-utterances-or-files" title="Permalink to this heading">#</a></h3>
 <p>To preserve the utterance-level structure, pass in <code class="docutils literal notranslate"><span class="pre">by_utterances=True</span></code>
 so that an inner list is created around the words from each utterance:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="n">by_utterances</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="go">[['more', 'cookie', '.'],</span>
-<span class="go"> ['you', '0v', 'more', 'cookies', '?']]</span>
+<span class="go">[[&#39;more&#39;, &#39;cookie&#39;, &#39;.&#39;],</span>
+<span class="go"> [&#39;you&#39;, &#39;0v&#39;, &#39;more&#39;, &#39;cookies&#39;, &#39;?&#39;]]</span>
 </pre></div>
 </div>
 <p>Because this example reader was created by a single in-memory string above,
@@ -319,43 +323,43 @@ Compared to the code snippet just above,
 adding <code class="docutils literal notranslate"><span class="pre">by_files=True</span></code> captures the two utterances (= two lists of strings)
 in an inner list, before the outermost list wraps up all the data:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="n">by_utterances</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">by_files</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="go">[[['more', 'cookie', '.'],</span>
-<span class="go">  ['you', '0v', 'more', 'cookies', '?']]]</span>
+<span class="go">[[[&#39;more&#39;, &#39;cookie&#39;, &#39;.&#39;],</span>
+<span class="go">  [&#39;you&#39;, &#39;0v&#39;, &#39;more&#39;, &#39;cookies&#39;, &#39;?&#39;]]]</span>
 </pre></div>
 </div>
 </section>
 <section id="filter-by-participants">
-<h3>Filter by Participants<a class="headerlink" href="#filter-by-participants" title="Permalink to this headline">#</a></h3>
+<h3>Filter by Participants<a class="headerlink" href="#filter-by-participants" title="Permalink to this heading">#</a></h3>
 <p>Besides controlling the output for its structure,
 you can also specify which participants’ data to return.
 The optional arguments <code class="docutils literal notranslate"><span class="pre">participants</span></code> and <code class="docutils literal notranslate"><span class="pre">exclude</span></code> are available for this purpose.
-<code class="docutils literal notranslate"><span class="pre">participants</span></code> takes a string (e.g., <code class="docutils literal notranslate"><span class="pre">"CHI"</span></code>) or an iterable of strings
-(e.g., <code class="docutils literal notranslate"><span class="pre">{"CHI",</span> <span class="pre">"MOT"}</span></code>) to include only the specified participants in the output.
+<code class="docutils literal notranslate"><span class="pre">participants</span></code> takes a string (e.g., <code class="docutils literal notranslate"><span class="pre">&quot;CHI&quot;</span></code>) or an iterable of strings
+(e.g., <code class="docutils literal notranslate"><span class="pre">{&quot;CHI&quot;,</span> <span class="pre">&quot;MOT&quot;}</span></code>) to include only the specified participants in the output.
 If specifying who to exclude is easier, use <code class="docutils literal notranslate"><span class="pre">exclude</span></code> instead.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="n">participants</span><span class="o">=</span><span class="s2">"CHI"</span><span class="p">,</span> <span class="n">by_utterances</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="go">[['more', 'cookie', '.']]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="n">exclude</span><span class="o">=</span><span class="s2">"MOT"</span><span class="p">,</span> <span class="n">by_utterances</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="go">[['more', 'cookie', '.']]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="n">participants</span><span class="o">=</span><span class="s2">&quot;CHI&quot;</span><span class="p">,</span> <span class="n">by_utterances</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">[[&#39;more&#39;, &#39;cookie&#39;, &#39;.&#39;]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="n">exclude</span><span class="o">=</span><span class="s2">&quot;MOT&quot;</span><span class="p">,</span> <span class="n">by_utterances</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">[[&#39;more&#39;, &#39;cookie&#39;, &#39;.&#39;]]</span>
 </pre></div>
 </div>
 <p>Examples of use cases:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">participants="CHI"</span></code> for child speech</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">exclude="CHI"</span></code> for child-directed speech</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">participants={"CHI",</span> <span class="pre">"MOT",</span> <span class="pre">"FAT"}</span></code> for parent-child interactions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">participants=&quot;CHI&quot;</span></code> for child speech</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exclude=&quot;CHI&quot;</span></code> for child-directed speech</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">participants={&quot;CHI&quot;,</span> <span class="pre">&quot;MOT&quot;,</span> <span class="pre">&quot;FAT&quot;}</span></code> for parent-child interactions</p></li>
 </ul>
 </section>
 </section>
 <section id="tokens">
-<h2>Tokens<a class="headerlink" href="#tokens" title="Permalink to this headline">#</a></h2>
+<h2>Tokens<a class="headerlink" href="#tokens" title="Permalink to this heading">#</a></h2>
 <p>Beyond the transcriptions from <a class="reference internal" href="api.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a>,
 <a class="reference internal" href="api.html#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code></a> gives you the word-based
 annotations from the CHAT data.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve_tokens</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">tokens</span><span class="p">(</span><span class="n">participants</span><span class="o">=</span><span class="s2">"CHI"</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve_tokens</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">tokens</span><span class="p">(</span><span class="n">participants</span><span class="o">=</span><span class="s2">&quot;CHI&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eve_tokens</span>
-<span class="go">[Token(word='more', pos='qn', mor='more', gra=Gra(dep=1, head=2, rel='QUANT')),</span>
-<span class="go"> Token(word='cookie', pos='n', mor='cookie', gra=Gra(dep=2, head=0, rel='INCROOT')),</span>
-<span class="go"> Token(word='.', pos='.', mor='', gra=Gra(dep=3, head=2, rel='PUNCT'))]</span>
+<span class="go">[Token(word=&#39;more&#39;, pos=&#39;qn&#39;, mor=&#39;more&#39;, gra=Gra(dep=1, head=2, rel=&#39;QUANT&#39;)),</span>
+<span class="go"> Token(word=&#39;cookie&#39;, pos=&#39;n&#39;, mor=&#39;cookie&#39;, gra=Gra(dep=2, head=0, rel=&#39;INCROOT&#39;)),</span>
+<span class="go"> Token(word=&#39;.&#39;, pos=&#39;.&#39;, mor=&#39;&#39;, gra=Gra(dep=3, head=2, rel=&#39;PUNCT&#39;))]</span>
 </pre></div>
 </div>
 <p><a class="reference internal" href="api.html#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code></a> has the same optional arguments
@@ -367,23 +371,23 @@ of a word into a <a class="reference internal" href="api.html#pylangacq.objects.
 A <a class="reference internal" href="api.html#pylangacq.objects.Token" title="pylangacq.objects.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a>’s information can be accessed via its attributes
 <code class="docutils literal notranslate"><span class="pre">word</span></code>, <code class="docutils literal notranslate"><span class="pre">pos</span></code>, <code class="docutils literal notranslate"><span class="pre">mor</span></code>, and <code class="docutils literal notranslate"><span class="pre">gra</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">eve_tokens</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">"word:"</span><span class="p">,</span> <span class="n">token</span><span class="o">.</span><span class="n">word</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">"part-of-speech tag:"</span><span class="p">,</span> <span class="n">token</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">"morphological information:"</span><span class="p">,</span> <span class="n">token</span><span class="o">.</span><span class="n">mor</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">"grammatical relation:"</span><span class="p">,</span> <span class="n">token</span><span class="o">.</span><span class="n">gra</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;word:&quot;</span><span class="p">,</span> <span class="n">token</span><span class="o">.</span><span class="n">word</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;part-of-speech tag:&quot;</span><span class="p">,</span> <span class="n">token</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;morphological information:&quot;</span><span class="p">,</span> <span class="n">token</span><span class="o">.</span><span class="n">mor</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;grammatical relation:&quot;</span><span class="p">,</span> <span class="n">token</span><span class="o">.</span><span class="n">gra</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="go">word: more</span>
 <span class="go">part-of-speech tag: qn</span>
 <span class="go">morphological information: more</span>
-<span class="go">grammatical relation: Gra(dep=1, head=2, rel='QUANT')</span>
+<span class="go">grammatical relation: Gra(dep=1, head=2, rel=&#39;QUANT&#39;)</span>
 <span class="go">word: cookie</span>
 <span class="go">part-of-speech tag: n</span>
 <span class="go">morphological information: cookie</span>
-<span class="go">grammatical relation: Gra(dep=2, head=0, rel='INCROOT')</span>
+<span class="go">grammatical relation: Gra(dep=2, head=0, rel=&#39;INCROOT&#39;)</span>
 <span class="go">word: .</span>
 <span class="go">part-of-speech tag: .</span>
 <span class="go">morphological information:</span>
-<span class="go">grammatical relation: Gra(dep=3, head=2, rel='PUNCT')</span>
+<span class="go">grammatical relation: Gra(dep=3, head=2, rel=&#39;PUNCT&#39;)</span>
 </pre></div>
 </div>
 <p>A grammatical relation is further represented by a <a class="reference internal" href="api.html#pylangacq.objects.Gra" title="pylangacq.objects.Gra"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gra</span></code></a> object,
@@ -393,19 +397,19 @@ with the attributes
 and <code class="docutils literal notranslate"><span class="pre">rel</span></code> (relation).</p>
 </section>
 <section id="utterances">
-<h2>Utterances<a class="headerlink" href="#utterances" title="Permalink to this headline">#</a></h2>
+<h2>Utterances<a class="headerlink" href="#utterances" title="Permalink to this heading">#</a></h2>
 <p>The <a class="reference internal" href="api.html#pylangacq.Reader.utterances" title="pylangacq.Reader.utterances"><code class="xref py py-func docutils literal notranslate"><span class="pre">utterances()</span></code></a> method gives you information
 beyond <a class="reference internal" href="api.html#pylangacq.Reader.tokens" title="pylangacq.Reader.tokens"><code class="xref py py-func docutils literal notranslate"><span class="pre">tokens()</span></code></a>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span><span class="o">.</span><span class="n">utterances</span><span class="p">(</span><span class="n">participants</span><span class="o">=</span><span class="s2">"CHI"</span><span class="p">)</span>
-<span class="go">[Utterance(participant='CHI',</span>
-<span class="go">           tokens=[Token(word='more', pos='qn', mor='more', gra=Gra(dep=1, head=2, rel='QUANT')),</span>
-<span class="go">                   Token(word='cookie', pos='n', mor='cookie', gra=Gra(dep=2, head=0, rel='INCROOT')),</span>
-<span class="go">                   Token(word='.', pos='.', mor='', gra=Gra(dep=3, head=2, rel='PUNCT'))],</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span><span class="o">.</span><span class="n">utterances</span><span class="p">(</span><span class="n">participants</span><span class="o">=</span><span class="s2">&quot;CHI&quot;</span><span class="p">)</span>
+<span class="go">[Utterance(participant=&#39;CHI&#39;,</span>
+<span class="go">           tokens=[Token(word=&#39;more&#39;, pos=&#39;qn&#39;, mor=&#39;more&#39;, gra=Gra(dep=1, head=2, rel=&#39;QUANT&#39;)),</span>
+<span class="go">                   Token(word=&#39;cookie&#39;, pos=&#39;n&#39;, mor=&#39;cookie&#39;, gra=Gra(dep=2, head=0, rel=&#39;INCROOT&#39;)),</span>
+<span class="go">                   Token(word=&#39;.&#39;, pos=&#39;.&#39;, mor=&#39;&#39;, gra=Gra(dep=3, head=2, rel=&#39;PUNCT&#39;))],</span>
 <span class="go">           time_marks=None,</span>
-<span class="go">           tiers={'CHI': 'more cookie . [+ IMP]',</span>
-<span class="go">                  '%mor': 'qn|more n|cookie .',</span>
-<span class="go">                  '%gra': '1|2|QUANT 2|0|INCROOT 3|2|PUNCT',</span>
-<span class="go">                  '%int': 'distinctive , loud'})]</span>
+<span class="go">           tiers={&#39;CHI&#39;: &#39;more cookie . [+ IMP]&#39;,</span>
+<span class="go">                  &#39;%mor&#39;: &#39;qn|more n|cookie .&#39;,</span>
+<span class="go">                  &#39;%gra&#39;: &#39;1|2|QUANT 2|0|INCROOT 3|2|PUNCT&#39;,</span>
+<span class="go">                  &#39;%int&#39;: &#39;distinctive , loud&#39;})]</span>
 </pre></div>
 </div>
 <p><a class="reference internal" href="api.html#pylangacq.Reader.utterances" title="pylangacq.Reader.utterances"><code class="xref py py-func docutils literal notranslate"><span class="pre">utterances()</span></code></a> has the same optional arguments
@@ -420,7 +424,7 @@ Accessing CHAT data using <a class="reference internal" href="api.html#pylangacq
 is useful when you need to, say, tie participant information to
 the transcriptions and/or annotations.</p>
 <section id="time-marks">
-<h3>Time Marks<a class="headerlink" href="#time-marks" title="Permalink to this headline">#</a></h3>
+<h3>Time Marks<a class="headerlink" href="#time-marks" title="Permalink to this heading">#</a></h3>
 <p>Many of the more recent CHILDES datasets (especially starting from the 1990s)
 come with digitized audio and video data associated with the text-based CHAT data files.
 In these datasets, an utterance in the CHAT file has time marks to indicate
@@ -430,7 +434,7 @@ If the information is available, the <code class="docutils literal notranslate">
 e.g., <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">1073)</span></code>, for <code class="docutils literal notranslate"><span class="pre">·0_1073·</span></code> found at the end of the CHAT transcription line.</p>
 </section>
 <section id="tiers">
-<h3>Tiers<a class="headerlink" href="#tiers" title="Permalink to this headline">#</a></h3>
+<h3>Tiers<a class="headerlink" href="#tiers" title="Permalink to this heading">#</a></h3>
 <p>You may sometimes need the original, unparsed transcription lines,
 because they contain information, e.g., annotations for pauses, that is dropped
 when <a class="reference internal" href="api.html#pylangacq.objects.Token" title="pylangacq.objects.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a> objects are constructed
@@ -456,10 +460,10 @@ for your custom needs.</p>
                 </div>
                 <div class="title">Writing CHAT Data</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="headers.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -473,7 +477,7 @@ for your custom needs.</p>
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2015-2022, Jackson L. Lee | PyLangAcq 0.17.0 | Documentation last updated on June 09, 2022
+                Copyright &#169; 2015-2023, Jackson L. Lee | PyLangAcq 0.18.0 | Documentation last updated on March 11, 2023
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
@@ -481,9 +485,7 @@ for your custom needs.</p>
             
           </div>
           <div class="right-details">
-            <div class="icons">
-              
-            </div>
+            
           </div>
         </div>
         
@@ -495,7 +497,7 @@ for your custom needs.</p>
       <div class="toc-sticky toc-scroll">
         <div class="toc-title-container">
           <span class="toc-title">
-            Contents
+            On this page
           </span>
         </div>
         <div class="toc-tree-container">
@@ -526,9 +528,8 @@ for your custom needs.</p>
     </aside>
   </div>
 </div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/scripts/furo.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>

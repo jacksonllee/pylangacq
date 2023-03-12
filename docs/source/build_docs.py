@@ -5,7 +5,7 @@
 import logging
 import os
 
-import m2r2
+import m2r
 
 
 _DOCS_SOURCE = os.path.dirname(os.path.abspath(__file__))
@@ -36,7 +36,7 @@ def create_changelog_rst():
     changelog_rst = (
         ".. _changelog:\n\n"
         + "Changelog\n=========\n"
-        + m2r2.convert(changelog_md[changelog_md.index("## [Unreleased]") :])
+        + m2r.convert(changelog_md[changelog_md.index("## [Unreleased]") :])
     )
     with open(os.path.join(_DOCS_SOURCE, "changelog.rst"), "w", encoding="utf8") as f:
         f.write(changelog_rst)
@@ -48,26 +48,10 @@ def create_robots_txt():
         f.write("User-agent: *\n\nSitemap: https://pylangacq.org/sitemap.xml\n")
 
 
-def add_custom_css():
-    logging.info("Adding custom css")
-    dir_ = os.path.join(_DOCS, "_static")
-    os.makedirs(dir_, exist_ok=True)
-    file_path = os.path.join(dir_, "custom.css")
-    with open(file_path, "w", encoding="utf-8") as f:
-        # https://stackoverflow.com/q/69873561
-        avoid_uppercasing_docstrings = """
-dl.py .field-list dt {
-    text-transform: none !important;
-}
-        """
-        f.write(avoid_uppercasing_docstrings)
-
-
 if __name__ == "__main__":
     logging.basicConfig(level="INFO")
     remove_generated_docs()
     create_changelog_rst()
     create_robots_txt()
-    add_custom_css()
     # Rebuilding docs has to be the final step.
     rebuild_docs()

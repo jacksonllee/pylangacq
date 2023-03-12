@@ -1,17 +1,17 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Transcriptions and Annotations" href="transcriptions.html" /><link rel="prev" title="Reading CHAT Data" href="read.html" />
+        <link rel="canonical" href="https://pylangacq.org/headers.html" />
 
-    <meta name="generator" content="sphinx-4.3.2, furo 2022.03.04"/>
-        <title>Accessing Headers - PyLangAcq 0.17.0 documentation</title>
+    <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
+        <title>Accessing Headers - PyLangAcq 0.18.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
 
@@ -38,10 +38,12 @@
   }
 </style></head>
   <body>
+    
     <script>
       document.body.dataset.theme = localStorage.getItem("theme") || "auto";
     </script>
     
+
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="svg-toc" viewBox="0 0 24 24">
     <title>Contents</title>
@@ -123,7 +125,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">PyLangAcq 0.17.0 documentation</div></a>
+      <a href="index.html"><div class="brand">PyLangAcq 0.18.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,10 +148,10 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">PyLangAcq 0.17.0 documentation</span>
+  <span class="sidebar-brand-text">PyLangAcq 0.18.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -182,7 +184,9 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -197,9 +201,9 @@
         </div>
         <article role="main">
           <section id="accessing-headers">
-<span id="headers"></span><h1>Accessing Headers<a class="headerlink" href="#accessing-headers" title="Permalink to this headline">#</a></h1>
+<span id="headers"></span><h1>Accessing Headers<a class="headerlink" href="#accessing-headers" title="Permalink to this heading">#</a></h1>
 <p>CHAT data files record metadata such as the participants’ demographic information
-in a header section, which has lines starting with the <code class="docutils literal notranslate"><span class="pre">@</span></code> character
+in a header section, which has lines starting with the <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> character
 and is typically found at the top of a data file.
 The following is the header section of <code class="docutils literal notranslate"><span class="pre">Brown/Eve/010600a.cha</span></code> from CHILDES:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@UTF8</span>
@@ -216,13 +220,10 @@ The following is the header section of <code class="docutils literal notranslate
 </div>
 <p><a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> has the following methods
 to access the commonly needed information from the headers:</p>
-<div class="table-wrapper"><table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%"/>
-<col style="width: 90%"/>
-</colgroup>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="api.html#pylangacq.Reader.ages" title="pylangacq.Reader.ages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ages</span></code></a>([participant, months])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#pylangacq.Reader.ages" title="pylangacq.Reader.ages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ages</span></code></a>([participant, months])</p></td>
 <td><p>Return the ages of the given participant in the data.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="api.html#pylangacq.Reader.dates_of_recording" title="pylangacq.Reader.dates_of_recording"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dates_of_recording</span></code></a>([by_files])</p></td>
@@ -238,16 +239,17 @@ to access the commonly needed information from the headers:</p>
 <td><p>Return the participants (e.g., CHI, MOT).</p></td>
 </tr>
 </tbody>
-</table></div>
+</table>
+</div>
 <p>Let’s use Eve’s data to see these methods in action.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylangacq</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="s2">"https://childes.talkbank.org/data/Eng-NA/Brown.zip"</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">"Eve"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://childes.talkbank.org/data/Eng-NA/Brown.zip&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span> <span class="o">=</span> <span class="n">pylangacq</span><span class="o">.</span><span class="n">read_chat</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;Eve&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <section id="ages">
-<h2>Ages<a class="headerlink" href="#ages" title="Permalink to this headline">#</a></h2>
-<p><a class="reference internal" href="api.html#pylangacq.Reader.ages" title="pylangacq.Reader.ages"><code class="xref py py-func docutils literal notranslate"><span class="pre">ages()</span></code></a> returns the age information of the participant <code class="docutils literal notranslate"><span class="pre">"CHI"</span></code>
+<h2>Ages<a class="headerlink" href="#ages" title="Permalink to this heading">#</a></h2>
+<p><a class="reference internal" href="api.html#pylangacq.Reader.ages" title="pylangacq.Reader.ages"><code class="xref py py-func docutils literal notranslate"><span class="pre">ages()</span></code></a> returns the age information of the participant <code class="docutils literal notranslate"><span class="pre">&quot;CHI&quot;</span></code>
 (the target child) by default, since CHAT is by far most commonly used
 in language acquisition and development research, and that typically only the age of the
 target child is available. The only argument <code class="docutils literal notranslate"><span class="pre">participant</span></code> can be passed in
@@ -304,9 +306,9 @@ such as <code class="docutils literal notranslate"><span class="pre">(1,</span> 
 </div>
 </section>
 <section id="dates-of-recording">
-<h2>Dates of Recording<a class="headerlink" href="#dates-of-recording" title="Permalink to this headline">#</a></h2>
+<h2>Dates of Recording<a class="headerlink" href="#dates-of-recording" title="Permalink to this heading">#</a></h2>
 <p><a class="reference internal" href="api.html#pylangacq.Reader.dates_of_recording" title="pylangacq.Reader.dates_of_recording"><code class="xref py py-func docutils literal notranslate"><span class="pre">dates_of_recording()</span></code></a> returns the dates of recording
-as a set of <a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.date" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">date</span></code></a> objects
+as a set of <a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.date" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">date</span></code></a> objects
 for all the date files.</p>
 <p>Some files have the same dates, as multiple recording sessions were conducted
 on the same day. To have the dates by data files,
@@ -339,24 +341,24 @@ where each set is for one file:</p>
 </div>
 </section>
 <section id="languages">
-<h2>Languages<a class="headerlink" href="#languages" title="Permalink to this headline">#</a></h2>
+<h2>Languages<a class="headerlink" href="#languages" title="Permalink to this heading">#</a></h2>
 <p><a class="reference internal" href="api.html#pylangacq.Reader.languages" title="pylangacq.Reader.languages"><code class="xref py py-func docutils literal notranslate"><span class="pre">languages()</span></code></a> returns the language information.
 Eve’s data is naturally in English.
 In datasets with more than one language (bi-/multilingualism),
 the <code class="docutils literal notranslate"><span class="pre">by_files=True</span></code> flag would indicate the languages in individual files according to
 the headers.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">languages</span><span class="p">()</span>
-<span class="go">{'eng'}</span>
+<span class="go">{&#39;eng&#39;}</span>
 </pre></div>
 </div>
 </section>
 <section id="participants">
-<h2>Participants<a class="headerlink" href="#participants" title="Permalink to this headline">#</a></h2>
-<p><a class="reference internal" href="api.html#pylangacq.Reader.participants" title="pylangacq.Reader.participants"><code class="xref py py-func docutils literal notranslate"><span class="pre">participants()</span></code></a> returns the participants (e.g., <code class="docutils literal notranslate"><span class="pre">"CHI"</span></code>, <code class="docutils literal notranslate"><span class="pre">"MOT"</span></code>)
+<h2>Participants<a class="headerlink" href="#participants" title="Permalink to this heading">#</a></h2>
+<p><a class="reference internal" href="api.html#pylangacq.Reader.participants" title="pylangacq.Reader.participants"><code class="xref py py-func docutils literal notranslate"><span class="pre">participants()</span></code></a> returns the participants (e.g., <code class="docutils literal notranslate"><span class="pre">&quot;CHI&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;MOT&quot;</span></code>)
 in the reader. <code class="docutils literal notranslate"><span class="pre">by_files=True</span></code> is also available if you need the information
 by individual files.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eve</span><span class="o">.</span><span class="n">participants</span><span class="p">()</span>
-<span class="go">{'URS', 'CHI', 'MOT', 'FAT', 'RIC', 'COL', 'GLO'}</span>
+<span class="go">{&#39;URS&#39;, &#39;CHI&#39;, &#39;MOT&#39;, &#39;FAT&#39;, &#39;RIC&#39;, &#39;COL&#39;, &#39;GLO&#39;}</span>
 </pre></div>
 </div>
 <p>The more detailed information for each participant
@@ -364,60 +366,60 @@ by individual files.</p>
 which is illustrated next.</p>
 </section>
 <section id="other-header-information">
-<h2>Other Header Information<a class="headerlink" href="#other-header-information" title="Permalink to this headline">#</a></h2>
+<h2>Other Header Information<a class="headerlink" href="#other-header-information" title="Permalink to this heading">#</a></h2>
 <p>For any header information not given by one of the implemented methods above,
 <a class="reference internal" href="api.html#pylangacq.Reader.headers" title="pylangacq.Reader.headers"><code class="xref py py-func docutils literal notranslate"><span class="pre">headers()</span></code></a> gives a list of headers,
 where each header is a generic Python dictionary for each data file,
 and you can walk through the dict for information you need.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">headers</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">headers</span><span class="p">()</span>  <span class="c1"># a list of dicts</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">headers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># show the header of Brown/Eve/010600a.cha</span>
-<span class="go">{'Date': {datetime.date(1962, 10, 15), datetime.date(1962, 10, 17)},</span>
-<span class="go"> 'Languages': ['eng'],</span>
-<span class="go"> 'PID': '11312/c-00034743-1',</span>
-<span class="go"> 'Participants': {'CHI': {'age': '1;06.00',</span>
-<span class="go">                          'corpus': 'Brown',</span>
-<span class="go">                          'custom': '',</span>
-<span class="go">                          'education': '',</span>
-<span class="go">                          'group': '',</span>
-<span class="go">                          'language': 'eng',</span>
-<span class="go">                          'name': 'Eve',</span>
-<span class="go">                          'role': 'Target_Child',</span>
-<span class="go">                          'ses': '',</span>
-<span class="go">                          'sex': 'female'},</span>
-<span class="go">                  'COL': {'age': '',</span>
-<span class="go">                          'corpus': 'Brown',</span>
-<span class="go">                          'custom': '',</span>
-<span class="go">                          'education': '',</span>
-<span class="go">                          'group': '',</span>
-<span class="go">                          'language': 'eng',</span>
-<span class="go">                          'name': 'Colin',</span>
-<span class="go">                          'role': 'Investigator',</span>
-<span class="go">                          'ses': '',</span>
-<span class="go">                          'sex': ''},</span>
-<span class="go">                  'MOT': {'age': '',</span>
-<span class="go">                          'corpus': 'Brown',</span>
-<span class="go">                          'custom': '',</span>
-<span class="go">                          'education': '',</span>
-<span class="go">                          'group': '',</span>
-<span class="go">                          'language': 'eng',</span>
-<span class="go">                          'name': 'Sue',</span>
-<span class="go">                          'role': 'Mother',</span>
-<span class="go">                          'ses': '',</span>
-<span class="go">                          'sex': 'female'},</span>
-<span class="go">                  'RIC': {'age': '',</span>
-<span class="go">                          'corpus': 'Brown',</span>
-<span class="go">                          'custom': '',</span>
-<span class="go">                          'education': '',</span>
-<span class="go">                          'group': '',</span>
-<span class="go">                          'language': 'eng',</span>
-<span class="go">                          'name': 'Richard',</span>
-<span class="go">                          'role': 'Investigator',</span>
-<span class="go">                          'ses': '',</span>
-<span class="go">                          'sex': ''}},</span>
-<span class="go"> 'Tape Location': '850',</span>
-<span class="go"> 'Time Duration': '11:30-12:00',</span>
-<span class="go"> 'Types': 'long, toyplay, TD',</span>
-<span class="go"> 'UTF8': ''}</span>
+<span class="go">{&#39;Date&#39;: {datetime.date(1962, 10, 15), datetime.date(1962, 10, 17)},</span>
+<span class="go"> &#39;Languages&#39;: [&#39;eng&#39;],</span>
+<span class="go"> &#39;PID&#39;: &#39;11312/c-00034743-1&#39;,</span>
+<span class="go"> &#39;Participants&#39;: {&#39;CHI&#39;: {&#39;age&#39;: &#39;1;06.00&#39;,</span>
+<span class="go">                          &#39;corpus&#39;: &#39;Brown&#39;,</span>
+<span class="go">                          &#39;custom&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;education&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;group&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;language&#39;: &#39;eng&#39;,</span>
+<span class="go">                          &#39;name&#39;: &#39;Eve&#39;,</span>
+<span class="go">                          &#39;role&#39;: &#39;Target_Child&#39;,</span>
+<span class="go">                          &#39;ses&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;sex&#39;: &#39;female&#39;},</span>
+<span class="go">                  &#39;COL&#39;: {&#39;age&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;corpus&#39;: &#39;Brown&#39;,</span>
+<span class="go">                          &#39;custom&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;education&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;group&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;language&#39;: &#39;eng&#39;,</span>
+<span class="go">                          &#39;name&#39;: &#39;Colin&#39;,</span>
+<span class="go">                          &#39;role&#39;: &#39;Investigator&#39;,</span>
+<span class="go">                          &#39;ses&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;sex&#39;: &#39;&#39;},</span>
+<span class="go">                  &#39;MOT&#39;: {&#39;age&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;corpus&#39;: &#39;Brown&#39;,</span>
+<span class="go">                          &#39;custom&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;education&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;group&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;language&#39;: &#39;eng&#39;,</span>
+<span class="go">                          &#39;name&#39;: &#39;Sue&#39;,</span>
+<span class="go">                          &#39;role&#39;: &#39;Mother&#39;,</span>
+<span class="go">                          &#39;ses&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;sex&#39;: &#39;female&#39;},</span>
+<span class="go">                  &#39;RIC&#39;: {&#39;age&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;corpus&#39;: &#39;Brown&#39;,</span>
+<span class="go">                          &#39;custom&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;education&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;group&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;language&#39;: &#39;eng&#39;,</span>
+<span class="go">                          &#39;name&#39;: &#39;Richard&#39;,</span>
+<span class="go">                          &#39;role&#39;: &#39;Investigator&#39;,</span>
+<span class="go">                          &#39;ses&#39;: &#39;&#39;,</span>
+<span class="go">                          &#39;sex&#39;: &#39;&#39;}},</span>
+<span class="go"> &#39;Tape Location&#39;: &#39;850&#39;,</span>
+<span class="go"> &#39;Time Duration&#39;: &#39;11:30-12:00&#39;,</span>
+<span class="go"> &#39;Types&#39;: &#39;long, toyplay, TD&#39;,</span>
+<span class="go"> &#39;UTF8&#39;: &#39;&#39;}</span>
 </pre></div>
 </div>
 </section>
@@ -435,10 +437,10 @@ and you can walk through the dict for information you need.</p>
                 </div>
                 <div class="title">Transcriptions and Annotations</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="read.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -452,7 +454,7 @@ and you can walk through the dict for information you need.</p>
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2015-2022, Jackson L. Lee | PyLangAcq 0.17.0 | Documentation last updated on June 09, 2022
+                Copyright &#169; 2015-2023, Jackson L. Lee | PyLangAcq 0.18.0 | Documentation last updated on March 11, 2023
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
@@ -460,9 +462,7 @@ and you can walk through the dict for information you need.</p>
             
           </div>
           <div class="right-details">
-            <div class="icons">
-              
-            </div>
+            
           </div>
         </div>
         
@@ -474,7 +474,7 @@ and you can walk through the dict for information you need.</p>
       <div class="toc-sticky toc-scroll">
         <div class="toc-title-container">
           <span class="toc-title">
-            Contents
+            On this page
           </span>
         </div>
         <div class="toc-tree-container">
@@ -498,9 +498,8 @@ and you can walk through the dict for information you need.</p>
     </aside>
   </div>
 </div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/scripts/furo.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>

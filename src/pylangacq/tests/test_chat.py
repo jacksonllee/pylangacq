@@ -209,7 +209,7 @@ class BaseTestCHATReader:
             # Word count
             sum(len(u.tokens) for f in original._files for u in f.utterances)
             == sum(len(u.tokens) for f in new._files for u in f.utterances)
-            == 6101
+            == 6108
         )
 
     def test_clear(self):

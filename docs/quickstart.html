@@ -1,17 +1,17 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Reading CHAT Data" href="read.html" /><link rel="prev" title="PyLangAcq: Language Acquisition Research in Python" href="index.html" />
         <link rel="canonical" href="https://pylangacq.org/quickstart.html" />
 
-    <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
-        <title>Quickstart - PyLangAcq 0.18.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <!-- Generated with Sphinx 7.1.2 and Furo 2023.09.10 -->
+        <title>Quickstart - PyLangAcq 0.19.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b76e3c8a" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=36a5483c" />
     
     
 
@@ -125,7 +125,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">PyLangAcq 0.18.0 documentation</div></a>
+      <a href="index.html"><div class="brand">PyLangAcq 0.19.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -148,7 +148,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">PyLangAcq 0.18.0 documentation</span>
+  <span class="sidebar-brand-text">PyLangAcq 0.19.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -274,7 +274,7 @@ which is from 1 year and 6 months old to 2 years and 3 months old:</p>
 <p><a class="reference internal" href="api.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a> is the basic method to access the transcriptions:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">words</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">words</span><span class="p">()</span>  <span class="c1"># list of strings, for all the words across all 20 files</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>  <span class="c1"># total word count</span>
-<span class="go">119799</span>
+<span class="go">119781</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">words</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span>
 <span class="go">[&#39;more&#39;, &#39;cookie&#39;, &#39;.&#39;, &#39;you&#39;, &#39;0v&#39;, &#39;more&#39;, &#39;cookies&#39;, &#39;?&#39;]</span>
 </pre></div>
@@ -289,25 +289,25 @@ the method has the optional boolean parameter <code class="docutils literal notr
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">words_one_file</span> <span class="ow">in</span> <span class="n">words_by_files</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">words_one_file</span><span class="p">))</span>
 <span class="gp">...</span>
-<span class="go">5810</span>
-<span class="go">5258</span>
-<span class="go">2493</span>
-<span class="go">5742</span>
+<span class="go">5809</span>
+<span class="go">5252</span>
+<span class="go">2488</span>
+<span class="go">5739</span>
 <span class="go">5707</span>
 <span class="go">4338</span>
-<span class="go">5298</span>
+<span class="go">5299</span>
 <span class="go">8901</span>
 <span class="go">4454</span>
-<span class="go">4535</span>
-<span class="go">4196</span>
-<span class="go">6193</span>
+<span class="go">4533</span>
+<span class="go">4195</span>
+<span class="go">6195</span>
 <span class="go">4444</span>
-<span class="go">5202</span>
-<span class="go">8075</span>
+<span class="go">5207</span>
+<span class="go">8073</span>
 <span class="go">7361</span>
 <span class="go">10870</span>
-<span class="go">8407</span>
-<span class="go">6903</span>
+<span class="go">8403</span>
+<span class="go">6901</span>
 <span class="go">5612</span>
 </pre></div>
 </div>
@@ -368,7 +368,7 @@ and <a class="reference internal" href="api.html#pylangacq.Reader.word_ngrams" t
 <span class="gp">&gt;&gt;&gt; </span><span class="n">word_freq</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 <span class="go">[(&#39;.&#39;, 20071),</span>
 <span class="go"> (&#39;?&#39;, 6358),</span>
-<span class="go"> (&#39;you&#39;, 3695),</span>
+<span class="go"> (&#39;you&#39;, 3681),</span>
 <span class="go"> (&#39;the&#39;, 2524),</span>
 <span class="go"> (&#39;it&#39;, 2363)]</span>
 
@@ -398,13 +398,13 @@ and <a class="reference internal" href="api.html#pylangacq.Reader.word_ngrams" t
 <span class="go"> 3.840077071290944,</span>
 <span class="go"> 3.822669104204753,</span>
 <span class="go"> 3.8814317673378076,</span>
-<span class="go"> 4.176287051482059,</span>
+<span class="go"> 4.177847113884555,</span>
 <span class="go"> 4.2631578947368425,</span>
-<span class="go"> 3.976890756302521,</span>
+<span class="go"> 3.9936974789915967,</span>
 <span class="go"> 4.457182320441989,</span>
 <span class="go"> 4.416536661466458,</span>
 <span class="go"> 4.499446290143965,</span>
-<span class="go"> 4.289506953223768,</span>
+<span class="go"> 4.288242730720607,</span>
 <span class="go"> 4.3813169984686064,</span>
 <span class="go"> 3.3191094619666046]</span>
 </pre></div>
@@ -454,7 +454,7 @@ contact <a class="reference external" href="https://jacksonllee.com/">Jackson L.
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2015-2023, Jackson L. Lee | PyLangAcq 0.18.0 | Documentation last updated on March 11, 2023
+                Copyright &#169; 2015-2023, Jackson L. Lee | PyLangAcq 0.19.0 | Documentation last updated on December 13, 2023
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
@@ -498,11 +498,11 @@ contact <a class="reference external" href="https://jacksonllee.com/">Jackson L.
       
     </aside>
   </div>
-</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
-    <script src="_static/scripts/furo.js"></script>
-    <script src="_static/clipboard.min.js"></script>
-    <script src="_static/copybutton.js"></script>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3de8224"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
     </body>
 </html>

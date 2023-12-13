@@ -1,17 +1,17 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Accessing Headers" href="headers.html" /><link rel="prev" title="Quickstart" href="quickstart.html" />
         <link rel="canonical" href="https://pylangacq.org/read.html" />
 
-    <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
-        <title>Reading CHAT Data - PyLangAcq 0.18.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <!-- Generated with Sphinx 7.1.2 and Furo 2023.09.10 -->
+        <title>Reading CHAT Data - PyLangAcq 0.19.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b76e3c8a" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=36a5483c" />
     
     
 
@@ -125,7 +125,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">PyLangAcq 0.18.0 documentation</div></a>
+      <a href="index.html"><div class="brand">PyLangAcq 0.19.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -148,7 +148,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">PyLangAcq 0.18.0 documentation</span>
+  <span class="sidebar-brand-text">PyLangAcq 0.19.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -238,15 +238,15 @@ If the ZIP file has a fair amount of data
 a <a class="reference internal" href="api.html#pylangacq.read_chat" title="pylangacq.read_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_chat()</span></code></a> call like this typically takes a couple seconds.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">brown</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 <span class="go">214 files</span>
-<span class="go">184639 utterances</span>
-<span class="go">881179 words</span>
+<span class="go">184631 utterances</span>
+<span class="go">880748 words</span>
 <span class="go">      Utterance Count    Word Count  File Path</span>
 <span class="go">--  -----------------  ------------  ---------------------</span>
-<span class="go">#1               1737          6441  Brown/Adam/020304.cha</span>
-<span class="go">#2               1972          7763  Brown/Adam/020318.cha</span>
-<span class="go">#3               1305          5579  Brown/Adam/020403.cha</span>
+<span class="go">#1               1737          6437  Brown/Adam/020304.cha</span>
+<span class="go">#2               1972          7757  Brown/Adam/020318.cha</span>
+<span class="go">#3               1305          5572  Brown/Adam/020403.cha</span>
 <span class="go">#4               1224          4570  Brown/Adam/020415.cha</span>
-<span class="go">#5               1344          5480  Brown/Adam/020430.cha</span>
+<span class="go">#5               1344          5469  Brown/Adam/020430.cha</span>
 <span class="gp">...</span>
 <span class="go">(set `verbose` to True for all the files)</span>
 </pre></div>
@@ -455,7 +455,7 @@ the resulting reader has the data automatically sorted based on file paths.</p>
 <p>With the knowledge that data is ordered by files in a <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a>,
 it is reasonable for a <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> to append or drop data,
 and to do so from either end for modeling purposes.
-Think of a CHAT data reader more or less like a <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.deque" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">deque</span></code></a>.</p>
+Think of a CHAT data reader more or less like a <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.deque" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">deque</span></code></a>.</p>
 <p>The following <a class="reference internal" href="api.html#pylangacq.Reader" title="pylangacq.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a> methods support adding and removing data
 from a reader:</p>
 <div class="table-wrapper autosummary longtable docutils container">
@@ -597,7 +597,7 @@ for Cantonese conversational data in the
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2015-2023, Jackson L. Lee | PyLangAcq 0.18.0 | Documentation last updated on March 11, 2023
+                Copyright &#169; 2015-2023, Jackson L. Lee | PyLangAcq 0.19.0 | Documentation last updated on December 13, 2023
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
@@ -646,11 +646,11 @@ for Cantonese conversational data in the
       
     </aside>
   </div>
-</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
-    <script src="_static/scripts/furo.js"></script>
-    <script src="_static/clipboard.min.js"></script>
-    <script src="_static/copybutton.js"></script>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3de8224"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
     </body>
 </html>

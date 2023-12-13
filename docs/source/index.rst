@@ -16,6 +16,18 @@ PyLangAcq: Language Acquisition Research in Python
         nlp, linguistics, corpora, speech, language, transcription,
         language acquisition, language development
 
+.. image:: https://badge.fury.io/py/pylangacq.svg
+   :target: https://pypi.python.org/pypi/pylangacq
+   :alt: PyPI version
+
+.. image:: https://img.shields.io/pypi/pyversions/pylangacq.svg
+   :target: https://pypi.python.org/pypi/pylangacq
+   :alt: Supported Python versions
+
+.. image:: https://img.shields.io/pypi/dm/pylangacq
+   :target: https://pypi.python.org/pypi/pylangacq
+   :alt: PyPI - Downloads
+
 .. include:: ../../README.rst
    :start-after: start-sphinx-website-index-page
    :end-before: end-sphinx-website-index-page

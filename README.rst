@@ -13,6 +13,10 @@ Full documentation: https://pylangacq.org
    :target: https://pypi.python.org/pypi/pylangacq
    :alt: Supported Python versions
 
+.. image:: https://img.shields.io/pypi/dm/pylangacq
+   :target: https://pypi.python.org/pypi/pylangacq
+   :alt: PyPI - Downloads
+
 .. image:: https://circleci.com/gh/jacksonllee/pylangacq.svg?style=shield
    :target: https://circleci.com/gh/jacksonllee/pylangacq
    :alt: CircleCI Builds
@@ -41,12 +45,6 @@ To download and install the most recent version::
 
 Ready for more?
 Check out the `Quickstart <https://pylangacq.org/quickstart.html>`_ page.
-
-Support
--------
-
-If you have found PyLangAcq useful and would like to offer support,
-`buying me a coffee <https://www.buymeacoffee.com/pylangacq>`_ would go a long way!
 
 Links
 -----

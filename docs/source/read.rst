@@ -53,15 +53,15 @@ a :func:`~pylangacq.read_chat` call like this typically takes a couple seconds.
 
     >>> brown.info()
     214 files
-    184639 utterances
-    881179 words
+    184631 utterances
+    880748 words
           Utterance Count    Word Count  File Path
     --  -----------------  ------------  ---------------------
-    #1               1737          6441  Brown/Adam/020304.cha
-    #2               1972          7763  Brown/Adam/020318.cha
-    #3               1305          5579  Brown/Adam/020403.cha
+    #1               1737          6437  Brown/Adam/020304.cha
+    #2               1972          7757  Brown/Adam/020318.cha
+    #3               1305          5572  Brown/Adam/020403.cha
     #4               1224          4570  Brown/Adam/020415.cha
-    #5               1344          5480  Brown/Adam/020430.cha
+    #5               1344          5469  Brown/Adam/020430.cha
     ...
     (set `verbose` to True for all the files)
 
@@ -383,7 +383,7 @@ organized by a subdirectory structure.
 :func:`~pylangacq.Reader.filter` allows us to easily create :class:`~pylangacq.Reader` objects
 for individual children without re-downloading data:
 
-.. skip: start if(os.name == "nt", reason="Windows OS sep is backslash instead")
+.. skip: start if(os.getenv("CI") == "true", reason="test got killed at brown = pylangacq.read_chat(url) for python 3.12 on CircleCI?")
 
 .. code-block:: python
 

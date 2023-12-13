@@ -80,7 +80,7 @@ class _DependencyGraph:
             pos = token.pos
             mor = token.mor
             gra = token.gra
-            if type(gra) == Gra and gra is not None:
+            if type(gra) is Gra and gra is not None:
                 node1 = gra.dep
                 node2 = gra.head
                 relation = gra.rel

@@ -6,7 +6,9 @@ from tabulate import tabulate
 from ._punctuation_marks import _PUNCTUATION_MARKS
 
 
-_CLITIC = "CLITIC"
+_POSTCLITIC = "POSTCLITIC"
+_PRECLITIC = "PRECLITIC"
+_CLITICS = frozenset([_PRECLITIC, _POSTCLITIC])
 
 
 @dataclasses.dataclass
@@ -114,7 +116,7 @@ class Utterance:
             for token in self.tokens:
                 token_in_table = []
                 # TODO: Write a test for the clitic case.
-                if token.word == _CLITIC and prev_token is not None:
+                if token.word == _POSTCLITIC and prev_token is not None:
                     tokens_in_table.pop()
                     token_in_table.append(prev_token.word)
                     if "%mor" in mor_gra_keys:

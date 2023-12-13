@@ -89,7 +89,7 @@ Transcriptions and Annotations
 
     >>> words = eve.words()  # list of strings, for all the words across all 20 files
     >>> len(words)  # total word count
-    119799
+    119781
     >>> words[:8]
     ['more', 'cookie', '.', 'you', '0v', 'more', 'cookies', '?']
 
@@ -106,25 +106,25 @@ the method has the optional boolean parameter ``by_files``:
     >>> for words_one_file in words_by_files:
     ...     print(len(words_one_file))
     ...
-    5810
-    5258
-    2493
-    5742
+    5809
+    5252
+    2488
+    5739
     5707
     4338
-    5298
+    5299
     8901
     4454
-    4535
-    4196
-    6193
+    4533
+    4195
+    6195
     4444
-    5202
-    8075
+    5207
+    8073
     7361
     10870
-    8407
-    6903
+    8403
+    6901
     5612
 
 Apart from transcriptions, CHAT data has rich annotations for linguistic
@@ -194,7 +194,7 @@ and :func:`~pylangacq.Reader.word_ngrams`:
     >>> word_freq.most_common(5)
     [('.', 20071),
      ('?', 6358),
-     ('you', 3695),
+     ('you', 3681),
      ('the', 2524),
      ('it', 2363)]
 
@@ -228,13 +228,13 @@ To get the mean length of utterance (MLU), use :func:`~pylangacq.Reader.mlu`:
      3.840077071290944,
      3.822669104204753,
      3.8814317673378076,
-     4.176287051482059,
+     4.177847113884555,
      4.2631578947368425,
-     3.976890756302521,
+     3.9936974789915967,
      4.457182320441989,
      4.416536661466458,
      4.499446290143965,
-     4.289506953223768,
+     4.288242730720607,
      4.3813169984686064,
      3.3191094619666046]
 

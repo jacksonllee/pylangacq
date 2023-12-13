@@ -1,7 +1,7 @@
 from typing import List
 
 from .dependency import _DependencyGraph
-from .objects import _CLITIC
+from .objects import _POSTCLITIC
 
 
 _WORDS_IGNORE_WHOLE_UTTERANCE = frozenset({"xxx", "yyy", "www"})
@@ -17,7 +17,7 @@ _WORDS_TO_IGNORE = frozenset(
         "‡",
         "„",
         "0",
-        _CLITIC,
+        _POSTCLITIC,
     }
 )
 
@@ -62,9 +62,10 @@ def _get_mlum(tagged_sents, exclude_switch) -> List[float]:
                 if token.pos in _POS_TO_IGNORE:
                     continue
                 morpheme_count += 1
-                if type(token.mor) == str:
+                if type(token.mor) is str:
                     morpheme_count += token.mor.count("-")
                     morpheme_count += token.mor.count("~")
+                    morpheme_count += token.mor.count("$")
             if exclude_utterance or not morpheme_count:
                 continue
             morpheme_counts_for_file.append(morpheme_count)
@@ -702,7 +703,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
             word = graph.node[i]["word"]
             pos2 = graph.node[i + 1]["pos"]
 
-            if pos.startswith("mod") and pos2 == "v" and word != _CLITIC:
+            if pos.startswith("mod") and pos2 == "v" and word != _POSTCLITIC:
                 scoring_board["V9"] += 1
                 add_one_point_if_needed("V5")
 
@@ -1397,7 +1398,7 @@ def _get_ipsyn_for_file(tagged_sents) -> int:
 
             if (
                 graph.edge[dep][head]["rel"] == "SUBJ"
-                and graph.node[dep]["word"] != _CLITIC
+                and graph.node[dep]["word"] != _POSTCLITIC
             ):
                 subject_count += 1
                 subject_count_increment = True

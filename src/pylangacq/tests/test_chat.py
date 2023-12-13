@@ -209,7 +209,7 @@ class BaseTestCHATReader:
             # Word count
             sum(len(u.tokens) for f in original._files for u in f.utterances)
             == sum(len(u.tokens) for f in new._files for u in f.utterances)
-            == 6108
+            == 6107
         )
 
     def test_clear(self):
@@ -437,7 +437,7 @@ class BaseTestCHATReader:
         assert self.eve_local.word_ngrams(1).most_common(5) == [
             ((".",), 1121),
             (("?",), 455),
-            (("you",), 197),
+            (("you",), 196),
             (("that",), 151),
             (("the",), 132),
         ]
@@ -453,7 +453,7 @@ class BaseTestCHATReader:
         assert self.eve_local.word_frequencies().most_common(5) == [
             (".", 1121),
             ("?", 455),
-            ("you", 197),
+            ("you", 196),
             ("that", 151),
             ("the", 132),
         ]

@@ -14,6 +14,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Security
 
+## [0.19.0] - 2023-12-12
+
+### Added
+- Added support for Python 3.12.
+- Handled pre-clitics and post-clitics from %mor tiers
+  and honored their distinction in the parsed utterance.
+
 ## [0.18.0] - 2023-03-11
 
 ### Added

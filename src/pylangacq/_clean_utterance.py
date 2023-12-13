@@ -91,7 +91,8 @@ def _skip_extract(utterance, regex, replacee) -> str:
         return utterance
 
 
-def _find_paren(s, target, opposite, direction) -> int:
+def _find_paren(utterance, check, target, opposite, direction) -> int:
+    s = utterance[:check]
     if direction == "left":
         indices = range(len(s) - 1, -1, -1)
     elif direction == "right":
@@ -109,14 +110,17 @@ def _find_paren(s, target, opposite, direction) -> int:
         if signal == 0:
             return i
     else:
-        raise ValueError(f"no matching paren: {s}, {target}, {opposite}, {direction}")
+        raise ValueError(
+            "no matching paren: "
+            f"{utterance} | {check} | {target} | {opposite} | {direction}"
+        )
 
 
 def _drop(utterance, test, target_paren, opposite_paren, paren_direction):
     check = utterance.find(test)
     if check != -1:
         paren_i = _find_paren(
-            utterance[:check], target_paren, opposite_paren, paren_direction
+            utterance, check, target_paren, opposite_paren, paren_direction
         )
         utterance = f"{utterance[: paren_i]} {utterance[check + len(test):]}"
         utterance = " ".join(utterance.split())
@@ -237,16 +241,22 @@ def _clean_utterance(utterance: str) -> str:
         "(...)",
         ":",
         ";",
+        ";;",
         "<",
         ">",
         # Drop the following for PhonBank later?
+        "xx",
+        "yy",
         "xxx",
         "yyy",
         "www",
+        "www:",
         "xxx:",
         "xxx;",
+        "xxx;;",
         "xxx→",
         "xxx↑",
+        "xxx@si",
         "yyy:",
         "→",
     }

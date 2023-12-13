@@ -25,7 +25,15 @@ from tabulate import tabulate
 
 import pylangacq
 from .measures import _get_ipsyn, _get_mlum, _get_mluw, _get_ttr
-from .objects import Gra, Token, Utterance, _sort_keys, _CLITIC
+from .objects import (
+    Gra,
+    Token,
+    Utterance,
+    _sort_keys,
+    _CLITICS,
+    _PRECLITIC,
+    _POSTCLITIC,
+)
 from ._clean_utterance import _clean_utterance
 
 
@@ -41,6 +49,8 @@ _CACHED_DATA_JSON_PATH = os.path.join(_CACHED_DATA_DIR, "cached_data.json")
 _CHAT_LINE_INDICATORS = frozenset({"@", "*", "%"})
 
 _HEADER_REGEX = re.compile(r"\A@([^@:]+)(:\s+(\S[\S\s]+))?\Z")
+
+_CLITIC_REGEX = re.compile(r"((.+)\$)?([^$~]+)(~(.+))?")
 
 
 def _params_in_docstring(*params, class_method=True):
@@ -275,9 +285,9 @@ class Reader:
         yield from (self._get_reader_from_files([f]) for f in self._files)
 
     def __getitem__(self, item):
-        if type(item) == int:
+        if type(item) is int:
             return self._get_reader_from_files([self._files[item]])
-        elif type(item) == slice:
+        elif type(item) is slice:
             start, stop, step = item.indices(len(self._files))
             # Slicing of a list etc would give us a _shallow_ copy of the container,
             # and so we follow the shallow copying practice here for the files.
@@ -514,7 +524,8 @@ class Reader:
             by_files=True,
         )
         result = [
-            [[t.word for t in ts if t.word != _CLITIC] for ts in tss] for tss in tokens
+            [[t.word for t in ts if t.word not in _CLITICS] for ts in tss]
+            for tss in tokens
         ]
         return self._get_result_by_utterances_by_files(result, by_utterances, by_files)
 
@@ -529,7 +540,7 @@ class Reader:
 
         if participants is None:
             participants: List[Set] = self.participants(by_files=True)
-        elif type(participants) == str:
+        elif type(participants) is str:
             participants: List[Set] = [{participants} for _ in range(self.n_files())]
         elif hasattr(participants, "__iter__"):
             participants: List[Set] = [set(participants) for _ in range(self.n_files())]
@@ -541,7 +552,7 @@ class Reader:
 
         if exclude is None:
             pass
-        elif type(exclude) == str:
+        elif type(exclude) is str:
             participants: List[Set] = [p - {exclude} for p in participants]
         elif hasattr(exclude, "__iter__"):
             participants: List[Set] = [p - set(exclude) for p in participants]
@@ -892,7 +903,7 @@ class Reader:
         """
 
         err_msg = f"n must be a positive integer: {n}"
-        if type(n) != int:
+        if type(n) is not int:
             raise TypeError(err_msg)
         elif n < 1:
             raise ValueError(err_msg)
@@ -1464,34 +1475,38 @@ class Reader:
             forms = utterance_line.split()
 
             # %mor tier
-            clitic_indices = []  # indices at the word items
-            clitic_count = 0
+            preclitic_indices = []
+            postclitic_indices = []
 
             mor_items = []
             if "%mor" in tiermarker_to_line:
                 mor_split = tiermarker_to_line["%mor"].split()
 
                 for j, item in enumerate(mor_split):
-                    tilde_count = item.count("~")
+                    match = _CLITIC_REGEX.search(item)
+                    _, morph_preclitic, morph_core, _, morph_postclitic = match.groups()
 
-                    if tilde_count:
-                        item_split = item.split("~")
+                    if morph_preclitic:
+                        for morph in morph_preclitic.split("$"):
+                            preclitic_indices.append(len(mor_items))
+                            mor_items.append(morph)
 
-                        for k in range(tilde_count):
-                            clitic_indices.append(clitic_count + j + k + 1)
-                            clitic_count += 1
+                    mor_items.append(morph_core)
 
-                            mor_items.append(item_split[k])
+                    if morph_postclitic:
+                        for morph in morph_postclitic.split("~"):
+                            postclitic_indices.append(len(mor_items))
+                            mor_items.append(morph)
 
-                        mor_items.append(item_split[-1])
-                    else:
-                        mor_items.append(item)
-
-            if mor_items and ((len(forms) + clitic_count) != len(mor_items)):
+            if mor_items and (
+                (len(forms) + len(preclitic_indices) + len(postclitic_indices))
+                != len(mor_items)
+            ):
                 raise ValueError(
                     "cannot align the utterance and %mor tiers:\n"
                     f"Tiers --\n{tiermarker_to_line}\n"
-                    f"Cleaned-up utterance --\n{utterance_line}"
+                    f"Cleaned-up utterance --\n{utterance_line}\n"
+                    f"Parsed %mor tier --\n{mor_items}"
                 )
 
             # %gra tier
@@ -1503,17 +1518,22 @@ class Reader:
 
             if mor_items and gra_items and (len(mor_items) != len(gra_items)):
                 raise ValueError(
-                    f"cannot align the %mor and %gra tiers:\n{tiermarker_to_line}"
+                    f"cannot align the %mor and %gra tiers:\n"
+                    f"Tiers --\n{tiermarker_to_line}\n"
+                    f"Parsed %mor tier --\n{mor_items}\n"
+                    f"parsed %gra tier --\n{gra_items}"
                 )
 
             # utterance tier
-            if mor_items and clitic_count:
+            if mor_items and (preclitic_indices or postclitic_indices):
                 word_iterator = iter(forms)
                 utterance_items = [""] * len(mor_items)
 
                 for j in range(len(mor_items)):
-                    if j in clitic_indices:
-                        utterance_items[j] = _CLITIC
+                    if j in postclitic_indices:
+                        utterance_items[j] = _POSTCLITIC
+                    elif j in preclitic_indices:
+                        utterance_items[j] = _PRECLITIC
                     else:
                         utterance_items[j] = next(word_iterator)
             else:

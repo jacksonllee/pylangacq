@@ -89,14 +89,15 @@ _HAS_SUBDATASETS = {
 
 def _check_compatibility(url: str, successes: int, failures: int) -> Tuple[int, int]:
     try:
-        pylangacq.read_chat(url)
-        successes += 1
+        pylangacq.Reader.from_zip(url, use_cached=False)
     except zipfile.BadZipFile:
         _LOG.warning("Can't reach this dataset: %r", url)
         failures += 1
     except:  # noqa
         _LOG.exception("Can't parse %r -> %r -> %r", db, corpus, dataset)
         failures += 1
+    else:
+        successes += 1
     return successes, failures
 
 

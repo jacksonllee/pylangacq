@@ -16,6 +16,7 @@ _REGEX_DROP = (
     re.compile(r"\[>\d?\]"),
     re.compile(r"\((\d+?:)?\d+?\.?\d*?\)"),
     re.compile(r"\[%act: [^\[]+?\]"),
+    re.compile(r"\b0\w+"),
 )
 
 _REGEX_REPLACE = (
@@ -164,6 +165,7 @@ def _clean_utterance(utterance: str) -> str:
     #     (.) (short pause)
     # then pad them with extra spaces.
 
+    print('mila.')
     for regex in _REGEX_DROP:
         utterance = regex.sub("", utterance)
 
@@ -284,3 +286,6 @@ def _clean_utterance(utterance: str) -> str:
             new_words.append(word)
 
     return " ".join(new_words).strip()
+
+
+print(_clean_utterance("I 0am done."))

@@ -59,7 +59,7 @@ from pylangacq._clean_utterance import _clean_utterance
         ("⌈ foo bar ⌉", "foo bar"),  # overlapping markers
         ("foo.", "foo ."),
         ("+...", "+..."),
-        # ("I 0am done.", "I done ."),  # CHILDES -> Biling -> Perez -> Shelia
+        ("I 0am done.", "I done ."),  # CHILDES -> Biling -> Perez -> Shelia
     ],
 )
 def test__clean_utterance(original, expected):

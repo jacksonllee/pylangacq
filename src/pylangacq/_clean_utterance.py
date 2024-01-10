@@ -165,7 +165,6 @@ def _clean_utterance(utterance: str) -> str:
     #     (.) (short pause)
     # then pad them with extra spaces.
 
-    print('mila.')
     for regex in _REGEX_DROP:
         utterance = regex.sub("", utterance)
 

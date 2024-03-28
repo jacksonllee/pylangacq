@@ -89,9 +89,9 @@ Transcriptions and Annotations
 
     >>> words = eve.words()  # list of strings, for all the words across all 20 files
     >>> len(words)  # total word count
-    119781
+    119779
     >>> words[:8]
-    ['more', 'cookie', '.', 'you', '0v', 'more', 'cookies', '?']
+    ['more', 'cookie', '.', 'you', 'more', 'cookies', '?', 'how_about']
 
 By default, :func:`~pylangacq.Reader.words`
 returns a flat list of results from all the files.
@@ -106,7 +106,7 @@ the method has the optional boolean parameter ``by_files``:
     >>> for words_one_file in words_by_files:
     ...     print(len(words_one_file))
     ...
-    5809
+    5808
     5252
     2488
     5739
@@ -125,7 +125,7 @@ the method has the optional boolean parameter ``by_files``:
     10870
     8403
     6901
-    5612
+    5611
 
 Apart from transcriptions, CHAT data has rich annotations for linguistic
 and extra-linguistic information.
@@ -147,8 +147,8 @@ as :func:`~pylangacq.Reader.words` with annotations:
     [Token(word='more', pos='qn', mor='more', gra=Gra(dep=1, head=2, rel='QUANT')),
      Token(word='cookie', pos='n', mor='cookie', gra=Gra(dep=2, head=0, rel='INCROOT')),
      Token(word='.', pos='.', mor='', gra=Gra(dep=3, head=2, rel='PUNCT')),
-     Token(word='you', pos='pro:per', mor='you', gra=Gra(dep=1, head=2, rel='SUBJ')),
-     Token(word='0v', pos='0v', mor='v', gra=Gra(dep=2, head=0, rel='ROOT'))]
+     Token(word='you', pos='pro:per', mor='you', gra=Gra(dep=1, head=3, rel='SUBJ')),
+     Token(word='more', pos='adv', mor='more', gra=Gra(dep=2, head=3, rel='JCT'))]
     >>>
     >>> # The Token class is a dataclass. A Token instance has attributes as shown above.
     >>> for token in some_tokens:
@@ -158,7 +158,7 @@ as :func:`~pylangacq.Reader.words` with annotations:
     cookie n
     . .
     you pro:per
-    0v 0v
+    more adv
 
 Beyond the ``%mor`` and ``%gra`` tiers,
 an utterance has yet more information from the original CHAT data file.
@@ -225,7 +225,7 @@ To get the mean length of utterance (MLU), use :func:`~pylangacq.Reader.mlu`:
      3.203358208955224,
      3.179732313575526,
      3.4171011470281543,
-     3.840077071290944,
+     3.8439306358381504,
      3.822669104204753,
      3.8814317673378076,
      4.177847113884555,
@@ -233,10 +233,10 @@ To get the mean length of utterance (MLU), use :func:`~pylangacq.Reader.mlu`:
      3.9936974789915967,
      4.457182320441989,
      4.416536661466458,
-     4.499446290143965,
+     4.501661129568106,
      4.288242730720607,
      4.3813169984686064,
-     3.3191094619666046]
+     3.3172541743970316]
 
 The result is the MLU for each CHAT file.
 As this is a list of floats, they can be readily piped into

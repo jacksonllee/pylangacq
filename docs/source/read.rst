@@ -54,12 +54,12 @@ a :func:`~pylangacq.read_chat` call like this typically takes a couple seconds.
     >>> brown.info()
     214 files
     184631 utterances
-    880748 words
+    880723 words
           Utterance Count    Word Count  File Path
     --  -----------------  ------------  ---------------------
-    #1               1737          6437  Brown/Adam/020304.cha
+    #1               1737          6435  Brown/Adam/020304.cha
     #2               1972          7757  Brown/Adam/020318.cha
-    #3               1305          5572  Brown/Adam/020403.cha
+    #3               1305          5570  Brown/Adam/020403.cha
     #4               1224          4570  Brown/Adam/020415.cha
     #5               1344          5469  Brown/Adam/020430.cha
     ...

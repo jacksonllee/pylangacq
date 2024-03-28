@@ -1465,6 +1465,11 @@ class Reader:
         result_list = []
 
         for tiermarker_to_line in all_tiers:
+            # TODO: Handle the new tiers for Universal Dependencies
+            for unhandled_tier in ("%umor", "%ugra"):
+                if unhandled_tier in tiermarker_to_line:
+                    del tiermarker_to_line[unhandled_tier]
+
             participant_code = self._get_participant_code(tiermarker_to_line.keys())
 
             if participant_code is None:

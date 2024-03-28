@@ -53,33 +53,27 @@ _EXPECTED_EVE_UTTERANCES = [
                 word="you",
                 pos="pro:per",
                 mor="you",
-                gra=Gra(dep=1, head=2, rel="SUBJ"),
-            ),
-            Token(
-                word="0v",
-                pos="0v",
-                mor="v",
-                gra=Gra(dep=2, head=0, rel="ROOT"),
+                gra=Gra(dep=1, head=3, rel="SUBJ"),
             ),
             Token(
                 word="more",
-                pos="qn",
+                pos="adv",
                 mor="more",
-                gra=Gra(dep=3, head=4, rel="QUANT"),
+                gra=Gra(dep=2, head=3, rel="JCT"),
             ),
             Token(
                 word="cookies",
                 pos="n",
                 mor="cookie-PL",
-                gra=Gra(dep=4, head=2, rel="OBJ"),
+                gra=Gra(dep=3, head=0, rel="INCROOT"),
             ),
-            Token(word="?", pos="?", mor="", gra=Gra(dep=5, head=2, rel="PUNCT")),
+            Token(word="?", pos="?", mor="", gra=Gra(dep=4, head=3, rel="PUNCT")),
         ],
         time_marks=None,
         tiers={
-            "MOT": "you 0v more cookies ?",
-            "%mor": "pro:per|you 0v|v qn|more n|cookie-PL ?",
-            "%gra": "1|2|SUBJ 2|0|ROOT 3|4|QUANT 4|2|OBJ 5|2|PUNCT",
+            "MOT": "you &=0v more cookies ?",
+            "%mor": "pro:per|you adv|more n|cookie-PL ?",
+            "%gra": "1|3|SUBJ 2|3|JCT 3|0|INCROOT 4|3|PUNCT",
         },
     ),
 ]
@@ -290,7 +284,7 @@ class BaseTestCHATReader:
                 "Date": {datetime.date(1962, 10, 15), datetime.date(1962, 10, 17)},
                 "Participants": {
                     "CHI": {
-                        "name": "Eve",
+                        "name": "Target_Child",
                         "language": "eng",
                         "corpus": "Brown",
                         "age": "1;06.00",
@@ -302,7 +296,7 @@ class BaseTestCHATReader:
                         "custom": "",
                     },
                     "MOT": {
-                        "name": "Sue",
+                        "name": "Mother",
                         "language": "eng",
                         "corpus": "Brown",
                         "age": "",
@@ -314,7 +308,7 @@ class BaseTestCHATReader:
                         "custom": "",
                     },
                     "COL": {
-                        "name": "Colin",
+                        "name": "Investigator",
                         "language": "eng",
                         "corpus": "Brown",
                         "age": "",
@@ -326,7 +320,7 @@ class BaseTestCHATReader:
                         "custom": "",
                     },
                     "RIC": {
-                        "name": "Richard",
+                        "name": "Investigator",
                         "language": "eng",
                         "corpus": "Brown",
                         "age": "",
@@ -341,6 +335,7 @@ class BaseTestCHATReader:
                 "UTF8": "",
                 "PID": "11312/c-00034743-1",
                 "Languages": ["eng"],
+                "Options": "multi",
                 "Time Duration": "11:30-12:00",
                 "Types": "long, toyplay, TD",
                 "Tape Location": "850",
@@ -404,19 +399,21 @@ class BaseTestCHATReader:
                 word="you",
                 pos="pro:per",
                 mor="you",
-                gra=Gra(dep=1, head=2, rel="SUBJ"),
+                gra=Gra(dep=1, head=3, rel="SUBJ"),
             ),
-            Token(word="0v", pos="0v", mor="v", gra=Gra(dep=2, head=0, rel="ROOT")),
+            Token(
+                word="more", pos="adv", mor="more", gra=Gra(dep=2, head=3, rel="JCT")
+            ),
         ]
 
     def test_words_by_utterances(self):
         assert self.eve_local.words(by_utterances=True)[:2] == [
             ["more", "cookie", "."],
-            ["you", "0v", "more", "cookies", "?"],
+            ["you", "more", "cookies", "?"],
         ]
 
     def test_words(self):
-        assert self.eve_local.words()[:5] == ["more", "cookie", ".", "you", "0v"]
+        assert self.eve_local.words()[:5] == ["more", "cookie", ".", "you", "more"]
 
     def test_mlum(self):
         assert pytest.approx(self.eve_local.mlum(), abs=0.1) == [2.267022696929239]

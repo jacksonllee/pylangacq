@@ -16,6 +16,7 @@ _REGEX_DROP = (
     re.compile(r"\[>\d?\]"),
     re.compile(r"\((\d+?:)?\d+?\.?\d*?\)"),
     re.compile(r"\[%act: [^\[]+?\]"),
+    re.compile(r"\[# [^\[]+?\]"),
 )
 
 _REGEX_REPLACE = (

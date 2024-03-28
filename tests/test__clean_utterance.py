@@ -59,6 +59,7 @@ from pylangacq._clean_utterance import _clean_utterance
         ("⌈ foo bar ⌉", "foo bar"),  # overlapping markers
         ("foo.", "foo ."),
         ("+...", "+..."),
+        ("gimme that &=laughs:SUm xxx [# 0.4] .", "gimme that ."),
     ],
 )
 def test__clean_utterance(original, expected):

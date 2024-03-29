@@ -7,7 +7,7 @@
         <link rel="canonical" href="https://pylangacq.org/quickstart.html" />
 
     <!-- Generated with Sphinx 7.1.2 and Furo 2023.09.10 -->
-        <title>Quickstart - PyLangAcq 0.19.0 documentation</title>
+        <title>Quickstart - PyLangAcq 0.19.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b76e3c8a" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -125,7 +125,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">PyLangAcq 0.19.0 documentation</div></a>
+      <a href="index.html"><div class="brand">PyLangAcq 0.19.1 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -148,7 +148,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">PyLangAcq 0.19.0 documentation</span>
+  <span class="sidebar-brand-text">PyLangAcq 0.19.1 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -274,9 +274,9 @@ which is from 1 year and 6 months old to 2 years and 3 months old:</p>
 <p><a class="reference internal" href="api.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a> is the basic method to access the transcriptions:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">words</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">words</span><span class="p">()</span>  <span class="c1"># list of strings, for all the words across all 20 files</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>  <span class="c1"># total word count</span>
-<span class="go">119781</span>
+<span class="go">119779</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">words</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span>
-<span class="go">[&#39;more&#39;, &#39;cookie&#39;, &#39;.&#39;, &#39;you&#39;, &#39;0v&#39;, &#39;more&#39;, &#39;cookies&#39;, &#39;?&#39;]</span>
+<span class="go">[&#39;more&#39;, &#39;cookie&#39;, &#39;.&#39;, &#39;you&#39;, &#39;more&#39;, &#39;cookies&#39;, &#39;?&#39;, &#39;how_about&#39;]</span>
 </pre></div>
 </div>
 <p>By default, <a class="reference internal" href="api.html#pylangacq.Reader.words" title="pylangacq.Reader.words"><code class="xref py py-func docutils literal notranslate"><span class="pre">words()</span></code></a>
@@ -289,7 +289,7 @@ the method has the optional boolean parameter <code class="docutils literal notr
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">words_one_file</span> <span class="ow">in</span> <span class="n">words_by_files</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">words_one_file</span><span class="p">))</span>
 <span class="gp">...</span>
-<span class="go">5809</span>
+<span class="go">5808</span>
 <span class="go">5252</span>
 <span class="go">2488</span>
 <span class="go">5739</span>
@@ -308,7 +308,7 @@ the method has the optional boolean parameter <code class="docutils literal notr
 <span class="go">10870</span>
 <span class="go">8403</span>
 <span class="go">6901</span>
-<span class="go">5612</span>
+<span class="go">5611</span>
 </pre></div>
 </div>
 <p>Apart from transcriptions, CHAT data has rich annotations for linguistic
@@ -327,8 +327,8 @@ as <a class="reference internal" href="api.html#pylangacq.Reader.words" title="p
 <span class="go">[Token(word=&#39;more&#39;, pos=&#39;qn&#39;, mor=&#39;more&#39;, gra=Gra(dep=1, head=2, rel=&#39;QUANT&#39;)),</span>
 <span class="go"> Token(word=&#39;cookie&#39;, pos=&#39;n&#39;, mor=&#39;cookie&#39;, gra=Gra(dep=2, head=0, rel=&#39;INCROOT&#39;)),</span>
 <span class="go"> Token(word=&#39;.&#39;, pos=&#39;.&#39;, mor=&#39;&#39;, gra=Gra(dep=3, head=2, rel=&#39;PUNCT&#39;)),</span>
-<span class="go"> Token(word=&#39;you&#39;, pos=&#39;pro:per&#39;, mor=&#39;you&#39;, gra=Gra(dep=1, head=2, rel=&#39;SUBJ&#39;)),</span>
-<span class="go"> Token(word=&#39;0v&#39;, pos=&#39;0v&#39;, mor=&#39;v&#39;, gra=Gra(dep=2, head=0, rel=&#39;ROOT&#39;))]</span>
+<span class="go"> Token(word=&#39;you&#39;, pos=&#39;pro:per&#39;, mor=&#39;you&#39;, gra=Gra(dep=1, head=3, rel=&#39;SUBJ&#39;)),</span>
+<span class="go"> Token(word=&#39;more&#39;, pos=&#39;adv&#39;, mor=&#39;more&#39;, gra=Gra(dep=2, head=3, rel=&#39;JCT&#39;))]</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># The Token class is a dataclass. A Token instance has attributes as shown above.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">some_tokens</span><span class="p">:</span>
@@ -338,7 +338,7 @@ as <a class="reference internal" href="api.html#pylangacq.Reader.words" title="p
 <span class="go">cookie n</span>
 <span class="go">. .</span>
 <span class="go">you pro:per</span>
-<span class="go">0v 0v</span>
+<span class="go">more adv</span>
 </pre></div>
 </div>
 <p>Beyond the <code class="docutils literal notranslate"><span class="pre">%mor</span></code> and <code class="docutils literal notranslate"><span class="pre">%gra</span></code> tiers,
@@ -395,7 +395,7 @@ and <a class="reference internal" href="api.html#pylangacq.Reader.word_ngrams" t
 <span class="go"> 3.203358208955224,</span>
 <span class="go"> 3.179732313575526,</span>
 <span class="go"> 3.4171011470281543,</span>
-<span class="go"> 3.840077071290944,</span>
+<span class="go"> 3.8439306358381504,</span>
 <span class="go"> 3.822669104204753,</span>
 <span class="go"> 3.8814317673378076,</span>
 <span class="go"> 4.177847113884555,</span>
@@ -403,10 +403,10 @@ and <a class="reference internal" href="api.html#pylangacq.Reader.word_ngrams" t
 <span class="go"> 3.9936974789915967,</span>
 <span class="go"> 4.457182320441989,</span>
 <span class="go"> 4.416536661466458,</span>
-<span class="go"> 4.499446290143965,</span>
+<span class="go"> 4.501661129568106,</span>
 <span class="go"> 4.288242730720607,</span>
 <span class="go"> 4.3813169984686064,</span>
-<span class="go"> 3.3191094619666046]</span>
+<span class="go"> 3.3172541743970316]</span>
 </pre></div>
 </div>
 <p>The result is the MLU for each CHAT file.
@@ -454,7 +454,7 @@ contact <a class="reference external" href="https://jacksonllee.com/">Jackson L.
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2015-2023, Jackson L. Lee | PyLangAcq 0.19.0 | Documentation last updated on December 13, 2023
+                Copyright &#169; 2015-2024, Jackson L. Lee | PyLangAcq 0.19.1 | Documentation last updated on March 29, 2024
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
@@ -498,7 +498,7 @@ contact <a class="reference external" href="https://jacksonllee.com/">Jackson L.
       
     </aside>
   </div>
-</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3de8224"></script>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=17a6063d"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/scripts/furo.js?v=32e29ea5"></script>

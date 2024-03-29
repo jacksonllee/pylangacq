@@ -24,6 +24,15 @@ Fixed
 Security
 ^^^^^^^^
 
+[0.19.1] - 2024-03-29
+---------------------
+
+Fixed
+^^^^^
+
+
+* Handled the duration mark (e.g., ``[# 0.4]``\ ) in utterance cleaning.
+
 [0.19.0] - 2023-12-13
 ---------------------
 

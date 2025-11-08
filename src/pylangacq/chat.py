@@ -1534,6 +1534,10 @@ class Reader:
                 != len(mor_items)
             ):
                 if ignore_morph_errors:
+                    print("Warning, the following utterance will be skipped:\n" \
+                    f"Tiers --\n{tiermarker_to_line}\n"
+                    f"Cleaned-up utterance --\n{utterance_line}\n"
+                    f"Parsed %mor tier --\n{mor_items}")
                     continue
                 raise ValueError(
                     "cannot align the utterance and %mor tiers:\n"
@@ -1551,6 +1555,10 @@ class Reader:
 
             if mor_items and gra_items and (len(mor_items) != len(gra_items)):
                 if ignore_morph_errors:
+                    print("Warning, the following utterance will be skipped:\n" \
+                    f"Tiers --\n{tiermarker_to_line}\n"
+                    f"Cleaned-up utterance --\n{utterance_line}\n"
+                    f"Parsed %mor tier --\n{mor_items}")
                     continue
                 raise ValueError(
                     f"cannot align the %mor and %gra tiers:\n"

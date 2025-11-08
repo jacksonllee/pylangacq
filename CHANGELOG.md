@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Security
 
+## [0.19.2] - 2025-11-06
+
+### Added
+- Added option in read_chat for ignoring %mor tag alignment errors.
+
 ## [0.19.1] - 2024-03-29
 
 ### Fixed

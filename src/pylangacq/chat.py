@@ -255,10 +255,10 @@ class Reader:
     def __init__(self):
         """Initialize an empty reader."""
         self._files = collections.deque()
-        self._best_effort = False
+        self._strict = True
 
     def _parse_chat_strs(
-        self, strs: List[str], file_paths: List[str], parallel: bool, best_effort=False
+        self, strs: List[str], file_paths: List[str], parallel: bool, strict=True
     ) -> None:
         if parallel:
             with cf.ProcessPoolExecutor() as executor:
@@ -267,13 +267,12 @@ class Reader:
                         self._parse_chat_str,
                         strs,
                         file_paths,
-                        [best_effort] * len(strs),
+                        [strict] * len(strs),
                     )
                 )
         else:
             self._files = collections.deque(
-                self._parse_chat_str(s, f, best_effort)
-                for s, f in zip(strs, file_paths)
+                self._parse_chat_str(s, f, strict) for s, f in zip(strs, file_paths)
             )
 
     def __len__(self):
@@ -284,28 +283,26 @@ class Reader:
         )
 
     def _get_reader_from_files(
-        self, files: Iterable[_File], best_effort=False
+        self, files: Iterable[_File], strict=True
     ) -> "pylangacq.Reader":
         reader = self.__class__()
         reader._files = collections.deque(files)
-        reader._best_effort = best_effort
+        reader._strict = strict
         return reader
 
     def __iter__(self):
-        yield from (
-            self._get_reader_from_files([f], self._best_effort) for f in self._files
-        )
+        yield from (self._get_reader_from_files([f], self._strict) for f in self._files)
 
     def __getitem__(self, item):
         if type(item) is int:
-            return self._get_reader_from_files([self._files[item], self._best_effort])
+            return self._get_reader_from_files([self._files[item], self._strict])
         elif type(item) is slice:
             start, stop, step = item.indices(len(self._files))
             # Slicing of a list etc would give us a _shallow_ copy of the container,
             # and so we follow the shallow copying practice here for the files.
             return self._get_reader_from_files(
                 itertools.islice(self._files.copy(), start, stop, step),
-                self._best_effort,
+                self._strict,
             )
         else:
             raise TypeError(
@@ -981,7 +978,7 @@ class Reader:
         strs: List[str],
         ids: List[str] = None,
         parallel: bool = True,
-        best_effort: bool = False,
+        strict: bool = True,
     ) -> "pylangacq.Reader":
         """Instantiate a reader from in-memory CHAT data strings.
 
@@ -994,6 +991,10 @@ class Reader:
             List of identifiers. If not provided, UUID random strings are used.
             When file paths are referred to in other parts of this package, they
             mean these identifiers if you have instantiated the reader by this method.
+            strict: boolean
+        strict: bool, optional
+            If False, ignores utterances where %mor does not align with an utterance.
+            Defaults to True.
 
         Returns
         -------
@@ -1009,11 +1010,13 @@ class Reader:
                 f"strs and ids must have the same size: {len(strs)} and {len(ids)}"
             )
         reader = cls()
-        reader._parse_chat_strs(strs, ids, parallel, best_effort)
+        reader._parse_chat_strs(strs, ids, parallel, strict)
         return reader
 
     @classmethod
-    @_params_in_docstring("match", "exclude", "encoding", "parallel", "from_files")
+    @_params_in_docstring(
+        "match", "exclude", "encoding", "parallel", "from_files", "strict"
+    )
     def from_files(
         cls,
         paths: List[str],
@@ -1021,7 +1024,7 @@ class Reader:
         exclude: str = None,
         encoding: str = _ENCODING,
         parallel: bool = True,
-        best_effort: bool = False,
+        strict: bool = True,
     ) -> "pylangacq.Reader":
         """Instantiate a reader from local CHAT data files.
 
@@ -1030,6 +1033,9 @@ class Reader:
         paths : List[str]
             List of local file paths of the CHAT data. The ordering of the paths
             determines that of the parsed CHAT data in the resulting reader.
+        strict: bool, optional
+            If False, ignores utterances where %mor does not align with an
+            utterance. Defaults to True.
 
         Returns
         -------
@@ -1049,7 +1055,7 @@ class Reader:
         else:
             strs = [_open_file(p) for p in paths]
 
-        return cls.from_strs(strs, paths, parallel=parallel, best_effort=best_effort)
+        return cls.from_strs(strs, paths, parallel=parallel, strict=strict)
 
     @staticmethod
     def _filter_file_paths(
@@ -1066,7 +1072,7 @@ class Reader:
 
     @classmethod
     @_params_in_docstring(
-        "match", "exclude", "extension", "encoding", "parallel", "best_effort"
+        "match", "exclude", "extension", "encoding", "parallel", "strict"
     )
     def from_dir(
         cls,
@@ -1076,7 +1082,7 @@ class Reader:
         extension: str = _CHAT_EXTENSION,
         encoding: str = _ENCODING,
         parallel: bool = True,
-        best_effort: bool = False,
+        strict: bool = True,
     ) -> "pylangacq.Reader":
         """Instantiate a reader from a local directory with CHAT data files.
 
@@ -1086,6 +1092,9 @@ class Reader:
             Local directory that contains CHAT data files. Files are searched for
             recursively under this directory, and those that satisfy ``match`` and
             ``extension`` are parsed and handled by the reader.
+        strict: bool, optional
+            If False, ignores utterances where %mor does not align with an utterance.
+            Defaults to True.
 
         Returns
         -------
@@ -1106,7 +1115,7 @@ class Reader:
             exclude=exclude,
             encoding=encoding,
             parallel=parallel,
-            best_effort=best_effort,
+            strict=strict,
         )
 
     @classmethod
@@ -1129,7 +1138,7 @@ class Reader:
         parallel: bool = True,
         use_cached: bool = True,
         session: requests.Session = None,
-        best_effort: bool = False,
+        strict: bool = True,
     ) -> "pylangacq.Reader":
         """Instantiate a reader from a local or remote ZIP file.
 
@@ -1147,6 +1156,9 @@ class Reader:
             For instance, you can provide either a local path to a ZIP file downloaded
             from CHILDES, or simply a URL such as
             ``"https://childes.talkbank.org/data/Eng-NA/Brown.zip"``.
+        strict: bool, optional
+            If False, ignores utterances where %mor does not align with an utterance.
+            Defaults to True.
 
         Returns
         -------
@@ -1179,7 +1191,7 @@ class Reader:
                 extension=extension,
                 encoding=encoding,
                 parallel=parallel,
-                best_effort=best_effort,
+                strict=strict,
             )
 
         # Unzipped files from `.from_zip` have the unwieldy temp dir in the file path.
@@ -1472,11 +1484,11 @@ class Reader:
             with open(os.path.join(dir_, filename), "w", encoding=encoding) as f:
                 f.write(lines)
 
-    def _parse_chat_str(self, chat_str, file_path, best_effort=False) -> _File:
+    def _parse_chat_str(self, chat_str, file_path, strict=True) -> _File:
         lines = self._get_lines(chat_str)
         header = self._get_header(lines)
         all_tiers = self._get_all_tiers(lines)
-        utterances = self._get_utterances(all_tiers, best_effort)
+        utterances = self._get_utterances(all_tiers, strict)
         return _File(file_path, header, utterances)
 
     def _get_participant_code(self, tier_markers: Iterable[str]) -> Union[str, None]:
@@ -1486,7 +1498,7 @@ class Reader:
         return None
 
     def _get_utterances(
-        self, all_tiers: Iterable[Dict[str, str]], ignore_morph_errors=False
+        self, all_tiers: Iterable[Dict[str, str]], strict=True
     ) -> List[Utterance]:
         result_list = []
 
@@ -1533,8 +1545,8 @@ class Reader:
                 (len(forms) + len(preclitic_indices) + len(postclitic_indices))
                 != len(mor_items)
             ):
-                if ignore_morph_errors:
-                    print(
+                if not strict:
+                    warnings.warn(
                         "Warning, the following utterance will be skipped:\n"
                         f"Tiers --\n{tiermarker_to_line}\n"
                         f"Cleaned-up utterance --\n{utterance_line}\n"
@@ -1556,8 +1568,8 @@ class Reader:
             )
 
             if mor_items and gra_items and (len(mor_items) != len(gra_items)):
-                if ignore_morph_errors:
-                    print(
+                if not strict:
+                    warnings.warn(
                         "Warning, the following utterance will be skipped:\n"
                         f"Tiers --\n{tiermarker_to_line}\n"
                         f"Cleaned-up utterance --\n{utterance_line}\n"
@@ -1876,7 +1888,7 @@ def remove_cached_data(url: str = None) -> None:
 
 
 @_params_in_docstring(
-    "match", "exclude", "encoding", "cls", "best_effort", class_method=False
+    "match", "exclude", "encoding", "cls", "strict", class_method=False
 )
 def read_chat(
     path: str,
@@ -1884,7 +1896,7 @@ def read_chat(
     exclude: str = None,
     encoding: str = _ENCODING,
     cls: type = Reader,
-    best_effort: bool = False,
+    strict: bool = True,
 ) -> "pylangacq.Reader":
     """Create a reader of CHAT data.
 
@@ -1904,11 +1916,9 @@ def read_chat(
           Example of a URL: ``"https://childes.talkbank.org/data/Eng-NA/Brown.zip"``
         - A local directory, for files under this directory recursively.
         - A single ``.cha`` CHAT file.
-
-    best_effort: boolean
-
-        - If True, Ignores utterances where %mor does not align with an utterance
-        - Defaults to False
+    strict: bool, optional
+        If False, ignores utterances where %mor does not align with an utterance.
+        Defaults to True.
 
     Returns
     -------
@@ -1935,7 +1945,7 @@ def read_chat(
             match=match,
             exclude=exclude,
             encoding=encoding,
-            best_effort=best_effort,
+            strict=strict,
         )
     elif os.path.isdir(path):
         return cls.from_dir(
@@ -1943,7 +1953,7 @@ def read_chat(
             match=match,
             exclude=exclude,
             encoding=encoding,
-            best_effort=best_effort,
+            strict=strict,
         )
     elif path_lower.endswith(_CHAT_EXTENSION):
         return cls.from_files(
@@ -1951,7 +1961,7 @@ def read_chat(
             match=match,
             exclude=exclude,
             encoding=encoding,
-            best_effort=best_effort,
+            strict=strict,
         )
     else:
         raise ValueError(

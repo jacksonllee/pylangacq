@@ -1,4 +1,4 @@
-from typing import List
+from __future__ import annotations
 
 from .dependency import _DependencyGraph
 from .objects import _POSTCLITIC
@@ -38,8 +38,8 @@ def _get_lemma_from_mor(mor):
     return lemma
 
 
-def _get_mlum(tagged_sents, exclude_switch) -> List[float]:
-    result = []
+def _get_mlum(tagged_sents, exclude_switch) -> list[float]:
+    result: list[float] = []
 
     if not tagged_sents:
         return result
@@ -78,8 +78,8 @@ def _get_mlum(tagged_sents, exclude_switch) -> List[float]:
     return result
 
 
-def _get_mluw(sents, exclude_switch) -> List[float]:
-    result = []
+def _get_mluw(sents, exclude_switch) -> list[float]:
+    result: list[float] = []
 
     if not sents:
         return result
@@ -116,7 +116,7 @@ def _get_mluw(sents, exclude_switch) -> List[float]:
     return result
 
 
-def _get_ttr(word_freq_dicts) -> List[float]:
+def _get_ttr(word_freq_dicts) -> list[float]:
     result_by_files = []
     for word_freq in word_freq_dicts:
         filtered = {w: f for w, f in word_freq.items() if w not in _WORDS_TO_IGNORE}
@@ -127,7 +127,7 @@ def _get_ttr(word_freq_dicts) -> List[float]:
     return result_by_files
 
 
-def _get_ipsyn(tagged_sents) -> List[int]:
+def _get_ipsyn(tagged_sents) -> list[int]:
     result_by_files = []
     for tagged_sents_for_file in tagged_sents:
         result_by_files.append(_get_ipsyn_for_file(tagged_sents_for_file))

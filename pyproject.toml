@@ -55,6 +55,7 @@ dev = [
     # Running tests and linters
     "black == 25.11.0",
     "flake8 == 7.3.0",
+    "mypy == 1.18.2",
     "pytest == 9.0.1",
     "sybil == 9.2.0",
 
@@ -69,6 +70,11 @@ dev = [
     "Sphinx == 7.1.2",
     "sphinx-sitemap == 2.5.1",
     "sphinx-copybutton == 0.5.2",
+
+    # typeshed stubs -- just get their latest
+    "types-python-dateutil",
+    "types-requests",
+    "types-tabulate",
 ]
 
 [tool.setuptools]

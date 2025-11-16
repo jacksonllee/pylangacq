@@ -1,8 +1,4 @@
-try:
-    from importlib.metadata import version
-except ModuleNotFoundError:
-    # For Python 3.7
-    from importlib_metadata import version
+from importlib.metadata import version
 
 from .chat import read_chat, Reader
 

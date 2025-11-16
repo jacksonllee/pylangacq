@@ -1,5 +1,6 @@
+from __future__ import annotations
+
 import dataclasses
-from typing import Dict, List, Tuple, Union
 
 from tabulate import tabulate
 
@@ -51,9 +52,9 @@ class Token:
     __slots__ = ("word", "pos", "mor", "gra")
 
     word: str
-    pos: Union[str, None]
-    mor: Union[str, None]
-    gra: Union[Gra, None]
+    pos: str | None
+    mor: str | None
+    gra: Gra | None
 
     def to_mor_tier(self) -> str:
         """Return the %mor representation.
@@ -74,7 +75,7 @@ class Token:
         -------
         str
         """
-        return f"{self.gra.dep}|{self.gra.head}|{self.gra.rel}"
+        return f"{self.gra.dep}|{self.gra.head}|{self.gra.rel}"  # type: ignore
 
 
 @dataclasses.dataclass
@@ -103,9 +104,9 @@ class Utterance:
     __slots__ = ("participant", "tokens", "time_marks", "tiers")
 
     participant: str
-    tokens: List[Token]
-    time_marks: Union[Tuple[int, int], None]
-    tiers: Dict[str, str]
+    tokens: list[Token]
+    time_marks: tuple[int, int] | None
+    tiers: dict[str, str]
 
     def _to_str(self, tabular: bool = True) -> str:
         # `mor_gra_keys` needs to be a list for the ordering.
@@ -196,7 +197,7 @@ class Utterance:
         return f"<table>{html}</table>"
 
 
-def _sort_keys(keys, *, first=None, drop=None) -> List[str]:
+def _sort_keys(keys, *, first=None, drop=None) -> list[str]:
     sorted_keys = []
     first = first or []
     drop = set(drop or [])  # ordering doesn't matter

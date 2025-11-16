@@ -1,6 +1,6 @@
 """Utilities for dependency grammar and parsing."""
 
-from typing import List
+from __future__ import annotations
 
 from .objects import Gra, Token
 
@@ -15,15 +15,17 @@ class _DependencyGraph:
     tagged_sent : List[Token]]
     """
 
-    def __init__(self, tagged_sent: List[Token]):
+    def __init__(self, tagged_sent: list[Token]):
         """Initialize a DependencyGraph object.
 
         Parameters
         ----------
-        tagged_sent : List[Token]
+        tagged_sent : list[Token]
         """
-        self.node = {}  # from node to dict (node's properties)
-        self.edge = {}  # from node to node to dict (edge's properties)
+        # from node to dict (node's properties)
+        self.node: dict[int, dict] = {}
+        # from node to node to dict (edge's properties)
+        self.edge: dict[int, dict[int, dict]] = {}
 
         self.tagged_sent = tagged_sent
         self._faulty = False

@@ -1,5 +1,7 @@
 """Interfacing with CHAT data files."""
 
+from __future__ import annotations
+
 import collections
 import concurrent.futures as cf
 import dataclasses
@@ -14,11 +16,11 @@ import tempfile
 import uuid
 import warnings
 import zipfile
-from typing import Dict, Generator, Iterable, List, Optional, Set, Tuple, Union
+from typing import Any, Generator, Iterable, Type
 
 import requests
 from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
+from requests.packages.urllib3.util.retry import Retry  # type: ignore
 from dateutil.parser import parse as parse_date
 from dateutil.parser import ParserError
 from tabulate import tabulate
@@ -245,8 +247,8 @@ class _File:
     __slots__ = ("file_path", "header", "utterances")
 
     file_path: str
-    header: Dict
-    utterances: List[Utterance]
+    header: dict
+    utterances: list[Utterance]
 
 
 class Reader:
@@ -258,7 +260,7 @@ class Reader:
         self._strict = True
 
     def _parse_chat_strs(
-        self, strs: List[str], file_paths: List[str], parallel: bool, strict=True
+        self, strs: list[str], file_paths: list[str], parallel: bool, strict=True
     ) -> None:
         if parallel:
             with cf.ProcessPoolExecutor() as executor:
@@ -420,7 +422,9 @@ class Reader:
         return self._pop("left")
 
     @_params_in_docstring("match", "exclude")
-    def filter(self, match: str = None, exclude: str = None) -> "pylangacq.Reader":
+    def filter(
+        self, match: str | None = None, exclude: str | None = None
+    ) -> "pylangacq.Reader":
         """Return a new reader filtered by file paths.
 
         Parameters
@@ -446,11 +450,9 @@ class Reader:
         return reader
 
     @staticmethod
-    def _flatten(item_type, nested) -> Union[List, Set]:
+    def _flatten(item_type, nested) -> list | set | collections.Counter:
         if item_type == list:
             return [item for items in nested for item in items]
-        elif item_type == int:
-            return sum(nested)
         elif item_type == set:
             return set().union(*nested)
         elif item_type == collections.Counter:
@@ -461,7 +463,7 @@ class Reader:
     @_params_in_docstring("participants", "exclude", "by_files")
     def utterances(
         self, participants=None, exclude=None, by_files=False
-    ) -> Union[List[Utterance], List[List[Utterance]]]:
+    ) -> list[Utterance] | list[list[Utterance]]:
         """Return the utterances.
 
         Parameters
@@ -475,7 +477,7 @@ class Reader:
         if by_files:
             return result_by_files
         else:
-            return self._flatten(list, result_by_files)
+            return self._flatten(list, result_by_files)  # type: ignore
 
     def _get_result_by_utterances_by_files(self, result, by_utterances, by_files):
         if by_files and by_utterances:
@@ -492,7 +494,7 @@ class Reader:
     @_params_in_docstring("participants", "exclude", "by_utterances", "by_files")
     def tokens(
         self, participants=None, exclude=None, by_utterances=False, by_files=False
-    ) -> Union[List[Token], List[List[Token]], List[List[List[Token]]]]:
+    ) -> list[Token] | list[list[Token]] | list[list[list[Token]]]:
         """Return the tokens.
 
         Parameters
@@ -514,7 +516,7 @@ class Reader:
     @_params_in_docstring("participants", "exclude", "by_utterances", "by_files")
     def words(
         self, participants=None, exclude=None, by_utterances=False, by_files=False
-    ) -> Union[List[str], List[List[str]], List[List[List[str]]]]:
+    ) -> list[str] | list[list[str]] | list[list[list[str]]]:
         """Return the words.
 
         Parameters
@@ -540,8 +542,8 @@ class Reader:
         return self._get_result_by_utterances_by_files(result, by_utterances, by_files)
 
     def _filter_utterances_by_participants(
-        self, participants, exclude
-    ) -> List[List[Utterance]]:
+        self, participants: list[set], exclude
+    ) -> list[list[Utterance]]:
         if participants and exclude:
             raise TypeError(
                 "participants and exclude cannot be specified at the same time: "
@@ -549,11 +551,11 @@ class Reader:
             )
 
         if participants is None:
-            participants: List[Set] = self.participants(by_files=True)
+            participants = self.participants(by_files=True)
         elif type(participants) is str:
-            participants: List[Set] = [{participants} for _ in range(self.n_files())]
+            participants = [{participants} for _ in range(self.n_files())]
         elif hasattr(participants, "__iter__"):
-            participants: List[Set] = [set(participants) for _ in range(self.n_files())]
+            participants = [set(participants) for _ in range(self.n_files())]
         else:
             raise ValueError(
                 "participants must be one of {None, a string, an iterable of strings}: "
@@ -563,9 +565,9 @@ class Reader:
         if exclude is None:
             pass
         elif type(exclude) is str:
-            participants: List[Set] = [p - {exclude} for p in participants]
+            participants = [p - {exclude} for p in participants]
         elif hasattr(exclude, "__iter__"):
-            participants: List[Set] = [p - set(exclude) for p in participants]
+            participants = [p - set(exclude) for p in participants]
         else:
             raise ValueError(
                 "exclude must be one of {None, a string, an iterable of strings}: "
@@ -577,7 +579,7 @@ class Reader:
             for us, ps in zip([f.utterances for f in self._files], participants)
         ]
 
-    def headers(self) -> List[Dict]:
+    def headers(self) -> list[dict]:
         """Return the headers.
 
         Returns
@@ -586,7 +588,7 @@ class Reader:
         """
         return [f.header for f in self._files]
 
-    def file_paths(self) -> List[str]:
+    def file_paths(self) -> list[str]:
         """Return the file paths.
 
         If the data comes from in-memory strings, then the "file paths" are
@@ -603,7 +605,7 @@ class Reader:
         return len(self._files)
 
     @_params_in_docstring("by_files")
-    def participants(self, by_files=False) -> Union[Set[str], List[Set[str]]]:
+    def participants(self, by_files=False) -> set[str] | list[set[str]]:
         """Return the participants (e.g., CHI, MOT).
 
         Parameters
@@ -617,10 +619,10 @@ class Reader:
         if by_files:
             return result_by_files
         else:
-            return self._flatten(set, result_by_files)
+            return self._flatten(set, result_by_files)  # type: ignore
 
     @_params_in_docstring("by_files")
-    def languages(self, by_files=False) -> Union[Set[str], List[List[str]]]:
+    def languages(self, by_files=False) -> set[str] | list[list[str]]:
         """Return the languages in the data.
 
         Parameters
@@ -643,7 +645,7 @@ class Reader:
     @_params_in_docstring("by_files")
     def dates_of_recording(
         self, by_files=False
-    ) -> Union[Set[datetime.date], List[Set[datetime.date]]]:
+    ) -> set[datetime.date] | list[set[datetime.date]]:
         """Return the dates of recording.
 
         Parameters
@@ -658,11 +660,11 @@ class Reader:
         if by_files:
             return result_by_files
         else:
-            return self._flatten(set, result_by_files)
+            return self._flatten(set, result_by_files)  # type: ignore
 
     def ages(
         self, participant="CHI", months=False
-    ) -> Union[List[Tuple[int, int, int]], List[float]]:
+    ) -> list[tuple[int, int, int]] | list[float]:
         """Return the ages of the given participant in the data.
 
         Parameters
@@ -695,16 +697,16 @@ class Reader:
                 if months:
                     result = year_int * 12 + month_int + day_int / 30
                 else:
-                    result = (year_int, month_int, day_int)
+                    result = (year_int, month_int, day_int)  # type: ignore
             except (KeyError, IndexError, ValueError):
                 result = None
             result_by_files.append(result)
-        return result_by_files
+        return result_by_files  # type: ignore
 
     @_params_in_docstring("participants", "exclude", "by_files")
     def tagged_sents(
         self, participants=None, exclude=None, by_files=False
-    ) -> Union[List[List[Token]], List[List[List[Token]]]]:
+    ) -> list[list[Token]] | list[list[list[Token]]]:
         """Return the tagged sents.
 
         .. deprecated:: 0.13.0
@@ -729,12 +731,12 @@ class Reader:
         if by_files:
             return result_by_files
         else:
-            return self._flatten(list, result_by_files)
+            return self._flatten(list, result_by_files)  # type: ignore
 
     @_params_in_docstring("participants", "exclude", "by_files")
     def tagged_words(
         self, participants=None, exclude=None, by_files=False
-    ) -> Union[List[Token], List[List[Token]]]:
+    ) -> list[Token] | list[list[Token]]:
         """Return the tagged words.
 
         .. deprecated:: 0.13.0
@@ -756,12 +758,12 @@ class Reader:
         if by_files:
             return result_by_files
         else:
-            return self._flatten(list, result_by_files)
+            return self._flatten(list, result_by_files)  # type: ignore
 
     @_params_in_docstring("participants", "exclude", "by_files")
     def sents(
         self, participants=None, exclude=None, by_files=False
-    ) -> Union[List[List[str]], List[List[List[str]]]]:
+    ) -> list[list[str]] | list[list[list[str]]]:
         """Return the sents.
 
         .. deprecated:: 0.13.0
@@ -785,9 +787,9 @@ class Reader:
         if by_files:
             return result_by_files
         else:
-            return self._flatten(list, result_by_files)
+            return self._flatten(list, result_by_files)  # type: ignore
 
-    def mlum(self, participant="CHI", exclude_switch: bool = False) -> List[float]:
+    def mlum(self, participant="CHI", exclude_switch: bool = False) -> list[float]:
         """Return the mean lengths of utterance in morphemes.
 
         Parameters
@@ -809,7 +811,7 @@ class Reader:
             exclude_switch,
         )
 
-    def mlu(self, participant="CHI", exclude_switch: bool = False) -> List[float]:
+    def mlu(self, participant="CHI", exclude_switch: bool = False) -> list[float]:
         """Return the mean lengths of utterance (MLU).
 
         This method is equivalent to :func:`~pylangacq.Reader.mlum`.
@@ -830,7 +832,7 @@ class Reader:
         """
         return self.mlum(participant=participant, exclude_switch=exclude_switch)
 
-    def mluw(self, participant="CHI", exclude_switch: bool = False) -> List[float]:
+    def mluw(self, participant="CHI", exclude_switch: bool = False) -> list[float]:
         """Return the mean lengths of utterance in words.
 
         Parameters
@@ -852,7 +854,7 @@ class Reader:
             exclude_switch,
         )
 
-    def ttr(self, keep_case=True, participant="CHI") -> List[float]:
+    def ttr(self, keep_case=True, participant="CHI") -> list[float]:
         """Return the type-token ratios (TTR).
 
         Parameters
@@ -880,7 +882,7 @@ class Reader:
             )
         )
 
-    def ipsyn(self, participant="CHI") -> List[int]:
+    def ipsyn(self, participant="CHI") -> list[int]:
         """Return the indexes of productive syntax (IPSyn).
 
         Parameters
@@ -900,7 +902,7 @@ class Reader:
     @_params_in_docstring("keep_case", "participants", "exclude", "by_files")
     def word_ngrams(
         self, n, keep_case=True, participants=None, exclude=None, by_files=False
-    ) -> Union[collections.Counter, List[collections.Counter]]:
+    ) -> collections.Counter | list[collections.Counter]:
         """Return word ngrams.
 
         Parameters
@@ -918,7 +920,7 @@ class Reader:
         elif n < 1:
             raise ValueError(err_msg)
 
-        result_by_files = []
+        result_by_files: list[collections.Counter] = []
 
         for sents_in_file in self.words(
             participants=participants,
@@ -926,7 +928,7 @@ class Reader:
             by_utterances=True,
             by_files=True,
         ):
-            result_for_file = collections.Counter()
+            result_for_file: collections.Counter = collections.Counter()
             for sent in sents_in_file:
                 if len(sent) < n:
                     continue
@@ -939,12 +941,12 @@ class Reader:
         if by_files:
             return result_by_files
         else:
-            return self._flatten(collections.Counter, result_by_files)
+            return self._flatten(collections.Counter, result_by_files)  # type: ignore
 
     @_params_in_docstring("keep_case", "participants", "exclude", "by_files")
     def word_frequencies(
         self, keep_case=True, participants=None, exclude=None, by_files=False
-    ) -> Union[collections.Counter, List[collections.Counter]]:
+    ) -> collections.Counter | list[collections.Counter]:
         """Return word frequencies.
 
         Parameters
@@ -969,14 +971,14 @@ class Reader:
         if by_files:
             return result_by_files
         else:
-            return self._flatten(collections.Counter, result_by_files)
+            return self._flatten(collections.Counter, result_by_files)  # type: ignore
 
     @classmethod
     @_params_in_docstring("parallel")
     def from_strs(
         cls,
-        strs: List[str],
-        ids: List[str] = None,
+        strs: list[str],
+        ids: list[str] | None = None,
         parallel: bool = True,
         strict: bool = True,
     ) -> "pylangacq.Reader":
@@ -1019,9 +1021,9 @@ class Reader:
     )
     def from_files(
         cls,
-        paths: List[str],
-        match: str = None,
-        exclude: str = None,
+        paths: list[str],
+        match: str | None = None,
+        exclude: str | None = None,
         encoding: str = _ENCODING,
         parallel: bool = True,
         strict: bool = True,
@@ -1059,8 +1061,8 @@ class Reader:
 
     @staticmethod
     def _filter_file_paths(
-        paths: List[str], match: str = None, exclude: str = None
-    ) -> List[str]:
+        paths: list[str], match: str | None = None, exclude: str | None = None
+    ) -> list[str]:
         paths = list(paths)
         if match:
             regex = re.compile(match)
@@ -1077,8 +1079,8 @@ class Reader:
     def from_dir(
         cls,
         path: str,
-        match: str = None,
-        exclude: str = None,
+        match: str | None = None,
+        exclude: str | None = None,
         extension: str = _CHAT_EXTENSION,
         encoding: str = _ENCODING,
         parallel: bool = True,
@@ -1131,13 +1133,13 @@ class Reader:
     def from_zip(
         cls,
         path: str,
-        match: str = None,
-        exclude: str = None,
+        match: str | None = None,
+        exclude: str | None = None,
         extension: str = _CHAT_EXTENSION,
         encoding: str = _ENCODING,
         parallel: bool = True,
         use_cached: bool = True,
-        session: requests.Session = None,
+        session: requests.Session | None = None,
         strict: bool = True,
     ) -> "pylangacq.Reader":
         """Instantiate a reader from a local or remote ZIP file.
@@ -1201,7 +1203,7 @@ class Reader:
         return reader
 
     @staticmethod
-    def _retrieve_unzip_dir(url: str) -> Union[str, None]:
+    def _retrieve_unzip_dir(url: str) -> str | None:
         try:
             existing_records = json.load(open(_CACHED_DATA_JSON_PATH, encoding="utf-8"))
         except FileNotFoundError:
@@ -1365,8 +1367,8 @@ class Reader:
         ]
         return "\n".join(lines)
 
-    def _get_info_details_of_file(self, f: _File) -> Dict:
-        result = {
+    def _get_info_details_of_file(self, f: _File) -> dict[str, int | str]:
+        result: dict[str, int | str] = {
             "Utterance Count": len(f.utterances),
             "Word Count": sum(len(u.tokens) for u in f.utterances),
         }
@@ -1402,7 +1404,7 @@ class Reader:
         self,
         path: str,
         is_dir: bool = False,
-        filenames: Iterable[str] = None,
+        filenames: Iterable[str] | None = None,
         tabular: bool = True,
         encoding: str = _ENCODING,
     ) -> None:
@@ -1491,15 +1493,15 @@ class Reader:
         utterances = self._get_utterances(all_tiers, strict)
         return _File(file_path, header, utterances)
 
-    def _get_participant_code(self, tier_markers: Iterable[str]) -> Union[str, None]:
+    def _get_participant_code(self, tier_markers: Iterable[str]) -> str | None:
         for tier_marker in tier_markers:
             if not tier_marker.startswith("%"):
                 return tier_marker
         return None
 
     def _get_utterances(
-        self, all_tiers: Iterable[Dict[str, str]], strict=True
-    ) -> List[Utterance]:
+        self, all_tiers: Iterable[dict[str, str]], strict=True
+    ) -> list[Utterance]:
         result_list = []
 
         for tiermarker_to_line in all_tiers:
@@ -1521,13 +1523,13 @@ class Reader:
             preclitic_indices = []
             postclitic_indices = []
 
-            mor_items = []
+            mor_items: list[str] = []
             if "%mor" in tiermarker_to_line:
                 mor_split = tiermarker_to_line["%mor"].split()
 
                 for j, item in enumerate(mor_split):
                     match = _CLITIC_REGEX.search(item)
-                    _, morph_preclitic, morph_core, _, morph_postclitic = match.groups()
+                    _, morph_preclitic, morph_core, _, morph_postclitic = match.groups()  # type: ignore  # noqa: E501
 
                     if morph_preclitic:
                         for morph in morph_preclitic.split("$"):
@@ -1600,21 +1602,21 @@ class Reader:
 
             # determine what to yield (and how) to create the generator
             if not mor_items:
-                mor_items = [None] * len(utterance_items)
+                mor_items = [None] * len(utterance_items)  # type: ignore
             if not gra_items:
-                gra_items = [None] * len(utterance_items)
+                gra_items = [None] * len(utterance_items)  # type: ignore
 
-            sent: List[Token] = []
+            sent: list[Token] = []
 
             for word, mor, gra in zip(utterance_items, mor_items, gra_items):
                 try:
                     pos, _, mor = mor.partition("|")
                 except AttributeError:
-                    pos, mor = None, None
+                    pos, mor = None, None  # type: ignore
 
                 output_word = Token(
                     _clean_word(word),
-                    self._preprocess_pos(pos),
+                    self._preprocess_pos(pos),  # type: ignore
                     mor,
                     self._get_gra(gra),
                 )
@@ -1643,7 +1645,7 @@ class Reader:
         return pos
 
     @staticmethod
-    def _get_time_marks(line: str) -> Union[Tuple[int, int], None]:
+    def _get_time_marks(line: str) -> tuple[int, int] | None:
         match = _TIMER_MARKS_REGEX.search(line)
         if match:
             time_marks = match.groups()
@@ -1652,19 +1654,17 @@ class Reader:
             return None
 
     @staticmethod
-    def _get_gra(raw_gra: Optional[str]) -> Union[Gra, None]:
+    def _get_gra(raw_gra: str | None) -> Gra | None:
         if raw_gra is None:
             return None
         try:
             dep, head, rel = raw_gra.strip().split("|", 2)
-            dep = int(dep)
-            head = int(head)
-            return Gra(dep, head, rel)
+            return Gra(int(dep), int(head), rel)
         except (ValueError, TypeError):
             return None
 
-    def _get_all_tiers(self, lines: List[str]) -> Iterable[Dict[str, str]]:
-        index_to_tiers: Dict[int, Dict[str, str]] = {}
+    def _get_all_tiers(self, lines: list[str]) -> Iterable[dict[str, str]]:
+        index_to_tiers: dict[int, dict[str, str]] = {}
         index_ = -1  # utterance index (1st utterance is index 0)
         utterance = None
 
@@ -1686,8 +1686,8 @@ class Reader:
 
         return index_to_tiers.values()
 
-    def _get_header(self, lines: List[str]) -> Dict:
-        headname_to_entry = {}
+    def _get_header(self, lines: list[str]) -> dict:
+        headname_to_entry: dict[str, Any] = {}
 
         for line in lines:
             header_re_search = _HEADER_REGEX.search(line)
@@ -1714,8 +1714,8 @@ class Reader:
                     ) = participant_label.partition(" ")
                     # code = participant code, e.g. CHI, MOT
                     if "Participants" not in headname_to_entry:
-                        headname_to_entry["Participants"] = {}
-                    headname_to_entry["Participants"][code] = {"name": participant_name}
+                        headname_to_entry["Participants"] = {}  # type: ignore
+                    headname_to_entry["Participants"][code] = {"name": participant_name}  # type: ignore  # noqa: E501
 
             elif head == "ID":
                 participant_info = line.split("|")[:-1]
@@ -1741,11 +1741,11 @@ class Reader:
                 head_to_info = dict(zip(participant_info_heads, participant_info))
 
                 if "Participants" not in headname_to_entry:
-                    headname_to_entry["Participants"] = {}
+                    headname_to_entry["Participants"] = {}  # type: ignore
                 if code not in headname_to_entry["Participants"]:
-                    headname_to_entry["Participants"][code] = {}
+                    headname_to_entry["Participants"][code] = {}  # type: ignore
 
-                headname_to_entry["Participants"][code].update(head_to_info)
+                headname_to_entry["Participants"][code].update(head_to_info)  # type: ignore  # noqa: E501
 
             elif head == "Date":
                 try:
@@ -1753,8 +1753,8 @@ class Reader:
                 except (TypeError, ValueError, ParserError):
                     continue
                 if "Date" not in headname_to_entry:
-                    headname_to_entry["Date"] = set()
-                headname_to_entry["Date"].add(date)
+                    headname_to_entry["Date"] = set()  # type: ignore
+                headname_to_entry["Date"].add(date)  # type: ignore
 
             elif head.startswith("Birth of"):
                 # e.g., header is 'Birth of CHI', participant is 'CHI'
@@ -1764,8 +1764,8 @@ class Reader:
                 except (TypeError, ValueError, ParserError):
                     continue
                 if participant not in headname_to_entry["Participants"]:
-                    headname_to_entry["Participants"][participant] = {}
-                headname_to_entry["Participants"][participant]["dob"] = date
+                    headname_to_entry["Participants"][participant] = {}  # type: ignore
+                headname_to_entry["Participants"][participant]["dob"] = date  # type: ignore  # noqa: E501
 
             elif head == "Languages":
                 languages = []  # not set; ordering indicates language dominance
@@ -1776,7 +1776,7 @@ class Reader:
                 headname_to_entry["Languages"] = languages
 
             else:
-                headname_to_entry[head] = line or ""
+                headname_to_entry[head] = line or ""  # type: ignore
 
         return headname_to_entry if any(headname_to_entry.values()) else {}
 
@@ -1785,8 +1785,8 @@ class Reader:
         return parse_date(line).date()
 
     @staticmethod
-    def _get_lines(raw_str: str) -> List[str]:
-        lines: List[str] = []
+    def _get_lines(raw_str: str) -> list[str]:
+        lines: list[str] = []
         raw_str = (raw_str or "").strip()
 
         if not raw_str:
@@ -1838,12 +1838,12 @@ def _initialize_cached_data_dir() -> None:
         f.write("{}")
 
 
-def _write_cached_data_json(records: Dict) -> None:
+def _write_cached_data_json(records: dict) -> None:
     with open(_CACHED_DATA_JSON_PATH, "w", encoding="utf-8") as f:
         json.dump(records, f, indent=4)
 
 
-def cached_data_info() -> Set[str]:
+def cached_data_info() -> set[str]:
     """Return the information of the cached datasets.
 
     Returns
@@ -1859,7 +1859,7 @@ def cached_data_info() -> Set[str]:
         return set(existing_records.keys())
 
 
-def remove_cached_data(url: str = None) -> None:
+def remove_cached_data(url: str | None = None) -> None:
     """Remove data cached on disk.
 
     Parameters
@@ -1892,10 +1892,10 @@ def remove_cached_data(url: str = None) -> None:
 )
 def read_chat(
     path: str,
-    match: str = None,
-    exclude: str = None,
+    match: str | None = None,
+    exclude: str | None = None,
     encoding: str = _ENCODING,
-    cls: type = Reader,
+    cls: Type[Reader] = Reader,
     strict: bool = True,
 ) -> "pylangacq.Reader":
     """Create a reader of CHAT data.

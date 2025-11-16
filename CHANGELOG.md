@@ -14,10 +14,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Security
 
-## [0.19.2] - 2025-11-06
+## [0.20.0] - 2025-11-xx
 
 ### Added
 - Added option in read_chat for ignoring %mor tag alignment errors.
+- Added support for Python 3.13 and 3.14.
+
+## Removed
+- Removed support for Python 3.8 and 3.9.
 
 ## [0.19.1] - 2024-03-29
 

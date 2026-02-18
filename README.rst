@@ -45,6 +45,7 @@ Check out the `Quickstart <https://pylangacq.org/quickstart.html>`_ page.
 Links
 -----
 
+* Documentation: https://pylangacq.org
 * Author: `Jackson L. Lee <https://jacksonllee.com>`_
 * Source code: https://github.com/jacksonllee/pylangacq
 

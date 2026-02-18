@@ -1,12 +1,33 @@
-try:
-    from importlib.metadata import version
-except ModuleNotFoundError:
-    # For Python 3.7
-    from importlib_metadata import version
+from importlib.metadata import version
 
-from .chat import read_chat, Reader
+from ._read_chat import read_chat
 
+from rustling.chat import (
+    Age,
+    CHAT,
+    ChangeableHeader,
+    Gra,
+    Headers,
+    Participant,
+    Token,
+    Utterance,
+    Utterances,
+)
+from rustling.ngram import Ngrams
 
 __version__ = version("pylangacq")
 
-__all__ = ["__version__", "read_chat", "Reader"]
+__all__ = [
+    "__version__",
+    "read_chat",
+    "Age",
+    "CHAT",
+    "ChangeableHeader",
+    "Gra",
+    "Headers",
+    "Ngrams",
+    "Participant",
+    "Token",
+    "Utterance",
+    "Utterances",
+]

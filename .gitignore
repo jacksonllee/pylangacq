@@ -1,9 +1,10 @@
 *.egg-info/
 .pytest_cache/
 dist/
-
-docs/_sources/*
+docs/_build/
 
 # Test data
 Brown/*
 brown.zip
+
+uv.lock

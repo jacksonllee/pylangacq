@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pylangacq"
-version = "0.20.0"
+version = "0.21.0"
 description = "Tools for Language Acquisition Research"
 readme = "README.rst"
 requires-python = ">= 3.10"
-license = { text = "MIT License" }
+license = "MIT"
 authors = [ { name = "Jackson L. Lee", email = "jacksonlunlee@gmail.com" } ]
 keywords = [
     "CHILDES",
@@ -17,7 +17,7 @@ keywords = [
     "language-development",
 ]
 dependencies = [
-    "rustling >= 0.5.0",
+    "rustling >= 0.6.0",
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -25,7 +25,6 @@ classifiers = [
     "Intended Audience :: Education",
     "Intended Audience :: Information Technology",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
@@ -51,8 +50,9 @@ Source = "https://github.com/jacksonllee/pylangacq"
 [project.optional-dependencies]
 dev = [
     # Running tests and linters
-    "black == 26.1.0",
+    "black == 26.3.0",
     "flake8 == 7.3.0",
+    "mypy == 1.19.1",
     "pytest == 9.0.2",
 
     # Managing source distributions
@@ -73,7 +73,7 @@ package-dir = { "" = "src" }
 where = [ "src" ]
 
 [tool.setuptools.package-data]
-pylangacq = ["tests/*"]
+pylangacq = ["py.typed"]
 
 [tool.pytest.ini_options]
 addopts = "-vv --durations=0 --strict-markers"

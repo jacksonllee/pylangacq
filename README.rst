@@ -9,13 +9,13 @@ Full documentation: https://pylangacq.org
    :target: https://pypi.python.org/pypi/pylangacq
    :alt: PyPI version
 
+.. image:: https://img.shields.io/conda/vn/conda-forge/pylangacq.svg
+   :target: https://anaconda.org/conda-forge/pylangacq
+   :alt: Conda version
+
 .. image:: https://img.shields.io/pypi/pyversions/pylangacq.svg
    :target: https://pypi.python.org/pypi/pylangacq
    :alt: Supported Python versions
-
-.. image:: https://img.shields.io/pypi/dm/pylangacq
-   :target: https://pypi.python.org/pypi/pylangacq
-   :alt: PyPI - Downloads
 
 |
 
@@ -35,9 +35,13 @@ PyLangAcq is a Python library for language acquisition research.
 Download and Install
 --------------------
 
-To download and install the most recent version::
+Using pip::
 
-    $ pip install --upgrade pylangacq
+   pip install --upgrade pylangacq
+
+Using conda::
+
+   conda install -c conda-forge pylangacq
 
 Ready for more?
 Check out the `Quickstart <https://pylangacq.org/quickstart.html>`_ page.
@@ -46,8 +50,8 @@ Links
 -----
 
 * Documentation: https://pylangacq.org
-* Author: `Jackson L. Lee <https://jacksonllee.com>`_
 * Source code: https://github.com/jacksonllee/pylangacq
+* Author: `Jackson L. Lee <https://jacksonllee.com>`_
 
 How to Cite
 -----------
@@ -70,16 +74,6 @@ Department of Computer Science, University of Chicago.
 License
 -------
 
-MIT License. Please see ``LICENSE.txt`` in the GitHub source code for details.
+MIT License
 
 .. end-sphinx-website-index-page
-
-Changelog
----------
-
-Please see ``CHANGELOG.md``.
-
-Contributing
-------------
-
-Please see ``CONTRIBUTING.md``.

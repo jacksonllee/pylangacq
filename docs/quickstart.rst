@@ -46,7 +46,7 @@ They are organized in subdirectories for the three children of Adam, Eve, and Sa
 ``brown`` is a :class:`~pylangacq.CHAT` instance that represents the Brown data
 and provides various methods.
 But before we get into those, let's filter the data down to one of the children,
-so that we aren't producing unwanted results with all children's data mixed up down the road.
+so that we aren't producing results with all children's data mixed up down the road.
 With ``brown`` in hand, we can filter based on knowledge of the file paths,
 targeting those that contain the string ``"Eve"``:
 
@@ -115,7 +115,7 @@ Transcriptions and Annotations
 By default, :meth:`~pylangacq.CHAT.words`
 returns a flat list of results from all the files.
 If we are interested in the results for individual files,
-the method has the optional boolean parameter ``by_files``:
+the method has the optional boolean parameter ``by_file``:
 
 .. code-block:: python
 
@@ -286,11 +286,11 @@ More on :ref:`frequencies`.
 Developmental Measures
 ----------------------
 
-To get the mean length of utterance (MLU), use :meth:`~pylangacq.CHAT.mlum`:
+To get the mean length of utterance (MLU), use :meth:`~pylangacq.CHAT.mlu`:
 
 .. code-block:: python
 
-    eve_chi.mlum()  # mean length of utterance by morpheme
+    eve_chi.mlu()  # mean length of utterance in morphemes
     # [1.43,
     #  1.82,
     #  2.15,
@@ -314,7 +314,7 @@ To get the mean length of utterance (MLU), use :meth:`~pylangacq.CHAT.mlum`:
 
 The result is the MLU in morphemes for each of Eve's CHAT files in order.
 As this is a list of floats, they can be readily piped into
-other packages for making plots, for example:
+code for making plots, for example:
 
 .. code-block:: python
 

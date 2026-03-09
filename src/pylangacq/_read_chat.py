@@ -8,11 +8,11 @@ from rustling.chat import CHAT
 
 
 def read_chat(
-    path: str,
+    path: str | os.PathLike[str],
     *,
     filter_files: str | Sequence[str] | None = None,
     filter_participants: str | Sequence[str] | None = None,
-    cls: type = CHAT,
+    cls: type[CHAT] = CHAT,
     strict: bool = True,
 ) -> CHAT:
     """Read CHAT data.
@@ -41,6 +41,7 @@ def read_chat(
     if cls != CHAT and not issubclass(cls, CHAT):
         raise TypeError(f"Only a CHAT class or its child class is allowed: {cls}")
 
+    path = os.fspath(path)
     path_lower = path.lower()
     if path_lower.endswith(".zip"):
         return cls.from_zip(

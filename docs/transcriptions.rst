@@ -359,6 +359,47 @@ Like :meth:`~pylangacq.CHAT.words`,
 ``by_utterance`` and ``by_file`` to organize the results
 at the utterance and file level, respectively.
 
+Clitics
+^^^^^^^
+
+In CHAT, clitics are morphemes that attach to a host word but carry their own
+part-of-speech and morphological information on the ``%mor`` tier.
+Postclitics are marked with ``~`` and preclitics with ``$``.
+For example, the contraction *that's* is annotated as
+``pro:dem|that~cop|be&3S`` -- the demonstrative pronoun *that* followed by
+the postclitic copula *be*.
+When PyLangAcq parses such forms, the host word's :class:`~pylangacq.Token`
+receives the transcribed word (e.g., ``"that's"``), while clitic tokens
+get an empty string for their ``word`` attribute but retain their ``pos``,
+``mor``, and ``gra`` annotations.
+This means the number of tokens in an utterance can exceed the number of words,
+because each clitic produces its own :class:`~pylangacq.Token`:
+
+.. code-block:: python
+
+    import pylangacq
+
+    # "that's good ." with %mor: pro:dem|that~cop|be&3S adj|good .
+    chat_str = (
+        "@UTF8\n@Begin\n"
+        "@Participants:\tCHI Target_Child\n"
+        "*CHI:\tthat's good .\n"
+        "%mor:\tpro:dem|that~cop|be&3S adj|good .\n"
+        "@End\n"
+    )
+    reader = pylangacq.read_chat(chat_str)
+    tokens = reader.tokens(by_utterance=True)[0]
+    len(tokens)
+    # 4 (three words, but four tokens because of the postclitic)
+    tokens[0].word, tokens[0].pos
+    # ("that's", 'pro:dem')
+    tokens[1].word, tokens[1].pos
+    # ('', 'cop')           # postclitic: empty word, but POS is retained
+    tokens[2].word, tokens[2].pos
+    # ('good', 'adj')
+    tokens[3].word, tokens[3].pos
+    # ('.', '')
+
 
 Utterances
 ----------
@@ -540,3 +581,34 @@ its start and end time (in milliseconds) in the corresponding audio and/or video
 If the information is available, the ``time_marks`` attribute of an
 :class:`~pylangacq.Utterance` object is a tuple of two integers,
 e.g., ``(0, 1073)``, for ``·0_1073·`` found at the end of the CHAT main tier.
+
+
+.. _chat_from_utterances:
+
+Creating a ``CHAT`` Object from ``Utterance`` Objects
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you have a list of :class:`~pylangacq.Utterance` objects
+(e.g., after filtering or transforming utterances programmatically),
+you can construct a new :class:`~pylangacq.CHAT` reader from them
+using the :meth:`~pylangacq.CHAT.from_utterances` classmethod.
+The resulting reader behaves like any other :class:`~pylangacq.CHAT` object,
+so you can call :meth:`~pylangacq.CHAT.words`, :meth:`~pylangacq.CHAT.tokens`,
+and other methods on it as usual:
+
+.. code-block:: python
+
+    eve_chi = eve.filter(participants="CHI")
+    utts = eve_chi.utterances()
+
+    # Create a new reader from the first 10 utterances
+    subset = pylangacq.CHAT.from_utterances(utts[:10])
+    subset.words()[:9]
+    # ['more', 'cookie', '.', 'more', 'cookie', '.', 'more', 'juice', '?']
+    len(subset.utterances())
+    # 10
+
+    # Round-trip: reconstructing a reader preserves all data
+    reconstructed = pylangacq.CHAT.from_utterances(utts)
+    reconstructed.words() == eve_chi.words()
+    # True

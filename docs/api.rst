@@ -12,22 +12,17 @@ API Reference
    :members:
 
 .. autoclass:: pylangacq.ChangeableHeader
-   :members:
 
 .. autoclass:: pylangacq.Gra
-   :members:
 
 .. autoclass:: pylangacq.Headers
-   :members:
 
 .. autoclass:: pylangacq.Ngrams
    :members:
 
 .. autoclass:: pylangacq.Participant
-   :members:
 
 .. autoclass:: pylangacq.Token
-   :members:
 
 .. autoclass:: pylangacq.Utterance
    :members:

@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Security
 
+## [0.21.0] - 2026-03-09
+
+### Added
+- Added `CHAT.from_utterances` through rustling >= 0.6.0.
+- `read_chat` now accepts `os.PathLike` paths (e.g., a `pathlib.Path` instance) in addition to strings.
+
 ## [0.20.0] - 2026-02-18
 
 ### Changed

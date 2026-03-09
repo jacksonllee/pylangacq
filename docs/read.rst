@@ -31,9 +31,6 @@ you should be able to download the full transcripts of CHAT data as a ZIP archiv
 :func:`~pylangacq.read_chat` automatically handles everything behind the scenes for you,
 from unzipping the ZIP archive, traversing through the CHAT files found,
 as well as parsing the files.
-If the ZIP file has a fair amount of data
-(the Brown dataset has over 200 CHAT data files, with over 180,000 utterances),
-a :func:`~pylangacq.read_chat` call like this typically takes a couple seconds.
 
 .. code-block:: python
 
@@ -206,6 +203,23 @@ of :meth:`~pylangacq.CHAT.utterances`.
 We are going to drill down to this and many other functions
 in the upcoming parts of the documentation,
 but this quick example gives you a glimpse of how PyLangAcq represents CHAT data.
+
+
+From ``Utterance`` Objects
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you already have a list of :class:`~pylangacq.Utterance` objects,
+:meth:`~pylangacq.CHAT.from_utterances` lets you construct a new
+:class:`~pylangacq.CHAT` reader directly from them:
+
+.. code-block:: python
+
+    utts = eve.utterances()[:5]
+    chat_data = pylangacq.CHAT.from_utterances(utts)
+    chat_data.words()
+    # ['more', 'cookie', '.', 'you', 'more', 'cookies', '?', ...]
+
+For more details and examples, see :ref:`chat_from_utterances`.
 
 
 Parallel Processing

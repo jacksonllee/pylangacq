@@ -22,13 +22,13 @@ PyLangAcq: Language Acquisition Research in Python
    :target: https://pypi.python.org/pypi/pylangacq
    :alt: PyPI version
 
+.. image:: https://img.shields.io/conda/vn/conda-forge/pylangacq.svg
+   :target: https://anaconda.org/conda-forge/pylangacq
+   :alt: Conda version
+
 .. image:: https://img.shields.io/pypi/pyversions/pylangacq.svg
    :target: https://pypi.python.org/pypi/pylangacq
    :alt: Supported Python versions
-
-.. image:: https://img.shields.io/pypi/dm/pylangacq
-   :target: https://pypi.python.org/pypi/pylangacq
-   :alt: PyPI - Downloads
 
 .. include:: ../README.rst
    :start-after: start-sphinx-website-index-page

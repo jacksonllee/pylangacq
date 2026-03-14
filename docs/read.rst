@@ -222,6 +222,46 @@ If you already have a list of :class:`~pylangacq.Utterance` objects,
 For more details and examples, see :ref:`chat_from_utterances`.
 
 
+Custom Tiers for Morpohology and Grammatical Relations
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+By default, PyLangAcq parses the ``%mor`` (morphology) and ``%gra`` (grammatical relation)
+dependent tiers in CHAT data. Some datasets, however, use non-standard tier names
+for morphological and grammatical annotations — for example, ``%xmor`` and ``%xgra``.
+The ``mor_tier`` and ``gra_tier`` keyword arguments let you tell PyLangAcq
+which tiers to treat as morphology and grammar tiers during parsing.
+
+These arguments are available on
+:meth:`~pylangacq.CHAT.from_strs`,
+:meth:`~pylangacq.CHAT.from_files`,
+:meth:`~pylangacq.CHAT.from_dir`, and
+:meth:`~pylangacq.CHAT.from_zip`.
+
+To specify custom tier names, pass them as strings.
+For instance, to treat ``%xmor`` as the morphology tier:
+
+.. code-block:: python
+
+    chat_data = pylangacq.CHAT.from_zip(
+        "path/to/data.zip",
+        mor_tier="%xmor",
+    )
+
+If your data has either morphology or grammatical relation tiers, but you'd like to skip parsing
+them entirely (to only handle the main tier with transcriptions, to avoid parsing issues, etc.),
+pass ``None`` for either argument
+(note that setting either one to ``None`` disables both tiers):
+
+.. code-block:: python
+
+    # Skip morphology and grammar tier parsing
+    chat_data = pylangacq.CHAT.from_zip(
+        "path/to/data.zip",
+        mor_tier=None,
+        gra_tier=None,
+    )
+
+
 Parallel Processing
 ^^^^^^^^^^^^^^^^^^^
 

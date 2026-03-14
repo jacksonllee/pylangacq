@@ -464,50 +464,32 @@ to organize the results at the file level:
     # 741
 
 
-Original Tiers
-^^^^^^^^^^^^^^
+Audibly Faithful Transcription
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You may sometimes need the original, unparsed transcription lines,
-because they contain information (e.g., annotations for pauses) that is dropped
-when :class:`~pylangacq.Token` objects are constructed
-from the cleaned-up words aligned with ``%mor`` and ``%gra``.
-Or you may need access to other ``%`` tiers,
-e.g., ``%int`` for intonation or ``%com`` for comments.
-The ``tiers`` attribute of an :class:`~pylangacq.Utterance` object
-gives you a dictionary of all the original tiers of the utterance
-for your custom needs:
+The ``audible`` attribute of an :class:`~pylangacq.Utterance` object
+gives you a transcription that faithfully represents what was audibly spoken,
+with CHAT coding conventions (e.g., ``[+ IMP]``) stripped out
+while preserving repetitions and retracings as they were heard:
 
 .. code-block:: python
 
-    u = eve_chi.utterances()[0]
-    u.tiers
-    # {'%gra': '1|2|AMOD 2|2|ROOT 3|2|PUNCT',
-    #  '%int': 'distinctive , loud',
-    #  'CHI': 'more cookie . [+ IMP]',
-    #  '%mor': 'adj|more-Cmp-S1 noun|cookie .'}
+    import pylangacq
 
-The dictionary keys include the participant code (``'CHI'``) for the main tier
-and the dependent tier names (``'%mor'``, ``'%gra'``, ``'%int'``, etc.).
-Notice that the main tier retains the original transcription ``'more cookie . [+ IMP]'``,
-including the ``[+ IMP]`` annotation that is not part of the parsed tokens.
+    # Repetitions marked with [x N] are expanded:
+    data1 = pylangacq.CHAT.from_strs(["*CHI:\tno [x 3] ."])
+    data1.utterances()[0].audible
+    # 'no no no .'
 
+    # Retracings are kept as spoken:
+    data2 = pylangacq.CHAT.from_strs(["*CHI:\tI want [/] I want cookie ."])
+    data2.utterances()[0].audible
+    # 'I want I want cookie .'
 
-Raw Transcription
-^^^^^^^^^^^^^^^^^
-
-The ``raw`` attribute of an :class:`~pylangacq.Utterance` object
-gives you the cleaned-up transcription as a plain string,
-with CHAT annotations (e.g., ``[+ IMP]``) stripped out:
-
-.. code-block:: python
-
-    u = eve_chi.utterances()[0]
-    u.raw
-    # 'more cookie .'
-
-This is the parsed transcription that aligns with the ``tokens`` list,
-without the extra annotations found in the original main tier.
-For changeable header entries, ``raw`` is ``None``.
+This transcription is useful for tasks where the goal is to model
+the actual speech signal, such as automatic speech recognition (ASR)
+and forced alignment, where to the extent possible the text matches what was audibly produced.
+For changeable header entries, ``audible`` is ``None``.
 
 
 Changeable Headers
@@ -581,6 +563,34 @@ its start and end time (in milliseconds) in the corresponding audio and/or video
 If the information is available, the ``time_marks`` attribute of an
 :class:`~pylangacq.Utterance` object is a tuple of two integers,
 e.g., ``(0, 1073)``, for ``·0_1073·`` found at the end of the CHAT main tier.
+
+
+Original Tiers
+^^^^^^^^^^^^^^
+
+You may sometimes need the original, unparsed transcription lines,
+because they contain information (e.g., annotations for pauses) that is dropped
+when :class:`~pylangacq.Token` objects are constructed
+from the cleaned-up words aligned with ``%mor`` and ``%gra``.
+Or you may need access to other ``%`` tiers,
+e.g., ``%int`` for intonation or ``%com`` for comments.
+The ``tiers`` attribute of an :class:`~pylangacq.Utterance` object
+gives you a dictionary of all the original tiers of the utterance
+for your custom needs:
+
+.. code-block:: python
+
+    u = eve_chi.utterances()[0]
+    u.tiers
+    # {'%gra': '1|2|AMOD 2|2|ROOT 3|2|PUNCT',
+    #  '%int': 'distinctive , loud',
+    #  'CHI': 'more cookie . [+ IMP]',
+    #  '%mor': 'adj|more-Cmp-S1 noun|cookie .'}
+
+The dictionary keys include the participant code (``'CHI'``) for the main tier
+and the dependent tier names (``'%mor'``, ``'%gra'``, ``'%int'``, etc.).
+Notice that the main tier retains the original transcription ``'more cookie . [+ IMP]'``,
+including the ``[+ IMP]`` annotation that is not part of the parsed tokens.
 
 
 .. _chat_from_utterances:

@@ -30,6 +30,11 @@ PyLangAcq is a Python library for language acquisition research.
 - Direct support and powerful extensions possible for CHAT-formatted conversational datasets
   more generally
 
+Since v0.20.0 (February 2026), PyLangAcq depends on
+`Rustling <https://docs.rustling.io>`_,
+a library for efficiently handling CHAT data and other computational linguistics tasks.
+
+
 .. _download_install:
 
 Download and Install

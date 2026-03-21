@@ -14,6 +14,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Security
 
+## [0.23.0] - 2026-03-21
+
+Updates due to rustling >= 0.8.0.
+
+## Added
+
+- New `from_git` and `from_url` methods at `CHAT` for remote data sources.
+- Data format conversion between CHAT and the following:
+   * CoNLL-U for Universal Dependencies
+   * ELAN for annotated multimedia data
+   * TextGrid for Praat annotations
+   * SRT for subtitles
+
 ## [0.22.0] - 2026-03-14
 
 Updates due to rustling >= 0.7.0.

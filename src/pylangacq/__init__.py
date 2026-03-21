@@ -1,7 +1,5 @@
 from importlib.metadata import version
 
-from ._read_chat import read_chat
-
 from rustling.chat import (
     Age,
     CHAT,
@@ -12,6 +10,7 @@ from rustling.chat import (
     Token,
     Utterance,
     Utterances,
+    read_chat,
 )
 from rustling.ngram import Ngrams
 

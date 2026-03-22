@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pylangacq"
-version = "0.22.0"
+version = "0.23.0"
 description = "Tools for Language Acquisition Research"
 readme = "README.rst"
 requires-python = ">= 3.10"
@@ -17,7 +17,7 @@ keywords = [
     "language-development",
 ]
 dependencies = [
-    "rustling >= 0.7.0",
+    "rustling >= 0.8.0",
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",

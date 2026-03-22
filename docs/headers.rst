@@ -140,7 +140,7 @@ by individual files.
     #   ...
     #  ]
 
-Each partcipant has their information available via attributes through the helper class
+Each participant has their information available via attributes through the helper class
 :class:`~pylangacq.Participant`. For instance:
 
 .. code-block:: python
@@ -160,12 +160,12 @@ Other Header Information
 For any header information not given by one of the implemented methods above,
 :meth:`~pylangacq.CHAT.headers` gives a list of headers,
 where each header is a :class:`~pylangacq.Headers` object for each data file,
-and you can walk through the dict for information you need.
+and you can walk through the object for information you need.
 
 .. code-block:: python
 
     headers = eve.headers()  # a list of Headers objects
     headers[0]
-    # Headers(languages=["eng"], participants=[...4], date=Some("15-OCT-1962"))
+    # Headers(languages=["eng"], participants=[...4], date=datetime.date(1962, 10, 15))
 
 See the documentation of :class:`~pylangacq.Headers` for more details.

@@ -41,7 +41,7 @@ other packages for making plots, for example:
     brown = pylangacq.read_chat("path/to/your/local/Brown.zip")
     eve = brown.filter(files="Eve")
     eve_chi = eve.filter(participants="CHI")
-    ages_in_months = [age.in_months() for age in eve_chi.ages()]
+    ages_in_months = [age.in_months() if age else None for age in eve_chi.ages()]
 
     plt.figure(figsize=(8, 5))
     sns.lineplot(

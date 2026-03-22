@@ -387,7 +387,7 @@ because each clitic produces its own :class:`~pylangacq.Token`:
         "%mor:\tpro:dem|that~cop|be&3S adj|good .\n"
         "@End\n"
     )
-    reader = pylangacq.read_chat(chat_str)
+    reader = pylangacq.CHAT.from_strs([chat_str])
     tokens = reader.tokens(by_utterance=True)[0]
     len(tokens)
     # 4 (three words, but four tokens because of the postclitic)
@@ -418,7 +418,9 @@ Each :class:`~pylangacq.Utterance` object has the following attributes:
 * ``participant`` -- the speaker code (e.g., ``'CHI'``, ``'MOT'``).
 * ``tokens`` -- a list of :class:`~pylangacq.Token` objects,
   the same kind introduced in the Tokens section above.
-* ``raw`` -- the cleaned-up transcript without annotations, or ``None`` for headers.
+* ``audible`` -- the audibly faithful transcription of this utterance,
+  with CHAT coding conventions stripped out while preserving
+  repetitions and retracings as they were heard; ``None`` for changeable headers.
 * ``tiers`` -- a dictionary of the original, unparsed tier lines.
 * ``time_marks`` -- a tuple of ``(start, end)`` in milliseconds, or ``None``.
 * ``changeable_header`` -- a :class:`~pylangacq.ChangeableHeader` object
@@ -439,7 +441,7 @@ Let's inspect these attributes on the first utterance of Eve's child speech:
     # 'more'
     u.tokens[0].pos
     # 'adj'
-    u.raw
+    u.audible
     # 'more cookie .'
     u.time_marks is None
     # True

@@ -129,6 +129,18 @@ Other data sources that this function is designed for are:
 
     chat_data = pylangacq.read_chat("path/to/your/local/data.cha")
 
+3. A git repository URL (ending in ``.git``):
+
+.. code-block:: python
+
+    chat_data = pylangacq.read_chat("https://github.com/user/corpus.git")
+
+4. An HTTP/HTTPS URL (ZIP files are automatically detected and extracted):
+
+.. code-block:: python
+
+    chat_data = pylangacq.read_chat("https://example.com/corpus.zip")
+
 
 :func:`~pylangacq.read_chat` is designed to cover the common use cases of reading in CHAT data.
 Under the hood, it is a wrapper of several classmethods of :class:`~pylangacq.CHAT`,
@@ -205,6 +217,29 @@ in the upcoming parts of the documentation,
 but this quick example gives you a glimpse of how PyLangAcq represents CHAT data.
 
 
+From a Git Repository
+^^^^^^^^^^^^^^^^^^^^^
+
+:meth:`~pylangacq.CHAT.from_git` clones a git repository
+(or uses a cached clone) and parses all matching CHAT files:
+
+.. code-block:: python
+
+    chat_data = pylangacq.CHAT.from_git("https://github.com/user/corpus.git")
+
+
+From a URL
+^^^^^^^^^^
+
+:meth:`~pylangacq.CHAT.from_url` downloads a file from a URL
+(or uses a cached copy) and parses it.
+ZIP files are automatically detected and extracted:
+
+.. code-block:: python
+
+    chat_data = pylangacq.CHAT.from_url("https://example.com/corpus.zip")
+
+
 From ``Utterance`` Objects
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -222,7 +257,7 @@ If you already have a list of :class:`~pylangacq.Utterance` objects,
 For more details and examples, see :ref:`chat_from_utterances`.
 
 
-Custom Tiers for Morpohology and Grammatical Relations
+Custom Tiers for Morphology and Grammatical Relations
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 By default, PyLangAcq parses the ``%mor`` (morphology) and ``%gra`` (grammatical relation)
@@ -315,7 +350,7 @@ and to do so from either end for flexible data analysis and modeling.
 Think of a :class:`~pylangacq.CHAT` object more or less like a double-ended queue.
 
 The following :class:`~pylangacq.CHAT` methods support adding and removing data
-(many of thenm inspired by :class:`~collections.deque`):
+(many of them inspired by :class:`~collections.deque`):
 
 .. currentmodule:: pylangacq.CHAT
 

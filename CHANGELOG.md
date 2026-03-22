@@ -27,6 +27,10 @@ Updates due to rustling >= 0.8.0.
    * TextGrid for Praat annotations
    * SRT for subtitles
 
+## Changed
+
+- The `to_chat` method at `CHAT` has been renamed `to_files` for clarity.
+
 ## [0.22.0] - 2026-03-14
 
 Updates due to rustling >= 0.7.0.
